@@ -229,7 +229,9 @@ void DXApp::CreateCommandObjects()
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	ThrowIfFailed(mdxDevice->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&mCommandQueue)))
+
 	ThrowIfFailed(mdxDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(mDirectCmdListAlloc.GetAddressOf())))
+
 	ThrowIfFailed(mdxDevice->CreateCommandList(0,
 		D3D12_COMMAND_LIST_TYPE_DIRECT,
 		mDirectCmdListAlloc.Get(),
@@ -290,6 +292,54 @@ D3D12_CPU_DESCRIPTOR_HANDLE DXApp::CurrentBackBufferView() const
 		mSwapChainRtvHeap->GetCPUDescriptorHandleForHeapStart(),
 		mCurrBackBuffer,
 		mRtvDescriptorSize);
+}
+
+void DXApp::UpdateDefaultBufferResource(ComPtr<ID3D12GraphicsCommandList2> commandList,
+	ID3D12Resource** pDestinationResource, ID3D12Resource** pIntermediateResource, size_t numElements,
+	size_t elementSize, const void* bufferData, D3D12_RESOURCE_FLAGS flags)
+{
+	size_t bufferSize = numElements * elementSize;
+
+	// Create a committed resource for the GPU resource in a default heap.
+	ThrowIfFailed(mdxDevice->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(bufferSize, flags),
+		D3D12_RESOURCE_STATE_COPY_DEST,
+		nullptr,
+		IID_PPV_ARGS(pDestinationResource)));
+
+	// Create an committed resource for the upload.
+	if (bufferData)
+	{
+		ThrowIfFailed(mdxDevice->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+			D3D12_HEAP_FLAG_NONE,
+			&CD3DX12_RESOURCE_DESC::Buffer(bufferSize),
+			D3D12_RESOURCE_STATE_GENERIC_READ,
+			nullptr,
+			IID_PPV_ARGS(pIntermediateResource)));
+
+		D3D12_SUBRESOURCE_DATA subresourceData = {};
+		subresourceData.pData = bufferData;
+		subresourceData.RowPitch = bufferSize;
+		subresourceData.SlicePitch = subresourceData.RowPitch;
+
+		mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr);
+
+		//This is command function. Therefore, need to execute command list & flush queue.
+		UpdateSubresources(commandList.Get(),
+			*pDestinationResource, *pIntermediateResource,
+			0, 0, 1, &subresourceData);
+
+		// Done recording commands.
+		ThrowIfFailed(mCommandList->Close())
+
+		// Add the command list to the queue for execution.
+		ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
+		mCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
+		FlushCommandQueue();
+	}
 }
 
 void DXApp::LogAdapters()
@@ -397,6 +447,29 @@ void DXApp::CalculateFrameStats()
 		frameCnt = 0;
 		timeElapsed += 1.0f;
 	}
+}
+
+void DXApp::TransitionResource(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2> commandList,
+	Microsoft::WRL::ComPtr<ID3D12Resource> resource, D3D12_RESOURCE_STATES beforeState,
+	D3D12_RESOURCE_STATES afterState)
+{
+	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+		resource.Get(),
+		beforeState, afterState);
+
+	commandList->ResourceBarrier(1, &barrier);
+}
+
+void DXApp::ClearRTV(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2> commandList, D3D12_CPU_DESCRIPTOR_HANDLE rtv,
+	FLOAT* clearColor)
+{
+	commandList->ClearRenderTargetView(rtv, clearColor, 0, nullptr);
+}
+
+void DXApp::ClearDepth(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2> commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsv,
+	FLOAT depth)
+{
+	commandList->ClearDepthStencilView(dsv, D3D12_CLEAR_FLAG_DEPTH, depth, 0, 0, nullptr);
 }
 
 void DXApp::OnResize()

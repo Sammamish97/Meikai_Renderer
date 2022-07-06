@@ -13,6 +13,8 @@
 
 #include "GameTimer.h"
 
+using Microsoft::WRL::ComPtr;
+
 class DXApp
 {
 protected:
@@ -63,6 +65,26 @@ protected:
 
     void CalculateFrameStats();
 
+    void TransitionResource(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2> commandList,
+        Microsoft::WRL::ComPtr<ID3D12Resource> resource,
+        D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_STATES afterState);
+    
+    void ClearRTV(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2> commandList,
+        D3D12_CPU_DESCRIPTOR_HANDLE rtv, FLOAT* clearColor);
+   
+    void ClearDepth(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2> commandList,
+        D3D12_CPU_DESCRIPTOR_HANDLE dsv, FLOAT depth = 1.0f);
+
+
+protected:
+    void UpdateDefaultBufferResource(
+        ComPtr<ID3D12GraphicsCommandList2> commandList,
+        ID3D12Resource** pDestinationResource,
+        ID3D12Resource** pIntermediateResource,
+        size_t numElements, size_t elementSize, const void* bufferData,
+        D3D12_RESOURCE_FLAGS flags = D3D12_RESOURCE_FLAG_NONE);
+
+private:
     void LogAdapters();
     void LogAdapterOutputs(IDXGIAdapter* adapter);
     void LogOutputDisplayModes(IDXGIOutput* output, DXGI_FORMAT format);
@@ -88,14 +110,14 @@ protected:
 
     Microsoft::WRL::ComPtr<IDXGIFactory4> mdxgiFactory;
     Microsoft::WRL::ComPtr<IDXGISwapChain> mSwapChain;
-    Microsoft::WRL::ComPtr<ID3D12Device> mdxDevice;
+    Microsoft::WRL::ComPtr<ID3D12Device2> mdxDevice;
 
     Microsoft::WRL::ComPtr<ID3D12Fence> mFence;
     UINT64 mCurrentFence = 0;
 
     Microsoft::WRL::ComPtr<ID3D12CommandQueue> mCommandQueue;
     Microsoft::WRL::ComPtr<ID3D12CommandAllocator> mDirectCmdListAlloc;
-    Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> mCommandList;
+    Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2> mCommandList;
 
     static const int SwapChainBufferCount = 2;
     int mCurrBackBuffer = 0;
