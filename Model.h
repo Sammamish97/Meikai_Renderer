@@ -1,29 +1,34 @@
 #pragma once
 #include <string>
-#include <vector>
+
 #include <DirectXMath.h>
-#include <d3d12.h>
 #include <wrl.h>
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+#include "Mesh.h"
 
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
+struct DXApp;
+
 struct Model
 {
-	Model(const std::string& file_path);
+private:
+	DXApp* mApp;
+	ComPtr<ID3D12GraphicsCommandList2> mCommandList;
+public:
+	Model(const std::string& file_path, DXApp* app, ComPtr<ID3D12GraphicsCommandList2> commandList);
 	std::string name;
 
-	std::vector<XMFLOAT3> positions;
-	std::vector<XMFLOAT3> normals;
-	std::vector<WORD> indices;
+	void LoadModel(const std::string& file_path);
+	void ProcessNode(aiNode* node, const aiScene* scene);
+	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
 
-	ComPtr<ID3D12Resource> m_VertexBuffer;
-	ComPtr<ID3D12Resource> m_IndexBuffer;
-
-	D3D12_VERTEX_BUFFER_VIEW m_VertexBufferView;
-	D3D12_INDEX_BUFFER_VIEW m_IndexBufferView;
-
-
-	bool LoadModel(const std::string& file_path);
+	void SetCommandList(ComPtr<ID3D12GraphicsCommandList2> commandList);
+	std::vector<Mesh> meshes;
 };
 

@@ -76,7 +76,7 @@ protected:
         D3D12_CPU_DESCRIPTOR_HANDLE dsv, FLOAT depth = 1.0f);
 
 
-protected:
+public:
     void UpdateDefaultBufferResource(
         ComPtr<ID3D12GraphicsCommandList2> commandList,
         ID3D12Resource** pDestinationResource,

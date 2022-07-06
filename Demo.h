@@ -21,7 +21,7 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE Demo::DepthStencilView() const;
 
 	void LoadContent();
-	void CreateVertexResource();
+	void InitModel();
 	void CreateDsvDescriptorHeap();
 	void CreateShader();
 	void CreateRootSignature();
@@ -31,13 +31,6 @@ private:
 private:
 	ComPtr<ID3D12DescriptorHeap> mDsvHeap;
 	ComPtr<ID3D12Resource> mDepthStencilBuffer;
-
-	// Vertex buffer for the cube.
-	ComPtr<ID3D12Resource> m_VertexBuffer;
-	D3D12_VERTEX_BUFFER_VIEW m_VertexBufferView;
-	// Index buffer for the cube.
-	ComPtr<ID3D12Resource> m_IndexBuffer;
-	D3D12_INDEX_BUFFER_VIEW m_IndexBufferView;
 
 	ComPtr<ID3DBlob> vertexShaderBlob;
 	ComPtr<ID3DBlob> pixelShaderBlob;

@@ -15,6 +15,7 @@
     <ClInclude Include="DXApp.h" />
     <ClInclude Include="DXUtil.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
   </ItemGroup>
   <ItemGroup>
@@ -23,6 +24,7 @@
     <ClCompile Include="DXUtil.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

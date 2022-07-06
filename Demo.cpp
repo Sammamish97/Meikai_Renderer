@@ -10,33 +10,6 @@ using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
 //Cube model data
-struct VertexPosColor
-{
-	XMFLOAT3 Position;
-	XMFLOAT3 Color;
-};
-
-static VertexPosColor g_Vertices[8] = {
-	{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f) }, // 0
-	{ XMFLOAT3(-1.0f,  1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) }, // 1
-	{ XMFLOAT3(1.0f,  1.0f, -1.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) }, // 2
-	{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) }, // 3
-	{ XMFLOAT3(-1.0f, -1.0f,  1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) }, // 4
-	{ XMFLOAT3(-1.0f,  1.0f,  1.0f), XMFLOAT3(0.0f, 1.0f, 1.0f) }, // 5
-	{ XMFLOAT3(1.0f,  1.0f,  1.0f), XMFLOAT3(1.0f, 1.0f, 1.0f) }, // 6
-	{ XMFLOAT3(1.0f, -1.0f,  1.0f), XMFLOAT3(1.0f, 0.0f, 1.0f) }  // 7
-};
-
-static WORD g_Indicies[36] =
-{
-	0, 1, 2, 0, 2, 3,
-	4, 6, 5, 4, 7, 6,
-	4, 5, 1, 4, 1, 0,
-	3, 2, 6, 3, 6, 7,
-	1, 5, 6, 1, 6, 2,
-	4, 0, 3, 4, 3, 7
-};
-//
 
 Demo::Demo(HINSTANCE hInstance)
 	:DXApp(hInstance)
@@ -121,8 +94,7 @@ void Demo::OnResize()
 
 void Demo::LoadContent()
 {
-	testModel = new Model("models/bunny_high_poly.obj");
-	CreateVertexResource();
+	InitModel();
 	CreateDsvDescriptorHeap();
 	CreateShader();
 	CreateRootSignature();
@@ -131,25 +103,10 @@ void Demo::LoadContent()
 	m_ContentLoaded = true; 
 }
 
-void Demo::CreateVertexResource()
+void Demo::InitModel()
 {
-	ComPtr<ID3D12Resource> stagingVB;
-	UpdateDefaultBufferResource(mCommandList, &m_VertexBuffer, &stagingVB,
-		_countof(g_Vertices), sizeof(VertexPosColor), g_Vertices);
-
-	m_VertexBufferView.BufferLocation = m_VertexBuffer->GetGPUVirtualAddress();
-	m_VertexBufferView.SizeInBytes = sizeof(g_Vertices);
-	m_VertexBufferView.StrideInBytes = sizeof(VertexPosColor);
-
-	ComPtr<ID3D12Resource> stagingIB;
-	UpdateDefaultBufferResource(mCommandList, &m_IndexBuffer, &stagingIB,
-		_countof(g_Indicies), sizeof(WORD), g_Indicies);
-
-	m_IndexBufferView.BufferLocation = m_IndexBuffer->GetGPUVirtualAddress();
-	m_IndexBufferView.Format = DXGI_FORMAT_R16_UINT;
-	m_IndexBufferView.SizeInBytes = sizeof(g_Indicies);
+	testModel = new Model("models/Torus.obj", this, mCommandList);
 }
-
 
 void Demo::CreateDsvDescriptorHeap()
 {
@@ -164,11 +121,45 @@ void Demo::CreateDsvDescriptorHeap()
 
 void Demo::CreateShader()
 {
+	UINT flags = D3DCOMPILE_ENABLE_STRICTNESS;
+
+#if defined(DEBUG) || defined(_DEBUG)
+	flags |= D3DCOMPILE_DEBUG;
+#endif
+
 	// Load the vertex shader.
-	ThrowIfFailed(D3DReadFileToBlob(L"shaders/VertexShader.cso", &vertexShaderBlob));
+	ComPtr<ID3DBlob> vertexErrorBlob;
+	HRESULT hr = D3DCompileFromFile(L"shaders/VertexShader.hlsl", nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "main", "vs_5_1", flags, 0, &vertexShaderBlob, &vertexErrorBlob);
+	if(FAILED(hr))
+	{
+		if(vertexErrorBlob)
+		{
+			OutputDebugStringA((char*)vertexErrorBlob->GetBufferPointer());
+			vertexErrorBlob->Release();
+		}
+
+		if(vertexShaderBlob)
+		{
+			vertexShaderBlob->Release();
+		}
+	}
 
 	// Load the pixel shader.
-	ThrowIfFailed(D3DReadFileToBlob(L"shaders/PixelShader.cso", &pixelShaderBlob));
+	ComPtr<ID3DBlob> pixelErrorBlob;
+	D3DCompileFromFile(L"shaders/PixelShader.hlsl", nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "main", "ps_5_1", flags, 0, &pixelShaderBlob, &pixelErrorBlob);
+	if (FAILED(hr))
+	{
+		if (pixelErrorBlob)
+		{
+			OutputDebugStringA((char*)pixelErrorBlob->GetBufferPointer());
+			pixelErrorBlob->Release();
+		}
+
+		if (pixelShaderBlob)
+		{
+			pixelShaderBlob->Release();
+		}
+	}
 }
 
 void Demo::CreateRootSignature()
@@ -216,7 +207,10 @@ void Demo::CreatePSO()
 
 	D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-		{"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}
+		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+		{"UV", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+		{"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+		{"BITANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
 	};
 
 	D3D12_RT_FORMAT_ARRAY rtvFormats = {};
@@ -279,26 +273,29 @@ void Demo::Draw(const GameTimer& gt)
 	mCommandList->SetPipelineState(m_PipelineState.Get());
 	mCommandList->SetGraphicsRootSignature(m_RootSignature.Get());
 
-	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	mCommandList->IASetVertexBuffers(0, 1, &m_VertexBufferView);
-	mCommandList->IASetIndexBuffer(&m_IndexBufferView);
-
 	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
 	mCommandList->RSSetViewports(1, &mScreenViewport);
 	mCommandList->RSSetScissorRects(1, &mScissorRect);
 
 	// Specify the buffers we are going to render to.
 	// TODO: For deferred pipeline, maybe need to provide rtv array instead of Current Back buffer view.
+
 	mCommandList->OMSetRenderTargets(1, &CurrentBackBufferView(), true, &DepthStencilView());
 
 	XMMATRIX mvpMatrix = XMMatrixMultiply(m_ModelMatrix, m_ViewMatrix);
 	mvpMatrix = XMMatrixMultiply(mvpMatrix, m_ProjectionMatrix);
 	mCommandList->SetGraphicsRoot32BitConstants(0, sizeof(XMMATRIX) / 4, &mvpMatrix, 0);
+	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//
+	for(const auto& mesh : testModel->meshes)
+	{
+		mCommandList->IASetVertexBuffers(0, 1, &mesh.m_VertexBufferView);
+		mCommandList->IASetIndexBuffer(&mesh.m_IndexBufferView);
 
-	mCommandList->DrawIndexedInstanced(_countof(g_Indicies), 1, 0, 0, 0);
-
+		mCommandList->DrawIndexedInstanced(mesh.m_indices.size(), 1, 0, 0, 0);
+	}
+	//
 	TransitionResource(mCommandList, CurrentBackBuffer(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-
 
 	// Done recording commands.
 	ThrowIfFailed(mCommandList->Close());
