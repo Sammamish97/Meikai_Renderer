@@ -1,5 +1,6 @@
 #include "Demo.h"
 #include "DXUtil.h"
+#include "Model.h"
 
 #include <DirectXColors.h>
 #include <d3dcompiler.h>
@@ -120,6 +121,7 @@ void Demo::OnResize()
 
 void Demo::LoadContent()
 {
+	testModel = new Model("models/bunny_high_poly.obj");
 	CreateVertexResource();
 	CreateDsvDescriptorHeap();
 	CreateShader();

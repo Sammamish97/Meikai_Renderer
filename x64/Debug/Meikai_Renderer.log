@@ -1,0 +1,4 @@
+﻿  Demo.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\crtdbg.h(307,1): warning C4005: '_malloca': macro redefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\malloc.h(124): message : see previous definition of '_malloca'
+  Meikai_Renderer.vcxproj -> C:\Data\Meikai_Renderer\x64\Debug\Meikai_Renderer.exe

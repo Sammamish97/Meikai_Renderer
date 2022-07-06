@@ -1,0 +1,10 @@
+^C:\DATA\MEIKAI_RENDERER\INCLUDE\ASSIMP-MASTER\BUILD\CMAKEFILES\545750BE0E9689DE6092144BC2B2FB8A\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Data/Meikai_Renderer/include/assimp-master -BC:/Data/Meikai_Renderer/include/assimp-master/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Data/Meikai_Renderer/include/assimp-master/build/Assimp.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

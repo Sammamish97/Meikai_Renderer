@@ -3,6 +3,7 @@
 
 #include "DXApp.h"
 
+struct Model;
 class Demo : public DXApp
 {
 public:
@@ -28,24 +29,24 @@ private:
 
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> mDsvHeap;
-	Microsoft::WRL::ComPtr<ID3D12Resource> mDepthStencilBuffer;
+	ComPtr<ID3D12DescriptorHeap> mDsvHeap;
+	ComPtr<ID3D12Resource> mDepthStencilBuffer;
 
 	// Vertex buffer for the cube.
-	Microsoft::WRL::ComPtr<ID3D12Resource> m_VertexBuffer;
+	ComPtr<ID3D12Resource> m_VertexBuffer;
 	D3D12_VERTEX_BUFFER_VIEW m_VertexBufferView;
 	// Index buffer for the cube.
-	Microsoft::WRL::ComPtr<ID3D12Resource> m_IndexBuffer;
+	ComPtr<ID3D12Resource> m_IndexBuffer;
 	D3D12_INDEX_BUFFER_VIEW m_IndexBufferView;
 
 	ComPtr<ID3DBlob> vertexShaderBlob;
 	ComPtr<ID3DBlob> pixelShaderBlob;
 
 	// Root signature
-	Microsoft::WRL::ComPtr<ID3D12RootSignature> m_RootSignature;
+	ComPtr<ID3D12RootSignature> m_RootSignature;
 
 	// Pipeline state object.
-	Microsoft::WRL::ComPtr<ID3D12PipelineState> m_PipelineState;
+	ComPtr<ID3D12PipelineState> m_PipelineState;
 
 	float m_FoV = 45.f;
 
@@ -53,6 +54,7 @@ private:
 	DirectX::XMMATRIX m_ViewMatrix;
 	DirectX::XMMATRIX m_ProjectionMatrix;
 
+	Model* testModel = nullptr;
 
 	bool m_ContentLoaded = false;
 };
