@@ -1,5 +1,6 @@
 #include "Demo.h"
 #include "DXUtil.h"
+
 #include <DirectXColors.h>
 #include <d3dcompiler.h>
 #include <d3dx12.h>
@@ -125,10 +126,7 @@ void Demo::LoadContent()
 	CreateRootSignature();
 	CreatePSO();
 
-	FlushCommandQueue();
-
-	m_ContentLoaded = true;
-
+	m_ContentLoaded = true; 
 }
 
 void Demo::CreateVertexResource()
@@ -228,7 +226,7 @@ void Demo::CreatePSO()
 	pipelineStateStream.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;//TODO: Depend on object for later.
 	pipelineStateStream.VS = CD3DX12_SHADER_BYTECODE(vertexShaderBlob.Get());
 	pipelineStateStream.PS = CD3DX12_SHADER_BYTECODE(pixelShaderBlob.Get());
-	pipelineStateStream.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+	pipelineStateStream.DSVFormat = mDepthStencilFormat;
 	pipelineStateStream.RTVFormats = rtvFormats;
 
 	D3D12_PIPELINE_STATE_STREAM_DESC pipelineStateStreamDesc = {

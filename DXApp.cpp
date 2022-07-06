@@ -263,7 +263,7 @@ void DXApp::CreateSwapChain()
 	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	// Note: Swap chain uses queue to perform flush.
-	ThrowIfFailed(mdxgiFactory->CreateSwapChain(mCommandQueue.Get(), &swapChainDesc, mSwapChain.GetAddressOf()));
+	ThrowIfFailed(mdxgiFactory->CreateSwapChain(mCommandQueue.Get(), &swapChainDesc, mSwapChain.GetAddressOf()))
 }
 
 void DXApp::FlushCommandQueue()
@@ -307,7 +307,7 @@ void DXApp::UpdateDefaultBufferResource(ComPtr<ID3D12GraphicsCommandList2> comma
 		&CD3DX12_RESOURCE_DESC::Buffer(bufferSize, flags),
 		D3D12_RESOURCE_STATE_COPY_DEST,
 		nullptr,
-		IID_PPV_ARGS(pDestinationResource)));
+		IID_PPV_ARGS(pDestinationResource)))
 
 	// Create an committed resource for the upload.
 	if (bufferData)
