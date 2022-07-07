@@ -1,9 +1,13 @@
 #pragma once
 #include <DirectXMath.h>
+#include <vector>
 
 #include "DXApp.h"
 
 struct Model;
+struct Object;
+class Camera;
+
 class Demo : public DXApp
 {
 public:
@@ -27,6 +31,10 @@ private:
 	void CreateRootSignature();
 	void CreatePSO();
 
+protected:
+	void OnMouseDown(WPARAM btnState, int x, int y) override;
+	void OnMouseUp(WPARAM btnState, int x, int y) override;
+	void OnMouseMove(WPARAM btnState, int x, int y) override;
 
 private:
 	ComPtr<ID3D12DescriptorHeap> mDsvHeap;
@@ -41,13 +49,11 @@ private:
 	// Pipeline state object.
 	ComPtr<ID3D12PipelineState> m_PipelineState;
 
-	float m_FoV = 45.f;
-
-	DirectX::XMMATRIX m_ModelMatrix;
-	DirectX::XMMATRIX m_ViewMatrix;
-	DirectX::XMMATRIX m_ProjectionMatrix;
+	Camera* mCamera;
+	POINT mLastMousePos;
 
 	Model* testModel = nullptr;
+	std::vector<Object*> objects;
 
 	bool m_ContentLoaded = false;
 };

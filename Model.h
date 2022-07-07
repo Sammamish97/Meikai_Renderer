@@ -20,6 +20,7 @@ struct Model
 private:
 	DXApp* mApp;
 	ComPtr<ID3D12GraphicsCommandList2> mCommandList;
+
 public:
 	Model(const std::string& file_path, DXApp* app, ComPtr<ID3D12GraphicsCommandList2> commandList);
 	std::string name;

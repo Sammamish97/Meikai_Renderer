@@ -1,10 +1,14 @@
 #include "Demo.h"
 #include "DXUtil.h"
 #include "Model.h"
+#include "Object.h"
+#include "Camera.h"
 
 #include <DirectXColors.h>
 #include <d3dcompiler.h>
 #include <d3dx12.h>
+
+#include "MathHelper.h"
 
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
@@ -94,6 +98,8 @@ void Demo::OnResize()
 
 void Demo::LoadContent()
 {
+	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
+	mCamera = new Camera(aspectRatio);
 	InitModel();
 	CreateDsvDescriptorHeap();
 	CreateShader();
@@ -105,7 +111,10 @@ void Demo::LoadContent()
 
 void Demo::InitModel()
 {
-	testModel = new Model("models/Torus.obj", this, mCommandList);
+	testModel = new Model("models/Monkey.obj", this, mCommandList);
+	objects.push_back(new Object(testModel, XMFLOAT3(0.f, 1.f, 0.f)));
+	objects.push_back(new Object(testModel, XMFLOAT3(-1.f, -1.f, 0.f)));
+	objects.push_back(new Object(testModel, XMFLOAT3(1.f, -1.f, 0.f)));
 }
 
 void Demo::CreateDsvDescriptorHeap()
@@ -232,20 +241,7 @@ void Demo::CreatePSO()
 
 void Demo::Update(const GameTimer& gt)
 {
-	// Update the model matrix.
-	float angle = static_cast<float>(gt.TotalTime() * 90.0);
-	const XMVECTOR rotationAxis = XMVectorSet(0, 1, 1, 0);
-	m_ModelMatrix = XMMatrixRotationAxis(rotationAxis, XMConvertToRadians(angle));
-
-	// Update the view matrix.
-	const XMVECTOR eyePosition = XMVectorSet(0, 0, -10, 1);
-	const XMVECTOR focusPoint = XMVectorSet(0, 0, 0, 1);
-	const XMVECTOR upDirection = XMVectorSet(0, 1, 0, 0);
-	m_ViewMatrix = XMMatrixLookAtLH(eyePosition, focusPoint, upDirection);
-
-	// Update the projection matrix.
-	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
-	m_ProjectionMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(m_FoV), aspectRatio, 0.1f, 100.0f);
+	mCamera->Update(gt);
 }
 
 void Demo::Draw(const GameTimer& gt)
@@ -282,18 +278,13 @@ void Demo::Draw(const GameTimer& gt)
 
 	mCommandList->OMSetRenderTargets(1, &CurrentBackBufferView(), true, &DepthStencilView());
 
-	XMMATRIX mvpMatrix = XMMatrixMultiply(m_ModelMatrix, m_ViewMatrix);
-	mvpMatrix = XMMatrixMultiply(mvpMatrix, m_ProjectionMatrix);
-	mCommandList->SetGraphicsRoot32BitConstants(0, sizeof(XMMATRIX) / 4, &mvpMatrix, 0);
 	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//
-	for(const auto& mesh : testModel->meshes)
-	{
-		mCommandList->IASetVertexBuffers(0, 1, &mesh.m_VertexBufferView);
-		mCommandList->IASetIndexBuffer(&mesh.m_IndexBufferView);
 
-		mCommandList->DrawIndexedInstanced(mesh.m_indices.size(), 1, 0, 0, 0);
+	for(const auto& object : objects)
+	{
+		object->Draw(mCommandList, XMLoadFloat4x4(&mCamera->GetViewMat()), XMLoadFloat4x4(&mCamera->GetProjMat()));
 	}
+
 	//
 	TransitionResource(mCommandList, CurrentBackBuffer(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 
@@ -312,4 +303,52 @@ void Demo::Draw(const GameTimer& gt)
 	// done for simplicity.  Later we will show how to organize our rendering code
 	// so we do not have to wait per frame.
 	FlushCommandQueue();
+}
+
+void Demo::OnMouseDown(WPARAM btnState, int x, int y)
+{
+	DXApp::OnMouseDown(btnState, x, y);
+	mLastMousePos.x = x;
+	mLastMousePos.y = y;
+
+	SetCapture(mhMainWnd);
+}
+
+void Demo::OnMouseUp(WPARAM btnState, int x, int y)
+{
+	DXApp::OnMouseUp(btnState, x, y);
+	ReleaseCapture();
+}
+
+void Demo::OnMouseMove(WPARAM btnState, int x, int y)
+{
+	DXApp::OnMouseMove(btnState, x, y);
+	if ((btnState & MK_LBUTTON) != 0)
+	{
+		// Make each pixel correspond to a quarter of a degree.
+		float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
+		float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
+
+		// Update angles based on input to orbit camera around box.
+		mCamera->mTheta += dx;
+		mCamera->mPhi += dy;
+
+		// Restrict the angle mPhi.
+		mCamera->mPhi = MathHelper::Clamp(mCamera->mPhi, 0.1f, MathHelper::Pi - 0.1f);
+	}
+	else if ((btnState & MK_RBUTTON) != 0)
+	{
+		// Make each pixel correspond to 0.2 unit in the scene.
+		float dx = 0.05f * static_cast<float>(x - mLastMousePos.x);
+		float dy = 0.05f * static_cast<float>(y - mLastMousePos.y);
+
+		// Update the camera radius based on input.
+		mCamera->mRadius += dx - dy;
+
+		// Restrict the radius.
+		mCamera->mRadius = MathHelper::Clamp(mCamera->mRadius, 5.0f, 150.0f);
+	}
+
+	mLastMousePos.x = x;
+	mLastMousePos.y = y;
 }
