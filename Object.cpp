@@ -2,7 +2,7 @@
 
 #include "Model.h"
 
-Object::Object(Model* model, XMFLOAT3 position, XMFLOAT3 scale)
+Object::Object(std::shared_ptr<Model> model, XMFLOAT3 position, XMFLOAT3 scale)
 	:mModel(model), mPosition(position), mScale(scale)
 {
 }

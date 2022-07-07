@@ -3,6 +3,7 @@
 #include "Model.h"
 #include "Object.h"
 #include "Camera.h"
+#include "GeometryPass.h"
 
 #include <DirectXColors.h>
 #include <d3dcompiler.h>
@@ -30,7 +31,18 @@ bool Demo::Initialize()
 	{
 		return false;
 	}
+	// Reset the command list to prep for initialization commands.
+	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
+	G_Pass = std::make_unique<GeometryPass>(mdxDevice.Get(), mCommandList.Get(), mClientWidth, mClientHeight);
 	LoadContent();
+
+	// Execute the initialization commands.
+	ThrowIfFailed(mCommandList->Close());
+	ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
+	mCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
+
+	// Wait until initialization is complete.
+	FlushCommandQueue();
 	// Do the initial resize code.
 	OnResize();
 	return true;
@@ -99,7 +111,7 @@ void Demo::OnResize()
 void Demo::LoadContent()
 {
 	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
-	mCamera = new Camera(aspectRatio);
+	mCamera = std::make_unique<Camera>(aspectRatio);
 	InitModel();
 	CreateDsvDescriptorHeap();
 	CreateShader();
@@ -111,7 +123,7 @@ void Demo::LoadContent()
 
 void Demo::InitModel()
 {
-	testModel = new Model("models/Monkey.obj", this, mCommandList);
+	testModel = std::make_shared<Model>("models/Monkey.obj", this, mCommandList);
 	objects.push_back(new Object(testModel, XMFLOAT3(0.f, 1.f, 0.f)));
 	objects.push_back(new Object(testModel, XMFLOAT3(-1.f, -1.f, 0.f)));
 	objects.push_back(new Object(testModel, XMFLOAT3(1.f, -1.f, 0.f)));

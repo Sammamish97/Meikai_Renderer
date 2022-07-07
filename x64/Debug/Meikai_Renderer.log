@@ -1,9 +1,19 @@
-﻿  Camera.cpp
+﻿  DXApp.cpp
   Demo.cpp
 C:\Data\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
 C:\Data\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
 C:\Data\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
 C:\Data\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
-  main.cpp
+  Mesh.cpp
+C:\Data\Meikai_Renderer\Mesh.cpp(18,69): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
+C:\Data\Meikai_Renderer\Mesh.cpp(28,65): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
+  Model.cpp
+C:\Data\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Model.cpp(17,9): warning C4002: too many arguments for function-like macro invocation 'assert'
+  Object.cpp
+C:\Data\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Object.cpp(35,70): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
   Generating Code...
   Meikai_Renderer.vcxproj -> C:\Data\Meikai_Renderer\x64\Debug\Meikai_Renderer.exe

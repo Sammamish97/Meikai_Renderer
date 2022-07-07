@@ -1,5 +1,5 @@
 #pragma once
-#include <DirectXMath.h>
+#include <memory>
 #include <vector>
 
 #include "DXApp.h"
@@ -7,6 +7,7 @@
 struct Model;
 struct Object;
 class Camera;
+class GeometryPass;
 
 class Demo : public DXApp
 {
@@ -15,14 +16,14 @@ public:
 	~Demo();
 
 	bool Initialize() override;
+
 protected:
 	void OnResize() override;
 	void Update(const GameTimer& gt) override;
 	void Draw(const GameTimer& gt) override;
 
 private:
-	
-	D3D12_CPU_DESCRIPTOR_HANDLE Demo::DepthStencilView() const;
+	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView() const;
 
 	void LoadContent();
 	void InitModel();
@@ -37,6 +38,9 @@ protected:
 	void OnMouseMove(WPARAM btnState, int x, int y) override;
 
 private:
+	std::unique_ptr<GeometryPass> G_Pass;
+
+private:
 	ComPtr<ID3D12DescriptorHeap> mDsvHeap;
 	ComPtr<ID3D12Resource> mDepthStencilBuffer;
 
@@ -49,10 +53,10 @@ private:
 	// Pipeline state object.
 	ComPtr<ID3D12PipelineState> m_PipelineState;
 
-	Camera* mCamera;
+	std::unique_ptr<Camera> mCamera;
 	POINT mLastMousePos;
 
-	Model* testModel = nullptr;
+	std::shared_ptr<Model> testModel = nullptr;
 	std::vector<Object*> objects;
 
 	bool m_ContentLoaded = false;

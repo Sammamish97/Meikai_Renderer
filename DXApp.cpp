@@ -325,20 +325,10 @@ void DXApp::UpdateDefaultBufferResource(ComPtr<ID3D12GraphicsCommandList2> comma
 		subresourceData.RowPitch = bufferSize;
 		subresourceData.SlicePitch = subresourceData.RowPitch;
 
-		mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr);
-
 		//This is command function. Therefore, need to execute command list & flush queue.
 		UpdateSubresources(commandList.Get(),
 			*pDestinationResource, *pIntermediateResource,
 			0, 0, 1, &subresourceData);
-
-		// Done recording commands.
-		ThrowIfFailed(mCommandList->Close())
-
-		// Add the command list to the queue for execution.
-		ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
-		mCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
-		FlushCommandQueue();
 	}
 }
 

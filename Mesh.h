@@ -28,12 +28,16 @@ public:
 	ComPtr<ID3D12Resource> m_VertexBuffer;
 	ComPtr<ID3D12Resource> m_IndexBuffer;
 
+	//Staging resource must not deleted before staging command is flushed by queue.
+	//Therefore, before command list manager implemented, need to cache staging resource.
+	ComPtr<ID3D12Resource> stagingVB;
+	ComPtr<ID3D12Resource> stagingIB;
+
 	D3D12_VERTEX_BUFFER_VIEW m_VertexBufferView;
 	D3D12_INDEX_BUFFER_VIEW m_IndexBufferView;
 
 	std::vector<Vertex> m_vertices;
 	std::vector<WORD> m_indices;
-
 
 private:
 	void InitVB(ComPtr<ID3D12GraphicsCommandList2> commandList);
