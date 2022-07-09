@@ -23,6 +23,11 @@ void Camera::Update(const GameTimer& gt)
 	XMStoreFloat4x4(&mView, view);
 }
 
+XMFLOAT3 Camera::GetPosition() const
+{
+	return mEyePos;
+}
+
 XMFLOAT4X4 Camera::GetViewMat() const
 {
 	return mView;

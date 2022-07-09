@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
+#include <unordered_map>
 #include <vector>
+#include "FrameResource.h"
 
 #include "DXApp.h"
 
@@ -23,14 +25,25 @@ protected:
 	void Draw(const GameTimer& gt) override;
 
 private:
+	void DrawGeometry(const GameTimer& gt);
+
+private:
 	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView() const;
 
 	void LoadContent();
-	void InitModel();
+	void BuildModels();
+	void BuildGeometryPSO();
+	void BuildGeometryRootSignature();
+	void BuildFrameResource();
+
+	void CreateGeometryRTV();
 	void CreateDsvDescriptorHeap();
 	void CreateShader();
-	void CreateRootSignature();
-	void CreatePSO();
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE GetGeometryRtvCpuHandle(int index);
+
+private:
+	void UpdatePassCB(const GameTimer& gt);
 
 protected:
 	void OnMouseDown(WPARAM btnState, int x, int y) override;
@@ -39,25 +52,20 @@ protected:
 
 private:
 	std::unique_ptr<GeometryPass> G_Pass;
+	std::unique_ptr<FrameResource> mFrameResource;
 
-private:
+	ComPtr<ID3D12DescriptorHeap> mGeometryRtvHeap;
 	ComPtr<ID3D12DescriptorHeap> mDsvHeap;
 	ComPtr<ID3D12Resource> mDepthStencilBuffer;
 
-	ComPtr<ID3DBlob> vertexShaderBlob;
-	ComPtr<ID3DBlob> pixelShaderBlob;
+	std::unordered_map<std::string, std::shared_ptr<Model>> mModels;
+	std::unordered_map<std::string, ComPtr<ID3DBlob>> mShaders;
 
-	// Root signature
-	ComPtr<ID3D12RootSignature> m_RootSignature;
-
-	// Pipeline state object.
-	ComPtr<ID3D12PipelineState> m_PipelineState;
+	std::vector<D3D12_INPUT_ELEMENT_DESC> mInputLayout;
+	std::vector<std::unique_ptr<Object>> objects;
 
 	std::unique_ptr<Camera> mCamera;
 	POINT mLastMousePos;
-
-	std::shared_ptr<Model> testModel = nullptr;
-	std::vector<Object*> objects;
 
 	bool m_ContentLoaded = false;
 };

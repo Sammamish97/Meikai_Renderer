@@ -21,14 +21,8 @@ private:
 
 public:
 	void OnResize(UINT newWidth, UINT newHeight);
-	void SetPSOs();
 
-	void BuildDescriptors(
-		CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuSrv,
-		CD3DX12_GPU_DESCRIPTOR_HANDLE hGpuSrv,
-		CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuRtv,
-		UINT cbvSrvUavDescriptorSize,
-		UINT rtvDescriptorSize);
+	void BuildDescriptors(CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuRtv, UINT rtvDescriptorSize);
 
 	void RebuildDescriptors();
 
@@ -47,8 +41,6 @@ public:
 
 private:
 	ComPtr<ID3D12Device> mdxDevice;
-	ComPtr<ID3D12RootSignature> mRootSIg;
-	ComPtr<ID3D12PipelineState> mPso;
 
 	ComPtr<ID3D12Resource> mPositionMap;
 	ComPtr<ID3D12Resource> mNormalMap;
@@ -71,5 +63,9 @@ private:
 
 	D3D12_VIEWPORT mViewport;
 	D3D12_RECT mScissorRect;
+
+public:
+	ComPtr<ID3D12RootSignature> mRootSig;
+	ComPtr<ID3D12PipelineState> mPso;
 };
 

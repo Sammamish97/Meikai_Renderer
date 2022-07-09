@@ -9,19 +9,23 @@ Object::Object(std::shared_ptr<Model> model, XMFLOAT3 position, XMFLOAT3 scale)
 
 void Object::SetMVPMatrix(ComPtr<ID3D12GraphicsCommandList2> commandList, XMMATRIX viewMat, XMMATRIX projMat)
 {
-	XMMATRIX translationMat = XMMatrixTranslation(mPosition.x, mPosition.y, mPosition.z);
-	XMMATRIX scaleMat = XMMatrixScaling(mScale.x, mScale.y, mScale.z);
-
-	XMMATRIX worldMat = XMMatrixMultiply(translationMat, scaleMat);
+	XMMATRIX worldMat = GetWorldMat();
 
 	XMMATRIX mvpMatrix = XMMatrixMultiply(worldMat, viewMat);
 	mvpMatrix = XMMatrixMultiply(mvpMatrix, projMat);
 	commandList->SetGraphicsRoot32BitConstants(0, sizeof(XMMATRIX) / 4, &mvpMatrix, 0);
 }
 
-
 void Object::Update(float dt)
 {
+}
+
+XMMATRIX Object::GetWorldMat() const
+{
+	XMMATRIX translationMat = XMMatrixTranslation(mPosition.x, mPosition.y, mPosition.z);
+	XMMATRIX scaleMat = XMMatrixScaling(mScale.x, mScale.y, mScale.z);
+
+	return XMMatrixMultiply(translationMat, scaleMat);
 }
 
 void Object::Draw(ComPtr<ID3D12GraphicsCommandList2> commandList, XMMATRIX viewMat, XMMATRIX projMat)

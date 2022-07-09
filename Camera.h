@@ -10,6 +10,7 @@ struct Camera
 public:
 	Camera(float aspectRatio);
 	void Update(const GameTimer& gt);
+	XMFLOAT3 GetPosition() const;
 	XMFLOAT4X4 GetViewMat() const;
 	XMFLOAT4X4 GetProjMat() const;
 

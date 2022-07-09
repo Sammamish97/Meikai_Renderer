@@ -29,31 +29,18 @@ void GeometryPass::OnResize(UINT newWidth, UINT newHeight)
     }
 }
 
-void GeometryPass::SetPSOs()
+void GeometryPass::BuildDescriptors(CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuRtv, UINT rtvDescriptorSize)
 {
-}
-
-void GeometryPass::BuildDescriptors(CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuSrv, CD3DX12_GPU_DESCRIPTOR_HANDLE hGpuSrv,
-	CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuRtv, UINT cbvSrvUavDescriptorSize, UINT rtvDescriptorSize)
-{
-    mhPositionMapCpuSrv = hCpuSrv;
-    mhNormalMapCpuSrv = hCpuSrv.Offset(1, cbvSrvUavDescriptorSize);
-    mhAlbedoMapCpuSrv = hCpuSrv.Offset(1, cbvSrvUavDescriptorSize);;
-
-    mhPositionMapGpuSrv = hGpuSrv;
-    mhNormalMapGpuSrv = hGpuSrv.Offset(1, cbvSrvUavDescriptorSize);
-    mhAlbedoMapGpuSrv = hGpuSrv.Offset(1, cbvSrvUavDescriptorSize);;
-
     mhPositionMapCpuRtv = hCpuRtv;
-    mhNormalMapCpuRtv = hCpuRtv;
-    mhAlbedoMapCpuRtv = hCpuRtv;
+    mhNormalMapCpuRtv = hCpuRtv.Offset(1, rtvDescriptorSize);
+    mhAlbedoMapCpuRtv = hCpuRtv.Offset(1, rtvDescriptorSize);
 
     RebuildDescriptors();
 }
 
 void GeometryPass::RebuildDescriptors()
 {
-    D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+    /*D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
     srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
     srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
     srvDesc.Format = PositionAndNormalMapFormat;
@@ -64,7 +51,7 @@ void GeometryPass::RebuildDescriptors()
     mdxDevice->CreateShaderResourceView(mNormalMap.Get(), &srvDesc, mhNormalMapCpuSrv);
 
     srvDesc.Format = AlbedoMapFormat;
-    mdxDevice->CreateShaderResourceView(mAlbedoMap.Get(), &srvDesc, mhAlbedoMapCpuSrv);
+    mdxDevice->CreateShaderResourceView(mAlbedoMap.Get(), &srvDesc, mhAlbedoMapCpuSrv);*/
 
     D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
     rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
