@@ -4,8 +4,8 @@
 #include "Object.h"
 #include "Camera.h"
 #include "GeometryPass.h"
+#include "LightingPass.h"
 
-#include <DirectXColors.h>
 #include <d3dcompiler.h>
 #include <d3dx12.h>
 
@@ -35,7 +35,9 @@ bool Demo::Initialize()
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
 	G_Pass = std::make_unique<GeometryPass>(mdxDevice.Get(), mCommandList.Get(), mClientWidth, mClientHeight);
+	L_Pass = std::make_unique<LightingPass>(mdxDevice.Get(), mCommandList.Get(), mClientWidth, mClientHeight);
 	LoadContent();
+
 
 	// Execute the initialization commands.
 	ThrowIfFailed(mCommandList->Close());
@@ -118,42 +120,14 @@ void Demo::LoadContent()
 	CreateShader();
 	CreateDsvDescriptorHeap();
 	CreateGeometryRTV();
+
 	BuildGeometryRootSignature();
 	BuildGeometryPSO();
 
+	BuildLightingRootSignature();
+	BuildLightingPSO();
+
 	m_ContentLoaded = true; 
-}
-
-void Demo::BuildGeometryRootSignature()
-{
-	//Geom use only 2 root parameter. One for model matrix 32-bit constant buffer, other for PassCB root descriptor.
-	D3D12_FEATURE_DATA_ROOT_SIGNATURE featureData = {};
-	featureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
-	if (FAILED(mdxDevice->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &featureData, sizeof(featureData))))
-	{
-		featureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
-	}
-
-	// Allow input layout and deny unnecessary access to certain pipeline stages.
-	// Use for vertex shader only.
-	D3D12_ROOT_SIGNATURE_FLAGS rootSignatureFlags =
-		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
-		D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
-		D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
-		D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
-		D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
-
-	CD3DX12_ROOT_PARAMETER1 rootParameters[2];
-	rootParameters[0].InitAsConstants(sizeof(XMMATRIX) / 4, 0, 0, D3D12_SHADER_VISIBILITY_VERTEX);
-	rootParameters[1].InitAsConstantBufferView(1);
-
-	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDescription;
-	rootSignatureDescription.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, rootSignatureFlags);
-
-	ComPtr<ID3DBlob> rootSignatureBlob;
-	ComPtr<ID3DBlob> errorBlob;
-	ThrowIfFailed(D3DX12SerializeVersionedRootSignature(&rootSignatureDescription, featureData.HighestVersion, &rootSignatureBlob, &errorBlob))
-	ThrowIfFailed(mdxDevice->CreateRootSignature(0, rootSignatureBlob->GetBufferPointer(), rootSignatureBlob->GetBufferSize(), IID_PPV_ARGS(G_Pass->mRootSig.GetAddressOf())))
 }
 
 void Demo::BuildGeometryPSO()
@@ -193,10 +167,113 @@ void Demo::BuildGeometryPSO()
 	};
 	geometryPSODesc.InputLayout = { inputLayout, _countof(inputLayout) };
 
-	
 	ThrowIfFailed(mdxDevice->CreateGraphicsPipelineState(&geometryPSODesc, IID_PPV_ARGS(G_Pass->mPso.GetAddressOf())))
 }
 
+void Demo::BuildGeometryRootSignature()
+{
+	//Geom use only 2 root parameter. One for model matrix 32-bit constant buffer, other for PassCB root descriptor.
+	D3D12_FEATURE_DATA_ROOT_SIGNATURE featureData = {};
+	featureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
+	if (FAILED(mdxDevice->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &featureData, sizeof(featureData))))
+	{
+		featureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
+	}
+
+	// Allow input layout and deny unnecessary access to certain pipeline stages.
+	// Use for vertex shader only.
+	D3D12_ROOT_SIGNATURE_FLAGS rootSignatureFlags =
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
+
+	CD3DX12_ROOT_PARAMETER1 rootParameters[2];
+	rootParameters[0].InitAsConstants(sizeof(XMMATRIX) / 4, 0, 0, D3D12_SHADER_VISIBILITY_VERTEX);
+	rootParameters[1].InitAsConstantBufferView(1);
+
+	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDescription;
+	rootSignatureDescription.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, rootSignatureFlags);
+
+	ComPtr<ID3DBlob> rootSignatureBlob;
+	ComPtr<ID3DBlob> errorBlob;
+	ThrowIfFailed(D3DX12SerializeVersionedRootSignature(&rootSignatureDescription, featureData.HighestVersion, &rootSignatureBlob, &errorBlob))
+	ThrowIfFailed(mdxDevice->CreateRootSignature(0, rootSignatureBlob->GetBufferPointer(), rootSignatureBlob->GetBufferSize(), IID_PPV_ARGS(G_Pass->mRootSig.GetAddressOf())))
+}
+
+void Demo::BuildLightingPSO()
+{
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC lightingPSODesc;
+	ZeroMemory(&lightingPSODesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
+	lightingPSODesc.pRootSignature = L_Pass->mRootSig.Get();
+	lightingPSODesc.VS =
+	{
+		reinterpret_cast<BYTE*>(mShaders["LightingVS"]->GetBufferPointer()),
+		mShaders["LightingVS"]->GetBufferSize()
+	};
+	lightingPSODesc.PS =
+	{
+		reinterpret_cast<BYTE*>(mShaders["LightingPS"]->GetBufferPointer()),
+		mShaders["LightingPS"]->GetBufferSize()
+	};
+	lightingPSODesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	lightingPSODesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+	lightingPSODesc.SampleMask = UINT_MAX;
+	lightingPSODesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	lightingPSODesc.NumRenderTargets = 1;
+	lightingPSODesc.RTVFormats[0] = mBackBufferFormat;
+	lightingPSODesc.SampleDesc.Count = m4xMsaaState ? 4 : 1;
+	lightingPSODesc.SampleDesc.Quality = m4xMsaaState ? (m4xMsaaQuality - 1) : 0;
+
+	ThrowIfFailed(mdxDevice->CreateGraphicsPipelineState(&lightingPSODesc, IID_PPV_ARGS(L_Pass->mPso.GetAddressOf())))
+}
+
+void Demo::BuildLightingRootSignature()
+{
+	//Light pass use 3 textures for root value.
+	D3D12_FEATURE_DATA_ROOT_SIGNATURE featureData = {};
+	featureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
+	if (FAILED(mdxDevice->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &featureData, sizeof(featureData))))
+	{
+		featureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
+	}
+
+	// Allow input layout and deny unnecessary access to certain pipeline stages.
+	// Use for vertex shader only.
+	D3D12_ROOT_SIGNATURE_FLAGS rootSignatureFlags =
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
+
+	CD3DX12_DESCRIPTOR_RANGE texTable0;//Table for position, normal, albedo texture of Geometry pass.
+	texTable0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 3, 0, 0);
+
+	CD3DX12_ROOT_PARAMETER rootParameters[1];
+	rootParameters[0].InitAsDescriptorTable(1, &texTable0, D3D12_SHADER_VISIBILITY_PIXEL);
+
+	auto staticSamplers = GetStaticSamplers();
+
+	CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(1, rootParameters,
+		(UINT)staticSamplers.size(), staticSamplers.data(),
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+	
+	ComPtr<ID3DBlob> serializedRootSig;
+	ComPtr<ID3DBlob> errorBlob;
+
+	HRESULT hr = D3D12SerializeRootSignature(&rootSigDesc, D3D_ROOT_SIGNATURE_VERSION_1,
+		serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf());
+
+	if (errorBlob != nullptr)
+	{
+		::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+	}
+	ThrowIfFailed(hr);
+
+	ThrowIfFailed(mdxDevice->CreateRootSignature(0, serializedRootSig->GetBufferPointer(), serializedRootSig->GetBufferSize(), IID_PPV_ARGS(L_Pass->mRootSig.GetAddressOf())))
+}
 
 void Demo::BuildModels()
 {
@@ -223,7 +300,15 @@ void Demo::CreateGeometryRTV()
 	ThrowIfFailed(mdxDevice->CreateDescriptorHeap(
 		&rtvHeapDesc, IID_PPV_ARGS(mGeometryRtvHeap.GetAddressOf())));
 
-	G_Pass->BuildDescriptors(GetGeometryRtvCpuHandle(0), mRtvDescriptorSize);
+	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
+	srvHeapDesc.NumDescriptors = 3;
+	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	ThrowIfFailed(mdxDevice->CreateDescriptorHeap(
+		&srvHeapDesc, IID_PPV_ARGS(mLightSrvHeap.GetAddressOf())))
+
+	G_Pass->BuildDescriptors(GetCpuSrv(0), GetGpuSrv(0), GetGeometryRtvCpuHandle(0),
+		mCbvSrvUavDescriptorSize,mRtvDescriptorSize);
 }
 
 void Demo::CreateDsvDescriptorHeap()
@@ -243,6 +328,78 @@ void Demo::CreateShader()
 	mShaders["opaquePS"] = DxUtil::CompileShader(L"shaders/PixelShader.hlsl", nullptr, "main", "ps_5_1");
 	mShaders["GeomVS"] = DxUtil::CompileShader(L"shaders/GeometryPass.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["GeomPS"] = DxUtil::CompileShader(L"shaders/GeometryPass.hlsl", nullptr, "PS", "ps_5_1");
+	mShaders["LightingVS"] = DxUtil::CompileShader(L"shaders/LightingPass.hlsl", nullptr, "VS", "vs_5_1");
+	mShaders["LightingPS"] = DxUtil::CompileShader(L"shaders/LightingPass.hlsl", nullptr, "PS", "ps_5_1");
+}
+
+std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> Demo::GetStaticSamplers()
+{
+	// Applications usually only need a handful of samplers.  So just define them all up front
+	// and keep them available as part of the root signature.  
+
+	const CD3DX12_STATIC_SAMPLER_DESC pointWrap(
+		0, // shaderRegister
+		D3D12_FILTER_MIN_MAG_MIP_POINT, // filter
+		D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressU
+		D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressV
+		D3D12_TEXTURE_ADDRESS_MODE_WRAP); // addressW
+
+	const CD3DX12_STATIC_SAMPLER_DESC pointClamp(
+		1, // shaderRegister
+		D3D12_FILTER_MIN_MAG_MIP_POINT, // filter
+		D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressU
+		D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressV
+		D3D12_TEXTURE_ADDRESS_MODE_CLAMP); // addressW
+
+	const CD3DX12_STATIC_SAMPLER_DESC linearWrap(
+		2, // shaderRegister
+		D3D12_FILTER_MIN_MAG_MIP_LINEAR, // filter
+		D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressU
+		D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressV
+		D3D12_TEXTURE_ADDRESS_MODE_WRAP); // addressW
+
+	const CD3DX12_STATIC_SAMPLER_DESC linearClamp(
+		3, // shaderRegister
+		D3D12_FILTER_MIN_MAG_MIP_LINEAR, // filter
+		D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressU
+		D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressV
+		D3D12_TEXTURE_ADDRESS_MODE_CLAMP); // addressW
+
+	const CD3DX12_STATIC_SAMPLER_DESC anisotropicWrap(
+		4, // shaderRegister
+		D3D12_FILTER_ANISOTROPIC, // filter
+		D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressU
+		D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressV
+		D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressW
+		0.0f,                             // mipLODBias
+		8);                               // maxAnisotropy
+
+	const CD3DX12_STATIC_SAMPLER_DESC anisotropicClamp(
+		5, // shaderRegister
+		D3D12_FILTER_ANISOTROPIC, // filter
+		D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressU
+		D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressV
+		D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressW
+		0.0f,                              // mipLODBias
+		8);                                // maxAnisotropy
+
+	const CD3DX12_STATIC_SAMPLER_DESC shadow(
+		6, // shaderRegister
+		D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT, // filter
+		D3D12_TEXTURE_ADDRESS_MODE_BORDER,  // addressU
+		D3D12_TEXTURE_ADDRESS_MODE_BORDER,  // addressV
+		D3D12_TEXTURE_ADDRESS_MODE_BORDER,  // addressW
+		0.0f,                               // mipLODBias
+		16,                                 // maxAnisotropy
+		D3D12_COMPARISON_FUNC_LESS_EQUAL,
+		D3D12_STATIC_BORDER_COLOR_OPAQUE_BLACK);
+
+	return {
+		pointWrap, pointClamp,
+		linearWrap, linearClamp,
+		anisotropicWrap, anisotropicClamp,
+		shadow
+	};
 }
 
 CD3DX12_CPU_DESCRIPTOR_HANDLE Demo::GetGeometryRtvCpuHandle(int index)
@@ -250,6 +407,20 @@ CD3DX12_CPU_DESCRIPTOR_HANDLE Demo::GetGeometryRtvCpuHandle(int index)
 	auto rtv = CD3DX12_CPU_DESCRIPTOR_HANDLE(mGeometryRtvHeap->GetCPUDescriptorHandleForHeapStart());
 	rtv.Offset(index, mRtvDescriptorSize);
 	return rtv;
+}
+
+CD3DX12_CPU_DESCRIPTOR_HANDLE Demo::GetCpuSrv(int index)
+{
+	auto srv = CD3DX12_CPU_DESCRIPTOR_HANDLE(mLightSrvHeap->GetCPUDescriptorHandleForHeapStart());
+	srv.Offset(index, mCbvSrvUavDescriptorSize);
+	return srv;
+}
+
+CD3DX12_GPU_DESCRIPTOR_HANDLE Demo::GetGpuSrv(int index)
+{
+	auto srv = CD3DX12_GPU_DESCRIPTOR_HANDLE(mLightSrvHeap->GetGPUDescriptorHandleForHeapStart());
+	srv.Offset(index, mCbvSrvUavDescriptorSize);
+	return srv;
 }
 
 void Demo::UpdatePassCB(const GameTimer& gt)
@@ -300,6 +471,7 @@ void Demo::Draw(const GameTimer& gt)
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
 	DrawGeometry(gt);
+	DrawLighting(gt);
 
 	// Done recording commands.
 	ThrowIfFailed(mCommandList->Close());
@@ -311,6 +483,9 @@ void Demo::Draw(const GameTimer& gt)
 	// swap the back and front buffers
 	ThrowIfFailed(mSwapChain->Present(0, 0));
 	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
+		D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_GENERIC_READ));
 
 	// Wait until frame commands are complete.  This waiting is inefficient and is
 	// done for simplicity.  Later we will show how to organize our rendering code
@@ -339,7 +514,7 @@ void Demo::DrawGeometry(const GameTimer& gt)
 		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
 	// Clear the screen normal map and depth buffer.
-	float normalClearValue[] = { 0.0f, 0.0f, 1.0f, 0.0f };
+	float normalClearValue[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	float positionAndcolorClearValue[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	mCommandList->ClearRenderTargetView(positionMapRtv, positionAndcolorClearValue, 0, nullptr);
 	mCommandList->ClearRenderTargetView(normalMapRtv, normalClearValue, 0, nullptr);
@@ -366,8 +541,6 @@ void Demo::DrawGeometry(const GameTimer& gt)
 	// Specify the buffers we are going to render to.
 	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, &DepthStencilView());
 
-	//TODO: Draw이전 Pass별로 필요한 data(Matrix, Light, 기타등등 넘겨줘야함)
-
 	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	for (const auto& object : objects)
@@ -381,6 +554,43 @@ void Demo::DrawGeometry(const GameTimer& gt)
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(albedoMap.Get(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
+}
+
+void Demo::DrawLighting(const GameTimer& gt)
+{
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
+		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	// Clear the screen normal map and depth buffer.
+	float positionAndcolorClearValue[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), positionAndcolorClearValue, 0, nullptr);
+
+	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { CurrentBackBufferExtView() };
+
+	//Set Pipeline & Root signature
+	mCommandList->SetPipelineState(L_Pass->mPso.Get());
+	mCommandList->SetGraphicsRootSignature(L_Pass->mRootSig.Get());
+
+	mCommandList->SetDescriptorHeaps(1, mLightSrvHeap.GetAddressOf());
+	//Update root table
+	mCommandList->SetGraphicsRootDescriptorTable(0, mLightSrvHeap->GetGPUDescriptorHandleForHeapStart());
+	mCommandList->SetGraphicsRootDescriptorTable(1, mLightSrvHeap->GetGPUDescriptorHandleForHeapStart());
+	mCommandList->SetGraphicsRootDescriptorTable(2, mLightSrvHeap->GetGPUDescriptorHandleForHeapStart());
+
+	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
+	mCommandList->RSSetViewports(1, &mScreenViewport);
+	mCommandList->RSSetScissorRects(1, &mScissorRect);
+
+	// Specify the buffers we are going to render to.
+	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, &DepthStencilView());
+
+	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	mCommandList->DrawInstanced(3, 1, 0, 0);
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+
 }
 
 void Demo::OnMouseDown(WPARAM btnState, int x, int y)

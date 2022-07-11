@@ -10,6 +10,7 @@ struct Model;
 struct Object;
 class Camera;
 class GeometryPass;
+class LightingPass;
 
 class Demo : public DXApp
 {
@@ -26,21 +27,31 @@ protected:
 
 private:
 	void DrawGeometry(const GameTimer& gt);
+	void DrawLighting(const GameTimer& gt);
 
 private:
 	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView() const;
 
 	void LoadContent();
 	void BuildModels();
+
 	void BuildGeometryPSO();
 	void BuildGeometryRootSignature();
+
+	void BuildLightingPSO();
+	void BuildLightingRootSignature();
+
 	void BuildFrameResource();
 
 	void CreateGeometryRTV();
 	void CreateDsvDescriptorHeap();
 	void CreateShader();
 
+	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
+
 	CD3DX12_CPU_DESCRIPTOR_HANDLE GetGeometryRtvCpuHandle(int index);
+	CD3DX12_CPU_DESCRIPTOR_HANDLE GetCpuSrv(int index);
+	CD3DX12_GPU_DESCRIPTOR_HANDLE GetGpuSrv(int index);
 
 private:
 	void UpdatePassCB(const GameTimer& gt);
@@ -52,9 +63,12 @@ protected:
 
 private:
 	std::unique_ptr<GeometryPass> G_Pass;
+	std::unique_ptr<LightingPass> L_Pass;
+
 	std::unique_ptr<FrameResource> mFrameResource;
 
 	ComPtr<ID3D12DescriptorHeap> mGeometryRtvHeap;
+	ComPtr<ID3D12DescriptorHeap> mLightSrvHeap;
 	ComPtr<ID3D12DescriptorHeap> mDsvHeap;
 	ComPtr<ID3D12Resource> mDepthStencilBuffer;
 

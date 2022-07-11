@@ -19,6 +19,7 @@
     <ClInclude Include="FrameResource.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GeometryPass.h" />
+    <ClInclude Include="LightingPass.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
@@ -33,6 +34,7 @@
     <ClCompile Include="FrameResource.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GeometryPass.cpp" />
+    <ClCompile Include="LightingPass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathHelper.cpp" />
     <ClCompile Include="Mesh.cpp" />

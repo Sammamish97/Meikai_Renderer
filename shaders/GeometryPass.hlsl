@@ -74,7 +74,7 @@ PS_OUTPUT PS(VertexOut pin)
     PS_OUTPUT output;
     output.Position = pin.PosW;
     output.Normal = float4(pin.NormalW, 1.0);
-    output.Albdeo = float4(0.1, 0.7, 0.1, 1.0);
+    output.Albdeo = float4(1.0, 0.0, 0.0, 1.0);
 
     return output;
 }

@@ -216,6 +216,7 @@ bool DXApp::InitDirect3D()
 	LogAdapters();
 #endif
 
+	//Initial swap chain image's state is common | present.
 	CreateCommandObjects();
 	CreateSwapChain();
 	CreateSwapChainRtvDescriptorHeap();
@@ -287,6 +288,14 @@ ID3D12Resource* DXApp::CurrentBackBuffer() const
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE DXApp::CurrentBackBufferView() const
+{
+	return CD3DX12_CPU_DESCRIPTOR_HANDLE(
+		mSwapChainRtvHeap->GetCPUDescriptorHandleForHeapStart(),
+		mCurrBackBuffer,
+		mRtvDescriptorSize);
+}
+
+CD3DX12_CPU_DESCRIPTOR_HANDLE DXApp::CurrentBackBufferExtView() const
 {
 	return CD3DX12_CPU_DESCRIPTOR_HANDLE(
 		mSwapChainRtvHeap->GetCPUDescriptorHandleForHeapStart(),

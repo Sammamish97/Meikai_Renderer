@@ -22,7 +22,12 @@ private:
 public:
 	void OnResize(UINT newWidth, UINT newHeight);
 
-	void BuildDescriptors(CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuRtv, UINT rtvDescriptorSize);
+	void BuildDescriptors(
+		CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuSrv,
+		CD3DX12_GPU_DESCRIPTOR_HANDLE hGpuSrv,
+		CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuRtv,
+		UINT cbvSrvUavDescriptorSize,
+		UINT rtvDescriptorSize);
 
 	void RebuildDescriptors();
 

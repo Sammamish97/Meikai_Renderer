@@ -10,6 +10,8 @@
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <string>
+#include <d3dx12.h>
+#include <array>
 
 #include "GameTimer.h"
 
@@ -61,7 +63,8 @@ protected:
     void FlushCommandQueue();
 
     ID3D12Resource* CurrentBackBuffer()const;
-    D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView()const;
+    D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView() const;
+    CD3DX12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferExtView() const;
 
     void CalculateFrameStats();
 
