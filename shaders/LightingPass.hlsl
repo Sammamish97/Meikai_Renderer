@@ -1,12 +1,3 @@
-struct VertexIn
-{
-	float3 PosL    : POSITION;
-    float3 NormalL : NORMAL;
-	float2 TexC    : UV;
-	float3 TangentU : TANGENT;
-    float3 BiTangentU : BITANGENT;
-};
-
 struct VertexOut
 {
     float4 posH : SV_POSITION;
@@ -22,11 +13,11 @@ SamplerState gsamLinearClamp : register(s1);
 SamplerState gsamDepthMap : register(s2);
 SamplerState gsamLinearWrap : register(s3);
 
-VertexOut VS(VertexIn vin)
+VertexOut VS(uint vid : SV_VertexID)
 {
     VertexOut vout;
-	vout.posH = float4(vin.PosL, 1.f);
-	vout.UV = vin.TexC;
+	vout.UV = float2((vid << 1) & 2, vid & 2);
+	vout.posH = float4(vout.UV * 2.0f + -1.0f, 0.0f, 1.0f);
 	return vout;
 }
 

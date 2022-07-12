@@ -218,6 +218,7 @@ void Demo::BuildLightingPSO()
 		mShaders["LightingPS"]->GetBufferSize()
 	};
 	lightingPSODesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	lightingPSODesc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
 	lightingPSODesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	lightingPSODesc.SampleMask = UINT_MAX;
 	lightingPSODesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
@@ -225,15 +226,8 @@ void Demo::BuildLightingPSO()
 	lightingPSODesc.RTVFormats[0] = mBackBufferFormat;
 	lightingPSODesc.SampleDesc.Count = m4xMsaaState ? 4 : 1;
 	lightingPSODesc.SampleDesc.Quality = m4xMsaaState ? (m4xMsaaQuality - 1) : 0;
-	
-	D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-		{"UV", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-		{"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-		{"BITANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-	};
-	lightingPSODesc.InputLayout = { inputLayout, _countof(inputLayout) };
+
+	lightingPSODesc.InputLayout = { nullptr, 0};
 
 	ThrowIfFailed(mdxDevice->CreateGraphicsPipelineState(&lightingPSODesc, IID_PPV_ARGS(L_Pass->mPso.GetAddressOf())))
 }
@@ -598,7 +592,8 @@ void Demo::DrawLighting(const GameTimer& gt)
 
 	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	quad->DrawWithoutMat(mCommandList);
+	mCommandList->DrawInstanced(4, 1, 0, 0);
+	//quad->DrawWithoutMat(mCommandList);
 
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
