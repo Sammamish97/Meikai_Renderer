@@ -146,7 +146,6 @@ void Demo::BuildGeometryPSO()
 		mShaders["GeomPS"]->GetBufferSize()
 	};
 	geometryPSODesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	geometryPSODesc.RasterizerState.FrontCounterClockwise = true;
 	geometryPSODesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	geometryPSODesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 	geometryPSODesc.SampleMask = UINT_MAX;
@@ -292,7 +291,7 @@ void Demo::BuildModels()
 	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, mCommandList);
 	mModels["Bunny"] = std::make_shared<Model>("../models/bunny.obj", this, mCommandList);
 
-	objects.push_back(std::make_unique<Object>(mModels["Bunny"], XMFLOAT3(0.f, 1.f, 0.f), XMFLOAT3(10, 10, 10)));
+	objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(0.f, 0.f, 0.f)));
 	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(-1.f, -1.f, 0.f)));
 	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(1.f, -1.f, 0.f)));
 
@@ -557,7 +556,7 @@ void Demo::DrawGeometry(const GameTimer& gt)
 
 	for (const auto& object : objects)
 	{
-		object->Draw(mCommandList, XMLoadFloat4x4(&mCamera->GetViewMat()), XMLoadFloat4x4(&mCamera->GetProjMat()));
+		object->Draw(mCommandList);
 	}
 
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(positionMap.Get(),

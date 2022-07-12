@@ -1,5 +1,4 @@
 #include "Object.h"
-
 #include "Model.h"
 
 Object::Object(std::shared_ptr<Model> model, XMFLOAT3 position, XMFLOAT3 scale)
@@ -7,13 +6,10 @@ Object::Object(std::shared_ptr<Model> model, XMFLOAT3 position, XMFLOAT3 scale)
 {
 }
 
-void Object::SetMVPMatrix(ComPtr<ID3D12GraphicsCommandList2> commandList, XMMATRIX viewMat, XMMATRIX projMat)
+void Object::SetWorldMatrix(ComPtr<ID3D12GraphicsCommandList2> commandList)
 {
 	XMMATRIX worldMat = GetWorldMat();
-
-	XMMATRIX mvpMatrix = XMMatrixMultiply(worldMat, viewMat);
-	mvpMatrix = XMMatrixMultiply(mvpMatrix, projMat);
-	commandList->SetGraphicsRoot32BitConstants(0, sizeof(XMMATRIX) / 4, &mvpMatrix, 0);
+	commandList->SetGraphicsRoot32BitConstants(0, sizeof(XMMATRIX) / 4, &worldMat, 0);
 }
 
 void Object::Update(float dt)
@@ -25,14 +21,14 @@ XMMATRIX Object::GetWorldMat() const
 	XMMATRIX translationMat = XMMatrixTranslation(mPosition.x, mPosition.y, mPosition.z);
 	XMMATRIX scaleMat = XMMatrixScaling(mScale.x, mScale.y, mScale.z);
 
-	return XMMatrixMultiply(translationMat, scaleMat);
+	return XMMatrixMultiply(scaleMat, translationMat);
 }
 
-void Object::Draw(ComPtr<ID3D12GraphicsCommandList2> commandList, XMMATRIX viewMat, XMMATRIX projMat)
+void Object::Draw(ComPtr<ID3D12GraphicsCommandList2> commandList)
 {
 	for (const auto& mesh : mModel->meshes)
 	{
-		SetMVPMatrix(commandList, viewMat, projMat);
+		SetWorldMatrix(commandList);
 		commandList->IASetVertexBuffers(0, 1, &mesh.m_VertexBufferView);
 		commandList->IASetIndexBuffer(&mesh.m_IndexBufferView);
 

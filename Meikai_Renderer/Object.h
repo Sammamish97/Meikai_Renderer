@@ -13,12 +13,12 @@ struct Object
 	Object(std::shared_ptr<Model>, XMFLOAT3 position, XMFLOAT3 scale = XMFLOAT3(1.f, 1.f, 1.f));
 
 	void Update(float dt);
-	void Draw(ComPtr<ID3D12GraphicsCommandList2> commandList, XMMATRIX viewMat, XMMATRIX projMat);
+	void Draw(ComPtr<ID3D12GraphicsCommandList2> commandList);
 	void DrawWithoutMat(ComPtr<ID3D12GraphicsCommandList2> commandList);
 
 	XMMATRIX GetWorldMat() const;
 private:
-	void SetMVPMatrix(ComPtr<ID3D12GraphicsCommandList2> commandList, XMMATRIX viewMat, XMMATRIX projMat);
+	void SetWorldMatrix(ComPtr<ID3D12GraphicsCommandList2> commandList);
 
 	std::shared_ptr<Model> mModel = nullptr;
 	XMFLOAT3 mPosition;
