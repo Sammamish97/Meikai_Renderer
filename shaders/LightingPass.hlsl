@@ -26,6 +26,6 @@ float4 PS(VertexOut pin) : SV_Target
 	float3 position = gPositionMap.SampleLevel(gsamPointClamp, pin.UV, 0.0f).xyz;
 	float3 normal = normalize(gNormalMap.SampleLevel(gsamPointClamp, pin.UV, 0.0f).xyz);
 	float3 albedo = gAlbedoMap.SampleLevel(gsamPointClamp, pin.UV, 0.0f).xyz;
-	// Interpolating normal can unnormalize it, so renormalize it.
-    return float4(albedo, 1.0);
+
+    return float4(100.0, 100.0, 100.0, 1.0);
 }
