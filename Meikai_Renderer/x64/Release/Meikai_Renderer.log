@@ -1,0 +1,34 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  Camera.cpp
+  Demo.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(554,94): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(598,82): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
+  DXApp.cpp
+  DXUtil.cpp
+  FrameResource.cpp
+  GameTimer.cpp
+  GeometryPass.cpp
+  LightingPass.cpp
+  main.cpp
+  MathHelper.cpp
+  Mesh.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.cpp(18,69): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.cpp(28,65): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
+  Model.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.cpp(17,9): warning C4002: too many arguments for function-like macro invocation 'assert'
+  Object.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Object.cpp(39,70): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Object.cpp(50,70): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 1324 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Meikai_Renderer.vcxproj -> C:\Data\Meikai_Renderer\bin\Meikai_Renderer_release.exe
