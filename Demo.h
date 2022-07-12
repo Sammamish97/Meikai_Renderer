@@ -77,6 +77,7 @@ private:
 
 	std::vector<D3D12_INPUT_ELEMENT_DESC> mInputLayout;
 	std::vector<std::unique_ptr<Object>> objects;
+	std::unique_ptr<Object> quad;
 
 	std::unique_ptr<Camera> mCamera;
 	POINT mLastMousePos;

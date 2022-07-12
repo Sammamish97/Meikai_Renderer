@@ -16,7 +16,7 @@ public:
 
 	float mTheta = 1.5f * XM_PI;
 	float mPhi = 0.2f * XM_PI;
-	float mRadius = 15.0f;
+	float mRadius = 5.0f;
 
 private:
 	XMFLOAT3 mEyePos = { 0.0f, 0.0f, 0.0f };

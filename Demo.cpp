@@ -146,6 +146,7 @@ void Demo::BuildGeometryPSO()
 		mShaders["GeomPS"]->GetBufferSize()
 	};
 	geometryPSODesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	geometryPSODesc.RasterizerState.FrontCounterClockwise = true;
 	geometryPSODesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	geometryPSODesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 	geometryPSODesc.SampleMask = UINT_MAX;
@@ -226,10 +227,14 @@ void Demo::BuildLightingPSO()
 	lightingPSODesc.SampleDesc.Count = m4xMsaaState ? 4 : 1;
 	lightingPSODesc.SampleDesc.Quality = m4xMsaaState ? (m4xMsaaQuality - 1) : 0;
 	
-	D3D12_INPUT_LAYOUT_DESC inputDesc;
-	inputDesc.NumElements = 0;
-	inputDesc.pInputElementDescs = nullptr;
-	lightingPSODesc.InputLayout = inputDesc;
+	D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+		{"UV", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+		{"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+		{"BITANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+	};
+	lightingPSODesc.InputLayout = { inputLayout, _countof(inputLayout) };
 
 	ThrowIfFailed(mdxDevice->CreateGraphicsPipelineState(&lightingPSODesc, IID_PPV_ARGS(L_Pass->mPso.GetAddressOf())))
 }
@@ -283,10 +288,15 @@ void Demo::BuildLightingRootSignature()
 void Demo::BuildModels()
 {
 	mModels["Monkey"] = std::make_shared<Model>("models/Monkey.obj", this, mCommandList);
+	mModels["Quad"] = std::make_shared<Model>("models/Quad.obj", this, mCommandList);
+	mModels["Torus"] = std::make_shared<Model>("models/Torus.obj", this, mCommandList);
+	mModels["Bunny"] = std::make_shared<Model>("models/bunny.obj", this, mCommandList);
 
-	objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(0.f, 1.f, 0.f)));
-	objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(-1.f, -1.f, 0.f)));
-	objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(1.f, -1.f, 0.f)));
+	objects.push_back(std::make_unique<Object>(mModels["Bunny"], XMFLOAT3(0.f, 1.f, 0.f), XMFLOAT3(10, 10, 10)));
+	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(-1.f, -1.f, 0.f)));
+	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(1.f, -1.f, 0.f)));
+
+	quad = std::make_unique<Object>(mModels["Quad"], XMFLOAT3(0.f, 0.f, 0.f));
 }
 
 void Demo::BuildFrameResource()
@@ -589,9 +599,7 @@ void Demo::DrawLighting(const GameTimer& gt)
 
 	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	mCommandList->IASetVertexBuffers(0, 0, nullptr);
-	mCommandList->IASetIndexBuffer(nullptr);
-	mCommandList->DrawInstanced(3, 1, 0, 0);
+	quad->DrawWithoutMat(mCommandList);
 
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));

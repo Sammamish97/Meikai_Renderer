@@ -39,3 +39,14 @@ void Object::Draw(ComPtr<ID3D12GraphicsCommandList2> commandList, XMMATRIX viewM
 		commandList->DrawIndexedInstanced(mesh.m_indices.size(), 1, 0, 0, 0);
 	}
 }
+
+void Object::DrawWithoutMat(ComPtr<ID3D12GraphicsCommandList2> commandList)
+{
+	for (const auto& mesh : mModel->meshes)
+	{
+		commandList->IASetVertexBuffers(0, 1, &mesh.m_VertexBufferView);
+		commandList->IASetIndexBuffer(&mesh.m_IndexBufferView);
+
+		commandList->DrawIndexedInstanced(mesh.m_indices.size(), 1, 0, 0, 0);
+	}
+}
