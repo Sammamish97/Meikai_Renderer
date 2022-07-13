@@ -14,7 +14,6 @@ struct Object
 
 	void Update(float dt);
 	void Draw(ComPtr<ID3D12GraphicsCommandList2> commandList);
-	void DrawWithoutMat(ComPtr<ID3D12GraphicsCommandList2> commandList);
 
 	XMMATRIX GetWorldMat() const;
 private:

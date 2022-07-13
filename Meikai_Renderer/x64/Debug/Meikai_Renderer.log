@@ -6,4 +6,9 @@ C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': 
 C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
 C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(547,94): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
 C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(591,82): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
+  Object.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Object.cpp(36,70): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
+  Generating Code...
   Meikai_Renderer.vcxproj -> C:\Data\Meikai_Renderer\bin\Meikai_Renderer_debug.exe

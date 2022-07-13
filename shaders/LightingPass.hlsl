@@ -25,6 +25,7 @@ float4 PS(VertexOut pin) : SV_Target
 {
 	float2 fliped_UV = pin.UV;
 	fliped_UV.y = 1 - fliped_UV.y;
+	
 	float3 position = gPositionMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
 	float3 normal = normalize(gNormalMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz);
 	float3 albedo = gAlbedoMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
