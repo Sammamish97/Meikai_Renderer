@@ -30,28 +30,16 @@ private:
 	void DrawLighting(const GameTimer& gt);
 
 private:
-	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView() const;
-
 	void LoadContent();
 	void BuildModels();
-
-	void BuildGeometryPSO();
-	void BuildGeometryRootSignature();
 
 	void BuildLightingPSO();
 	void BuildLightingRootSignature();
 
 	void BuildFrameResource();
-
-	void CreateGeometryRTV();
-	void CreateDsvDescriptorHeap();
 	void CreateShader();
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
-
-	CD3DX12_CPU_DESCRIPTOR_HANDLE GetGeometryRtvCpuHandle(int index);
-	CD3DX12_CPU_DESCRIPTOR_HANDLE GetCpuSrv(int index);
-	CD3DX12_GPU_DESCRIPTOR_HANDLE GetGpuSrv(int index);
 
 private:
 	void UpdatePassCB(const GameTimer& gt);
@@ -67,17 +55,11 @@ private:
 
 	std::unique_ptr<FrameResource> mFrameResource;
 
-	ComPtr<ID3D12DescriptorHeap> mGeometryRtvHeap;
-	ComPtr<ID3D12DescriptorHeap> mLightSrvHeap;
-	ComPtr<ID3D12DescriptorHeap> mDsvHeap;
-	ComPtr<ID3D12Resource> mDepthStencilBuffer;
-
 	std::unordered_map<std::string, std::shared_ptr<Model>> mModels;
 	std::unordered_map<std::string, ComPtr<ID3DBlob>> mShaders;
 
 	std::vector<D3D12_INPUT_ELEMENT_DESC> mInputLayout;
 	std::vector<std::unique_ptr<Object>> objects;
-	std::unique_ptr<Object> quad;
 
 	std::unique_ptr<Camera> mCamera;
 	POINT mLastMousePos;

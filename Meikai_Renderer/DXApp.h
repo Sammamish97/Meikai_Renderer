@@ -27,13 +27,19 @@ protected:
 
 public:
     static DXApp* GetApp();
-
     HINSTANCE AppInst()const;
     HWND      MainWnd()const;
+    ComPtr<ID3D12Device2> GetDevice();
     float     AspectRatio()const;
 
-    bool Get4xMsaaState()const;
+    bool Get4xMsaaState();
     void Set4xMsaaState(bool value);
+    UINT DXApp::Get4xMsaaQuality();
+    std::pair<int, int> GetWindowSize();
+
+    UINT GetRtvDescSize();
+    UINT GetDsvDescSize();
+    UINT GetCbvSrvUavDescSize();
 
     int Run();
 
@@ -139,6 +145,7 @@ protected:
     D3D_DRIVER_TYPE md3dDriverType = D3D_DRIVER_TYPE_HARDWARE;
     DXGI_FORMAT mBackBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
     DXGI_FORMAT mDepthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
     int mClientWidth = 800;
     int mClientHeight = 600;
 };

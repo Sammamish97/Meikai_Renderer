@@ -28,6 +28,20 @@ struct PassCB
     float DeltaTime = 0.0f;
 };
 
+struct PointLight
+{
+    XMFLOAT3 Position;
+    float padding1;
+
+    XMFLOAT3 Color;
+    float padding2;
+};
+
+struct LightCB
+{
+    PointLight pointLight;
+};
+
 struct ShadowCB
 {
     XMFLOAT4X4 ShadowTransform = MathHelper::Identity4x4();
@@ -43,10 +57,7 @@ struct SsaoCB
 	
 };
 
-struct LightCB
-{
-	//Light Data
-};
+
 
 struct PostProcessCB
 {

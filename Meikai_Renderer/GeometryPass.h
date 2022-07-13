@@ -3,11 +3,15 @@
 #include <d3d12.h>
 #include <d3dx12.h>
 using namespace Microsoft::WRL;
+class DXApp;
 class GeometryPass
 {
+private:
+	DXApp* mdxApp = nullptr;
 public:
-	GeometryPass(ComPtr<ID3D12Device> device,
+	GeometryPass(DXApp* device,
 		ComPtr<ID3D12GraphicsCommandList> cmdList,
+		ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader,
 		UINT width, UINT height);
 	GeometryPass(const GeometryPass& rhs) = delete;
 	GeometryPass& operator=(const GeometryPass& rhs) = delete;
@@ -15,9 +19,17 @@ public:
 
 	static const DXGI_FORMAT PositionAndNormalMapFormat = DXGI_FORMAT_R16G16B16A16_FLOAT;
 	static const DXGI_FORMAT AlbedoMapFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
+	static const DXGI_FORMAT mDepthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 private:
-	void BuildResources();
+	void BuildRTVResources();
+	void BuildDSVResource();
+
+	void CreateRtvDescHeap();
+	void CreateDsvDescHeap();
+
+	void BuildPSO();
+	void BuildRootSignature();
 
 public:
 	void OnResize(UINT newWidth, UINT newHeight);
@@ -28,6 +40,8 @@ public:
 		CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuRtv,
 		UINT cbvSrvUavDescriptorSize,
 		UINT rtvDescriptorSize);
+
+	void BuildDsvDescriptor();
 
 	void RebuildDescriptors();
 
@@ -44,12 +58,24 @@ public:
 	CD3DX12_CPU_DESCRIPTOR_HANDLE GetAlbedoRtv();
 	CD3DX12_GPU_DESCRIPTOR_HANDLE GetAlbedoSrv();
 
+	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView();
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE GetGeometryRtvCpuHandle(int index);
+	CD3DX12_CPU_DESCRIPTOR_HANDLE GetCpuSrv(int index);
+	CD3DX12_GPU_DESCRIPTOR_HANDLE GetGpuSrv(int index);
+
+	ComPtr<ID3D12DescriptorHeap> GetSrvHeap();
+
 private:
-	ComPtr<ID3D12Device> mdxDevice;
+	ComPtr<ID3D12DescriptorHeap> mGeometryRtvHeap;
+	ComPtr<ID3D12DescriptorHeap> mDsvHeap;
+
+	ComPtr<ID3D12DescriptorHeap> mSrvHeap;
 
 	ComPtr<ID3D12Resource> mPositionMap;
 	ComPtr<ID3D12Resource> mNormalMap;
 	ComPtr<ID3D12Resource> mAlbedoMap;
+	ComPtr<ID3D12Resource> mDepthStencilBuffer;
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE mhPositionMapCpuSrv;
 	CD3DX12_GPU_DESCRIPTOR_HANDLE mhPositionMapGpuSrv;
@@ -68,6 +94,9 @@ private:
 
 	D3D12_VIEWPORT mViewport;
 	D3D12_RECT mScissorRect;
+
+	ComPtr<ID3DBlob> geometryVertShader;
+	ComPtr<ID3DBlob> geometryPixelShader;
 
 public:
 	ComPtr<ID3D12RootSignature> mRootSig;

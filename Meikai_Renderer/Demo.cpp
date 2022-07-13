@@ -34,10 +34,8 @@ bool Demo::Initialize()
 	// Reset the command list to prep for initialization commands.
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
-	G_Pass = std::make_unique<GeometryPass>(mdxDevice.Get(), mCommandList.Get(), mClientWidth, mClientHeight);
 	L_Pass = std::make_unique<LightingPass>(mdxDevice.Get(), mCommandList.Get(), mClientWidth, mClientHeight);
 	LoadContent();
-
 
 	// Execute the initialization commands.
 	ThrowIfFailed(mCommandList->Close());
@@ -51,63 +49,10 @@ bool Demo::Initialize()
 	return true;
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE Demo::DepthStencilView() const
-{
-	return mDsvHeap->GetCPUDescriptorHandleForHeapStart();
-}
-
-
 void Demo::OnResize()
 {
 	DXApp::OnResize();
-	mDepthStencilBuffer.Reset();
-	D3D12_RESOURCE_DESC depthStencilDesc;
-	depthStencilDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	depthStencilDesc.Alignment = 0;
-	depthStencilDesc.Width = mClientWidth;
-	depthStencilDesc.Height = mClientHeight;
-	depthStencilDesc.DepthOrArraySize = 1;
-	depthStencilDesc.MipLevels = 1;
-
-	// Correction 11/12/2016: SSAO chapter requires an SRV to the depth buffer to read from 
-	// the depth buffer.  Therefore, because we need to create two views to the same resource:
-	//   1. SRV format: DXGI_FORMAT_R24_UNORM_X8_TYPELESS
-	//   2. DSV Format: DXGI_FORMAT_D24_UNORM_S8_UINT
-	// we need to create the depth buffer resource with a typeless format.  s
-	depthStencilDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
-
-	depthStencilDesc.SampleDesc.Count = m4xMsaaState ? 4 : 1;
-	depthStencilDesc.SampleDesc.Quality = m4xMsaaState ? (m4xMsaaQuality - 1) : 0;
-	depthStencilDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
-	depthStencilDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
-
-	D3D12_CLEAR_VALUE clearValue;
-	clearValue.Format = mDepthStencilFormat;
-	clearValue.DepthStencil.Depth = 1.0f;
-	clearValue.DepthStencil.Stencil = 0;
-
-	ThrowIfFailed(mdxDevice->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-		D3D12_HEAP_FLAG_NONE,
-		&depthStencilDesc,
-		D3D12_RESOURCE_STATE_COMMON,
-		&clearValue,
-		IID_PPV_ARGS(mDepthStencilBuffer.GetAddressOf())))
-
-		D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;
-	dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
-	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-	dsvDesc.Format = mDepthStencilFormat;
-	dsvDesc.Texture2D.MipSlice = 0;
-	mdxDevice->CreateDepthStencilView(mDepthStencilBuffer.Get(), &dsvDesc, DepthStencilView());
-
-	mCommandList->ResourceBarrier(1,
-		&CD3DX12_RESOURCE_BARRIER::Transition(mDepthStencilBuffer.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE));
-
-	ThrowIfFailed(mCommandList->Close())
-		ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
-	mCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
-
+	
 	FlushCommandQueue();
 }
 
@@ -118,88 +63,12 @@ void Demo::LoadContent()
 	BuildModels();
 	BuildFrameResource();
 	CreateShader();
-	CreateDsvDescriptorHeap();
-	CreateGeometryRTV();
-
-	BuildGeometryRootSignature();
-	BuildGeometryPSO();
+	G_Pass = std::make_unique<GeometryPass>(this, mCommandList.Get(), mShaders["GeomVS"], mShaders["GeomPS"], mClientWidth, mClientHeight);
 
 	BuildLightingRootSignature();
 	BuildLightingPSO();
 
 	m_ContentLoaded = true; 
-}
-
-void Demo::BuildGeometryPSO()
-{
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC geometryPSODesc;
-	ZeroMemory(&geometryPSODesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
-	geometryPSODesc.pRootSignature = G_Pass->mRootSig.Get();
-	geometryPSODesc.VS =
-	{
-		reinterpret_cast<BYTE*>(mShaders["GeomVS"]->GetBufferPointer()),
-		mShaders["GeomVS"]->GetBufferSize()
-	};
-	geometryPSODesc.PS =
-	{
-		reinterpret_cast<BYTE*>(mShaders["GeomPS"]->GetBufferPointer()),
-		mShaders["GeomPS"]->GetBufferSize()
-	};
-	geometryPSODesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	geometryPSODesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-	geometryPSODesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-	geometryPSODesc.SampleMask = UINT_MAX;
-	geometryPSODesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	geometryPSODesc.NumRenderTargets = 3;
-	geometryPSODesc.RTVFormats[0] = G_Pass->PositionAndNormalMapFormat;
-	geometryPSODesc.RTVFormats[1] = G_Pass->PositionAndNormalMapFormat;
-	geometryPSODesc.RTVFormats[2] = G_Pass->AlbedoMapFormat;
-	geometryPSODesc.DSVFormat = mDepthStencilFormat;
-	geometryPSODesc.SampleDesc.Count = m4xMsaaState ? 4 : 1;
-	geometryPSODesc.SampleDesc.Quality = m4xMsaaState ? (m4xMsaaQuality - 1) : 0;
-
-	D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-		{"UV", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-		{"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-		{"BITANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-	};
-	geometryPSODesc.InputLayout = { inputLayout, _countof(inputLayout) };
-
-	ThrowIfFailed(mdxDevice->CreateGraphicsPipelineState(&geometryPSODesc, IID_PPV_ARGS(G_Pass->mPso.GetAddressOf())))
-}
-
-void Demo::BuildGeometryRootSignature()
-{
-	//Geom use only 2 root parameter. One for model matrix 32-bit constant buffer, other for PassCB root descriptor.
-	D3D12_FEATURE_DATA_ROOT_SIGNATURE featureData = {};
-	featureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
-	if (FAILED(mdxDevice->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &featureData, sizeof(featureData))))
-	{
-		featureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
-	}
-
-	// Allow input layout and deny unnecessary access to certain pipeline stages.
-	// Use for vertex shader only.
-	D3D12_ROOT_SIGNATURE_FLAGS rootSignatureFlags =
-		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
-		D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
-		D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
-		D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
-		D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
-
-	CD3DX12_ROOT_PARAMETER1 rootParameters[2];
-	rootParameters[0].InitAsConstants(sizeof(XMMATRIX) / 4, 0, 0, D3D12_SHADER_VISIBILITY_VERTEX);
-	rootParameters[1].InitAsConstantBufferView(1);
-
-	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDescription;
-	rootSignatureDescription.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, rootSignatureFlags);
-
-	ComPtr<ID3DBlob> rootSignatureBlob;
-	ComPtr<ID3DBlob> errorBlob;
-	ThrowIfFailed(D3DX12SerializeVersionedRootSignature(&rootSignatureDescription, featureData.HighestVersion, &rootSignatureBlob, &errorBlob))
-	ThrowIfFailed(mdxDevice->CreateRootSignature(0, rootSignatureBlob->GetBufferPointer(), rootSignatureBlob->GetBufferSize(), IID_PPV_ARGS(G_Pass->mRootSig.GetAddressOf())))
 }
 
 void Demo::BuildLightingPSO()
@@ -288,46 +157,11 @@ void Demo::BuildModels()
 	objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(0.f, 1.f, 0.f)));
 	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(-1.f, -1.f, 0.f)));
 	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(1.f, -1.f, 0.f)));
-
-	quad = std::make_unique<Object>(mModels["Quad"], XMFLOAT3(0.f, 0.f, 0.f));
 }
 
 void Demo::BuildFrameResource()
 {
 	mFrameResource = std::make_unique<FrameResource>(mdxDevice.Get(), 1, 1);
-}
-
-void Demo::CreateGeometryRTV()
-{
-	// These three maps for geometry's position, normal and albedo.
-	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc;
-	rtvHeapDesc.NumDescriptors = 3;
-	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	rtvHeapDesc.NodeMask = 0;
-	ThrowIfFailed(mdxDevice->CreateDescriptorHeap(
-		&rtvHeapDesc, IID_PPV_ARGS(mGeometryRtvHeap.GetAddressOf())));
-
-	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-	srvHeapDesc.NumDescriptors = 3;
-	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	ThrowIfFailed(mdxDevice->CreateDescriptorHeap(
-		&srvHeapDesc, IID_PPV_ARGS(mLightSrvHeap.GetAddressOf())))
-
-	G_Pass->BuildDescriptors(GetCpuSrv(0), GetGpuSrv(0), GetGeometryRtvCpuHandle(0),
-		mCbvSrvUavDescriptorSize,mRtvDescriptorSize);
-}
-
-void Demo::CreateDsvDescriptorHeap()
-{
-	//Create RTV descriptor heap for depth stencil image
-	D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc;
-	dsvHeapDesc.NumDescriptors = 1;//TODO: For shadow map, Num descriptors need to be increase.
-	dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-	dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	dsvHeapDesc.NodeMask = 0;
-	ThrowIfFailed(mdxDevice->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(mDsvHeap.GetAddressOf())))
 }
 
 void Demo::CreateShader()
@@ -408,27 +242,6 @@ std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> Demo::GetStaticSamplers()
 		anisotropicWrap, anisotropicClamp,
 		shadow
 	};
-}
-
-CD3DX12_CPU_DESCRIPTOR_HANDLE Demo::GetGeometryRtvCpuHandle(int index)
-{
-	auto rtv = CD3DX12_CPU_DESCRIPTOR_HANDLE(mGeometryRtvHeap->GetCPUDescriptorHandleForHeapStart());
-	rtv.Offset(index, mRtvDescriptorSize);
-	return rtv;
-}
-
-CD3DX12_CPU_DESCRIPTOR_HANDLE Demo::GetCpuSrv(int index)
-{
-	auto srv = CD3DX12_CPU_DESCRIPTOR_HANDLE(mLightSrvHeap->GetCPUDescriptorHandleForHeapStart());
-	srv.Offset(index, mCbvSrvUavDescriptorSize);
-	return srv;
-}
-
-CD3DX12_GPU_DESCRIPTOR_HANDLE Demo::GetGpuSrv(int index)
-{
-	auto srv = CD3DX12_GPU_DESCRIPTOR_HANDLE(mLightSrvHeap->GetGPUDescriptorHandleForHeapStart());
-	srv.Offset(index, mCbvSrvUavDescriptorSize);
-	return srv;
 }
 
 void Demo::UpdatePassCB(const GameTimer& gt)
@@ -527,7 +340,7 @@ void Demo::DrawGeometry(const GameTimer& gt)
 
 	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { positionMapRtv, normalMapRtv, albedoMapRtv };
 
-	mCommandList->ClearDepthStencilView(DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
+	mCommandList->ClearDepthStencilView(G_Pass->DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
 
 	//Set Pipeline & Root signature
 	mCommandList->SetPipelineState(G_Pass->mPso.Get());
@@ -544,7 +357,8 @@ void Demo::DrawGeometry(const GameTimer& gt)
 	mCommandList->RSSetScissorRects(1, &mScissorRect);
 
 	// Specify the buffers we are going to render to.
-	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, &DepthStencilView());
+	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(),
+		true, &G_Pass->DepthStencilView());
 
 	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -577,10 +391,11 @@ void Demo::DrawLighting(const GameTimer& gt)
 	mCommandList->SetPipelineState(L_Pass->mPso.Get());
 	mCommandList->SetGraphicsRootSignature(L_Pass->mRootSig.Get());
 
-	mCommandList->SetDescriptorHeaps(1, mLightSrvHeap.GetAddressOf());
+	mCommandList->SetDescriptorHeaps(1, G_Pass->GetSrvHeap().GetAddressOf());
+	mCommandList->SetDescriptorHeaps(1, G_Pass->GetSrvHeap().GetAddressOf());
 
 	//Test descriptor heap accessing
-	mCommandList->SetGraphicsRootDescriptorTable(0, mLightSrvHeap->GetGPUDescriptorHandleForHeapStart());
+	mCommandList->SetGraphicsRootDescriptorTable(0, G_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
 
 	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
 	mCommandList->RSSetViewports(1, &mScreenViewport);

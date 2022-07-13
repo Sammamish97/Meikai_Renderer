@@ -46,14 +46,44 @@ HWND DXApp::MainWnd() const
 	return mhMainWnd;
 }
 
+ComPtr<ID3D12Device2> DXApp::GetDevice()
+{
+	return mdxDevice;
+}
+
 float DXApp::AspectRatio() const
 {
 	return static_cast<float>(mClientWidth) / mClientHeight;
 }
 
-bool DXApp::Get4xMsaaState() const
+bool DXApp::Get4xMsaaState()
 {
 	return m4xMsaaState;
+}
+
+UINT DXApp::Get4xMsaaQuality()
+{
+	return m4xMsaaQuality;
+}
+
+std::pair<int, int> DXApp::GetWindowSize()
+{
+	return std::make_pair(mClientWidth, mClientHeight);
+}
+
+UINT DXApp::GetRtvDescSize()
+{
+	return mRtvDescriptorSize;
+}
+
+UINT DXApp::GetDsvDescSize()
+{
+	return mDsvDescriptorSize;
+}
+
+UINT DXApp::GetCbvSrvUavDescSize()
+{
+	return mCbvSrvUavDescriptorSize;
 }
 
 void DXApp::Set4xMsaaState(bool value)
@@ -477,10 +507,6 @@ void DXApp::OnResize()
 	assert(mSwapChain);
 	assert(mDirectCmdListAlloc);
 
-	FlushCommandQueue();
-
-	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr))
-
 	// Release the previous resources we will be recreating.
 	for(int i = 0; i < SwapChainBufferCount; ++i)
 	{
@@ -504,7 +530,6 @@ void DXApp::OnResize()
 		mdxDevice->CreateRenderTargetView(mSwapChainBuffer[i].Get(), nullptr, rtvHeapHandle);
 		rtvHeapHandle.Offset(1, mRtvDescriptorSize);
 	}
-	FlushCommandQueue();
 
 	// Update the viewport transform to cover the client area.
 	mScreenViewport.TopLeftX = 0;
