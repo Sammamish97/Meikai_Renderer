@@ -41,6 +41,10 @@ public:
     UINT GetDsvDescSize();
     UINT GetCbvSrvUavDescSize();
 
+    DXGI_FORMAT GetBackBufferFormat();
+
+    std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
+
     int Run();
 
     virtual bool Initialize();

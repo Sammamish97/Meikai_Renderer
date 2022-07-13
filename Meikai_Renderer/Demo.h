@@ -33,9 +33,6 @@ private:
 	void LoadContent();
 	void BuildModels();
 
-	void BuildLightingPSO();
-	void BuildLightingRootSignature();
-
 	void BuildFrameResource();
 	void CreateShader();
 

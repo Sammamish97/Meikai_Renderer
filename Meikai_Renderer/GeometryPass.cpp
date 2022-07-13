@@ -7,7 +7,7 @@
 
 GeometryPass::GeometryPass(DXApp* device, ComPtr<ID3D12GraphicsCommandList> cmdList,
 	ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader, UINT width, UINT height)
-    :mdxApp(device), mRenderTargetWidth(width), mRenderTargetHeight(height), geometryVertShader(vertShader), geometryPixelShader(pixelShader)
+    :mdxApp(device), mRenderTargetWidth(width), mRenderTargetHeight(height), mVertShader(vertShader), mPixelShader(pixelShader)
 {
     BuildRTVResources();
     BuildDSVResource();
@@ -227,13 +227,13 @@ void GeometryPass::BuildPSO()
     geometryPSODesc.pRootSignature = mRootSig.Get();
     geometryPSODesc.VS =
     {
-        reinterpret_cast<BYTE*>(geometryVertShader->GetBufferPointer()),
-        geometryVertShader->GetBufferSize()
+        reinterpret_cast<BYTE*>(mVertShader->GetBufferPointer()),
+        mVertShader->GetBufferSize()
     };
     geometryPSODesc.PS =
     {
-        reinterpret_cast<BYTE*>(geometryPixelShader->GetBufferPointer()),
-        geometryPixelShader->GetBufferSize()
+        reinterpret_cast<BYTE*>(mPixelShader->GetBufferPointer()),
+        mPixelShader->GetBufferSize()
     };
     geometryPSODesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
     geometryPSODesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);

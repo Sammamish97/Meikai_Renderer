@@ -95,8 +95,8 @@ private:
 	D3D12_VIEWPORT mViewport;
 	D3D12_RECT mScissorRect;
 
-	ComPtr<ID3DBlob> geometryVertShader;
-	ComPtr<ID3DBlob> geometryPixelShader;
+	ComPtr<ID3DBlob> mVertShader;
+	ComPtr<ID3DBlob> mPixelShader;
 
 public:
 	ComPtr<ID3D12RootSignature> mRootSig;
