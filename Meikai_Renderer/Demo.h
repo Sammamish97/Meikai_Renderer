@@ -40,6 +40,7 @@ private:
 
 private:
 	void UpdatePassCB(const GameTimer& gt);
+	void UpdateLightCB(const GameTimer& gt);
 
 protected:
 	void OnMouseDown(WPARAM btnState, int x, int y) override;

@@ -126,10 +126,31 @@ void Demo::UpdatePassCB(const GameTimer& gt)
 	passCB->CopyData(0, currentFrameCB);
 }
 
+void Demo::UpdateLightCB(const GameTimer& gt)
+{
+	LightCB lightData;
+
+	lightData.directLight.Direction = XMFLOAT3(-0.5f, 0.5f, 0.5f);
+	lightData.directLight.Color = XMFLOAT3(0.1f, 0.1f, 0.1f);
+
+	lightData.pointLight[0].Position = XMFLOAT3(5, 0, 0);
+	lightData.pointLight[0].Color = XMFLOAT3(1, 0, 0);
+
+	lightData.pointLight[1].Position = XMFLOAT3(0, 5, 0);
+	lightData.pointLight[1].Color = XMFLOAT3(0, 1, 0);
+
+	lightData.pointLight[2].Position = XMFLOAT3(0, 0, 5);
+	lightData.pointLight[2].Color = XMFLOAT3(0, 0, 1);
+
+	auto LightCB = L_Pass->mLightCB.get();
+	LightCB->CopyData(0, lightData);
+}
+
 void Demo::Update(const GameTimer& gt)
 {
 	mCamera->Update(gt);
 	UpdatePassCB(gt);
+	UpdateLightCB(gt);
 }
 
 void Demo::Draw(const GameTimer& gt)
@@ -243,10 +264,12 @@ void Demo::DrawLighting(const GameTimer& gt)
 	mCommandList->SetGraphicsRootSignature(L_Pass->mRootSig.Get());
 
 	mCommandList->SetDescriptorHeaps(1, G_Pass->GetSrvHeap().GetAddressOf());
-	mCommandList->SetDescriptorHeaps(1, G_Pass->GetSrvHeap().GetAddressOf());
 
 	//Test descriptor heap accessing
 	mCommandList->SetGraphicsRootDescriptorTable(0, G_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
+
+	D3D12_GPU_VIRTUAL_ADDRESS lightCBAddress = L_Pass->mLightCB->Resource()->GetGPUVirtualAddress();
+	mCommandList->SetGraphicsRootConstantBufferView(1, lightCBAddress);
 
 	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
 	mCommandList->RSSetViewports(1, &mScreenViewport);

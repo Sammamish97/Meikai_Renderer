@@ -58,6 +58,11 @@ public:
         memcpy(&mMappedData[elementIndex * mElementByteSize], &data, sizeof(T));
     }
 
+    UINT GetSize() const
+    {
+        return mElementByteSize;
+    }
+
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> mUploadBuffer;
     BYTE* mMappedData = nullptr;

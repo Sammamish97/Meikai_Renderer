@@ -28,6 +28,15 @@ struct PassCB
     float DeltaTime = 0.0f;
 };
 
+struct DirectLight
+{
+    XMFLOAT3 Direction;
+    float padding1;
+
+    XMFLOAT3 Color;
+    float padding2;
+};
+
 struct PointLight
 {
     XMFLOAT3 Position;
@@ -39,7 +48,8 @@ struct PointLight
 
 struct LightCB
 {
-    PointLight pointLight;
+    DirectLight directLight;
+    PointLight pointLight[3];
 };
 
 struct ShadowCB
@@ -56,8 +66,6 @@ struct SsaoCB
 {
 	
 };
-
-
 
 struct PostProcessCB
 {

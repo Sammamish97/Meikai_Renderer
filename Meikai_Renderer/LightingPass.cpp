@@ -2,10 +2,13 @@
 #include "DXApp.h"
 #include "DXUtil.h"
 
-LightingPass::LightingPass(DXApp* device, ComPtr<ID3D12GraphicsCommandList> cmdList,
+LightingPass::LightingPass(DXApp* mApp, ComPtr<ID3D12GraphicsCommandList> cmdList,
 	ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader, UINT width, UINT height)
-	:mdxApp(device), mRenderTargetWidth(width), mRenderTargetHeight(height), mVertShader(vertShader), mPixelShader(pixelShader)
+	:mdxApp(mApp), mRenderTargetWidth(width), mRenderTargetHeight(height), mVertShader(vertShader), mPixelShader(pixelShader)
 {
+	BuildResource();
+	BuildCbvheap();
+	BuildCbvDesc();
 	BuildRootSignature();
 	BuildPSO();
 	OnResize(width, height);
@@ -60,6 +63,11 @@ void LightingPass::BuildPSO()
 	ThrowIfFailed(mdxApp->GetDevice()->CreateGraphicsPipelineState(&lightingPSODesc, IID_PPV_ARGS(mPso.GetAddressOf())))
 }
 
+void LightingPass::BuildResource()
+{
+	mLightCB = std::make_unique<UploadBuffer<LightCB>>(mdxApp->GetDevice().Get(), 1, true);
+}
+
 void LightingPass::BuildRootSignature()
 {
 	//Light pass use 3 textures for root value.
@@ -82,12 +90,13 @@ void LightingPass::BuildRootSignature()
 	CD3DX12_DESCRIPTOR_RANGE texTable0;//Table for position, normal, albedo texture of Geometry pass.
 	texTable0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 3, 0, 0);
 
-	CD3DX12_ROOT_PARAMETER rootParameters[1];
+	CD3DX12_ROOT_PARAMETER rootParameters[2];
 	rootParameters[0].InitAsDescriptorTable(1, &texTable0, D3D12_SHADER_VISIBILITY_PIXEL);
+	rootParameters[1].InitAsConstantBufferView(2);
 
 	auto staticSamplers = mdxApp->GetStaticSamplers();
 
-	CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(1, rootParameters,
+	CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(_countof(rootParameters), rootParameters,
 		(UINT)staticSamplers.size(), staticSamplers.data(),
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
@@ -104,4 +113,23 @@ void LightingPass::BuildRootSignature()
 	ThrowIfFailed(hr);
 
 	ThrowIfFailed(mdxApp->GetDevice()->CreateRootSignature(0, serializedRootSig->GetBufferPointer(), serializedRootSig->GetBufferSize(), IID_PPV_ARGS(mRootSig.GetAddressOf())))
+}
+
+void LightingPass::BuildCbvheap()
+{
+	//One descriptor in the heap.
+	D3D12_DESCRIPTOR_HEAP_DESC cbvHeapDesc = {};
+	cbvHeapDesc.NumDescriptors = 1;
+	cbvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	ThrowIfFailed(mdxApp->GetDevice()->CreateDescriptorHeap(
+		&cbvHeapDesc, IID_PPV_ARGS(mCbvHeap.GetAddressOf())))
+}
+
+void LightingPass::BuildCbvDesc()
+{
+	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
+	cbvDesc.BufferLocation = mLightCB->Resource()->GetGPUVirtualAddress();
+	cbvDesc.SizeInBytes = mLightCB->GetSize();
+	mdxApp->GetDevice()->CreateConstantBufferView(&cbvDesc, mCbvHeap->GetCPUDescriptorHandleForHeapStart());
 }

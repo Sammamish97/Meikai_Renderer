@@ -20,7 +20,7 @@ public:
     // that reference it.  So each frame needs their own cbuffers.
     std::unique_ptr<UploadBuffer<PassCB>> mPassCB = nullptr;
     std::unique_ptr<UploadBuffer<ObjectCB>> mObjectCB = nullptr;
-    std::unique_ptr <UploadBuffer<GeometryCB>> mGeometryCB = nullptr;
+    std::unique_ptr<UploadBuffer<GeometryCB>> mGeometryCB = nullptr;
 
     // Fence value to mark commands up to this fence point.  This lets us
     // check if these frame resources are still in use by the GPU.
