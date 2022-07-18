@@ -43,10 +43,12 @@ void GeometryPass::BuildDescriptors(CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuSrv, CD3DX
     mhPositionMapCpuSrv = hCpuSrv;
     mhNormalMapCpuSrv = hCpuSrv.Offset(1, cbvSrvUavDescriptorSize);
 	mhAlbedoMapCpuSrv = hCpuSrv.Offset(1, cbvSrvUavDescriptorSize);
+    mhDepthCpuSrv = hCpuSrv.Offset(1, cbvSrvUavDescriptorSize);
 
     mhPositionMapGpuSrv = hGpuSrv;
     mhNormalMapGpuSrv = hGpuSrv.Offset(1, cbvSrvUavDescriptorSize);
     mhAlbedoMapGpuSrv = hGpuSrv.Offset(1, cbvSrvUavDescriptorSize);
+    mhDepthGpuSrv = hGpuSrv.Offset(1, cbvSrvUavDescriptorSize);
 
     mhPositionMapCpuRtv = hCpuRtv;
     mhNormalMapCpuRtv = hCpuRtv.Offset(1, rtvDescriptorSize);
@@ -79,6 +81,9 @@ void GeometryPass::RebuildDescriptors()
 
     srvDesc.Format = AlbedoMapFormat;
     mdxApp->GetDevice()->CreateShaderResourceView(mAlbedoMap.Get(), &srvDesc, mhAlbedoMapCpuSrv);
+
+    srvDesc.Format = mDepthStencilFormat;
+    mdxApp->GetDevice()->CreateShaderResourceView(mDepthStencilBuffer.Get(), &srvDesc, mhDepthCpuSrv);
 
     D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
     rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
@@ -196,8 +201,9 @@ void GeometryPass::CreateRtvDescHeap()
     ThrowIfFailed(mdxApp->GetDevice()->CreateDescriptorHeap(
         &rtvHeapDesc, IID_PPV_ARGS(mGeometryRtvHeap.GetAddressOf())));
 
+    //TODO: Detatch Rtv & Srv heap & Desc from this function for intuitivity. 
     D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-    srvHeapDesc.NumDescriptors = 3;
+    srvHeapDesc.NumDescriptors = 4;
     srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
     srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
     ThrowIfFailed(mdxApp->GetDevice()->CreateDescriptorHeap(

@@ -1,6 +1,7 @@
 Texture2D gPositionMap : register(t0);
 Texture2D gNormalMap  : register(t1);
 Texture2D gAlbedoMap  : register(t2);
+Texture2D gDepthMap  : register(t3);
 
 SamplerState gsamPointClamp : register(s0);
 SamplerState gsamLinearClamp : register(s1);

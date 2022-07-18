@@ -68,7 +68,6 @@ public:
 private:
 	ComPtr<ID3D12DescriptorHeap> mGeometryRtvHeap;
 	ComPtr<ID3D12DescriptorHeap> mDsvHeap;
-
 	ComPtr<ID3D12DescriptorHeap> mSrvHeap;
 
 	ComPtr<ID3D12Resource> mPositionMap;
@@ -87,6 +86,10 @@ private:
 	CD3DX12_CPU_DESCRIPTOR_HANDLE mhAlbedoMapCpuSrv;
 	CD3DX12_GPU_DESCRIPTOR_HANDLE mhAlbedoMapGpuSrv;
 	CD3DX12_CPU_DESCRIPTOR_HANDLE mhAlbedoMapCpuRtv;
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE mhDepthCpuSrv;
+	CD3DX12_GPU_DESCRIPTOR_HANDLE mhDepthGpuSrv;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE mhDepthCpuRtv;
 
 	UINT mRenderTargetWidth;
 	UINT mRenderTargetHeight;

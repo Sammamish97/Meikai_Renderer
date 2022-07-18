@@ -1,6 +1,7 @@
 Texture2D gPositionMap : register(t0);
 Texture2D gNormalMap  : register(t1);
 Texture2D gAlbedoMap  : register(t2);
+Texture2D gDepthMap  : register(t3);
 // Constant data that varies per material.
 
 SamplerState gsamPointClamp : register(s0);
@@ -23,5 +24,5 @@ float PS(VertexOut pin) : SV_Target
 	float3 normal = normalize(gNormalMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz);
 	float3 albedo = gAlbedoMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
 
-    return 0.5f;
+    return abs(normal.x);
 }

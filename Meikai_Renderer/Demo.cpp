@@ -283,7 +283,7 @@ void Demo::DrawSsao(const GameTimer& gt)
 
 	mCommandList->IASetVertexBuffers(0, 0, nullptr);
 	mCommandList->IASetIndexBuffer(nullptr);
-	mCommandList->DrawInstanced(4, 1, 0, 0);
+	mCommandList->DrawInstanced(3, 1, 0, 0);
 
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(SsaoMapResource.Get(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
@@ -325,7 +325,7 @@ void Demo::DrawLighting(const GameTimer& gt)
 
 	mCommandList->IASetVertexBuffers(0, 0, nullptr);
 	mCommandList->IASetIndexBuffer(nullptr);
-	mCommandList->DrawInstanced(4, 1, 0, 0);
+	mCommandList->DrawInstanced(3, 1, 0, 0);
 
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
