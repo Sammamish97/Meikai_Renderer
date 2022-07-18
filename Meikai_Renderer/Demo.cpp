@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "GeometryPass.h"
 #include "LightingPass.h"
+#include "SsaoPass.h"
 
 #include <d3dcompiler.h>
 #include <d3dx12.h>
@@ -64,7 +65,7 @@ void Demo::LoadContent()
 	CreateShader();
 	G_Pass = std::make_unique<GeometryPass>(this, mCommandList.Get(), mShaders["GeomVS"], mShaders["GeomPS"], mClientWidth, mClientHeight);
 	L_Pass = std::make_unique<LightingPass>(this, mCommandList.Get(), mShaders["ScreenQuadVS"], mShaders["LightingPS"], mClientWidth, mClientHeight);
-
+	S_Pass = std::make_unique<SsaoPass>(this, mCommandList.Get(), mShaders["ScreenQuadVS"], mShaders["SsaoPS"], mClientWidth, mClientHeight);
 	m_ContentLoaded = true; 
 }
 
@@ -93,6 +94,7 @@ void Demo::CreateShader()
 	mShaders["GeomPS"] = DxUtil::CompileShader(L"../shaders/GeometryPass.hlsl", nullptr, "PS", "ps_5_1");
 	mShaders["ScreenQuadVS"] = DxUtil::CompileShader(L"../shaders/ScreenQuad.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["LightingPS"] = DxUtil::CompileShader(L"../shaders/LightingPass.hlsl", nullptr, "PS", "ps_5_1");
+	mShaders["SsaoPS"] = DxUtil::CompileShader(L"../shaders/SsaoPass.hlsl", nullptr, "PS", "ps_5_1");
 }
 
 void Demo::UpdatePassCB(const GameTimer& gt)
@@ -164,6 +166,7 @@ void Demo::Draw(const GameTimer& gt)
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
 	DrawGeometry(gt);
+	DrawSsao(gt);
 	DrawLighting(gt);
 
 	// Done recording commands.
@@ -244,6 +247,45 @@ void Demo::DrawGeometry(const GameTimer& gt)
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(normalMap.Get(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(albedoMap.Get(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
+}
+
+void Demo::DrawSsao(const GameTimer& gt)
+{
+	auto SsaoMapResource = S_Pass->GetSsaoMap();
+	auto SsaoRtv = S_Pass->GetSsaoRtv();
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(SsaoMapResource.Get(),
+		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	// Clear the screen normal map and depth buffer.
+	float positionAndcolorClearValue[] = { 1.f };
+	mCommandList->ClearRenderTargetView(SsaoRtv, positionAndcolorClearValue, 0, nullptr);
+
+	//Set Pipeline & Root signature
+	mCommandList->SetPipelineState(S_Pass->mPso.Get());
+	mCommandList->SetGraphicsRootSignature(S_Pass->mRootSig.Get());
+
+	mCommandList->SetDescriptorHeaps(1, S_Pass->GetSrvHeap().GetAddressOf());
+
+	//Access geometry pass's pos/normal/albedo map.
+	mCommandList->SetGraphicsRootDescriptorTable(0, G_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
+
+	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
+	mCommandList->RSSetViewports(1, &mScreenViewport);
+	mCommandList->RSSetScissorRects(1, &mScissorRect);
+
+	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { SsaoRtv };
+	// Specify the buffers we are going to render to.
+	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, nullptr);
+
+	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	mCommandList->IASetVertexBuffers(0, 0, nullptr);
+	mCommandList->IASetIndexBuffer(nullptr);
+	mCommandList->DrawInstanced(4, 1, 0, 0);
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(SsaoMapResource.Get(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
 }
 

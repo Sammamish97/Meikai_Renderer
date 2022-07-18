@@ -6,7 +6,6 @@ using namespace Microsoft::WRL;
 class DXApp;
 class GeometryPass
 {
-private:
 	DXApp* mdxApp = nullptr;
 public:
 	GeometryPass(DXApp* device,
