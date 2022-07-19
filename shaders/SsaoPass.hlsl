@@ -23,6 +23,7 @@ float PS(VertexOut pin) : SV_Target
 	float3 position = gPositionMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
 	float3 normal = normalize(gNormalMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz);
 	float3 albedo = gAlbedoMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
+	float depth = gDepthMap.SampleLevel(gsamDepthMap, fliped_UV, 0.0f).r;
 
-    return abs(normal.x);
+    return depth;
 }

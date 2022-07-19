@@ -18,7 +18,8 @@ public:
 
 	static const DXGI_FORMAT PositionAndNormalMapFormat = DXGI_FORMAT_R16G16B16A16_FLOAT;
 	static const DXGI_FORMAT AlbedoMapFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
-	static const DXGI_FORMAT mDepthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	static const DXGI_FORMAT mDepthStencilDsvFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	static const DXGI_FORMAT mDepthStencilSrvFormat = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 
 private:
 	void BuildRTVResources();

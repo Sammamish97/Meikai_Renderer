@@ -17,6 +17,7 @@ public:
 	~SsaoPass() = default;
 
 	static const DXGI_FORMAT SsaoMapFormat = DXGI_FORMAT_R16_UNORM;
+	static const DXGI_FORMAT depthSrvFommat = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 
 private:
 	void BuildMapResource();

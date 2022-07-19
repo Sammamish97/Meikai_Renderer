@@ -62,7 +62,7 @@ void GeometryPass::BuildDsvDescriptor()
     D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;
     dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
     dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-    dsvDesc.Format = mDepthStencilFormat;
+    dsvDesc.Format = mDepthStencilDsvFormat;
     dsvDesc.Texture2D.MipSlice = 0;
     mdxApp->GetDevice()->CreateDepthStencilView(mDepthStencilBuffer.Get(), &dsvDesc, DepthStencilView());
 }
@@ -82,7 +82,7 @@ void GeometryPass::RebuildDescriptors()
     srvDesc.Format = AlbedoMapFormat;
     mdxApp->GetDevice()->CreateShaderResourceView(mAlbedoMap.Get(), &srvDesc, mhAlbedoMapCpuSrv);
 
-    srvDesc.Format = mDepthStencilFormat;
+    srvDesc.Format = mDepthStencilSrvFormat;
     mdxApp->GetDevice()->CreateShaderResourceView(mDepthStencilBuffer.Get(), &srvDesc, mhDepthCpuSrv);
 
     D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
@@ -176,7 +176,7 @@ void GeometryPass::BuildDSVResource()
     depthStencilDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 
     D3D12_CLEAR_VALUE clearValue;
-    clearValue.Format = mDepthStencilFormat;
+    clearValue.Format = mDepthStencilDsvFormat;
     clearValue.DepthStencil.Depth = 1.0f;
     clearValue.DepthStencil.Stencil = 0;
 
@@ -250,7 +250,7 @@ void GeometryPass::BuildPSO()
     geometryPSODesc.RTVFormats[0] = PositionAndNormalMapFormat;
     geometryPSODesc.RTVFormats[1] = PositionAndNormalMapFormat;
     geometryPSODesc.RTVFormats[2] = AlbedoMapFormat;
-    geometryPSODesc.DSVFormat = mDepthStencilFormat;
+    geometryPSODesc.DSVFormat = mDepthStencilDsvFormat;
     geometryPSODesc.SampleDesc.Count = mdxApp->Get4xMsaaState() ? 4 : 1;
     geometryPSODesc.SampleDesc.Quality = mdxApp->Get4xMsaaState() ? (mdxApp->Get4xMsaaQuality() - 1) : 0;
 

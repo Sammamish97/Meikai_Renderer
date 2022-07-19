@@ -258,9 +258,12 @@ void Demo::DrawSsao(const GameTimer& gt)
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(SsaoMapResource.Get(),
 		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
-	// Clear the screen normal map and depth buffer.
-	float positionAndcolorClearValue[] = { 1.f };
-	mCommandList->ClearRenderTargetView(SsaoRtv, positionAndcolorClearValue, 0, nullptr);
+	// Clear ambient map
+	float clearValue[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	mCommandList->ClearRenderTargetView(SsaoRtv, clearValue, 0, nullptr);
+
+	// Specify the buffers we are going to render to.
+	mCommandList->OMSetRenderTargets(1, &SsaoRtv, true, nullptr);
 
 	//Set Pipeline & Root signature
 	mCommandList->SetPipelineState(S_Pass->mPso.Get());
@@ -274,10 +277,6 @@ void Demo::DrawSsao(const GameTimer& gt)
 	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
 	mCommandList->RSSetViewports(1, &mScreenViewport);
 	mCommandList->RSSetScissorRects(1, &mScissorRect);
-
-	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { SsaoRtv };
-	// Specify the buffers we are going to render to.
-	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, nullptr);
 
 	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
