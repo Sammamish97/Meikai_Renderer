@@ -87,12 +87,16 @@ void LightingPass::BuildRootSignature()
 		D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
 		D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
 
-	CD3DX12_DESCRIPTOR_RANGE texTable0;//Table for position, normal, albedo texture of Geometry pass.
+	CD3DX12_DESCRIPTOR_RANGE texTable0;//Table for position, normal, albedo and depth texture of Geometry pass.
 	texTable0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 4, 0, 0);
 
-	CD3DX12_ROOT_PARAMETER rootParameters[2];
+	CD3DX12_DESCRIPTOR_RANGE texTable1;//Table for Occlusion texture of Ssao pass.
+	texTable1.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 4, 0);
+
+	CD3DX12_ROOT_PARAMETER rootParameters[3];
 	rootParameters[0].InitAsDescriptorTable(1, &texTable0, D3D12_SHADER_VISIBILITY_PIXEL);
 	rootParameters[1].InitAsConstantBufferView(2);
+	rootParameters[2].InitAsDescriptorTable(1, &texTable1, D3D12_SHADER_VISIBILITY_PIXEL);
 
 	auto staticSamplers = mdxApp->GetStaticSamplers();
 

@@ -3,6 +3,8 @@ Texture2D gNormalMap  : register(t1);
 Texture2D gAlbedoMap  : register(t2);
 Texture2D gDepthMap  : register(t3);
 
+Texture2D gSsaoMap  : register(t4);
+
 SamplerState gsamPointClamp : register(s0);
 SamplerState gsamLinearClamp : register(s1);
 SamplerState gsamDepthMap : register(s2);
@@ -48,6 +50,7 @@ float4 PS(VertexOut pin) : SV_Target
 	float3 position = gPositionMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
 	float3 normal = normalize(gNormalMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz);
 	float3 albedo = gAlbedoMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
+	float occluded = gSsaoMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
 
 	float3 resultColor = float3(0, 0, 0);
 	
@@ -58,6 +61,7 @@ float4 PS(VertexOut pin) : SV_Target
 	{
 		normalizedDir = normalize(pointLights[i].position - position);
 		resultColor += max(dot(normalizedDir, normal), 0.0f) * pointLights[i].color;
+		resultColor *= albedo * occluded;
 	}
     return float4(resultColor, 1.0);
 }

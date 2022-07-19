@@ -311,6 +311,7 @@ void Demo::DrawLighting(const GameTimer& gt)
 
 	D3D12_GPU_VIRTUAL_ADDRESS lightCBAddress = L_Pass->mLightCB->Resource()->GetGPUVirtualAddress();
 	mCommandList->SetGraphicsRootConstantBufferView(1, lightCBAddress);
+	mCommandList->SetGraphicsRootDescriptorTable(2, S_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
 
 	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
 	mCommandList->RSSetViewports(1, &mScreenViewport);
