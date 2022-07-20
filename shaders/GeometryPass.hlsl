@@ -5,7 +5,6 @@ struct WorldMatrix
 
 ConstantBuffer<WorldMatrix> objectWorld : register(b0);
 
-// Constant data that varies per material.
 cbuffer cbPass : register(b1)
 {
     float4x4 gView;

@@ -1,4 +1,4 @@
-#include "Demo.h"
+﻿#include "Demo.h"
 #include "DXUtil.h"
 #include "Model.h"
 #include "Object.h"
@@ -74,9 +74,12 @@ void Demo::BuildModels()
 	mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, mCommandList);
 	mModels["Quad"] = std::make_shared<Model>("../models/Quad.obj", this, mCommandList);
 	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, mCommandList);
-	mModels["Bunny"] = std::make_shared<Model>("../models/bunny.obj", this, mCommandList);
+	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, mCommandList);
 
+
+	objects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(10.f, 10.f, 10.f)));
 	objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(0.f, 0.f, 0.f)));
+
 	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(-1.f, -1.f, 0.f)));
 	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(1.f, -1.f, 0.f)));
 }
@@ -273,6 +276,12 @@ void Demo::DrawSsao(const GameTimer& gt)
 
 	//Access geometry pass's pos/normal/albedo map.
 	mCommandList->SetGraphicsRootDescriptorTable(0, G_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
+
+	//Update Pass CB
+	UINT passCBByteSize = DxUtil::CalcConstantBufferByteSize(sizeof(PassCB));
+	auto passCB = mFrameResource->mPassCB->Resource();
+	D3D12_GPU_VIRTUAL_ADDRESS passCBAddress = passCB->GetGPUVirtualAddress();
+	mCommandList->SetGraphicsRootConstantBufferView(1, passCBAddress);
 
 	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
 	mCommandList->RSSetViewports(1, &mScreenViewport);

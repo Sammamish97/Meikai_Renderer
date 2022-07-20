@@ -63,5 +63,6 @@ float4 PS(VertexOut pin) : SV_Target
 		resultColor += max(dot(normalizedDir, normal), 0.0f) * pointLights[i].color;
 		resultColor *= albedo * occluded;
 	}
-    return float4(resultColor, 1.0);
+    //return float4(resultColor, 1.0);
+	return float4(occluded, occluded, occluded, 1.0);
 }

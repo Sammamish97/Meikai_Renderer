@@ -142,7 +142,6 @@ void SsaoPass::BuildPSO()
 
 void SsaoPass::BuildRootSignature()
 {
-    //Light pass use 3 textures for root value.
     D3D12_FEATURE_DATA_ROOT_SIGNATURE featureData = {};
     featureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
     if (FAILED(mdxApp->GetDevice()->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &featureData, sizeof(featureData))))
@@ -162,8 +161,9 @@ void SsaoPass::BuildRootSignature()
     CD3DX12_DESCRIPTOR_RANGE texTable0;//Table for position, normal, albedo texture of Geometry pass.
     texTable0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 4, 0, 0);
 
-    CD3DX12_ROOT_PARAMETER rootParameters[1];
+    CD3DX12_ROOT_PARAMETER rootParameters[2];
     rootParameters[0].InitAsDescriptorTable(1, &texTable0, D3D12_SHADER_VISIBILITY_PIXEL);
+    rootParameters[1].InitAsConstantBufferView(0);
 
     auto staticSamplers = mdxApp->GetStaticSamplers();
 
