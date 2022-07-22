@@ -1,13 +1,9 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
   Demo.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(237,36): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(329,82): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
-Model.obj : warning LNK4099: PDB 'vc143.pdb' was not found with 'Model.obj' or at 'C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\bin\vc143.pdb'; linking object as if no debug info
-Mesh.obj : warning LNK4099: PDB 'vc143.pdb' was not found with 'Mesh.obj' or at 'C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\bin\vc143.pdb'; linking object as if no debug info
-DXUtil.obj : warning LNK4099: PDB 'vc143.pdb' was not found with 'DXUtil.obj' or at 'C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\bin\vc143.pdb'; linking object as if no debug info
-DXApp.obj : warning LNK4099: PDB 'vc143.pdb' was not found with 'DXApp.obj' or at 'C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\bin\vc143.pdb'; linking object as if no debug info
-  Meikai_Renderer.vcxproj -> C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\bin\Meikai_Renderer_debug.exe
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(244,36): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(425,82): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
+  Meikai_Renderer.vcxproj -> C:\Data\Meikai_Renderer\bin\Meikai_Renderer_debug.exe

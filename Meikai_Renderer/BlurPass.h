@@ -10,7 +10,7 @@ class BlurPass
 public:
 	BlurPass(DXApp* device,
 		ComPtr<ID3D12GraphicsCommandList> cmdList,
-		ComPtr<ID3DBlob> computeShader,
+		ComPtr<ID3DBlob> hBlurShader, ComPtr<ID3DBlob> vBlurShader,
 		UINT blurwWidth, UINT blurHeight);
 	BlurPass(const BlurPass& rhs) = delete;
 	BlurPass& operator=(const BlurPass& rhs) = delete;
@@ -21,11 +21,14 @@ public:
 private:
 	void BuildBlurResource();
 	void CreateSrvUavDescriptorHeap();
-	void BuildComputePSO();
 	void BuildRootSignature();
+	void BuildBlurPSOs();
 
 public:
 	void BuildDescriptors();
+
+	ComPtr<ID3D12Resource> GetHorizontalMap();
+	ComPtr<ID3D12Resource> GetVerticalMap();
 
 private:
 	ComPtr<ID3D12DescriptorHeap> mSrvUavHeap;
@@ -33,6 +36,13 @@ private:
 	ComPtr<ID3D12Resource> mBlurHorizon;
 	ComPtr<ID3D12Resource> mBlurVertical;
 
+	UINT mBlurWidth;
+	UINT mBlurHeight;
+
+	ComPtr<ID3DBlob> mhBlurShader;
+	ComPtr<ID3DBlob> mvBlurShader;
+
+public:
 	CD3DX12_CPU_DESCRIPTOR_HANDLE mBlurHCpuSrv;
 	CD3DX12_CPU_DESCRIPTOR_HANDLE mBlurHCpuUav;
 
@@ -45,13 +55,8 @@ private:
 	CD3DX12_GPU_DESCRIPTOR_HANDLE mBlurVGpuSrv;
 	CD3DX12_GPU_DESCRIPTOR_HANDLE mBlurVGpuUav;
 
-	UINT mBlurWidth;
-	UINT mBlurHeight;
-
-	ComPtr<ID3DBlob> mComputeShader;
-
-public:
 	ComPtr<ID3D12RootSignature> mRootSig;
-	ComPtr<ID3D12PipelineState> mPso;
+	ComPtr<ID3D12PipelineState> mhPso;
+	ComPtr<ID3D12PipelineState> mvPso;
 };
 

@@ -29,11 +29,8 @@ private:
 
 public:
 	void OnResize(UINT newWidth, UINT newHeight);
-
 	void BuildDescriptors();
-
 	void RebuildDescriptors();
-	void Execute(ID3D12GraphicsCommandList* cmdList, ID3D12Resource* input, int blurCount);
 
 
 	ComPtr<ID3D12DescriptorHeap> GetSrvHeap();

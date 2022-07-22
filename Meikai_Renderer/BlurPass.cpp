@@ -3,17 +3,16 @@
 #include "DXUtil.h"
 #include "DXApp.h"
 
-BlurPass::BlurPass(DXApp* device,
-	ComPtr<ID3D12GraphicsCommandList> cmdList,
-	ComPtr<ID3DBlob> computeShader,
-	UINT blurwWidth, UINT blurHeight)
-	:mdxApp(device), mBlurWidth(blurwWidth), mBlurHeight(blurHeight), mComputeShader(computeShader)
+BlurPass::BlurPass(DXApp* device, ComPtr<ID3D12GraphicsCommandList> cmdList, ComPtr<ID3DBlob> hBlurShader,
+	ComPtr<ID3DBlob> vBlurShader, UINT blurwWidth, UINT blurHeight)
+    :mdxApp(device), mBlurWidth(blurwWidth), mBlurHeight(blurHeight),
+		mhBlurShader(hBlurShader), mvBlurShader(vBlurShader)
 {
-	BuildBlurResource();
-	CreateSrvUavDescriptorHeap();
-	BuildDescriptors();
-	BuildRootSignature();
-	BuildComputePSO();
+    BuildBlurResource();
+    CreateSrvUavDescriptorHeap();
+    BuildDescriptors();
+    BuildRootSignature();
+    BuildBlurPSOs();
 }
 
 void BlurPass::BuildBlurResource()
@@ -98,12 +97,71 @@ void BlurPass::BuildDescriptors()
 
 void BlurPass::BuildRootSignature()
 {
-    //TODO: start here
+    //Blur compute shader use geometry pass's position, normal, albedo, depth buffer and input srv image.
+    D3D12_FEATURE_DATA_ROOT_SIGNATURE featureData = {};
+    featureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
+    if (FAILED(mdxApp->GetDevice()->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &featureData, sizeof(featureData))))
+    {
+        featureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
+    }
+
+    CD3DX12_DESCRIPTOR_RANGE texTable0;//Table for position, normal, albedo and depth texture of Geometry pass.
+    texTable0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 4, 0, 0);
+
+    CD3DX12_DESCRIPTOR_RANGE texTable1;//Table for input blur image
+    texTable1.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 4, 0);
+
+    CD3DX12_ROOT_PARAMETER rootParameters[2];
+    rootParameters[0].InitAsDescriptorTable(1, &texTable0, D3D12_SHADER_VISIBILITY_PIXEL);
+    rootParameters[1].InitAsDescriptorTable(1, &texTable1, D3D12_SHADER_VISIBILITY_PIXEL);
+
+    auto staticSamplers = mdxApp->GetStaticSamplers();
+
+    CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(_countof(rootParameters), rootParameters,
+        (UINT)staticSamplers.size(), staticSamplers.data(),
+        D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+    ComPtr<ID3DBlob> serializedRootSig;
+    ComPtr<ID3DBlob> errorBlob;
+
+    HRESULT hr = D3D12SerializeRootSignature(&rootSigDesc, D3D_ROOT_SIGNATURE_VERSION_1,
+        serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf());
+
+    if (errorBlob != nullptr)
+    {
+        ::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+    }
+    ThrowIfFailed(hr);
+
+    ThrowIfFailed(mdxApp->GetDevice()->CreateRootSignature(0, serializedRootSig->GetBufferPointer(), serializedRootSig->GetBufferSize(), IID_PPV_ARGS(mRootSig.GetAddressOf())))
 }
 
-void BlurPass::BuildComputePSO()
+void BlurPass::BuildBlurPSOs()
 {
+    D3D12_COMPUTE_PIPELINE_STATE_DESC blurPso = {};
+    blurPso.pRootSignature = mRootSig.Get();
+    blurPso.CS =
+    {
+        reinterpret_cast<BYTE*>(mhBlurShader->GetBufferPointer()),
+        mhBlurShader->GetBufferSize()
+    };
+    blurPso.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+    ThrowIfFailed(mdxApp->GetDevice()->CreateComputePipelineState(&blurPso, IID_PPV_ARGS(mhPso.GetAddressOf())))
 
+	blurPso.CS =
+    {
+        reinterpret_cast<BYTE*>(mvBlurShader->GetBufferPointer()),
+        mvBlurShader->GetBufferSize()
+    };
+    ThrowIfFailed(mdxApp->GetDevice()->CreateComputePipelineState(&blurPso, IID_PPV_ARGS(mvPso.GetAddressOf())))
 }
 
+ComPtr<ID3D12Resource> BlurPass::GetHorizontalMap()
+{
+    return mBlurHorizon;
+}
 
+ComPtr<ID3D12Resource> BlurPass::GetVerticalMap()
+{
+    return mBlurVertical;
+}

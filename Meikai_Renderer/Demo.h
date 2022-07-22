@@ -12,6 +12,7 @@ class Camera;
 class GeometryPass;
 class LightingPass;
 class SsaoPass;
+class BlurPass;
 
 class Demo : public DXApp
 {
@@ -29,6 +30,7 @@ protected:
 private:
 	void DrawGeometry(const GameTimer& gt);
 	void DrawSsao(const GameTimer& gt);
+	void BlurSsao(const GameTimer& gt);
 	void DrawLighting(const GameTimer& gt);
 
 private:
@@ -53,6 +55,7 @@ private:
 	std::unique_ptr<GeometryPass> G_Pass;
 	std::unique_ptr<LightingPass> L_Pass;
 	std::unique_ptr<SsaoPass> S_Pass;
+	std::unique_ptr<BlurPass> B_Pass;
 
 	std::unique_ptr<FrameResource> mFrameResource;
 
@@ -66,5 +69,7 @@ private:
 	POINT mLastMousePos;
 
 	bool m_ContentLoaded = false;
+
+	int blurCount = 5;
 };
 
