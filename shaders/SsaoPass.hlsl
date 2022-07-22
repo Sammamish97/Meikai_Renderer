@@ -1,16 +1,3 @@
-#include "MathUtil.hlsli"
-
-Texture2D gPositionMap : register(t0);
-Texture2D gNormalMap  : register(t1);
-Texture2D gAlbedoMap  : register(t2);
-Texture2D gDepthMap  : register(t3);
-// Constant data that varies per material.
-
-SamplerState gsamPointClamp : register(s0);
-SamplerState gsamLinearClamp : register(s1);
-SamplerState gsamDepthMap : register(s2);
-SamplerState gsamLinearWrap : register(s3);
-
 cbuffer cbPass : register(b0)
 {
     float4x4 gView;
@@ -29,6 +16,17 @@ cbuffer cbPass : register(b0)
     float gTotalTime;
     float gDeltaTime;
 };
+
+Texture2D gPositionMap : register(t0);
+Texture2D gNormalMap  : register(t1);
+Texture2D gAlbedoMap  : register(t2);
+Texture2D gDepthMap  : register(t3);
+// Constant data that varies per material.
+
+SamplerState gsamPointClamp : register(s0);
+SamplerState gsamLinearClamp : register(s1);
+SamplerState gsamDepthMap : register(s2);
+SamplerState gsamLinearWrap : register(s3);
 
 struct VertexOut
 {

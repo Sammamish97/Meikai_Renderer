@@ -16,6 +16,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{e864973d-2fd8-4ceb-87dc-78bd80cce88d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Passes">
+      <UniqueIdentifier>{bd2153b4-12d4-4eb1-b243-8f1b713498d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXApp.h">
@@ -45,9 +48,6 @@
     <ClInclude Include="MathHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GeometryPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ConstantBuffers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -58,10 +58,16 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LightingPass.h">
-      <Filter>Header Files</Filter>
+      <Filter>Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryPass.h">
+      <Filter>Passes</Filter>
     </ClInclude>
     <ClInclude Include="SsaoPass.h">
-      <Filter>Header Files</Filter>
+      <Filter>Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="BlurPass.h">
+      <Filter>Passes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -95,17 +101,20 @@
     <ClCompile Include="MathHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeometryPass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FrameResource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LightingPass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SsaoPass.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="LightingPass.cpp">
+      <Filter>Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryPass.cpp">
+      <Filter>Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="BlurPass.cpp">
+      <Filter>Passes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

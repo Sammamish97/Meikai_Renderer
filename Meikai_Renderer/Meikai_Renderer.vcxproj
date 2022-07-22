@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BlurPass.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstantBuffers.h" />
     <ClInclude Include="Demo.h" />
@@ -28,6 +29,7 @@
     <ClInclude Include="UploadBuffer.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BlurPass.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Demo.cpp" />
     <ClCompile Include="DXApp.cpp" />
