@@ -53,9 +53,10 @@ protected:
 
 private:
 	std::unique_ptr<GeometryPass> G_Pass;
-	std::unique_ptr<LightingPass> L_Pass;
 	std::unique_ptr<SsaoPass> S_Pass;
-	std::unique_ptr<BlurPass> B_Pass;
+	//std::unique_ptr<BlurPass> B_Pass;
+	std::unique_ptr<LightingPass> L_Pass;
+	
 
 	std::unique_ptr<FrameResource> mFrameResource;
 

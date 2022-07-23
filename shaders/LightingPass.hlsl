@@ -64,5 +64,7 @@ float4 PS(VertexOut pin) : SV_Target
 		resultColor *= albedo * occluded;
 	}
     //return float4(resultColor, 1.0);
+	//return float4(position.x, position.x, position.x, 1.0);
 	return float4(occluded, occluded, occluded, 1.0);
 }
+ 
