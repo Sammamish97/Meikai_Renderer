@@ -278,7 +278,7 @@ void Demo::DrawSsao(const GameTimer& gt)
 	mCommandList->SetPipelineState(S_Pass->mPso.Get());
 	mCommandList->SetGraphicsRootSignature(S_Pass->mRootSig.Get());
 
-	mCommandList->SetDescriptorHeaps(1, S_Pass->GetSrvHeap().GetAddressOf());
+	mCommandList->SetDescriptorHeaps(1, G_Pass->GetSrvHeap().GetAddressOf());
 
 	//Access geometry pass's pos/normal/albedo map.
 	mCommandList->SetGraphicsRootDescriptorTable(0, G_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
@@ -414,6 +414,8 @@ void Demo::DrawLighting(const GameTimer& gt)
 
 	D3D12_GPU_VIRTUAL_ADDRESS lightCBAddress = L_Pass->mLightCB->Resource()->GetGPUVirtualAddress();
 	mCommandList->SetGraphicsRootConstantBufferView(1, lightCBAddress);
+
+	mCommandList->SetDescriptorHeaps(1, S_Pass->GetSrvHeap().GetAddressOf());
 	mCommandList->SetGraphicsRootDescriptorTable(2, S_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
 
 	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
