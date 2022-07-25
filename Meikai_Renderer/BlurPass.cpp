@@ -119,10 +119,11 @@ void BlurPass::BuildRootSignature()
     CD3DX12_DESCRIPTOR_RANGE OutputUAVTable;//Table for input blur image
     OutputUAVTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0, 0);
 
-    CD3DX12_ROOT_PARAMETER rootParameters[3];
+    CD3DX12_ROOT_PARAMETER rootParameters[4];
     rootParameters[0].InitAsDescriptorTable(1, &GBufferTable, D3D12_SHADER_VISIBILITY_ALL);
     rootParameters[1].InitAsDescriptorTable(1, &InputSrvTable, D3D12_SHADER_VISIBILITY_ALL);
     rootParameters[2].InitAsDescriptorTable(1, &OutputUAVTable, D3D12_SHADER_VISIBILITY_ALL);
+    rootParameters[3].InitAsConstants(12, 0);
 
     auto staticSamplers = mdxApp->GetStaticSamplers();
 

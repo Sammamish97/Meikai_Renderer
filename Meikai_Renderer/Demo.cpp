@@ -318,6 +318,12 @@ void Demo::BlurSsao(const GameTimer& gt)
 
 	mCommandList->SetComputeRootSignature(B_Pass->mRootSig.Get());
 
+	auto weights = S_Pass->CalcGaussWeights(2.5f);
+	int blurRadius = (int)weights.size() / 2;
+
+	mCommandList->SetComputeRoot32BitConstants(3, 1, &blurRadius, 0);
+	mCommandList->SetComputeRoot32BitConstants(3, (UINT)weights.size(), weights.data(), 1);
+
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(inputResource.Get(),
 		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_COPY_SOURCE));
 

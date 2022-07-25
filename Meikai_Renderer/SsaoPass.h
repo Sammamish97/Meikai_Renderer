@@ -32,6 +32,8 @@ public:
 	void BuildDescriptors();
 	void RebuildDescriptors();
 
+	std::vector<float> CalcGaussWeights(float sigma);
+
 
 	ComPtr<ID3D12DescriptorHeap> GetSrvHeap();
 	ComPtr<ID3D12Resource> GetSsaoMap();
@@ -58,6 +60,7 @@ private:
 	ComPtr<ID3DBlob> mVertShader;
 	ComPtr<ID3DBlob> mPixelShader;
 
+	const int MaxBlurRadius = 5;
 public:
 	ComPtr<ID3D12RootSignature> mRootSig;
 	ComPtr<ID3D12PipelineState> mPso;
