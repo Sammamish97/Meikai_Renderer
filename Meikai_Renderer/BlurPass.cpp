@@ -165,6 +165,11 @@ void BlurPass::BuildBlurPSOs()
     ThrowIfFailed(mdxApp->GetDevice()->CreateComputePipelineState(&blurPso, IID_PPV_ARGS(mvPso.GetAddressOf())))
 }
 
+ComPtr<ID3D12DescriptorHeap> BlurPass::GetSrvUavHeap()
+{
+    return mSrvUavHeap;
+}
+
 ComPtr<ID3D12Resource> BlurPass::GetHorizontalMap()
 {
     return mBlurHorizon;

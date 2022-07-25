@@ -34,7 +34,7 @@ struct VertexOut
 	float2 UV : TEXCOORD;
 };
 
-float PS(VertexOut pin) : SV_Target
+float4 PS(VertexOut pin) : SV_Target
 {
 	float2 fliped_UV = pin.UV;
 	fliped_UV.y = 1 - fliped_UV.y;
@@ -77,5 +77,6 @@ float PS(VertexOut pin) : SV_Target
 	float total_occluded = 2 * 3.14 * fallOff / sampleCount * accumulation;
 	total_occluded = max(0, total_occluded);
 
-    return pow((1 - total_occluded), 50);
+    float result = pow((1 - total_occluded), 50);
+	return float4(result, result, result, 1.0);
 }

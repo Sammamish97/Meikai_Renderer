@@ -50,7 +50,7 @@ float4 PS(VertexOut pin) : SV_Target
 	float3 position = gPositionMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
 	float3 normal = normalize(gNormalMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz);
 	float3 albedo = gAlbedoMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
-	float occluded = gSsaoMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
+	float3 occluded = gSsaoMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
 
 	float3 resultColor = float3(0, 0, 0);
 	
@@ -65,6 +65,6 @@ float4 PS(VertexOut pin) : SV_Target
 	}
     //return float4(resultColor, 1.0);
 	//return float4(position.x, position.x, position.x, 1.0);
-	return float4(occluded, occluded, occluded, 1.0);
+	return float4(occluded, 1.0);
 }
  

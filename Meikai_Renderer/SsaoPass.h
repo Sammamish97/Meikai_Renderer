@@ -16,7 +16,7 @@ public:
 	SsaoPass& operator=(const SsaoPass& rhs) = delete;
 	~SsaoPass() = default;
 
-	static const DXGI_FORMAT SsaoMapFormat = DXGI_FORMAT_R16_UNORM;
+	static const DXGI_FORMAT SsaoMapFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 	static const DXGI_FORMAT depthSrvFommat = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 
 private:

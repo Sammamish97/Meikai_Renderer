@@ -27,6 +27,8 @@ private:
 public:
 	void BuildDescriptors();
 
+	ComPtr<ID3D12DescriptorHeap> GetSrvUavHeap();
+
 	ComPtr<ID3D12Resource> GetHorizontalMap();
 	ComPtr<ID3D12Resource> GetVerticalMap();
 

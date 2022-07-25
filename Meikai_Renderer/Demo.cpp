@@ -6,6 +6,7 @@
 #include "GeometryPass.h"
 #include "LightingPass.h"
 #include "SsaoPass.h"
+#include "BlurPass.h"
 
 #include <d3dcompiler.h>
 #include <d3dx12.h>
@@ -66,7 +67,7 @@ void Demo::LoadContent()
 	CreateShader();
 	G_Pass = std::make_unique<GeometryPass>(this, mCommandList.Get(), mShaders["GeomVS"], mShaders["GeomPS"], mClientWidth, mClientHeight);
 	S_Pass = std::make_unique<SsaoPass>(this, mCommandList.Get(), mShaders["ScreenQuadVS"], mShaders["SsaoPS"], mClientWidth, mClientHeight);
-	//B_Pass = std::make_unique<BlurPass>(this, mCommandList.Get(), mShaders["HBlurCS"], mShaders["VBlurCS"], mClientWidth, mClientHeight);
+	B_Pass = std::make_unique<BlurPass>(this, mCommandList.Get(), mShaders["HBlurCS"], mShaders["VBlurCS"], mClientWidth, mClientHeight);
 	L_Pass = std::make_unique<LightingPass>(this, mCommandList.Get(), mShaders["ScreenQuadVS"], mShaders["LightingPS"], mClientWidth, mClientHeight);
 	
 	m_ContentLoaded = true; 
@@ -175,7 +176,7 @@ void Demo::Draw(const GameTimer& gt)
 
 	DrawGeometry(gt);
 	DrawSsao(gt);
-	//BlurSsao(gt);
+	BlurSsao(gt);
 	DrawLighting(gt);
 
 	// Done recording commands.
@@ -302,94 +303,106 @@ void Demo::DrawSsao(const GameTimer& gt)
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
 }
 
-//void Demo::BlurSsao(const GameTimer& gt)
-//{
-//	auto hResource = B_Pass->GetHorizontalMap();
-//	auto vResource = B_Pass->GetVerticalMap();
-//
-//	auto inputResource = S_Pass->GetSsaoMap();
-//
-//	auto hGpuSrv = B_Pass->mBlurHGpuSrv;
-//	auto hpuUav = B_Pass->mBlurHGpuUav;
-//
-//	auto vGpuSrv = B_Pass->mBlurVGpuSrv;
-//	auto vGpuUav = B_Pass->mBlurVGpuUav;
-//
-//	mCommandList->SetComputeRootSignature(B_Pass->mRootSig.Get());
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(inputResource.Get(),
-//		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COPY_SOURCE));
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
-//		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST));
-//
-//	// Copy the input (back-buffer in this example) to horizontal blur map.
-//	mCommandList->CopyResource(hResource.Get(), inputResource.Get());
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
-//		D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_GENERIC_READ));
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vResource.Get(),
-//		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
-//
-//	for (int i = 0; i < blurCount; ++i)
-//	{
-//		//
-//		// Horizontal Blur pass.
-//		//
-//
-//		mCommandList->SetPipelineState(B_Pass->mhPso.Get());
-//
-//		mCommandList->SetComputeRootDescriptorTable(0, hGpuSrv);
-//		mCommandList->SetComputeRootDescriptorTable(1, vGpuUav);
-//
-//		// How many groups do we need to dispatch to cover a row of pixels, where each
-//		// group covers 256 pixels (the 256 is defined in the ComputeShader).
-//		UINT numGroupsX = (UINT)ceilf(mClientWidth / 256.0f);
-//		mCommandList->Dispatch(numGroupsX, mClientHeight, 1);
-//
-//		mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
-//			D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
-//
-//		mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vResource.Get(),
-//			D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
-//
-//		//
-//		// Vertical Blur pass.
-//		//
-//
-//		mCommandList->SetPipelineState(B_Pass->mvPso.Get());
-//
-//		mCommandList->SetComputeRootDescriptorTable(0, vGpuSrv);
-//		mCommandList->SetComputeRootDescriptorTable(1, hpuUav);
-//
-//		// How many groups do we need to dispatch to cover a column of pixels, where each
-//		// group covers 256 pixels  (the 256 is defined in the ComputeShader).
-//		UINT numGroupsY = (UINT)ceilf(mClientHeight / 256.0f);
-//		mCommandList->Dispatch(mClientWidth, numGroupsY, 1);
-//
-//		mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
-//			D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
-//
-//		mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vResource.Get(),
-//			D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
-//	}
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(inputResource.Get(),
-//		D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COPY_DEST));
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
-//		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_COPY_SOURCE));
-//
-//	// Copy the input (back-buffer in this example) to horizontal blur map.
-//	mCommandList->CopyResource(inputResource.Get(), hResource.Get());
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
-//		D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COMMON));
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(inputResource.Get(),
-//		D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_GENERIC_READ));
-//}
+void Demo::BlurSsao(const GameTimer& gt)
+{
+	auto hResource = B_Pass->GetHorizontalMap();
+	auto vResource = B_Pass->GetVerticalMap();
+
+	auto inputResource = S_Pass->GetSsaoMap();
+
+	auto hGpuSrv = B_Pass->mBlurHGpuSrv;
+	auto hGpuUav = B_Pass->mBlurHGpuUav;
+
+	auto vGpuSrv = B_Pass->mBlurVGpuSrv;
+	auto vGpuUav = B_Pass->mBlurVGpuUav;
+
+	mCommandList->SetComputeRootSignature(B_Pass->mRootSig.Get());
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(inputResource.Get(),
+		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_COPY_SOURCE));
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
+		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST));
+
+	// Copy the input (back-buffer in this example) to horizontal blur map.
+	mCommandList->CopyResource(hResource.Get(), inputResource.Get());
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
+		D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_GENERIC_READ));
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vResource.Get(),
+		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
+
+	for (int i = 0; i < blurCount; ++i)
+	{
+		//
+		// Horizontal Blur pass.
+		//
+
+		mCommandList->SetPipelineState(B_Pass->mhPso.Get());
+
+		mCommandList->SetDescriptorHeaps(1, G_Pass->GetSrvHeap().GetAddressOf());
+
+		mCommandList->SetComputeRootDescriptorTable(0, G_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
+
+		mCommandList->SetDescriptorHeaps(1, B_Pass->GetSrvUavHeap().GetAddressOf());
+
+		mCommandList->SetComputeRootDescriptorTable(1, hGpuSrv);
+		mCommandList->SetComputeRootDescriptorTable(2, vGpuUav);
+
+		// How many groups do we need to dispatch to cover a row of pixels, where each
+		// group covers 256 pixels (the 256 is defined in the ComputeShader).
+		UINT numGroupsX = (UINT)ceilf(mClientWidth / 256.0f);
+		mCommandList->Dispatch(numGroupsX, mClientHeight, 1);
+
+		mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
+			D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
+
+		mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vResource.Get(),
+			D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
+
+		//
+		// Vertical Blur pass.
+		//
+
+		mCommandList->SetPipelineState(B_Pass->mvPso.Get());
+
+		mCommandList->SetDescriptorHeaps(1, G_Pass->GetSrvHeap().GetAddressOf());
+
+		mCommandList->SetComputeRootDescriptorTable(0, G_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
+
+		mCommandList->SetDescriptorHeaps(1, B_Pass->GetSrvUavHeap().GetAddressOf());
+
+		mCommandList->SetComputeRootDescriptorTable(1, vGpuSrv);
+		mCommandList->SetComputeRootDescriptorTable(2, hGpuUav);
+
+		// How many groups do we need to dispatch to cover a column of pixels, where each
+		// group covers 256 pixels  (the 256 is defined in the ComputeShader).
+		UINT numGroupsY = (UINT)ceilf(mClientHeight / 256.0f);
+		mCommandList->Dispatch(mClientWidth, numGroupsY, 1);
+
+		mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
+			D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
+
+		mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vResource.Get(),
+			D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
+	}
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(inputResource.Get(),
+		D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COPY_DEST));
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
+		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_COPY_SOURCE));
+
+	// Copy the input (back-buffer in this example) to horizontal blur map.
+	mCommandList->CopyResource(inputResource.Get(), hResource.Get());
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
+		D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COMMON));
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(inputResource.Get(),
+		D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_GENERIC_READ));
+}
 
 void Demo::DrawLighting(const GameTimer& gt)
 {
