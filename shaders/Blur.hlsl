@@ -74,11 +74,10 @@ void HorzBlurCS(int3 groupThreadID : SV_GroupThreadID,
 	GroupMemoryBarrierWithGroupSync();
 
 	float4 blurColor = float4(0, 0, 0, 0);
-	
+
 	for(int i = -gBlurRadius; i <= gBlurRadius; ++i)
 	{
 		int k = groupThreadID.x + gBlurRadius + i;
-		
 		blurColor += weights[i + gBlurRadius] * gInputCache[k];
 	}
 	

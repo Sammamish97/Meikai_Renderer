@@ -145,13 +145,13 @@ void Demo::UpdateLightCB(const GameTimer& gt)
 	lightData.directLight.Color = XMFLOAT3(0.1f, 0.1f, 0.1f);
 
 	lightData.pointLight[0].Position = XMFLOAT3(5, 0, 0);
-	lightData.pointLight[0].Color = XMFLOAT3(1, 0, 0);
+	lightData.pointLight[0].Color = XMFLOAT3(0.5, 0, 0);
 
 	lightData.pointLight[1].Position = XMFLOAT3(0, 5, 0);
-	lightData.pointLight[1].Color = XMFLOAT3(0, 1, 0);
+	lightData.pointLight[1].Color = XMFLOAT3(0.1, 0.1, 0.1);
 
 	lightData.pointLight[2].Position = XMFLOAT3(0, 0, 5);
-	lightData.pointLight[2].Color = XMFLOAT3(0, 0, 1);
+	lightData.pointLight[2].Color = XMFLOAT3(0, 0, 0.5);
 
 	auto LightCB = L_Pass->mLightCB.get();
 	LightCB->CopyData(0, lightData);
