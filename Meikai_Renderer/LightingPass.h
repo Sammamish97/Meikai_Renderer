@@ -13,7 +13,7 @@ using namespace Microsoft::WRL;
 class LightingPass
 {
 public:
-	LightingPass(DXApp* device,
+	LightingPass(DXApp* mApp,
 		ComPtr<ID3D12GraphicsCommandList> cmdList,
 		ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader,
 		UINT width, UINT height);

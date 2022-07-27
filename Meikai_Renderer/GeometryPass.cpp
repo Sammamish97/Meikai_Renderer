@@ -184,7 +184,7 @@ void GeometryPass::BuildDSVResource()
         &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
         D3D12_HEAP_FLAG_NONE,
         &depthStencilDesc,
-        D3D12_RESOURCE_STATE_COMMON,
+        D3D12_RESOURCE_STATE_DEPTH_WRITE,
         &clearValue,
         IID_PPV_ARGS(mDepthStencilBuffer.GetAddressOf())))
     //TODO: state를 D3D12_RESOURCE_STATE_COMMON에서 Depth write로 바꾸기.
@@ -322,6 +322,11 @@ CD3DX12_GPU_DESCRIPTOR_HANDLE GeometryPass::GetGpuSrv(int index)
 ComPtr<ID3D12DescriptorHeap> GeometryPass::GetSrvHeap()
 {
     return mSrvHeap;
+}
+
+ComPtr<ID3D12Resource> GeometryPass::GetDepthStencilResource()
+{
+    return mDepthStencilBuffer;
 }
 
 ComPtr<ID3D12Resource> GeometryPass::GetPositionMap()

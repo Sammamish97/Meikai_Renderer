@@ -14,6 +14,7 @@ class GeometryPass;
 class LightingPass;
 class SsaoPass;
 class BlurPass;
+class SkyboxPass;
 
 class Demo : public DXApp
 {
@@ -33,11 +34,11 @@ private:
 	void DrawSsao(const GameTimer& gt);
 	void BlurSsao(const GameTimer& gt);
 	void DrawLighting(const GameTimer& gt);
+	void DrawSkybox(const GameTimer& gt);
 
 private:
 	void LoadContent();
 	void BuildModels();
-	void BuildTextures();
 
 	void BuildFrameResource();
 	void CreateShader();
@@ -58,8 +59,8 @@ private:
 	std::unique_ptr<SsaoPass> S_Pass;
 	std::unique_ptr<BlurPass> B_Pass;
 	std::unique_ptr<LightingPass> L_Pass;
+	std::unique_ptr<SkyboxPass> K_Pass;
 	
-
 	std::unique_ptr<FrameResource> mFrameResource;
 
 	std::unordered_map<std::string, std::shared_ptr<Model>> mModels;
@@ -67,7 +68,7 @@ private:
 
 	std::vector<D3D12_INPUT_ELEMENT_DESC> mInputLayout;
 	std::vector<std::unique_ptr<Object>> objects;
-	std::unique_ptr<Texture> test;
+	std::unique_ptr<Object> mSkybox;
 
 	std::unique_ptr<Camera> mCamera;
 	POINT mLastMousePos;

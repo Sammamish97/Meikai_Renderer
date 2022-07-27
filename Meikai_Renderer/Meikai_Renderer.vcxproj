@@ -25,11 +25,13 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="SkyboxPass.h" />
     <ClInclude Include="SsaoPass.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="UploadBuffer.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\include\tools\DDSTextureLoader.cpp" />
     <ClCompile Include="BlurPass.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Demo.cpp" />
@@ -44,6 +46,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="SkyboxPass.cpp" />
     <ClCompile Include="SsaoPass.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>

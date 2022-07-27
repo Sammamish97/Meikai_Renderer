@@ -7,6 +7,7 @@
 #include "LightingPass.h"
 #include "SsaoPass.h"
 #include "BlurPass.h"
+#include "SkyboxPass.h"
 #include "Texture.h"
 
 #include <d3dcompiler.h>
@@ -63,7 +64,6 @@ void Demo::LoadContent()
 {
 	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
 	mCamera = std::make_unique<Camera>(aspectRatio);
-	//BuildTextures();
 	BuildModels();
 	BuildFrameResource();
 	CreateShader();
@@ -71,7 +71,7 @@ void Demo::LoadContent()
 	S_Pass = std::make_unique<SsaoPass>(this, mCommandList.Get(), mShaders["ScreenQuadVS"], mShaders["SsaoPS"], mClientWidth, mClientHeight);
 	B_Pass = std::make_unique<BlurPass>(this, mCommandList.Get(), mShaders["HBlurCS"], mShaders["VBlurCS"], mClientWidth, mClientHeight);
 	L_Pass = std::make_unique<LightingPass>(this, mCommandList.Get(), mShaders["ScreenQuadVS"], mShaders["LightingPS"], mClientWidth, mClientHeight);
-	
+	K_Pass = std::make_unique<SkyboxPass>(this, mCommandList.Get(), mShaders["SkyboxVS"], mShaders["SkyboxPS"], mClientWidth, mClientHeight);
 	m_ContentLoaded = true; 
 }
 
@@ -81,18 +81,16 @@ void Demo::BuildModels()
 	mModels["Quad"] = std::make_shared<Model>("../models/Quad.obj", this, mCommandList);
 	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, mCommandList);
 	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, mCommandList);
+	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, mCommandList);
 
 
 	objects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(10.f, 10.f, 10.f)));
 	objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(0.f, 0.f, 0.f)));
 
+	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
+
 	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(-1.f, -1.f, 0.f)));
 	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(1.f, -1.f, 0.f)));
-}
-
-void Demo::BuildTextures()
-{
-	test = std::make_unique<Texture>(this, mCommandList, "../textures/nice.jpg");
 }
 
 void Demo::BuildFrameResource()
@@ -111,6 +109,9 @@ void Demo::CreateShader()
 	mShaders["SsaoPS"] = DxUtil::CompileShader(L"../shaders/SsaoPass.hlsl", nullptr, "PS", "ps_5_1");
 	mShaders["HBlurCS"] = DxUtil::CompileShader(L"../shaders/Blur.hlsl", nullptr, "HorzBlurCS", "cs_5_1");
 	mShaders["VBlurCS"] = DxUtil::CompileShader(L"../shaders/Blur.hlsl", nullptr, "VertBlurCS", "cs_5_1");
+
+	mShaders["SkyboxVS"] = DxUtil::CompileShader(L"../shaders/SkyboxPass.hlsl", nullptr, "VS", "vs_5_1");
+	mShaders["SkyboxPS"] = DxUtil::CompileShader(L"../shaders/SkyboxPass.hlsl", nullptr, "PS", "ps_5_1");
 }
 
 void Demo::UpdatePassCB(const GameTimer& gt)
@@ -185,6 +186,7 @@ void Demo::Draw(const GameTimer& gt)
 	DrawSsao(gt);
 	BlurSsao(gt);
 	DrawLighting(gt);
+	DrawSkybox(gt);
 
 	// Done recording commands.
 	ThrowIfFailed(mCommandList->Close());
@@ -274,6 +276,9 @@ void Demo::DrawSsao(const GameTimer& gt)
 
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(SsaoMapResource.Get(),
 		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(G_Pass->GetDepthStencilResource().Get(),
+		D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ));
 
 	// Clear ambient map
 	float clearValue[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -457,6 +462,53 @@ void Demo::DrawLighting(const GameTimer& gt)
 	mCommandList->IASetVertexBuffers(0, 0, nullptr);
 	mCommandList->IASetIndexBuffer(nullptr);
 	mCommandList->DrawInstanced(3, 1, 0, 0);
+
+	//Continue to Draw Skybox.
+	/*mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));*/
+}
+
+void Demo::DrawSkybox(const GameTimer& gt)
+{
+	//Draw continue after light pass
+
+	/*mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
+		D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_GENERIC_READ));
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
+		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));*/
+
+	
+	/*float positionAndcolorClearValue[] = { 1.f, 0.f, 1.f, 0.f };
+	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), positionAndcolorClearValue, 0, nullptr);*/
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(G_Pass->GetDepthStencilResource().Get(),
+		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE));
+
+	//Set Pipeline & Root signature
+	mCommandList->SetPipelineState(K_Pass->mPso.Get());
+	mCommandList->SetGraphicsRootSignature(K_Pass->mRootSig.Get());
+
+	//Update Pass CB
+	UINT passCBByteSize = DxUtil::CalcConstantBufferByteSize(sizeof(PassCB));
+	auto passCB = mFrameResource->mPassCB->Resource();
+	D3D12_GPU_VIRTUAL_ADDRESS passCBAddress = passCB->GetGPUVirtualAddress();
+	mCommandList->SetGraphicsRootConstantBufferView(0, passCBAddress);
+
+	mCommandList->SetDescriptorHeaps(1, K_Pass->GetSrvHeap().GetAddressOf());
+	mCommandList->SetGraphicsRootDescriptorTable(1, K_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
+
+	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
+	mCommandList->RSSetViewports(1, &mScreenViewport);
+	mCommandList->RSSetScissorRects(1, &mScissorRect);
+
+	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { CurrentBackBufferExtView() };
+	// Specify the buffers we are going to render to.
+	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, &G_Pass->DepthStencilView());
+
+	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	mSkybox->DrawWithoutWorld(mCommandList);
 
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));

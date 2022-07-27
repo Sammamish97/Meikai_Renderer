@@ -65,6 +65,7 @@ public:
 	CD3DX12_GPU_DESCRIPTOR_HANDLE GetGpuSrv(int index);
 
 	ComPtr<ID3D12DescriptorHeap> GetSrvHeap();
+	ComPtr<ID3D12Resource> GetDepthStencilResource();
 
 private:
 	ComPtr<ID3D12DescriptorHeap> mGeometryRtvHeap;
