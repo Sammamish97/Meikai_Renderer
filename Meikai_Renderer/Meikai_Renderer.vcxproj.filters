@@ -69,6 +69,9 @@
     <ClInclude Include="BlurPass.h">
       <Filter>Passes</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXApp.cpp">
@@ -115,6 +118,9 @@
     </ClCompile>
     <ClCompile Include="BlurPass.cpp">
       <Filter>Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

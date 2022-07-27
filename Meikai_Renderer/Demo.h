@@ -8,6 +8,7 @@
 
 struct Model;
 struct Object;
+struct Texture;
 class Camera;
 class GeometryPass;
 class LightingPass;
@@ -36,6 +37,7 @@ private:
 private:
 	void LoadContent();
 	void BuildModels();
+	void BuildTextures();
 
 	void BuildFrameResource();
 	void CreateShader();
@@ -65,6 +67,7 @@ private:
 
 	std::vector<D3D12_INPUT_ELEMENT_DESC> mInputLayout;
 	std::vector<std::unique_ptr<Object>> objects;
+	std::unique_ptr<Texture> test;
 
 	std::unique_ptr<Camera> mCamera;
 	POINT mLastMousePos;

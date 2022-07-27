@@ -7,6 +7,7 @@
 #include "LightingPass.h"
 #include "SsaoPass.h"
 #include "BlurPass.h"
+#include "Texture.h"
 
 #include <d3dcompiler.h>
 #include <d3dx12.h>
@@ -62,6 +63,7 @@ void Demo::LoadContent()
 {
 	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
 	mCamera = std::make_unique<Camera>(aspectRatio);
+	//BuildTextures();
 	BuildModels();
 	BuildFrameResource();
 	CreateShader();
@@ -86,6 +88,11 @@ void Demo::BuildModels()
 
 	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(-1.f, -1.f, 0.f)));
 	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(1.f, -1.f, 0.f)));
+}
+
+void Demo::BuildTextures()
+{
+	test = std::make_unique<Texture>(this, mCommandList, "../textures/nice.jpg");
 }
 
 void Demo::BuildFrameResource()
