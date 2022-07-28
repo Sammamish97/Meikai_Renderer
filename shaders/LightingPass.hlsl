@@ -2,8 +2,10 @@ Texture2D gPositionMap : register(t0);
 Texture2D gNormalMap  : register(t1);
 Texture2D gAlbedoMap  : register(t2);
 Texture2D gDepthMap  : register(t3);
+Texture2D gMetalic  : register(t4);
+Texture2D gRoughness  : register(t5);
 
-Texture2D gSsaoMap  : register(t4);
+Texture2D gSsaoMap  : register(t6);
 
 SamplerState gsamPointClamp : register(s0);
 SamplerState gsamLinearClamp : register(s1);
@@ -50,7 +52,9 @@ float4 PS(VertexOut pin) : SV_Target
 	float3 position = gPositionMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
 	float3 normal = normalize(gNormalMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz);
 	float3 albedo = gAlbedoMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
-	float3 occluded = gSsaoMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
+	float occluded = gSsaoMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
+	float metalic = gMetalic.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
+	float roughness = gRoughness.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
 
 	float3 resultColor = float3(0, 0, 0);
 	

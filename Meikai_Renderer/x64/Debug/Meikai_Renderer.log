@@ -1,3 +1,13 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  Demo.cpp
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(159,56): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(261,36): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(464,82): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(513,102): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
   GeometryPass.cpp
+  Generating Code...
   Meikai_Renderer.vcxproj -> C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\bin\Meikai_Renderer_debug.exe

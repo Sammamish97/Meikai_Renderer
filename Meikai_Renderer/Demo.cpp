@@ -216,6 +216,12 @@ void Demo::DrawGeometry(const GameTimer& gt)
 	auto albedoMap = G_Pass->GetAlbedoMap();
 	auto albedoMapRtv = G_Pass->GetAlbedoRtv();
 
+	auto metalicMap = G_Pass->GetMetalicMap();
+	auto metalicMapRtv = G_Pass->GetMetalicRtv();
+
+	auto roughnessMap = G_Pass->GetRoughnessMap();
+	auto roughnessMapRtv = G_Pass->GetRoughnessRtv();
+
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(positionMap.Get(),
 		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
@@ -227,12 +233,11 @@ void Demo::DrawGeometry(const GameTimer& gt)
 
 	// Clear the screen normal map and depth buffer.
 	float colorClearValue[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-	float positionAndNormalClearValue[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-	mCommandList->ClearRenderTargetView(positionMapRtv, positionAndNormalClearValue, 0, nullptr);
-	mCommandList->ClearRenderTargetView(normalMapRtv, positionAndNormalClearValue, 0, nullptr);
+	mCommandList->ClearRenderTargetView(positionMapRtv, colorClearValue, 0, nullptr);
+	mCommandList->ClearRenderTargetView(normalMapRtv, colorClearValue, 0, nullptr);
 	mCommandList->ClearRenderTargetView(albedoMapRtv, colorClearValue, 0, nullptr);
-
-	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { positionMapRtv, normalMapRtv, albedoMapRtv };
+	mCommandList->ClearRenderTargetView(metalicMapRtv, colorClearValue, 0, nullptr);
+	mCommandList->ClearRenderTargetView(roughnessMapRtv, colorClearValue, 0, nullptr);
 
 	mCommandList->ClearDepthStencilView(G_Pass->DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
 
@@ -250,6 +255,7 @@ void Demo::DrawGeometry(const GameTimer& gt)
 	mCommandList->RSSetViewports(1, &mScreenViewport);
 	mCommandList->RSSetScissorRects(1, &mScissorRect);
 
+	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { positionMapRtv, normalMapRtv, albedoMapRtv, metalicMapRtv, roughnessMapRtv };
 	// Specify the buffers we are going to render to.
 	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(),
 		true, &G_Pass->DepthStencilView());

@@ -377,6 +377,16 @@ ComPtr<ID3D12Resource> GeometryPass::GetAlbedoMap()
     return mAlbedoMap;
 }
 
+ComPtr<ID3D12Resource> GeometryPass::GetMetalicMap()
+{
+    return mMetalicMap;
+}
+
+ComPtr<ID3D12Resource> GeometryPass::GetRoughnessMap()
+{
+    return mRoughnessMap;
+}
+
 CD3DX12_CPU_DESCRIPTOR_HANDLE GeometryPass::GetPosRtv()
 {
     return mhPositionMapCpuRtv;
@@ -405,6 +415,25 @@ CD3DX12_CPU_DESCRIPTOR_HANDLE GeometryPass::GetAlbedoRtv()
 CD3DX12_GPU_DESCRIPTOR_HANDLE GeometryPass::GetAlbedoSrv()
 {
     return mhAlbedoMapGpuSrv;
+}
+
+CD3DX12_CPU_DESCRIPTOR_HANDLE GeometryPass::GetMetalicRtv()
+{
+    return mhMetalicMapCpuRtv;
+}
+
+CD3DX12_GPU_DESCRIPTOR_HANDLE GeometryPass::GetMetalicSrv()
+{
+    return mhMetalicMapGpuSrv;
+}
+
+CD3DX12_CPU_DESCRIPTOR_HANDLE GeometryPass::GetRoughnessRtv()
+{
+    return mhRoughnessMapCpuRtv;
+}
+CD3DX12_GPU_DESCRIPTOR_HANDLE GeometryPass::GetRoughnessSrv()
+{
+    return mhRoughnessMapGpuSrv;
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE GeometryPass::DepthStencilView()

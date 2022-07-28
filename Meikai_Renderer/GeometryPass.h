@@ -49,6 +49,8 @@ public:
 	ComPtr<ID3D12Resource> GetPositionMap();
 	ComPtr<ID3D12Resource> GetNormalMap();
 	ComPtr<ID3D12Resource> GetAlbedoMap();
+	ComPtr<ID3D12Resource> GetMetalicMap();
+	ComPtr<ID3D12Resource> GetRoughnessMap();
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE GetPosRtv();
 	CD3DX12_GPU_DESCRIPTOR_HANDLE GetPosSrv();
@@ -58,6 +60,12 @@ public:
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE GetAlbedoRtv();
 	CD3DX12_GPU_DESCRIPTOR_HANDLE GetAlbedoSrv();
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE GetMetalicRtv();
+	CD3DX12_GPU_DESCRIPTOR_HANDLE GetMetalicSrv();
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE GetRoughnessRtv();
+	CD3DX12_GPU_DESCRIPTOR_HANDLE GetRoughnessSrv();
 
 	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView();
 
