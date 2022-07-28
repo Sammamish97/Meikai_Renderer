@@ -246,7 +246,6 @@ void Demo::DrawGeometry(const GameTimer& gt)
 	mCommandList->SetGraphicsRootSignature(G_Pass->mRootSig.Get());
 
 	//Update Pass CB
-	UINT passCBByteSize = DxUtil::CalcConstantBufferByteSize(sizeof(PassCB));
 	auto passCB = mFrameResource->mPassCB->Resource();
 	D3D12_GPU_VIRTUAL_ADDRESS passCBAddress = passCB->GetGPUVirtualAddress();
 	mCommandList->SetGraphicsRootConstantBufferView(1, passCBAddress);
@@ -448,6 +447,10 @@ void Demo::DrawLighting(const GameTimer& gt)
 
 	//Test descriptor heap accessing
 	mCommandList->SetGraphicsRootDescriptorTable(0, G_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
+
+	auto passCB = mFrameResource->mPassCB->Resource();
+	D3D12_GPU_VIRTUAL_ADDRESS passCBAddress = passCB->GetGPUVirtualAddress();
+	mCommandList->SetGraphicsRootConstantBufferView(0, passCBAddress);
 
 	D3D12_GPU_VIRTUAL_ADDRESS lightCBAddress = L_Pass->mLightCB->Resource()->GetGPUVirtualAddress();
 	mCommandList->SetGraphicsRootConstantBufferView(1, lightCBAddress);
