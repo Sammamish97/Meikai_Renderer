@@ -44,15 +44,23 @@ void GeometryPass::BuildDescriptors(CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuSrv, CD3DX
     mhNormalMapCpuSrv = hCpuSrv.Offset(1, cbvSrvUavDescriptorSize);
 	mhAlbedoMapCpuSrv = hCpuSrv.Offset(1, cbvSrvUavDescriptorSize);
     mhDepthCpuSrv = hCpuSrv.Offset(1, cbvSrvUavDescriptorSize);
+    mhMetalicMapCpuSrv = hCpuSrv.Offset(1, cbvSrvUavDescriptorSize);
+    mhRoughnessMapCpuSrv = hCpuSrv.Offset(1, cbvSrvUavDescriptorSize);
+
 
     mhPositionMapGpuSrv = hGpuSrv;
     mhNormalMapGpuSrv = hGpuSrv.Offset(1, cbvSrvUavDescriptorSize);
     mhAlbedoMapGpuSrv = hGpuSrv.Offset(1, cbvSrvUavDescriptorSize);
     mhDepthGpuSrv = hGpuSrv.Offset(1, cbvSrvUavDescriptorSize);
+    mhMetalicMapGpuSrv = hGpuSrv.Offset(1, cbvSrvUavDescriptorSize);
+    mhRoughnessMapGpuSrv = hGpuSrv.Offset(1, cbvSrvUavDescriptorSize);
+
 
     mhPositionMapCpuRtv = hCpuRtv;
     mhNormalMapCpuRtv = hCpuRtv.Offset(1, rtvDescriptorSize);
     mhAlbedoMapCpuRtv = hCpuRtv.Offset(1, rtvDescriptorSize);
+    mhMetalicMapCpuRtv = hCpuRtv.Offset(1, rtvDescriptorSize);
+    mhRoughnessMapCpuRtv = hCpuRtv.Offset(1, rtvDescriptorSize);
 
     RebuildDescriptors();
 }
@@ -85,6 +93,10 @@ void GeometryPass::RebuildDescriptors()
     srvDesc.Format = mDepthStencilSrvFormat;
     mdxApp->GetDevice()->CreateShaderResourceView(mDepthStencilBuffer.Get(), &srvDesc, mhDepthCpuSrv);
 
+    srvDesc.Format = MetalicRoughnessFormat;
+    mdxApp->GetDevice()->CreateShaderResourceView(mMetalicMap.Get(), &srvDesc, mhMetalicMapCpuSrv);
+    mdxApp->GetDevice()->CreateShaderResourceView(mRoughnessMap.Get(), &srvDesc, mhRoughnessMapCpuSrv);
+
     D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
     rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
     rtvDesc.Format = PositionAndNormalMapFormat;
@@ -93,9 +105,12 @@ void GeometryPass::RebuildDescriptors()
     mdxApp->GetDevice()->CreateRenderTargetView(mPositionMap.Get(), &rtvDesc, mhPositionMapCpuRtv);
     mdxApp->GetDevice()->CreateRenderTargetView(mNormalMap.Get(), &rtvDesc, mhNormalMapCpuRtv);
 
-
     rtvDesc.Format = AlbedoMapFormat;
     mdxApp->GetDevice()->CreateRenderTargetView(mAlbedoMap.Get(), &rtvDesc, mhAlbedoMapCpuRtv);
+
+    rtvDesc.Format = MetalicRoughnessFormat;
+    mdxApp->GetDevice()->CreateRenderTargetView(mMetalicMap.Get(), &rtvDesc, mhMetalicMapCpuRtv);
+    mdxApp->GetDevice()->CreateRenderTargetView(mRoughnessMap.Get(), &rtvDesc, mhRoughnessMapCpuRtv);
 }
 
 void GeometryPass::BuildRTVResources()
@@ -118,8 +133,8 @@ void GeometryPass::BuildRTVResources()
     texDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
     texDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
 
-    float positionClearColor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-    CD3DX12_CLEAR_VALUE posOptClear(PositionAndNormalMapFormat, positionClearColor);
+    float ClearColor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+    CD3DX12_CLEAR_VALUE posOptClear(PositionAndNormalMapFormat, ClearColor);
     ThrowIfFailed(mdxApp->GetDevice()->CreateCommittedResource(
         &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
         D3D12_HEAP_FLAG_NONE,
@@ -129,8 +144,7 @@ void GeometryPass::BuildRTVResources()
         IID_PPV_ARGS(mPositionMap.GetAddressOf())))
     
 
-    float normalClearColor[] = { 0.0f, 0.0f, 1.0f, 0.0f };
-    CD3DX12_CLEAR_VALUE normalOptClear(PositionAndNormalMapFormat, normalClearColor);
+    CD3DX12_CLEAR_VALUE normalOptClear(PositionAndNormalMapFormat, ClearColor);
     ThrowIfFailed(mdxApp->GetDevice()->CreateCommittedResource(
         &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
         D3D12_HEAP_FLAG_NONE,
@@ -140,8 +154,7 @@ void GeometryPass::BuildRTVResources()
         IID_PPV_ARGS(mNormalMap.GetAddressOf())))
 
     texDesc.Format = AlbedoMapFormat;
-    float alBedoClearColor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-    CD3DX12_CLEAR_VALUE albedoOptClear(AlbedoMapFormat, alBedoClearColor);
+    CD3DX12_CLEAR_VALUE albedoOptClear(AlbedoMapFormat, ClearColor);
     ThrowIfFailed(mdxApp->GetDevice()->CreateCommittedResource(
         &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
         D3D12_HEAP_FLAG_NONE,
@@ -149,6 +162,24 @@ void GeometryPass::BuildRTVResources()
         D3D12_RESOURCE_STATE_GENERIC_READ,
         &albedoOptClear,
         IID_PPV_ARGS(mAlbedoMap.GetAddressOf())))
+
+    texDesc.Format = MetalicRoughnessFormat;
+    CD3DX12_CLEAR_VALUE metalicRoughnessOptClear(MetalicRoughnessFormat, ClearColor);
+    ThrowIfFailed(mdxApp->GetDevice()->CreateCommittedResource(
+        &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+        D3D12_HEAP_FLAG_NONE,
+        &texDesc,
+        D3D12_RESOURCE_STATE_GENERIC_READ,
+        &metalicRoughnessOptClear,
+        IID_PPV_ARGS(mMetalicMap.GetAddressOf())))
+
+    ThrowIfFailed(mdxApp->GetDevice()->CreateCommittedResource(
+        &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+        D3D12_HEAP_FLAG_NONE,
+        &texDesc,
+        D3D12_RESOURCE_STATE_GENERIC_READ,
+        &metalicRoughnessOptClear,
+        IID_PPV_ARGS(mRoughnessMap.GetAddressOf())))
 
 }
 
@@ -192,9 +223,9 @@ void GeometryPass::BuildDSVResource()
 
 void GeometryPass::CreateRtvDescHeap()
 {
-    // These three maps for geometry's position, normal and albedo.
+    // These three maps for geometry's position, normal, albedo, metalic and roughness
     D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc;
-    rtvHeapDesc.NumDescriptors = 3;
+    rtvHeapDesc.NumDescriptors = 5;
     rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
     rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
     rtvHeapDesc.NodeMask = 0;
@@ -203,7 +234,7 @@ void GeometryPass::CreateRtvDescHeap()
 
     //TODO: Detatch Rtv & Srv heap & Desc from this function for intuitivity. 
     D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-    srvHeapDesc.NumDescriptors = 4;
+    srvHeapDesc.NumDescriptors = 6;
     srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
     srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
     ThrowIfFailed(mdxApp->GetDevice()->CreateDescriptorHeap(
@@ -246,10 +277,12 @@ void GeometryPass::BuildPSO()
     geometryPSODesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
     geometryPSODesc.SampleMask = UINT_MAX;
     geometryPSODesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-    geometryPSODesc.NumRenderTargets = 3;
+    geometryPSODesc.NumRenderTargets = 5;
     geometryPSODesc.RTVFormats[0] = PositionAndNormalMapFormat;
     geometryPSODesc.RTVFormats[1] = PositionAndNormalMapFormat;
     geometryPSODesc.RTVFormats[2] = AlbedoMapFormat;
+    geometryPSODesc.RTVFormats[3] = MetalicRoughnessFormat;
+    geometryPSODesc.RTVFormats[4] = MetalicRoughnessFormat;
     geometryPSODesc.DSVFormat = mDepthStencilDsvFormat;
     geometryPSODesc.SampleDesc.Count = mdxApp->Get4xMsaaState() ? 4 : 1;
     geometryPSODesc.SampleDesc.Quality = mdxApp->Get4xMsaaState() ? (mdxApp->Get4xMsaaQuality() - 1) : 0;

@@ -18,6 +18,7 @@ public:
 
 	static const DXGI_FORMAT PositionAndNormalMapFormat = DXGI_FORMAT_R16G16B16A16_FLOAT;
 	static const DXGI_FORMAT AlbedoMapFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
+	static const DXGI_FORMAT MetalicRoughnessFormat = DXGI_FORMAT_R16_FLOAT;
 	static const DXGI_FORMAT mDepthStencilDsvFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	static const DXGI_FORMAT mDepthStencilSrvFormat = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 
@@ -75,6 +76,8 @@ private:
 	ComPtr<ID3D12Resource> mPositionMap;
 	ComPtr<ID3D12Resource> mNormalMap;
 	ComPtr<ID3D12Resource> mAlbedoMap;
+	ComPtr<ID3D12Resource> mMetalicMap;
+	ComPtr<ID3D12Resource> mRoughnessMap;
 	ComPtr<ID3D12Resource> mDepthStencilBuffer;
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE mhPositionMapCpuSrv;
@@ -88,6 +91,14 @@ private:
 	CD3DX12_CPU_DESCRIPTOR_HANDLE mhAlbedoMapCpuSrv;
 	CD3DX12_GPU_DESCRIPTOR_HANDLE mhAlbedoMapGpuSrv;
 	CD3DX12_CPU_DESCRIPTOR_HANDLE mhAlbedoMapCpuRtv;
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE mhMetalicMapCpuSrv;
+	CD3DX12_GPU_DESCRIPTOR_HANDLE mhMetalicMapGpuSrv;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE mhMetalicMapCpuRtv;
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE mhRoughnessMapCpuSrv;
+	CD3DX12_GPU_DESCRIPTOR_HANDLE mhRoughnessMapGpuSrv;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE mhRoughnessMapCpuRtv;
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE mhDepthCpuSrv;
 	CD3DX12_GPU_DESCRIPTOR_HANDLE mhDepthGpuSrv;
