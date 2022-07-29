@@ -93,10 +93,11 @@ void LightingPass::BuildRootSignature()
 	CD3DX12_DESCRIPTOR_RANGE texTable1;//Table for Occlusion texture of Ssao pass.
 	texTable1.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 6, 0);
 
-	CD3DX12_ROOT_PARAMETER rootParameters[3];
+	CD3DX12_ROOT_PARAMETER rootParameters[4];
 	rootParameters[0].InitAsDescriptorTable(1, &texTable0, D3D12_SHADER_VISIBILITY_PIXEL);
-	rootParameters[1].InitAsConstantBufferView(2);
+	rootParameters[1].InitAsConstantBufferView(0);
 	rootParameters[2].InitAsDescriptorTable(1, &texTable1, D3D12_SHADER_VISIBILITY_PIXEL);
+	rootParameters[3].InitAsConstantBufferView(1);
 
 	auto staticSamplers = mdxApp->GetStaticSamplers();
 

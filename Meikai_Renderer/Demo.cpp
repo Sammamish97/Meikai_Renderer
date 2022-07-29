@@ -152,14 +152,14 @@ void Demo::UpdateLightCB(const GameTimer& gt)
 	lightData.directLight.Direction = XMFLOAT3(-0.5f, 0.5f, 0.5f);
 	lightData.directLight.Color = XMFLOAT3(0.1f, 0.1f, 0.1f);
 
-	lightData.pointLight[0].Position = XMFLOAT3(5, 0, 0);
-	lightData.pointLight[0].Color = XMFLOAT3(0.5, 0, 0);
+	lightData.pointLight[0].Position = XMFLOAT3(2, 0, 0);
+	lightData.pointLight[0].Color = XMFLOAT3(1, 0, 0);
 
-	lightData.pointLight[1].Position = XMFLOAT3(0, 5, 0);
-	lightData.pointLight[1].Color = XMFLOAT3(0.1, 0.1, 0.1);
+	lightData.pointLight[1].Position = XMFLOAT3(0, 2, 0);
+	lightData.pointLight[1].Color = XMFLOAT3(0.0, 1, 0.0);
 
-	lightData.pointLight[2].Position = XMFLOAT3(0, 0, 5);
-	lightData.pointLight[2].Color = XMFLOAT3(0, 0, 0.5);
+	lightData.pointLight[2].Position = XMFLOAT3(0, 0, 2);
+	lightData.pointLight[2].Color = XMFLOAT3(0, 0, 1);
 
 	auto LightCB = L_Pass->mLightCB.get();
 	LightCB->CopyData(0, lightData);
@@ -450,10 +450,10 @@ void Demo::DrawLighting(const GameTimer& gt)
 
 	auto passCB = mFrameResource->mPassCB->Resource();
 	D3D12_GPU_VIRTUAL_ADDRESS passCBAddress = passCB->GetGPUVirtualAddress();
-	mCommandList->SetGraphicsRootConstantBufferView(0, passCBAddress);
+	mCommandList->SetGraphicsRootConstantBufferView(1, passCBAddress);
 
 	D3D12_GPU_VIRTUAL_ADDRESS lightCBAddress = L_Pass->mLightCB->Resource()->GetGPUVirtualAddress();
-	mCommandList->SetGraphicsRootConstantBufferView(1, lightCBAddress);
+	mCommandList->SetGraphicsRootConstantBufferView(3, lightCBAddress);
 
 	mCommandList->SetDescriptorHeaps(1, S_Pass->GetSrvHeap().GetAddressOf());
 	mCommandList->SetGraphicsRootDescriptorTable(2, S_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
