@@ -71,6 +71,11 @@ std::pair<int, int> DXApp::GetWindowSize()
 	return std::make_pair(mClientWidth, mClientHeight);
 }
 
+uint64_t DXApp::GetFrameCount()
+{
+	return mCurrentFrame;
+}
+
 UINT DXApp::GetRtvDescSize()
 {
 	return mRtvDescriptorSize;
@@ -207,6 +212,7 @@ int DXApp::Run()
 			{
 				Sleep(100);
 			}
+			++mCurrentFrame;
         }
     }
 

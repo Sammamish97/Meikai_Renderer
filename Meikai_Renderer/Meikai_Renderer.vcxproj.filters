@@ -87,6 +87,9 @@
     <ClInclude Include="DescriptorAllocatorPage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DescriptorAllocation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXApp.cpp">
@@ -150,6 +153,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DescriptorAllocatorPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DescriptorAllocation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

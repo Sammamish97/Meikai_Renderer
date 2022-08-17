@@ -5,8 +5,9 @@
 #include <memory>
 #include <set>	
 #include <vector>
+
+#include "DescriptorAllocation.h"
 class DescriptorAllocatorPage;
-class DescriptorAllocation;
 class DXApp;
 class DescriptorAllocator
 {

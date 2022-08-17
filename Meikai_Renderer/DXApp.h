@@ -39,6 +39,8 @@ public:
     UINT DXApp::Get4xMsaaQuality();
     std::pair<int, int> GetWindowSize();
 
+    uint64_t GetFrameCount();
+
     UINT GetRtvDescSize();
     UINT GetDsvDescSize();
     UINT GetCbvSrvUavDescSize();
@@ -133,6 +135,7 @@ protected:
 
     ComPtr<ID3D12Fence> mFence;
     UINT64 mCurrentFence = 0;
+    UINT64 mCurrentFrame = 0;
 
     ComPtr<ID3D12CommandQueue> mCommandQueue;
     ComPtr<ID3D12CommandAllocator> mDirectCmdListAlloc;

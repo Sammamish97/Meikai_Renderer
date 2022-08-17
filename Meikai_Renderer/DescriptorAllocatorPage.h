@@ -6,11 +6,13 @@
 #include <memory>
 #include <mutex>	
 #include <queue>
+
+#include "DescriptorAllocation.h"
 using namespace Microsoft::WRL;
-class DescriptorAllocation;
 class DXApp;
 class DescriptorAllocatorPage : public std::enable_shared_from_this<DescriptorAllocatorPage>
 {
+	DXApp* mApp;
 public:
 	DescriptorAllocatorPage(DXApp* appPtr, D3D12_DESCRIPTOR_HEAP_TYPE type, uint32_t numDescriptors);
 	D3D12_DESCRIPTOR_HEAP_TYPE GetHeapType() const;
