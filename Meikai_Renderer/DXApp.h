@@ -12,8 +12,10 @@
 #include <string>
 #include <d3dx12.h>
 #include <array>
+#include <memory>
 
 #include "GameTimer.h"
+#include "ResourceAllocator.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -42,6 +44,8 @@ public:
     UINT GetCbvSrvUavDescSize();
 
     DXGI_FORMAT GetBackBufferFormat();
+
+    std::shared_ptr<ResourceAllocator> GetMemAllocator();
 
     std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
 
@@ -120,6 +124,8 @@ protected:
 
     // Used to keep track of the delta-time?and game time (?.4).
     GameTimer mTimer;
+
+    std::shared_ptr<ResourceAllocator> mResourceAllocator;
 
     ComPtr<IDXGIFactory4> mdxgiFactory;
     ComPtr<IDXGISwapChain> mSwapChain;

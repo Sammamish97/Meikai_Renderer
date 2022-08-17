@@ -6,12 +6,14 @@
 
 #include "UploadBuffer.hpp"
 #include "ConstantBuffers.h"
+#include "ResourceAllocator.h"
 
 class DXApp;
 using namespace Microsoft::WRL;
 
 class LightingPass
 {
+	DXApp* mdxApp = nullptr;
 public:
 	LightingPass(DXApp* mApp,
 		ComPtr<ID3D12GraphicsCommandList> cmdList,
@@ -33,7 +35,6 @@ private:
 	void BuildCbvDesc();
 
 private:
-	DXApp* mdxApp = nullptr;
 	D3D12_CPU_DESCRIPTOR_HANDLE* backBufferView;
 
 	ComPtr<ID3D12DescriptorHeap> mCbvHeap;
@@ -49,7 +50,7 @@ private:
 	ComPtr<ID3DBlob> mPixelShader;
 
 public:
-	std::unique_ptr<UploadBuffer<LightCB>> mLightCB = nullptr;
+	ResourceAllocator::Allocation mLightData;
 	ComPtr<ID3D12RootSignature> mRootSig;
 	ComPtr<ID3D12PipelineState> mPso;
 };

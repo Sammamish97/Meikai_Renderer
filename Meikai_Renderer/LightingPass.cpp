@@ -65,7 +65,8 @@ void LightingPass::BuildPSO()
 
 void LightingPass::BuildResource()
 {
-	mLightCB = std::make_unique<UploadBuffer<LightCB>>(mdxApp->GetDevice().Get(), 1, true);
+	auto allocator = mdxApp->GetMemAllocator();
+	mLightData = allocator->Allocate(sizeof(LightCB), 256);//Currently Aligned for constant buffer is hardcoded to 256.
 }
 
 void LightingPass::BuildRootSignature()
@@ -134,7 +135,7 @@ void LightingPass::BuildCbvheap()
 void LightingPass::BuildCbvDesc()
 {
 	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-	cbvDesc.BufferLocation = mLightCB->Resource()->GetGPUVirtualAddress();
-	cbvDesc.SizeInBytes = mLightCB->GetSize();
+	cbvDesc.BufferLocation = mLightData.GPU;
+	cbvDesc.SizeInBytes = mLightData.SIZE;
 	mdxApp->GetDevice()->CreateConstantBufferView(&cbvDesc, mCbvHeap->GetCPUDescriptorHandleForHeapStart());
 }

@@ -91,6 +91,11 @@ DXGI_FORMAT DXApp::GetBackBufferFormat()
 	return mBackBufferFormat;
 }
 
+std::shared_ptr<ResourceAllocator> DXApp::GetMemAllocator()
+{
+	return mResourceAllocator;
+}
+
 std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> DXApp::GetStaticSamplers()
 {
 	// Applications usually only need a handful of samplers.  So just define them all up front
@@ -325,6 +330,8 @@ bool DXApp::InitDirect3D()
 	CreateCommandObjects();
 	CreateSwapChain();
 	CreateSwapChainRtvDescriptorHeap();
+	
+	mResourceAllocator = std::make_shared<ResourceAllocator>(this);
 
 	return true;
 }
