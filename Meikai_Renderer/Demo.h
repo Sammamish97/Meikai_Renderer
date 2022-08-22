@@ -1,7 +1,8 @@
-#pragma once
+﻿#pragma once
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include "MaterialResource.h"
 #include "FrameResource.h"
 
 #include "DXApp.h"
@@ -10,11 +11,6 @@ struct Model;
 struct Object;
 struct Texture;
 class Camera;
-class GeometryPass;
-class LightingPass;
-class SsaoPass;
-class BlurPass;
-class SkyboxPass;
 
 class Demo : public DXApp
 {
@@ -28,13 +24,6 @@ protected:
 	void OnResize() override;
 	void Update(const GameTimer& gt) override;
 	void Draw(const GameTimer& gt) override;
-
-private:
-	void DrawGeometry(const GameTimer& gt);
-	void DrawSsao(const GameTimer& gt);
-	void BlurSsao(const GameTimer& gt);
-	void DrawLighting(const GameTimer& gt);
-	void DrawSkybox(const GameTimer& gt);
 
 private:
 	void LoadContent();
@@ -54,14 +43,17 @@ protected:
 	void OnMouseUp(WPARAM btnState, int x, int y) override;
 	void OnMouseMove(WPARAM btnState, int x, int y) override;
 
-private:
-	std::unique_ptr<GeometryPass> G_Pass;
-	std::unique_ptr<SsaoPass> S_Pass;
-	std::unique_ptr<BlurPass> B_Pass;
-	std::unique_ptr<LightingPass> L_Pass;
-	std::unique_ptr<SkyboxPass> K_Pass;
-	
+private://RTV&SRV Resource
+	std::unique_ptr <MaterialResource> mMatResource;
+	ComPtr<ID3D12Resource> mDepthStencilBuffer;
 	std::unique_ptr<FrameResource> mFrameResource;
+
+private://Descriptor heap for unbounded array
+	ComPtr<ID3D12DescriptorHeap> mBindlessHeap;//0번은 constant, 뒤는 SRV들
+
+private:
+	
+	
 
 	std::unordered_map<std::string, std::shared_ptr<Model>> mModels;
 	std::unordered_map<std::string, ComPtr<ID3DBlob>> mShaders;

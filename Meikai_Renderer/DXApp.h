@@ -12,7 +12,9 @@
 #include <string>
 #include <d3dx12.h>
 #include <array>
+#include <memory>
 
+#include "CommandManager.h"
 #include "GameTimer.h"
 
 using Microsoft::WRL::ComPtr;
@@ -102,6 +104,9 @@ private:
     void LogAdapterOutputs(IDXGIAdapter* adapter);
     void LogOutputDisplayModes(IDXGIOutput* output, DXGI_FORMAT format);
 
+public:
+    // Manage Command list things.
+    std::unique_ptr<CommandManager> mCommandMgr;
 
 protected:
     static DXApp* mApp;
@@ -118,7 +123,6 @@ protected:
     bool      m4xMsaaState = false;    // 4X MSAA enabled
     UINT      m4xMsaaQuality = 0;      // quality level of 4X MSAA
 
-    // Used to keep track of the delta-time?and game time (?.4).
     GameTimer mTimer;
 
     ComPtr<IDXGIFactory4> mdxgiFactory;

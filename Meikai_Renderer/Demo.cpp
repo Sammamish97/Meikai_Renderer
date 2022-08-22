@@ -3,17 +3,12 @@
 #include "Model.h"
 #include "Object.h"
 #include "Camera.h"
-#include "GeometryPass.h"
-#include "LightingPass.h"
-#include "SsaoPass.h"
-#include "BlurPass.h"
-#include "SkyboxPass.h"
+
 #include "Texture.h"
 
 #include <d3dcompiler.h>
 #include <d3dx12.h>
 
-#include "BlurPass.h"
 #include "MathHelper.h"
 
 using namespace DirectX;
@@ -67,11 +62,7 @@ void Demo::LoadContent()
 	BuildModels();
 	BuildFrameResource();
 	CreateShader();
-	G_Pass = std::make_unique<GeometryPass>(this, mCommandList.Get(), mShaders["GeomVS"], mShaders["GeomPS"], mClientWidth, mClientHeight);
-	S_Pass = std::make_unique<SsaoPass>(this, mCommandList.Get(), mShaders["ScreenQuadVS"], mShaders["SsaoPS"], mClientWidth, mClientHeight);
-	B_Pass = std::make_unique<BlurPass>(this, mCommandList.Get(), mShaders["HBlurCS"], mShaders["VBlurCS"], mClientWidth, mClientHeight);
-	L_Pass = std::make_unique<LightingPass>(this, mCommandList.Get(), mShaders["ScreenQuadVS"], mShaders["LightingPS"], mClientWidth, mClientHeight);
-	K_Pass = std::make_unique<SkyboxPass>(this, mCommandList.Get(), mShaders["SkyboxVS"], mShaders["SkyboxPS"], mClientWidth, mClientHeight);
+	
 	m_ContentLoaded = true; 
 }
 
@@ -161,8 +152,8 @@ void Demo::UpdateLightCB(const GameTimer& gt)
 	lightData.pointLight[2].Position = XMFLOAT3(0, 0, 2);
 	lightData.pointLight[2].Color = XMFLOAT3(0, 0, 1);
 
-	auto LightCB = L_Pass->mLightCB.get();
-	LightCB->CopyData(0, lightData);
+	/*auto LightCB = L_Pass->mLightCB.get();
+	LightCB->CopyData(0, lightData);*/
 }
 
 void Demo::Update(const GameTimer& gt)
@@ -182,12 +173,6 @@ void Demo::Draw(const GameTimer& gt)
 	// Reusing the command list reuses memory.
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
-	DrawGeometry(gt);
-	DrawSsao(gt);
-	BlurSsao(gt);
-	DrawLighting(gt);
-	DrawSkybox(gt);
-
 	// Done recording commands.
 	ThrowIfFailed(mCommandList->Close());
 
@@ -203,324 +188,6 @@ void Demo::Draw(const GameTimer& gt)
 	// done for simplicity.  Later we will show how to organize our rendering code
 	// so we do not have to wait per frame.
 	FlushCommandQueue();
-}
-
-void Demo::DrawGeometry(const GameTimer& gt)
-{
-	auto positionMap = G_Pass->GetPositionMap();
-	auto positionMapRtv = G_Pass->GetPosRtv();
-
-	auto normalMap = G_Pass->GetNormalMap();
-	auto normalMapRtv = G_Pass->GetNormalRtv();
-
-	auto albedoMap = G_Pass->GetAlbedoMap();
-	auto albedoMapRtv = G_Pass->GetAlbedoRtv();
-
-	auto metalicMap = G_Pass->GetMetalicMap();
-	auto metalicMapRtv = G_Pass->GetMetalicRtv();
-
-	auto roughnessMap = G_Pass->GetRoughnessMap();
-	auto roughnessMapRtv = G_Pass->GetRoughnessRtv();
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(positionMap.Get(),
-		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(normalMap.Get(),
-		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(albedoMap.Get(),
-		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
-
-	// Clear the screen normal map and depth buffer.
-	float colorClearValue[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-	mCommandList->ClearRenderTargetView(positionMapRtv, colorClearValue, 0, nullptr);
-	mCommandList->ClearRenderTargetView(normalMapRtv, colorClearValue, 0, nullptr);
-	mCommandList->ClearRenderTargetView(albedoMapRtv, colorClearValue, 0, nullptr);
-	mCommandList->ClearRenderTargetView(metalicMapRtv, colorClearValue, 0, nullptr);
-	mCommandList->ClearRenderTargetView(roughnessMapRtv, colorClearValue, 0, nullptr);
-
-	mCommandList->ClearDepthStencilView(G_Pass->DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
-
-	//Set Pipeline & Root signature
-	mCommandList->SetPipelineState(G_Pass->mPso.Get());
-	mCommandList->SetGraphicsRootSignature(G_Pass->mRootSig.Get());
-
-	//Update Pass CB
-	auto passCB = mFrameResource->mPassCB->Resource();
-	D3D12_GPU_VIRTUAL_ADDRESS passCBAddress = passCB->GetGPUVirtualAddress();
-	mCommandList->SetGraphicsRootConstantBufferView(1, passCBAddress);
-
-	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
-	mCommandList->RSSetViewports(1, &mScreenViewport);
-	mCommandList->RSSetScissorRects(1, &mScissorRect);
-
-	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { positionMapRtv, normalMapRtv, albedoMapRtv, metalicMapRtv, roughnessMapRtv };
-	// Specify the buffers we are going to render to.
-	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(),
-		true, &G_Pass->DepthStencilView());
-
-	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	for (const auto& object : objects)
-	{
-		object->Draw(mCommandList);
-	}
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(positionMap.Get(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(normalMap.Get(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(albedoMap.Get(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
-}
-
-void Demo::DrawSsao(const GameTimer& gt)
-{
-	auto SsaoMapResource = S_Pass->GetSsaoMap();
-	auto SsaoRtv = S_Pass->GetSsaoRtv();
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(SsaoMapResource.Get(),
-		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(G_Pass->GetDepthStencilResource().Get(),
-		D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ));
-
-	// Clear ambient map
-	float clearValue[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	mCommandList->ClearRenderTargetView(SsaoRtv, clearValue, 0, nullptr);
-
-	// Specify the buffers we are going to render to.
-	mCommandList->OMSetRenderTargets(1, &SsaoRtv, true, nullptr);
-
-	//Set Pipeline & Root signature
-	mCommandList->SetPipelineState(S_Pass->mPso.Get());
-	mCommandList->SetGraphicsRootSignature(S_Pass->mRootSig.Get());
-
-	mCommandList->SetDescriptorHeaps(1, G_Pass->GetSrvHeap().GetAddressOf());
-
-	//Access geometry pass's pos/normal/albedo map.
-	mCommandList->SetGraphicsRootDescriptorTable(0, G_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
-
-	//Update Pass CB
-	auto passCB = mFrameResource->mPassCB->Resource();
-	D3D12_GPU_VIRTUAL_ADDRESS passCBAddress = passCB->GetGPUVirtualAddress();
-	mCommandList->SetGraphicsRootConstantBufferView(1, passCBAddress);
-
-	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
-	mCommandList->RSSetViewports(1, &mScreenViewport);
-	mCommandList->RSSetScissorRects(1, &mScissorRect);
-
-	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	mCommandList->IASetVertexBuffers(0, 0, nullptr);
-	mCommandList->IASetIndexBuffer(nullptr);
-	mCommandList->DrawInstanced(3, 1, 0, 0);
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(SsaoMapResource.Get(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
-}
-
-void Demo::BlurSsao(const GameTimer& gt)
-{
-	auto hResource = B_Pass->GetHorizontalMap();
-	auto vResource = B_Pass->GetVerticalMap();
-
-	auto inputResource = S_Pass->GetSsaoMap();
-
-	auto hGpuSrv = B_Pass->mBlurHGpuSrv;
-	auto hGpuUav = B_Pass->mBlurHGpuUav;
-
-	auto vGpuSrv = B_Pass->mBlurVGpuSrv;
-	auto vGpuUav = B_Pass->mBlurVGpuUav;
-
-	mCommandList->SetComputeRootSignature(B_Pass->mRootSig.Get());
-
-	auto weights = S_Pass->CalcGaussWeights(2.5f);
-	int blurRadius = (int)weights.size() / 2;
-
-	mCommandList->SetComputeRoot32BitConstants(3, 1, &blurRadius, 0);
-	mCommandList->SetComputeRoot32BitConstants(3, (UINT)weights.size(), weights.data(), 1);
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(inputResource.Get(),
-		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_COPY_SOURCE));
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
-		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST));
-
-	// Copy the input (back-buffer in this example) to horizontal blur map.
-	mCommandList->CopyResource(hResource.Get(), inputResource.Get());
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
-		D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_GENERIC_READ));
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vResource.Get(),
-		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
-
-	for (int i = 0; i < blurCount; ++i)
-	{
-		//
-		// Horizontal Blur pass.
-		//
-
-		mCommandList->SetPipelineState(B_Pass->mhPso.Get());
-
-		mCommandList->SetDescriptorHeaps(1, G_Pass->GetSrvHeap().GetAddressOf());
-
-		mCommandList->SetComputeRootDescriptorTable(0, G_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
-
-		mCommandList->SetDescriptorHeaps(1, B_Pass->GetSrvUavHeap().GetAddressOf());
-
-		mCommandList->SetComputeRootDescriptorTable(1, hGpuSrv);
-		mCommandList->SetComputeRootDescriptorTable(2, vGpuUav);
-
-		// How many groups do we need to dispatch to cover a row of pixels, where each
-		// group covers 256 pixels (the 256 is defined in the ComputeShader).
-		UINT numGroupsX = (UINT)ceilf(mClientWidth / 256.0f);
-		mCommandList->Dispatch(numGroupsX, mClientHeight, 1);
-
-		mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
-			D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
-
-		mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vResource.Get(),
-			D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
-
-		//
-		// Vertical Blur pass.
-		//
-
-		mCommandList->SetPipelineState(B_Pass->mvPso.Get());
-
-		mCommandList->SetDescriptorHeaps(1, G_Pass->GetSrvHeap().GetAddressOf());
-
-		mCommandList->SetComputeRootDescriptorTable(0, G_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
-
-		mCommandList->SetDescriptorHeaps(1, B_Pass->GetSrvUavHeap().GetAddressOf());
-
-		mCommandList->SetComputeRootDescriptorTable(1, vGpuSrv);
-		mCommandList->SetComputeRootDescriptorTable(2, hGpuUav);
-
-		// How many groups do we need to dispatch to cover a column of pixels, where each
-		// group covers 256 pixels  (the 256 is defined in the ComputeShader).
-		UINT numGroupsY = (UINT)ceilf(mClientHeight / 256.0f);
-		mCommandList->Dispatch(mClientWidth, numGroupsY, 1);
-
-		mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
-			D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
-
-		mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vResource.Get(),
-			D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
-	}
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(inputResource.Get(),
-		D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COPY_DEST));
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
-		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_COPY_SOURCE));
-
-	// Copy the input (back-buffer in this example) to horizontal blur map.
-	mCommandList->CopyResource(inputResource.Get(), hResource.Get());
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(hResource.Get(),
-		D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COMMON));
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(inputResource.Get(),
-		D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_GENERIC_READ));
-}
-
-void Demo::DrawLighting(const GameTimer& gt)
-{
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
-		D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_GENERIC_READ));
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
-		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
-
-	// Clear the screen normal map and depth buffer.
-	float positionAndcolorClearValue[] = { 1.f, 0.f, 1.f, 0.f };
-	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), positionAndcolorClearValue, 0, nullptr);
-
-	//Set Pipeline & Root signature
-	mCommandList->SetPipelineState(L_Pass->mPso.Get());
-	mCommandList->SetGraphicsRootSignature(L_Pass->mRootSig.Get());
-
-	mCommandList->SetDescriptorHeaps(1, G_Pass->GetSrvHeap().GetAddressOf());
-
-	//Test descriptor heap accessing
-	mCommandList->SetGraphicsRootDescriptorTable(0, G_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
-
-	auto passCB = mFrameResource->mPassCB->Resource();
-	D3D12_GPU_VIRTUAL_ADDRESS passCBAddress = passCB->GetGPUVirtualAddress();
-	mCommandList->SetGraphicsRootConstantBufferView(1, passCBAddress);
-
-	D3D12_GPU_VIRTUAL_ADDRESS lightCBAddress = L_Pass->mLightCB->Resource()->GetGPUVirtualAddress();
-	mCommandList->SetGraphicsRootConstantBufferView(3, lightCBAddress);
-
-	mCommandList->SetDescriptorHeaps(1, S_Pass->GetSrvHeap().GetAddressOf());
-	mCommandList->SetGraphicsRootDescriptorTable(2, S_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
-
-	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
-	mCommandList->RSSetViewports(1, &mScreenViewport);
-	mCommandList->RSSetScissorRects(1, &mScissorRect);
-
-	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { CurrentBackBufferExtView() };
-	// Specify the buffers we are going to render to.
-	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, nullptr);
-
-	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	mCommandList->IASetVertexBuffers(0, 0, nullptr);
-	mCommandList->IASetIndexBuffer(nullptr);
-	mCommandList->DrawInstanced(3, 1, 0, 0);
-
-	//Continue to Draw Skybox.
-	/*mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));*/
-}
-
-void Demo::DrawSkybox(const GameTimer& gt)
-{
-	//Draw continue after light pass
-
-	/*mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
-		D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_GENERIC_READ));
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
-		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));*/
-
-	
-	/*float positionAndcolorClearValue[] = { 1.f, 0.f, 1.f, 0.f };
-	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), positionAndcolorClearValue, 0, nullptr);*/
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(G_Pass->GetDepthStencilResource().Get(),
-		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE));
-
-	//Set Pipeline & Root signature
-	mCommandList->SetPipelineState(K_Pass->mPso.Get());
-	mCommandList->SetGraphicsRootSignature(K_Pass->mRootSig.Get());
-
-	//Update Pass CB
-	UINT passCBByteSize = DxUtil::CalcConstantBufferByteSize(sizeof(PassCB));
-	auto passCB = mFrameResource->mPassCB->Resource();
-	D3D12_GPU_VIRTUAL_ADDRESS passCBAddress = passCB->GetGPUVirtualAddress();
-	mCommandList->SetGraphicsRootConstantBufferView(0, passCBAddress);
-
-	mCommandList->SetDescriptorHeaps(1, K_Pass->GetSrvHeap().GetAddressOf());
-	mCommandList->SetGraphicsRootDescriptorTable(1, K_Pass->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
-
-	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
-	mCommandList->RSSetViewports(1, &mScreenViewport);
-	mCommandList->RSSetScissorRects(1, &mScissorRect);
-
-	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { CurrentBackBufferExtView() };
-	// Specify the buffers we are going to render to.
-	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, &G_Pass->DepthStencilView());
-
-	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	mSkybox->DrawWithoutWorld(mCommandList);
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 }
 
 void Demo::OnMouseDown(WPARAM btnState, int x, int y)

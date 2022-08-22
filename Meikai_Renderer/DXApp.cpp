@@ -217,6 +217,7 @@ bool DXApp::Initialize()
 		return false;
 
 	CreateFence();
+	mCommandMgr = std::make_unique<CommandManager>(this);
 	return true;
 }
 
