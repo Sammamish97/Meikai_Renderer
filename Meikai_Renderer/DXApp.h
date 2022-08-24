@@ -16,6 +16,7 @@
 
 #include "CommandManager.h"
 #include "GameTimer.h"
+#include "ResourceAllocator.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -107,6 +108,7 @@ private:
 public:
     // Manage Command list things.
     std::unique_ptr<CommandManager> mCommandMgr;
+    std::unique_ptr<ResourceAllocator> mResourceAllocator;
 
 protected:
     static DXApp* mApp;

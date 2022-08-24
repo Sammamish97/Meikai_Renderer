@@ -2,7 +2,7 @@
 #include "DXApp.h"
 #include "DXUtil.h"
 
-ResourceAllocator::ResourceAllocator(DXApp* appPtr, size_t pageSize = _2MB)
+ResourceAllocator::ResourceAllocator(DXApp* appPtr, size_t pageSize)
 	:mApp(appPtr), mPageSize(pageSize)
 {
 	InitStagingBuffer();
@@ -30,7 +30,7 @@ void ResourceAllocator::InitStagingBuffer()
 	mStagingResource->Map(0, nullptr, &mStagingCPU);
 }
 
-UploadAllocation ResourceAllocator::AllocateUploadHeap(void* data, size_t sizeInBytes, size_t alignment)
+UploadAllocation ResourceAllocator::AllocateToUploadHeap(void* data, size_t sizeInBytes, size_t alignment)
 {
 	if (sizeInBytes > mPageSize)
 	{
@@ -46,7 +46,7 @@ UploadAllocation ResourceAllocator::AllocateUploadHeap(void* data, size_t sizeIn
 	//TODO: 여기서 page에게 data를 넘기고, Page안에서 GPU로의 data복사가 일어나게 해야 한다.
 }
 
-DefaultAllocation ResourceAllocator::AllocateDefaultHeap(void* data, size_t sizeInBytes, size_t alignment)
+DefaultAllocation ResourceAllocator::AllocateToDefaultHeap(void* data, size_t sizeInBytes, size_t alignment)
 {
 	if (sizeInBytes > mPageSize)
 	{
@@ -57,7 +57,7 @@ DefaultAllocation ResourceAllocator::AllocateDefaultHeap(void* data, size_t size
 	{
 		mCurrentDefaultPage = RequestDefaultPage();
 	}
-	return mCurrentDefaultPage->Allocate(data, sizeInBytes, alignment, mStagingCPU, mStagingGPU);
+	return mCurrentDefaultPage->Allocate(data, sizeInBytes, alignment, mStagingCPU, mStagingResource);
 }
 
 std::shared_ptr<UploadPage> ResourceAllocator::RequestUploadPage()

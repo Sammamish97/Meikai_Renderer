@@ -56,15 +56,13 @@ protected:
 
 struct UploadPage : public Page
 {
-    UploadPage(DXApp* appPtr, size_t sizeInBytes)
-        : Page(appPtr, sizeInBytes){}
+    UploadPage(DXApp* appPtr, size_t sizeInBytes);
     UploadAllocation Allocate(void* data, size_t sizeInBytes, size_t alignment);
 };
 
 struct DefaultPage : public Page
 {
-    DefaultPage(DXApp* appPtr, size_t sizeInBytes)
-        : Page(appPtr, sizeInBytes) {}
-    DefaultAllocation Allocate(void* data, size_t sizeInBytes, size_t alignment, void* stagingCPU, D3D12_GPU_VIRTUAL_ADDRESS stagingGPU);
+    DefaultPage(DXApp* appPtr, size_t sizeInBytes);
+    DefaultAllocation Allocate(void* data, size_t sizeInBytes, size_t alignment, void* stagingCPU, ComPtr<ID3D12Resource> stagingResource);
 };
 

@@ -1,6 +1,7 @@
 ﻿#include "Page.h"
 #include "DXApp.h"
 #include "DXUtil.h"
+#include <d3dx12.h>
 
 Page::Page(DXApp* appPtr, size_t sizeInBytes)
 	:mApp(appPtr),
@@ -80,15 +81,17 @@ UploadAllocation UploadPage::Allocate(void* data, size_t sizeInBytes, size_t ali
 	allocation.Size = alignedSize;
 	allocation.CPU = static_cast<uint8_t*>(mCPUPtr) + mOffset;
 	allocation.GPU = mGPUPtr + mOffset;
-	allocation.Copy(data, alignedSize);
 
+	if (data != nullptr)
+	{
+		allocation.Copy(data, alignedSize);
+	}
 	mOffset += alignedSize;
-
 	return allocation;
 }
 
 DefaultAllocation DefaultPage::Allocate(void* data, size_t sizeInBytes, size_t alignment
-	, void* stagingCPU, D3D12_GPU_VIRTUAL_ADDRESS stagingGPU)
+	, void* stagingCPU, ComPtr<ID3D12Resource> stagingResource)
 {
 	if (HasSpace(sizeInBytes, alignment) == false)
 	{
@@ -97,28 +100,19 @@ DefaultAllocation DefaultPage::Allocate(void* data, size_t sizeInBytes, size_t a
 	size_t alignedSize = AlignUp(sizeInBytes, alignment);
 	mOffset = AlignUp(mOffset, alignment);
 
-	memcpy(stagingCPU, data, sizeInBytes);
-	ComPtr<ID3D12GraphicsCommandList2> tempList;
-	mApp->mCommandMgr->AllocateTempList(tempList);
+	if (data != nullptr)
+	{
+		memcpy(stagingCPU, data, sizeInBytes);
+		ComPtr<ID3D12GraphicsCommandList2> tempList;
+		mApp->mCommandMgr->AllocateTempList(tempList);
+		tempList->CopyBufferRegion(mResource.Get(), mOffset, stagingResource.Get(), 0, sizeInBytes);
+		mApp->mCommandMgr->FlushTempList(tempList);
+	}
 	
-	//D3D12_SUBRESOURCE_DATA subresourceData = {};
-	//subresourceData.pData = bufferData;
-	//subresourceData.RowPitch = bufferSize;
-	//subresourceData.SlicePitch = subresourceData.RowPitch;
-
-	//TODO: Start from here
-	////This is command function. Therefore, need to execute command list & flush queue.
-	//UpdateSubresources(commandList.Get(),
-	//	*pDestinationResource, *pIntermediateResource,
-	//	0, 0, 1, &subresourceData);
-	
-
 	DefaultAllocation allocation;
 	allocation.Size = alignedSize;
 	allocation.CPU = nullptr;
 	allocation.GPU = mGPUPtr + mOffset;
-	allocation.Copy(data, alignedSize, stagingCPU, stagingGPU);
-
 
 	mOffset += alignedSize;
 

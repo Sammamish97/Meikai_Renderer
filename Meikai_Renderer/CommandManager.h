@@ -10,8 +10,8 @@ class CommandManager
 public:
 	CommandManager(DXApp* appPtr);
 	void InitTempCommandData();
-	void AllocateTempList(ComPtr<ID3D12GraphicsCommandList2> cmdListPtr);
-	void FlushTempList(ComPtr<ID3D12GraphicsCommandList2> cmdListPtr);
+	void AllocateTempList(ComPtr<ID3D12GraphicsCommandList2>& cmdListPtr);
+	void FlushTempList(ComPtr<ID3D12GraphicsCommandList2>& cmdListPtr);
 
 private:
 	ComPtr<ID3D12CommandQueue> mTempQueue;

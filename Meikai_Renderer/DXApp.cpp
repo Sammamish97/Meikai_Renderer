@@ -218,6 +218,7 @@ bool DXApp::Initialize()
 
 	CreateFence();
 	mCommandMgr = std::make_unique<CommandManager>(this);
+	mResourceAllocator = std::make_unique<ResourceAllocator>(this);
 	return true;
 }
 

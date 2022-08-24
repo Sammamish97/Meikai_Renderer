@@ -22,8 +22,8 @@ public:
     virtual ~ResourceAllocator();
     size_t GetPageSize() const { return mPageSize; }
 
-    UploadAllocation AllocateUploadHeap(void* data, size_t sizeInBytes, size_t alignment);
-    DefaultAllocation AllocateDefaultHeap(void* data, size_t sizeInBytes, size_t alignment);
+    UploadAllocation AllocateToUploadHeap(void* data, size_t sizeInBytes, size_t alignment);
+    DefaultAllocation AllocateToDefaultHeap(void* data, size_t sizeInBytes, size_t alignment);
 
     void Reset();
 

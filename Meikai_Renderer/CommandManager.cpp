@@ -19,7 +19,7 @@ void CommandManager::InitTempCommandData()
 	ThrowIfFailed(mApp->GetDevice()->CreateFence(mTempFenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(mTempFence.GetAddressOf())))
 }
 
-void CommandManager::AllocateTempList(ComPtr<ID3D12GraphicsCommandList2> cmdListPtr)
+void CommandManager::AllocateTempList(ComPtr<ID3D12GraphicsCommandList2>& cmdListPtr)
 {
 	ThrowIfFailed(mApp->GetDevice()->CreateCommandList
 	(0, 
@@ -30,7 +30,7 @@ void CommandManager::AllocateTempList(ComPtr<ID3D12GraphicsCommandList2> cmdList
 	//After command list is created, it is opened state.
 }
 
-void CommandManager::FlushTempList(ComPtr<ID3D12GraphicsCommandList2> cmdListPtr)
+void CommandManager::FlushTempList(ComPtr<ID3D12GraphicsCommandList2>& cmdListPtr)
 {
 	cmdListPtr->Close();
 	++mTempFenceValue;

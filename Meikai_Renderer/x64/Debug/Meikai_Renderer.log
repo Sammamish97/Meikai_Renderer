@@ -1,91 +1,10 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  DefaultPass.cpp
   Demo.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.h(49,18): error C2065: 'FrameResource': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.h(49,7): error C2923: 'std::unique_ptr': 'FrameResource' is not a valid template type argument for parameter '_Ty'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.h(49): message : see declaration of 'FrameResource'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.h(49,7): error C2976: 'std::unique_ptr': too few template arguments
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.32.31326\include\memory(3162): message : see declaration of 'std::unique_ptr'
 C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
 C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
 C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
 C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(21,1): error C2512: 'std::unique_ptr': no appropriate default constructor available
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.32.31326\include\memory(3162,18): message : see declaration of 'std::unique_ptr'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(89,36): error C2065: 'FrameResource': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(89,24): error C2672: 'std::make_unique': no matching overloaded function found
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(89,36): error C2974: 'std::make_unique': invalid template argument for '_Ty', type expected
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.32.31326\include\memory(3433): message : see declaration of 'std::make_unique'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(110,2): error C2065: 'PassCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(110,9): error C2146: syntax error: missing ';' before identifier 'currentFrameCB'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(110,9): error C2065: 'currentFrameCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(120,19): error C2065: 'currentFrameCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(121,19): error C2065: 'currentFrameCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(122,19): error C2065: 'currentFrameCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(123,19): error C2065: 'currentFrameCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(124,19): error C2065: 'currentFrameCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(125,19): error C2065: 'currentFrameCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(127,2): error C2065: 'currentFrameCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(128,2): error C2065: 'currentFrameCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(129,2): error C2065: 'currentFrameCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(130,2): error C2065: 'currentFrameCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(131,2): error C2065: 'currentFrameCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(132,2): error C2065: 'currentFrameCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(133,2): error C2065: 'currentFrameCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(135,30): error C2678: binary '->': no operator found which takes a left-hand operand of type 'std::unique_ptr' (or there is no acceptable conversion)
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.32.31326\include\memory(3255,24): message : could be '_Get_deleter_pointer_type<_Ty,remove_reference<_Ty1>::type,void>::type std::unique_ptr<_Ty,_Dx>::operator ->(void) noexcept const'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(135,30): message : while trying to match the argument list '(std::unique_ptr)'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(135,32): error C2039: 'mPassCB': is not a member of 'std::unique_ptr'
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.32.31326\include\memory(3162): message : see declaration of 'std::unique_ptr'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(136,8): error C3536: 'passCB': cannot be used before it is initialized
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(136,22): error C2065: 'currentFrameCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(141,2): error C2065: 'LightCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(141,10): error C2146: syntax error: missing ';' before identifier 'lightData'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(141,10): error C2065: 'lightData': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(143,2): error C2065: 'lightData': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(144,2): error C2065: 'lightData': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(146,2): error C2065: 'lightData': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(147,2): error C2065: 'lightData': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(149,2): error C2065: 'lightData': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(150,2): error C2065: 'lightData': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(152,2): error C2065: 'lightData': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(153,2): error C2065: 'lightData': undeclared identifier
-  FrameResource.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(3,1): error C2653: 'FrameResource': is not a class or namespace name
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(4,1): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(5,1): error C2065: 'mCmdListAlloc': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(5,1): error C2672: 'IID_PPV_ARGS_Helper': no matching overloaded function found
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(5,1): error C2660: 'ID3D12Device::CreateCommandAllocator': function does not take 1 arguments
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\d3d12.h(8466,43): message : see declaration of 'ID3D12Device::CreateCommandAllocator'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(9,2): error C2065: 'mPassCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(9,17): error C2039: 'make_unique': is not a member of 'std'
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\new.h(24): message : see declaration of 'std'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(9,28): error C2065: 'make_unique': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(9,29): error C2065: 'UploadBuffer': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(9,42): error C2065: 'PassCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(9,68): warning C4804: '>>': unsafe use of type 'bool' in operation
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(10,2): error C2065: 'mObjectCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(10,19): error C2039: 'make_unique': is not a member of 'std'
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\new.h(24): message : see declaration of 'std'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(10,30): error C2065: 'make_unique': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(10,31): error C2065: 'UploadBuffer': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(10,44): error C2065: 'ObjectCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(10,74): warning C4804: '>>': unsafe use of type 'bool' in operation
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(11,2): error C2065: 'mGeometryCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(11,21): error C2039: 'make_unique': is not a member of 'std'
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\new.h(24): message : see declaration of 'std'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(11,32): error C2065: 'make_unique': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(11,33): error C2065: 'UploadBuffer': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(11,46): error C2065: 'GeometryCB': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(11,68): warning C4804: '>>': unsafe use of type 'bool' in operation
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(12,1): warning C4508: 'FrameResource': function should return a value; 'void' return type assumed
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(14,1): error C2653: 'FrameResource': is not a class or namespace name
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(14,17): error C2523: '<Unknown>::~FrameResource': destructor tag mismatch
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(15,1): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\FrameResource.cpp(16,1): warning C4508: 'FrameResource': function should return a value; 'void' return type assumed
-  main.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.h(49,18): error C2065: 'FrameResource': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.h(49,7): error C2923: 'std::unique_ptr': 'FrameResource' is not a valid template type argument for parameter '_Ty'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.h(49): message : see declaration of 'FrameResource'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.h(49,7): error C2976: 'std::unique_ptr': too few template arguments
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.32.31326\include\memory(3162): message : see declaration of 'std::unique_ptr'
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(275,122): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
   Generating Code...
+  Meikai_Renderer.vcxproj -> C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\bin\Meikai_Renderer_debug.exe
