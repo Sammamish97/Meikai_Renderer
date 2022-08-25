@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BufferFormat.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommandManager.h" />
     <ClInclude Include="ConstantBuffers.h" />
@@ -19,6 +20,8 @@
     <ClInclude Include="DXApp.h" />
     <ClInclude Include="DXUtil.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="GeometryPass.h" />
+    <ClInclude Include="IPass.h" />
     <ClInclude Include="MaterialResource.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="MemDefine.h" />
@@ -38,6 +41,8 @@
     <ClCompile Include="DXApp.cpp" />
     <ClCompile Include="DXUtil.cpp" />
     <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="GeometryPass.cpp" />
+    <ClCompile Include="IPass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathHelper.cpp" />
     <ClCompile Include="Mesh.cpp" />

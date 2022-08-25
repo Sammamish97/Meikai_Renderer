@@ -70,7 +70,16 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DefaultPass.h">
+      <Filter>Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="IPass.h">
+      <Filter>Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferFormat.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryPass.h">
+      <Filter>Passes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -120,7 +129,13 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DefaultPass.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="IPass.cpp">
+      <Filter>Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryPass.cpp">
+      <Filter>Passes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

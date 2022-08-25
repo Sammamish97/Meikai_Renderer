@@ -1,9 +1,10 @@
 #include "DefaultPass.h"
 #include "DXUtil.h"
 #include "DXApp.h"
+#include "BufferFormat.h"
 #include <DirectXMath.h>
 DefaultPass::DefaultPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader)
-	:mApp(appPtr), mVertShader(vertShader), mPixelShader(pixelShader)
+	:IPass(appPtr, vertShader, pixelShader)
 {
     InitRootSignature();
     InitPSO();
@@ -67,7 +68,7 @@ void DefaultPass::InitPSO()
     defaultPSODesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
     defaultPSODesc.NumRenderTargets = 1;
     defaultPSODesc.RTVFormats[0] = BackBufferFormat;
-    defaultPSODesc.DSVFormat = DepthStenilFormat;
+    defaultPSODesc.DSVFormat = DepthStencilFormat;
     defaultPSODesc.SampleDesc.Count = mApp->Get4xMsaaState() ? 4 : 1;
     defaultPSODesc.SampleDesc.Quality = mApp->Get4xMsaaState() ? (mApp->Get4xMsaaQuality() - 1) : 0;
 

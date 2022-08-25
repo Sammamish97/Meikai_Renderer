@@ -11,8 +11,6 @@
 #include <d3dcompiler.h>
 #include <d3dx12.h>
 
-
-
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
@@ -138,12 +136,14 @@ void Demo::BuildModels()
 void Demo::BuildFrameResource()
 {
 	const size_t ConstantBufferAlignment = 256;
+
 	mPassCB = std::make_unique<PassCB>();
 	mPassAllocation = mResourceAllocator->AllocateToUploadHeap(&mPassCB, sizeof(PassCB), ConstantBufferAlignment);
-	mTestDeafult = mResourceAllocator->AllocateToDefaultHeap(&mPassCB, sizeof(PassCB), ConstantBufferAlignment);
-
+	
 	mLightCB = std::make_unique<LightCB>();
 	mLightAllocation = mResourceAllocator->AllocateToUploadHeap(&mLightCB, sizeof(LightCB), ConstantBufferAlignment);
+
+	mTestDeafult = mResourceAllocator->AllocateToDefaultHeap(&mPassCB, sizeof(PassCB), ConstantBufferAlignment);
 }
 
 void Demo::CreateShader()

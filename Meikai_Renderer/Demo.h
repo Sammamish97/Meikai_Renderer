@@ -59,7 +59,6 @@ private://Passes
 
 private://RTV & SRV Resource
 	std::unique_ptr<MaterialResource> mMatResource;
-	
 
 	std::unique_ptr<PassCB> mPassCB;
 	UploadAllocation mPassAllocation;
