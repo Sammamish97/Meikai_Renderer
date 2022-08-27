@@ -12,4 +12,3 @@ public:
 	void InitRootSignature() override;
 	void InitPSO() override;
 };
-

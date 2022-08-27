@@ -24,14 +24,21 @@ cbuffer cbPass : register(b1)
     float gDeltaTime;
 };
 
-struct VertexIn
+ByteAddressBuffer BufferTable[] : register(t0)
+
+struct MyVertexStructure
 {
-	float3 PosL    : POSITION;
-    float3 NormalL : NORMAL;
-	float2 TexC    : UV;
-	float3 TangentU : TANGENT;
-    float3 BiTangentU : BITANGENT;
+	float3 Pos;
+    float3 Normal;
+	float2 UV;
+	float3 BiTangent
 };
+
+cbuffer MyPerDrawConstants
+{
+    uint vertexOffset;
+    uint vertexBufferIndex;
+}
 
 struct VertexOut
 {

@@ -22,6 +22,7 @@
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GeometryPass.h" />
     <ClInclude Include="IPass.h" />
+    <ClInclude Include="LightingPass.h" />
     <ClInclude Include="MaterialResource.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="MemDefine.h" />
@@ -43,6 +44,7 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GeometryPass.cpp" />
     <ClCompile Include="IPass.cpp" />
+    <ClCompile Include="LightingPass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathHelper.cpp" />
     <ClCompile Include="Mesh.cpp" />
