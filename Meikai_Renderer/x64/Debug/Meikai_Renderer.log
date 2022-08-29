@@ -1,2 +1,54 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  Meikai_Renderer.vcxproj -> C:\Data\Meikai_Renderer\bin\Meikai_Renderer_debug.exe
+  Demo.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(105,22): error C2065: 'DepthStencilFormat': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(109,1): error C2065: 'mDepthStencilBuffer': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(109,1): error C2672: 'IID_PPV_ARGS_Helper': no matching overloaded function found
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(109,1): error C2660: 'ID3D12Device::CreateCommittedResource': function does not take 5 arguments
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\d3d12.h(8562,43): message : see declaration of 'ID3D12Device::CreateCommittedResource'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(122,48): error C2065: 'mDsvHeap': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(122,48): error C2672: 'IID_PPV_ARGS_Helper': no matching overloaded function found
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(122,85): error C2660: 'ID3D12Device::CreateDescriptorHeap': function does not take 1 arguments
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\d3d12.h(8494,43): message : see declaration of 'ID3D12Device::CreateDescriptorHeap'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(127,19): error C2065: 'DepthStencilFormat': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(129,36): error C2065: 'mDepthStencilBuffer': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(129,73): error C2065: 'mDsvHeap': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(129,119): error C2660: 'ID3D12Device::CreateDepthStencilView': function does not take 2 arguments
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\d3d12.h(8529,40): message : see declaration of 'ID3D12Device::CreateDepthStencilView'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(246,2): error C3861: 'DrawDefaultPass': identifier not found
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(265,12): error C2039: 'DrawDefaultPass': is not a member of 'Demo'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.h(19): message : see declaration of 'Demo'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(267,2): error C2065: 'mCommandList': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(267,73): error C3861: 'CurrentBackBuffer': identifier not found
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(272,2): error C2065: 'mCommandList': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(272,33): error C2065: 'mDefaultPass': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(273,2): error C2065: 'mCommandList': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(273,41): error C2065: 'mDefaultPass': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(276,44): error C2065: 'mPassAllocation': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(277,2): error C2065: 'mCommandList': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(279,2): error C2065: 'mCommandList': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(279,35): error C2065: 'mScreenViewport': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(280,2): error C2065: 'mCommandList': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(280,38): error C2065: 'mScissorRect': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(282,2): error C2065: 'mCommandList': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(282,38): error C3861: 'CurrentBackBufferView': identifier not found
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(283,2): error C2065: 'mCommandList': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(283,38): error C2065: 'mDsvHeap': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(285,57): error C3861: 'CurrentBackBufferExtView': identifier not found
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(286,2): error C2065: 'mCommandList': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(286,76): error C2065: 'mDsvHeap': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(288,2): error C2065: 'mCommandList': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(290,28): error C2065: 'objects': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(290,2): error C2530: 'object': references must be initialized
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(290,2): error C3531: 'object': a symbol whose type contains 'auto' must have an initializer
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(290,26): error C2143: syntax error: missing ';' before ':'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(290,35): error C2143: syntax error: missing ';' before ')'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(292,16): error C2065: 'mCommandList': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(295,2): error C2065: 'mCommandList': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(295,73): error C3861: 'CurrentBackBuffer': identifier not found
+  DescriptorHeap.cpp
+  main.cpp
+  Generating Code...

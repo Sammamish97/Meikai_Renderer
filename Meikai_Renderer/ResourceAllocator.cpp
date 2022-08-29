@@ -10,7 +10,6 @@ ResourceAllocator::ResourceAllocator(DXApp* appPtr, size_t pageSize)
 
 ResourceAllocator::~ResourceAllocator()
 {
-	
 }
 
 void ResourceAllocator::InitStagingBuffer()

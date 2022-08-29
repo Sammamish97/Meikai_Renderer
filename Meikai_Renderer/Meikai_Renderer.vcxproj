@@ -33,6 +33,7 @@
     <ClInclude Include="Page.h" />
     <ClInclude Include="ResourceAllocator.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureAllocator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\include\tools\DDSTextureLoader.cpp" />
@@ -55,6 +56,7 @@
     <ClCompile Include="Page.cpp" />
     <ClCompile Include="ResourceAllocator.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureAllocator.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
