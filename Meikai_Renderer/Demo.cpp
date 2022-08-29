@@ -76,7 +76,7 @@ void Demo::CreateDescriptorHeaps()
 }
 void Demo::CreateBufferResources()
 {
-	
+	mMatResource = std::make_unique<MaterialResource>();
 }
 
 void Demo::CreateDepthStencilData()
