@@ -68,6 +68,17 @@ void Demo::LoadContent()
 	m_ContentLoaded = true; 
 }
 
+void Demo::CreateDescriptorHeaps()
+{
+	mRTVHeap = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, mRtvDescriptorSize, 128);
+	mDSVHeap = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, mDsvDescriptorSize, 128);
+	mCBVSRVUAVHeap = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, mCbvSrvUavDescriptorSize, 128);
+}
+void Demo::CreateBufferResources()
+{
+	
+}
+
 void Demo::CreateDepthStencilData()
 {
 	D3D12_RESOURCE_DESC depthStencilDesc;

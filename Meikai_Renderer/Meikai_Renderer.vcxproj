@@ -17,6 +17,7 @@
     <ClInclude Include="ConstantBuffers.h" />
     <ClInclude Include="DefaultPass.h" />
     <ClInclude Include="Demo.h" />
+    <ClInclude Include="DescriptorHeap.h" />
     <ClInclude Include="DXApp.h" />
     <ClInclude Include="DXUtil.h" />
     <ClInclude Include="GameTimer.h" />
@@ -39,6 +40,7 @@
     <ClCompile Include="CommandManager.cpp" />
     <ClCompile Include="DefaultPass.cpp" />
     <ClCompile Include="Demo.cpp" />
+    <ClCompile Include="DescriptorHeap.cpp" />
     <ClCompile Include="DXApp.cpp" />
     <ClCompile Include="DXUtil.cpp" />
     <ClCompile Include="GameTimer.cpp" />

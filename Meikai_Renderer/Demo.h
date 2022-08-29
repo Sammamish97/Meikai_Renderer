@@ -6,6 +6,7 @@
 #include "MaterialResource.h"
 #include "DXApp.h"
 #include "ConstantBuffers.h"
+#include "DescriptorHeap.h"
 
 
 struct Model;
@@ -29,14 +30,22 @@ protected:
 	void Draw(const GameTimer& gt) override;
 
 private:
-	void LoadContent();
-	void CreateDepthStencilData();
 	void BuildModels();
-
 	void BuildFrameResource();
 	void CreateShader();
 
-	void DrawDefaultPass();
+private:
+	void LoadContent();
+	void CreateDescriptorHeaps();
+	void CreateBufferResources();
+
+	void CreateDepthStencilData();
+	void CreateBufferDescriptors();
+
+	void DrawGeometryPass();
+	void DrawLightingPass();
+
+	void Present();
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
 
@@ -49,17 +58,18 @@ protected:
 	void OnMouseUp(WPARAM btnState, int x, int y) override;
 	void OnMouseMove(WPARAM btnState, int x, int y) override;
 
-private:
-	ComPtr<ID3D12Resource> mDepthStencilBuffer;
-	ComPtr<ID3D12DescriptorHeap> mDsvHeap;
-	DXGI_FORMAT DepthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
-
 private://Passes
 	std::unique_ptr<DefaultPass> mDefaultPass;
 
-private://RTV & SRV Resource
+private://Descriptor heaps
+	std::unique_ptr<DescriptorHeap> mDSVHeap;
+	std::unique_ptr<DescriptorHeap> mRTVHeap;
+	std::unique_ptr<DescriptorHeap> mCBVSRVUAVHeap;
+
+private://RTV & DSV SRV Resource
 	std::unique_ptr<MaterialResource> mMatResource;
 
+private://CBV resource & allocation
 	std::unique_ptr<PassCB> mPassCB;
 	UploadAllocation mPassAllocation;
 
@@ -68,11 +78,7 @@ private://RTV & SRV Resource
 
 	DefaultAllocation mTestDeafult;
 
-private://Descriptor heap for unbounded array
-	ComPtr<ID3D12DescriptorHeap> mBindlessHeap;//0번은 constant, 뒤는 SRV들
-
 private:
-	
 	std::unordered_map<std::string, std::shared_ptr<Model>> mModels;
 	std::unordered_map<std::string, ComPtr<ID3DBlob>> mShaders;
 
