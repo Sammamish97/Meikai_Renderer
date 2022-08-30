@@ -68,7 +68,7 @@ void DefaultPass::InitPSO()
     defaultPSODesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
     defaultPSODesc.NumRenderTargets = 1;
     defaultPSODesc.RTVFormats[0] = BackBufferFormat;
-    defaultPSODesc.DSVFormat = DepthStencilFormat;
+    defaultPSODesc.DSVFormat = DepthStencilDSVFormat;
     defaultPSODesc.SampleDesc.Count = mApp->Get4xMsaaState() ? 4 : 1;
     defaultPSODesc.SampleDesc.Quality = mApp->Get4xMsaaState() ? (mApp->Get4xMsaaQuality() - 1) : 0;
 

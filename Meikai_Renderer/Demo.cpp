@@ -3,7 +3,7 @@
 #include "Model.h"
 #include "Object.h"
 #include "Camera.h"
-
+#include "BufferFormat.h"
 #include "Texture.h"
 #include "MathHelper.h"
 #include "DefaultPass.h"
@@ -14,7 +14,6 @@
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
-//Cube model data
 
 Demo::Demo(HINSTANCE hInstance)
 	:DXApp(hInstance)
@@ -34,6 +33,10 @@ bool Demo::Initialize()
 
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
+	CreateDescriptorHeaps();
+	CreateBufferResources();
+	CreateBufferDescriptors();
+
 	LoadContent();
 
 	ThrowIfFailed(mCommandList->Close());
@@ -41,8 +44,6 @@ bool Demo::Initialize()
 	mCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
 
 	FlushCommandQueue();
-
-	CreateDepthStencilData();
 	mDefaultPass = std::make_unique<DefaultPass>(this, mShaders["DefaultForwardVS"], mShaders["DefaultForwardPS"]);
 	
 
@@ -76,57 +77,44 @@ void Demo::CreateDescriptorHeaps()
 }
 void Demo::CreateBufferResources()
 {
-	mMatResource = std::make_unique<MaterialResource>();
+	Create2DTextureResource(mFrameResource.mPositionMap, mClientWidth, mClientHeight, PositionFormat, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+	Create2DTextureResource(mFrameResource.mNormalMap, mClientWidth, mClientHeight, NormalFormat, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+	Create2DTextureResource(mFrameResource.mAlbedoMap, mClientWidth, mClientHeight, AlbedoFormat, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+	Create2DTextureResource(mFrameResource.mMetalicMap, mClientWidth, mClientHeight, MetalicFormat, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+	Create2DTextureResource(mFrameResource.mRoughnessMap, mClientWidth, mClientHeight, RoughnessFormat, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+	Create2DTextureResource(mFrameResource.mDepthStencilBuffer, mClientWidth, mClientHeight, DepthStencilDSVFormat, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
 }
-
-void Demo::CreateDepthStencilData()
+void Demo::CreateBufferDescriptors()
 {
-	D3D12_RESOURCE_DESC depthStencilDesc;
-	depthStencilDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	depthStencilDesc.Alignment = 0;
-	depthStencilDesc.Width = GetWindowSize().first;
-	depthStencilDesc.Height = GetWindowSize().second;
-	depthStencilDesc.DepthOrArraySize = 1;
-	depthStencilDesc.MipLevels = 1;
+	mDescIndex.mPositionDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
+	mDescIndex.mNormalDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
+	mDescIndex.mAlbedoDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
+	mDescIndex.mRoughnessDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
+	mDescIndex.mMetalicDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
 
-	// Correction 11/12/2016: SSAO chapter requires an SRV to the depth buffer to read from 
-	// the depth buffer.  Therefore, because we need to create two views to the same resource:
-	//   1. SRV format: DXGI_FORMAT_R24_UNORM_X8_TYPELESS
-	//   2. DSV Format: DXGI_FORMAT_D24_UNORM_S8_UINT
-	// we need to create the depth buffer resource with a typeless format.  s
-	depthStencilDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+	mDescIndex.mPositionDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
+	mDescIndex.mNormalDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
+	mDescIndex.mAlbedoDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
+	mDescIndex.mRoughnessDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
+	mDescIndex.mMetalicDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
+	mDescIndex.mDepthStencilSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
 
-	depthStencilDesc.SampleDesc.Count = Get4xMsaaState() ? 4 : 1;
-	depthStencilDesc.SampleDesc.Quality = Get4xMsaaState() ? (Get4xMsaaQuality() - 1) : 0;
-	depthStencilDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
-	depthStencilDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+	mDescIndex.mDepthStencilDsvIdx = mDSVHeap->GetNextAvailableIndex();
 
-	D3D12_CLEAR_VALUE clearValue;
-	clearValue.Format = DepthStencilFormat;
-	clearValue.DepthStencil.Depth = 1.0f;
-	clearValue.DepthStencil.Stencil = 0;
+	CreateRtvDescriptor(PositionFormat, mFrameResource.mPositionMap, mRTVHeap->GetCpuHandle(mDescIndex.mPositionDescRtvIdx));
+	CreateRtvDescriptor(NormalFormat, mFrameResource.mNormalMap, mRTVHeap->GetCpuHandle(mDescIndex.mNormalDescRtvIdx));
+	CreateRtvDescriptor(AlbedoFormat, mFrameResource.mAlbedoMap, mRTVHeap->GetCpuHandle(mDescIndex.mAlbedoDescRtvIdx));
+	CreateRtvDescriptor(RoughnessFormat, mFrameResource.mRoughnessMap, mRTVHeap->GetCpuHandle(mDescIndex.mRoughnessDescRtvIdx));
+	CreateRtvDescriptor(MetalicFormat, mFrameResource.mMetalicMap, mRTVHeap->GetCpuHandle(mDescIndex.mMetalicDescRtvIdx));
 
-	ThrowIfFailed(mdxDevice->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-		D3D12_HEAP_FLAG_NONE,
-		&depthStencilDesc,
-		D3D12_RESOURCE_STATE_DEPTH_WRITE,
-		&clearValue,
-		IID_PPV_ARGS(mDepthStencilBuffer.GetAddressOf())))
+	CreateSrvDescriptor(PositionFormat, mFrameResource.mPositionMap, mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mPositionDescSrvIdx));
+	CreateSrvDescriptor(NormalFormat, mFrameResource.mNormalMap, mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mNormalDescSrvIdx));
+	CreateSrvDescriptor(AlbedoFormat, mFrameResource.mAlbedoMap, mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mAlbedoDescSrvIdx));
+	CreateSrvDescriptor(RoughnessFormat, mFrameResource.mRoughnessMap, mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mRoughnessDescSrvIdx));
+	CreateSrvDescriptor(MetalicFormat, mFrameResource.mMetalicMap, mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mMetalicDescSrvIdx));
+	CreateSrvDescriptor(DepthStencilSRVFormat, mFrameResource.mDepthStencilBuffer, mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mDepthStencilSrvIdx));
 
-	D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc;
-	dsvHeapDesc.NumDescriptors = 1;
-	dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-	dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	dsvHeapDesc.NodeMask = 0;
-	mdxDevice->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(mDsvHeap.GetAddressOf()));
-
-	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;
-	dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
-	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-	dsvDesc.Format = DepthStencilFormat;
-	dsvDesc.Texture2D.MipSlice = 0;
-	mdxDevice->CreateDepthStencilView(mDepthStencilBuffer.Get(), &dsvDesc, mDsvHeap->GetCPUDescriptorHandleForHeapStart());
+	CreateDsvDescriptor(DepthStencilDSVFormat, mFrameResource.mDepthStencilBuffer, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
 }
 
 void Demo::BuildModels()
@@ -148,13 +136,13 @@ void Demo::BuildFrameResource()
 {
 	const size_t ConstantBufferAlignment = 256;
 
-	mPassCB = std::make_unique<PassCB>();
-	mPassAllocation = mResourceAllocator->AllocateToUploadHeap(&mPassCB, sizeof(PassCB), ConstantBufferAlignment);
+	mCommonCB = std::make_unique<CommonCB>();
+	mCommonCBAllocation = mResourceAllocator->AllocateToUploadHeap(&mCommonCB, sizeof(CommonCB), ConstantBufferAlignment);
 	
 	mLightCB = std::make_unique<LightCB>();
 	mLightAllocation = mResourceAllocator->AllocateToUploadHeap(&mLightCB, sizeof(LightCB), ConstantBufferAlignment);
 
-	mTestDeafult = mResourceAllocator->AllocateToDefaultHeap(&mPassCB, sizeof(PassCB), ConstantBufferAlignment);
+	mTestDeafult = mResourceAllocator->AllocateToDefaultHeap(&mCommonCB, sizeof(CommonCB), ConstantBufferAlignment);
 }
 
 void Demo::CreateShader()
@@ -177,7 +165,7 @@ void Demo::CreateShader()
 
 void Demo::UpdatePassCB(const GameTimer& gt)
 {
-	PassCB currentFrameCB;
+	CommonCB currentFrameCB;
 
 	XMMATRIX view = XMLoadFloat4x4(&mCamera->GetViewMat());
 	XMMATRIX proj = XMLoadFloat4x4(&mCamera->GetProjMat());
@@ -202,7 +190,7 @@ void Demo::UpdatePassCB(const GameTimer& gt)
 	currentFrameCB.TotalTime = gt.TotalTime();
 	currentFrameCB.DeltaTime = gt.DeltaTime();
 
-	mPassAllocation.Copy(&currentFrameCB, sizeof(PassCB));
+	mCommonCBAllocation.Copy(&currentFrameCB, sizeof(CommonCB));
 }
 
 void Demo::UpdateLightCB(const GameTimer& gt)
@@ -242,7 +230,6 @@ void Demo::Draw(const GameTimer& gt)
 	// Reusing the command list reuses memory.
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
-
 	DrawDefaultPass();
 
 	// Done recording commands.
@@ -273,17 +260,17 @@ void Demo::DrawDefaultPass()
 	mCommandList->SetGraphicsRootSignature(mDefaultPass->mRootSig.Get());
 
 	//Remove it with bindless later.
-	D3D12_GPU_VIRTUAL_ADDRESS passCBAddress = mPassAllocation.GPU;
-	mCommandList->SetGraphicsRootConstantBufferView(1, passCBAddress);
+	D3D12_GPU_VIRTUAL_ADDRESS commonCBAddress = mCommonCBAllocation.GPU;
+	mCommandList->SetGraphicsRootConstantBufferView(1, commonCBAddress);
 
 	mCommandList->RSSetViewports(1, &mScreenViewport);
 	mCommandList->RSSetScissorRects(1, &mScissorRect);
 
 	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), colorClearValue, 0, nullptr);
-	mCommandList->ClearDepthStencilView(mDsvHeap->GetCPUDescriptorHandleForHeapStart(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
+	mCommandList->ClearDepthStencilView(mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
 
 	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = {CurrentBackBufferExtView()};
-	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, &mDsvHeap->GetCPUDescriptorHandleForHeapStart());
+	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, &mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
 
 	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 

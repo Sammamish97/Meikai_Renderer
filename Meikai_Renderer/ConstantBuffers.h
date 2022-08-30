@@ -9,7 +9,7 @@ struct ObjectCB
     XMFLOAT4X4 World = MathHelper::Identity4x4();
 };
 
-struct PassCB
+struct CommonCB
 {
 	XMFLOAT4X4 View = MathHelper::Identity4x4();
     XMFLOAT4X4 InvView = MathHelper::Identity4x4();

@@ -91,6 +91,13 @@ protected:
     void ClearDepth(ComPtr<ID3D12GraphicsCommandList2> commandList,
         D3D12_CPU_DESCRIPTOR_HANDLE dsv, FLOAT depth = 1.0f);
 
+    void Create2DTextureResource(ComPtr<ID3D12Resource>& destination, int width, int height, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag);
+    
+    void CreateRtvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
+    void CreateDsvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
+    void CreateCbvDescriptor(D3D12_GPU_VIRTUAL_ADDRESS gpuLocation, size_t bufferSize, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
+    void CreateSrvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
+    //void CreateUavDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
 
 public:
     void UpdateDefaultBufferResource(

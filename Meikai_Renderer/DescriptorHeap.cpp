@@ -12,12 +12,17 @@ DescriptorHeap::DescriptorHeap(DXApp* appPtr, D3D12_DESCRIPTOR_HEAP_TYPE heapTyp
 }
 
 //Allocate and return offset of descriptor.
-D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHeap::GetNextHandle()
+UINT DescriptorHeap::GetNextAvailableIndex()
 {
-	return (*this)[mOffset++];
+	return mOffset++;
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHeap::operator[](UINT idx)
+D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHeap::GetCpuHandle(UINT idx) const
 {
 	return CD3DX12_CPU_DESCRIPTOR_HANDLE(mDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), (INT)idx, mDescriptorSize);
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE DescriptorHeap::GetGpuHandle(UINT idx) const
+{
+	return CD3DX12_GPU_DESCRIPTOR_HANDLE(mDescriptorHeap->GetGPUDescriptorHandleForHeapStart(), (INT)idx, mDescriptorSize);
 }

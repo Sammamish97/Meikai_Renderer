@@ -578,6 +578,74 @@ void DXApp::ClearDepth(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2> comman
 	commandList->ClearDepthStencilView(dsv, D3D12_CLEAR_FLAG_DEPTH, depth, 0, 0, nullptr);
 }
 
+void DXApp::Create2DTextureResource(ComPtr<ID3D12Resource>& destination, int width, int height, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag)
+{
+	D3D12_RESOURCE_DESC texDesc = {};
+	ZeroMemory(&texDesc, sizeof(D3D12_RESOURCE_DESC));
+	texDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	texDesc.Alignment = 0;
+	texDesc.Width = width;
+	texDesc.Height = height;
+	texDesc.DepthOrArraySize = 1;
+	texDesc.MipLevels = 1;
+	texDesc.Format = format;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.SampleDesc.Quality = 0;
+	texDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+	texDesc.Flags = flag;
+
+	float clearColor[] = { 0.f, 0.f, 0.f, 0.f };
+	CD3DX12_CLEAR_VALUE OptClear(format, clearColor);
+	ThrowIfFailed(mdxDevice->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		&texDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		&OptClear,
+		IID_PPV_ARGS(destination.GetAddressOf())))
+}
+
+void DXApp::CreateRtvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos)
+{
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc;
+	rtvDesc.Format = format;
+	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+	rtvDesc.Texture2D.MipSlice = 0;
+	rtvDesc.Texture2D.PlaneSlice = 0;
+	mdxDevice->CreateRenderTargetView(resource.Get(), &rtvDesc, heapPos);
+}
+
+void DXApp::CreateDsvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos)
+{
+	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+	dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
+	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+	dsvDesc.Format = format;
+	dsvDesc.Texture2D.MipSlice = 0;
+	mdxDevice->CreateDepthStencilView(resource.Get(), &dsvDesc, heapPos);
+}
+
+void DXApp::CreateCbvDescriptor(D3D12_GPU_VIRTUAL_ADDRESS gpuLocation, size_t bufferSize, D3D12_CPU_DESCRIPTOR_HANDLE heapPos)
+{
+	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
+	cbvDesc.BufferLocation = gpuLocation;
+	cbvDesc.SizeInBytes = bufferSize;
+	mdxDevice->CreateConstantBufferView(&cbvDesc, heapPos);
+}
+
+void DXApp::CreateSrvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos)
+{
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Format = format;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	
+	srvDesc.Texture2D.MipLevels = 1;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.Texture2D.PlaneSlice = 0;
+	mdxDevice->CreateShaderResourceView(resource.Get(), &srvDesc, heapPos);
+}
+
 void DXApp::OnResize()
 {
 	assert(mdxDevice);

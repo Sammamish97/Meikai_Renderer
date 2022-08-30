@@ -54,7 +54,7 @@
     <ClInclude Include="Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MaterialResource.h">
+    <ClInclude Include="FrameBufferResource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MemDefine.h">
@@ -85,9 +85,6 @@
       <Filter>Passes</Filter>
     </ClInclude>
     <ClInclude Include="DescriptorHeap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureAllocator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -150,9 +147,6 @@
       <Filter>Passes</Filter>
     </ClCompile>
     <ClCompile Include="DescriptorHeap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureAllocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

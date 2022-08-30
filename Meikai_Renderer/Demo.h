@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "MaterialResource.h"
+#include "FrameBufferResource.h"
 #include "DXApp.h"
 #include "ConstantBuffers.h"
 #include "DescriptorHeap.h"
@@ -36,12 +36,12 @@ private:
 
 private:
 	void LoadContent();
+
 	void CreateDescriptorHeaps();
 	void CreateBufferResources();
-
-	void CreateDepthStencilData();
 	void CreateBufferDescriptors();
 
+	void DrawDefaultPass();
 	void DrawGeometryPass();
 	void DrawLightingPass();
 
@@ -67,11 +67,12 @@ private://Descriptor heaps
 	std::unique_ptr<DescriptorHeap> mCBVSRVUAVHeap;
 
 private://RTV & DSV SRV Resource
-	std::unique_ptr<MaterialResource> mMatResource;
+	FrameBufferResource mFrameResource;
+	FrameBufferDescriptorIndex mDescIndex;
 
 private://CBV resource & allocation
-	std::unique_ptr<PassCB> mPassCB;
-	UploadAllocation mPassAllocation;
+	std::unique_ptr<CommonCB> mCommonCB;
+	UploadAllocation mCommonCBAllocation;
 
 	std::unique_ptr<LightCB> mLightCB;
 	UploadAllocation mLightAllocation;
