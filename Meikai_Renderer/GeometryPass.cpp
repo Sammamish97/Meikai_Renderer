@@ -72,8 +72,8 @@ void GeometryPass::InitPSO()
     defaultPSODesc.RTVFormats[0] = PositionFormat;
     defaultPSODesc.RTVFormats[1] = NormalFormat;
     defaultPSODesc.RTVFormats[2] = AlbedoFormat;
-    defaultPSODesc.RTVFormats[3] = MetalicFormat;
-    defaultPSODesc.RTVFormats[4] = RoughnessFormat;
+    defaultPSODesc.RTVFormats[3] = RoughnessFormat;
+    defaultPSODesc.RTVFormats[4] = MetalicFormat;
     defaultPSODesc.DSVFormat = DepthStencilDSVFormat;
     defaultPSODesc.SampleDesc.Count = mApp->Get4xMsaaState() ? 4 : 1;
     defaultPSODesc.SampleDesc.Quality = mApp->Get4xMsaaState() ? (mApp->Get4xMsaaQuality() - 1) : 0;

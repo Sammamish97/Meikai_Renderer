@@ -15,6 +15,8 @@ struct Texture;
 class Camera;
 
 class DefaultPass;
+class GeometryPass;
+class LightingPass;
 
 class Demo : public DXApp
 {
@@ -60,6 +62,9 @@ protected:
 
 private://Passes
 	std::unique_ptr<DefaultPass> mDefaultPass;
+
+	std::unique_ptr<GeometryPass> mGeometryPass;
+	std::unique_ptr<LightingPass> mLightingPass;
 
 private://Descriptor heaps
 	std::unique_ptr<DescriptorHeap> mDSVHeap;

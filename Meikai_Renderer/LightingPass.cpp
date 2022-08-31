@@ -15,8 +15,6 @@ LightingPass::LightingPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID
 void LightingPass::InitRootSignature()
 {
 	//Light Pass use these root parameters
-		//PassCB: 0
-		//Geometry textures: 1 ~ unbound
     auto device = mApp->GetDevice();
     D3D12_FEATURE_DATA_ROOT_SIGNATURE featureData = {};
     if (FAILED(device->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &featureData, sizeof(featureData))))
@@ -31,24 +29,29 @@ void LightingPass::InitRootSignature()
         D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
         D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
 
-    //Use descriptor table with size 1000 for use bindless descriptor.
-    UINT descriptorNumber = 1000;
-    CD3DX12_DESCRIPTOR_RANGE1 unboundedRange = {};
-    unboundedRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, descriptorNumber, 0, 0);
-    
-    CD3DX12_ROOT_PARAMETER1 rootParameters[2];
-	rootParameters[0].InitAsConstantBufferView(0);
-    rootParameters[1].InitAsDescriptorTable(descriptorNumber, &unboundedRange, D3D12_SHADER_VISIBILITY_PIXEL);
+    UINT descriptorNumber = 7;//Pos + Normal + Albedo + Roughness + Metalic + SSAO + Depth
 
-    CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDescription;
-    rootSignatureDescription.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, rootSignatureFlags);
+    CD3DX12_DESCRIPTOR_RANGE srvRange = {};
+    srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, descriptorNumber, 0, 0);
+    
+    CD3DX12_ROOT_PARAMETER rootParameters[3];
+	rootParameters[0].InitAsConstantBufferView(0);
+    rootParameters[1].InitAsConstantBufferView(1);
+    rootParameters[2].InitAsDescriptorTable(1, &srvRange, D3D12_SHADER_VISIBILITY_PIXEL);
+
+    auto staticSamplers = mApp->GetStaticSamplers();
+
+    CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(_countof(rootParameters), rootParameters,
+        (UINT)staticSamplers.size(), staticSamplers.data(),
+        D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
     ComPtr<ID3DBlob> rootSignatureBlob;
     ComPtr<ID3DBlob> errorBlob;
 
-    ThrowIfFailed(D3DX12SerializeVersionedRootSignature(&rootSignatureDescription, featureData.HighestVersion, &rootSignatureBlob, &errorBlob))
+    ThrowIfFailed(D3D12SerializeRootSignature(&rootSigDesc, featureData.HighestVersion, &rootSignatureBlob, &errorBlob))
 	ThrowIfFailed(device->CreateRootSignature(0, rootSignatureBlob->GetBufferPointer(), rootSignatureBlob->GetBufferSize(), IID_PPV_ARGS(mRootSig.GetAddressOf())))
 }
+
 void LightingPass::InitPSO()
 {
 	//Light Pass use these render target view.
@@ -69,8 +72,11 @@ void LightingPass::InitPSO()
         mPixelShader->GetBufferSize()
     };
     lightingPSODesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+    lightingPSODesc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
     lightingPSODesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
     lightingPSODesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+    lightingPSODesc.DepthStencilState.DepthEnable = false;
+    lightingPSODesc.DepthStencilState.StencilEnable = false;
     lightingPSODesc.SampleMask = UINT_MAX;
     lightingPSODesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
     lightingPSODesc.NumRenderTargets = 1;

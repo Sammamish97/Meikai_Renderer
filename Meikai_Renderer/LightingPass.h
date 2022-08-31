@@ -1,5 +1,6 @@
 #pragma once
 #include "IPass.h"
+
 class LightingPass : public IPass
 {
 public:

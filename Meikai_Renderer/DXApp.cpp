@@ -594,13 +594,25 @@ void DXApp::Create2DTextureResource(ComPtr<ID3D12Resource>& destination, int wid
 	texDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
 	texDesc.Flags = flag;
 
-	float clearColor[] = { 0.f, 0.f, 0.f, 0.f };
-	CD3DX12_CLEAR_VALUE OptClear(format, clearColor);
+	CD3DX12_CLEAR_VALUE OptClear;
+	D3D12_RESOURCE_STATES initialState;
+	if(flag == D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET)
+	{
+		float clearColor[] = { 0.f, 0.f, 0.f, 0.f };
+		OptClear = CD3DX12_CLEAR_VALUE(format, clearColor);
+		initialState = D3D12_RESOURCE_STATE_GENERIC_READ;
+	}
+	if(flag == D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL)
+	{
+		OptClear = CD3DX12_CLEAR_VALUE(format, 1.0f, 0);
+		initialState = D3D12_RESOURCE_STATE_DEPTH_WRITE;
+	}
+
 	ThrowIfFailed(mdxDevice->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 		D3D12_HEAP_FLAG_NONE,
 		&texDesc,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
+		initialState,
 		&OptClear,
 		IID_PPV_ARGS(destination.GetAddressOf())))
 }

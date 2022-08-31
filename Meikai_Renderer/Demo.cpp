@@ -4,12 +4,14 @@
 #include "Object.h"
 #include "Camera.h"
 #include "BufferFormat.h"
-#include "Texture.h"
 #include "MathHelper.h"
 #include "DefaultPass.h"
 
 #include <d3dcompiler.h>
 #include <d3dx12.h>
+
+#include "GeometryPass.h"
+#include "LightingPass.h"
 
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
@@ -45,7 +47,8 @@ bool Demo::Initialize()
 
 	FlushCommandQueue();
 	mDefaultPass = std::make_unique<DefaultPass>(this, mShaders["DefaultForwardVS"], mShaders["DefaultForwardPS"]);
-	
+	mGeometryPass = std::make_unique<GeometryPass>(this, mShaders["GeomVS"], mShaders["GeomPS"]);
+	mLightingPass = std::make_unique<LightingPass>(this, mShaders["ScreenQuadVS"], mShaders["LightingPS"]);
 
 	OnResize();
 	return true;
@@ -75,6 +78,7 @@ void Demo::CreateDescriptorHeaps()
 	mDSVHeap = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, mDsvDescriptorSize, 128);
 	mCBVSRVUAVHeap = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, mCbvSrvUavDescriptorSize, 128);
 }
+
 void Demo::CreateBufferResources()
 {
 	Create2DTextureResource(mFrameResource.mPositionMap, mClientWidth, mClientHeight, PositionFormat, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
@@ -84,6 +88,7 @@ void Demo::CreateBufferResources()
 	Create2DTextureResource(mFrameResource.mRoughnessMap, mClientWidth, mClientHeight, RoughnessFormat, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
 	Create2DTextureResource(mFrameResource.mDepthStencilBuffer, mClientWidth, mClientHeight, DepthStencilDSVFormat, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
 }
+
 void Demo::CreateBufferDescriptors()
 {
 	mDescIndex.mPositionDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
@@ -209,8 +214,7 @@ void Demo::UpdateLightCB(const GameTimer& gt)
 	lightData.pointLight[2].Position = XMFLOAT3(0, 0, 2);
 	lightData.pointLight[2].Color = XMFLOAT3(0, 0, 1);
 
-	/*auto LightCB = L_Pass->mLightCB.get();
-	LightCB->CopyData(0, lightData);*/
+	mLightAllocation.Copy(&lightData, sizeof(LightCB));
 }
 
 void Demo::Update(const GameTimer& gt)
@@ -230,7 +234,11 @@ void Demo::Draw(const GameTimer& gt)
 	// Reusing the command list reuses memory.
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
-	DrawDefaultPass();
+	//DrawDefaultPass();
+	DrawGeometryPass();
+	DrawLightingPass();
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 
 	// Done recording commands.
 	ThrowIfFailed(mCommandList->Close());
@@ -281,6 +289,115 @@ void Demo::DrawDefaultPass()
 
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+}
+
+void Demo::DrawGeometryPass()
+{
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mPositionMap.Get(),
+		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mNormalMap.Get(),
+		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mAlbedoMap.Get(),
+		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mRoughnessMap.Get(),
+		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mMetalicMap.Get(),
+		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	auto positionRTV = mRTVHeap->GetCpuHandle(mDescIndex.mPositionDescRtvIdx);
+	auto normalRTV = mRTVHeap->GetCpuHandle(mDescIndex.mNormalDescRtvIdx);
+	auto albedoRTV = mRTVHeap->GetCpuHandle(mDescIndex.mAlbedoDescRtvIdx);
+	auto roughnessRTV = mRTVHeap->GetCpuHandle(mDescIndex.mRoughnessDescRtvIdx);
+	auto metalicRTV = mRTVHeap->GetCpuHandle(mDescIndex.mMetalicDescRtvIdx);
+
+	float colorClearValue[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	mCommandList->ClearRenderTargetView(positionRTV, colorClearValue, 0, nullptr);
+	mCommandList->ClearRenderTargetView(normalRTV, colorClearValue, 0, nullptr);
+	mCommandList->ClearRenderTargetView(albedoRTV, colorClearValue, 0, nullptr);
+	mCommandList->ClearRenderTargetView(roughnessRTV, colorClearValue, 0, nullptr);
+	mCommandList->ClearRenderTargetView(metalicRTV, colorClearValue, 0, nullptr);
+
+	mCommandList->ClearDepthStencilView(mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), 
+		D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
+
+	mCommandList->SetPipelineState(mGeometryPass->mPSO.Get());
+	mCommandList->SetGraphicsRootSignature(mGeometryPass->mRootSig.Get());
+
+	D3D12_GPU_VIRTUAL_ADDRESS commonCBAddress = mCommonCBAllocation.GPU;
+	mCommandList->SetGraphicsRootConstantBufferView(1, commonCBAddress);
+
+	mCommandList->RSSetViewports(1, &mScreenViewport);
+	mCommandList->RSSetScissorRects(1, &mScissorRect);
+
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { positionRTV, normalRTV, albedoRTV, roughnessRTV, metalicRTV };
+	// Specify the buffers we are going to render to.
+	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(),
+		true, &mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
+
+	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	for (const auto& object : objects)
+	{
+		object->Draw(mCommandList);
+	}
+}
+
+void Demo::DrawLightingPass()
+{
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mPositionMap.Get(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mNormalMap.Get(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mAlbedoMap.Get(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mRoughnessMap.Get(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mMetalicMap.Get(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
+		D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	// Clear the screen normal map and depth buffer.
+	float ClearColor[] = { 0.f, 0.f, 0.f, 0.f };
+	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), ClearColor, 0, nullptr);
+
+	//Set Pipeline & Root signature
+	mCommandList->SetPipelineState(mLightingPass->mPSO.Get());
+	mCommandList->SetGraphicsRootSignature(mLightingPass->mRootSig.Get());
+
+	D3D12_GPU_VIRTUAL_ADDRESS commonCBAddress = mCommonCBAllocation.GPU;
+	mCommandList->SetGraphicsRootConstantBufferView(0, commonCBAddress);
+
+	D3D12_GPU_VIRTUAL_ADDRESS lightCBAddress = mLightAllocation.GPU;
+	mCommandList->SetGraphicsRootConstantBufferView(1, lightCBAddress);
+
+	mCommandList->SetDescriptorHeaps(1, mCBVSRVUAVHeap->GetDescriptorHeap().GetAddressOf());
+
+	//Test descriptor heap accessing
+	mCommandList->SetGraphicsRootDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
+
+	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
+	mCommandList->RSSetViewports(1, &mScreenViewport);
+	mCommandList->RSSetScissorRects(1, &mScissorRect);
+
+	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { CurrentBackBufferExtView() };
+	// Specify the buffers we are going to render to.
+	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, nullptr);
+
+	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	mCommandList->IASetVertexBuffers(0, 0, nullptr);
+	mCommandList->IASetIndexBuffer(nullptr);
+	mCommandList->DrawInstanced(3, 1, 0, 0);
 }
 
 void Demo::OnMouseDown(WPARAM btnState, int x, int y)

@@ -7,6 +7,10 @@ DescriptorHeap::DescriptorHeap(DXApp* appPtr, D3D12_DESCRIPTOR_HEAP_TYPE heapTyp
 	HeapDesc.NumDescriptors = mMaxDescriptor;
 	HeapDesc.Type = mHeapType;
 	HeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	if(heapType == D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)
+	{
+		HeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	}
 	HeapDesc.NodeMask = 0;
 	mApp->GetDevice()->CreateDescriptorHeap(&HeapDesc, IID_PPV_ARGS(mDescriptorHeap.GetAddressOf()));
 }
@@ -26,3 +30,9 @@ D3D12_GPU_DESCRIPTOR_HANDLE DescriptorHeap::GetGpuHandle(UINT idx) const
 {
 	return CD3DX12_GPU_DESCRIPTOR_HANDLE(mDescriptorHeap->GetGPUDescriptorHandleForHeapStart(), (INT)idx, mDescriptorSize);
 }
+
+ComPtr<ID3D12DescriptorHeap>& DescriptorHeap::GetDescriptorHeap()
+{
+	return mDescriptorHeap;
+}
+

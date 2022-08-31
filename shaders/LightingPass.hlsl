@@ -1,11 +1,10 @@
 Texture2D gPositionMap : register(t0);
 Texture2D gNormalMap  : register(t1);
 Texture2D gAlbedoMap  : register(t2);
-Texture2D gDepthMap  : register(t3);
+Texture2D gRoughness  : register(t3);
 Texture2D gMetalic  : register(t4);
-Texture2D gRoughness  : register(t5);
-
-Texture2D gSsaoMap  : register(t6);
+Texture2D gSsaoMap  : register(t5);
+Texture2D gDepthMap  : register(t6);
 
 SamplerState gsamPointClamp : register(s0);
 SamplerState gsamLinearClamp : register(s1);
