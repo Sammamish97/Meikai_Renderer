@@ -14,6 +14,14 @@ struct FrameBufferResource
 	ComPtr<ID3D12Resource> mRoughnessMap;
 };
 
+struct IBLBufferResource
+{
+	ComPtr<ID3D12Resource> mHDRImage;
+	ComPtr<ID3D12Resource> mCubeMap;
+	ComPtr<ID3D12Resource> mDIffuseCubeMap;
+	ComPtr<ID3D12Resource> mSpecularCubeMap;
+};
+
 struct FrameBufferDescriptorIndex
 {
 	UINT mPositionDescRtvIdx;
