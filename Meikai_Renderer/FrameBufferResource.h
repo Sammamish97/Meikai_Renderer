@@ -14,7 +14,7 @@ struct FrameBufferResource
 	ComPtr<ID3D12Resource> mRoughnessMap;
 };
 
-struct IBLBufferResource
+struct IBLResource
 {
 	ComPtr<ID3D12Resource> mHDRImage;
 	ComPtr<ID3D12Resource> mCubeMap;

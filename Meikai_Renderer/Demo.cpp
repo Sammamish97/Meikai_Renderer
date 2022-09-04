@@ -39,6 +39,8 @@ bool Demo::Initialize()
 	CreateBufferResources();
 	CreateBufferDescriptors();
 
+	CreateIBLResources();
+
 	LoadContent();
 
 	ThrowIfFailed(mCommandList->Close());
@@ -89,6 +91,12 @@ void Demo::CreateBufferResources()
 	Create2DTextureResource(mFrameResource.mDepthStencilBuffer, mClientWidth, mClientHeight, DepthStencilDSVFormat, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
 }
 
+void Demo::CreateIBLResources()
+{
+	LoadHDRTextureFromFile(mIBLResource.mHDRImage, "../textures/Alexs_Apt_2k.hdr", HDRFormat, D3D12_RESOURCE_FLAG_NONE);
+
+}
+
 void Demo::CreateBufferDescriptors()
 {
 	mDescIndex.mPositionDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
@@ -120,6 +128,11 @@ void Demo::CreateBufferDescriptors()
 	CreateSrvDescriptor(DepthStencilSRVFormat, mFrameResource.mDepthStencilBuffer, mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mDepthStencilSrvIdx));
 
 	CreateDsvDescriptor(DepthStencilDSVFormat, mFrameResource.mDepthStencilBuffer, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
+}
+
+void Demo::CreateIBLDescriptors()
+{
+
 }
 
 void Demo::BuildModels()

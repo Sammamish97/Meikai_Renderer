@@ -8,7 +8,6 @@
 #include "ConstantBuffers.h"
 #include "DescriptorHeap.h"
 
-
 struct Model;
 struct Object;
 struct Texture;
@@ -40,16 +39,23 @@ private:
 	void LoadContent();
 
 	void CreateDescriptorHeaps();
+
 	void CreateBufferResources();
+	void CreateIBLResources();
+
 	void CreateBufferDescriptors();
+	void CreateIBLDescriptors();
 
 	void DrawDefaultPass();
 	void DrawGeometryPass();
 	void DrawLightingPass();
 
-	void Present();
-
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
+
+private:
+	void PreCalculateIBL();
+	void ImageToCubeMap();
+	void CalcDiffuseIrradiance();
 
 private:
 	void UpdatePassCB(const GameTimer& gt);
@@ -73,6 +79,8 @@ private://Descriptor heaps
 
 private://RTV & DSV SRV Resource
 	FrameBufferResource mFrameResource;
+	IBLResource mIBLResource;
+
 	FrameBufferDescriptorIndex mDescIndex;
 
 private://CBV resource & allocation

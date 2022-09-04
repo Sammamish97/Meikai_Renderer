@@ -92,7 +92,11 @@ protected:
         D3D12_CPU_DESCRIPTOR_HANDLE dsv, FLOAT depth = 1.0f);
 
     void Create2DTextureResource(ComPtr<ID3D12Resource>& destination, int width, int height, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag);
-    
+    void CreateCubemapTextureResource(ComPtr<ID3D12Resource>& destination, int width, int height, DXGI_FORMAT format);
+
+    void Load2DTextureFromFile(ComPtr<ID3D12Resource>& destination, const std::string& path, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag);
+    void LoadHDRTextureFromFile(ComPtr<ID3D12Resource>& destination, const std::string& path, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag);
+
     void CreateRtvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
     void CreateDsvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
     void CreateCbvDescriptor(D3D12_GPU_VIRTUAL_ADDRESS gpuLocation, size_t bufferSize, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
@@ -100,12 +104,21 @@ protected:
     //void CreateUavDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
 
 public:
+    //Update buffer by buffer
     void UpdateDefaultBufferResource(
         ComPtr<ID3D12GraphicsCommandList2> commandList,
         ID3D12Resource** pDestinationResource,
         ID3D12Resource** pIntermediateResource,
         size_t numElements, size_t elementSize, const void* bufferData,
         D3D12_RESOURCE_FLAGS flags = D3D12_RESOURCE_FLAG_NONE);
+
+    //Upldate texture by buffer
+    void UpdateDefaultTextureResource(
+        ComPtr<ID3D12GraphicsCommandList2> commandList,
+        ID3D12Resource** pDestinationResource,
+        ID3D12Resource** pIntermediateResource,
+        size_t numElements, size_t elementSize, const void* bufferData,
+        DXGI_FORMAT format, int width, int height, D3D12_RESOURCE_FLAGS flags = D3D12_RESOURCE_FLAG_NONE);
 
 private:
     void LogAdapters();

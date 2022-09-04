@@ -35,7 +35,6 @@
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\include\tools\DDSTextureLoader.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CommandManager.cpp" />
     <ClCompile Include="DefaultPass.cpp" />

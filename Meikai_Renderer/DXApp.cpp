@@ -1,9 +1,13 @@
-#include "DXApp.h"
+﻿#include "DXApp.h"
 #include "DXUtil.h"
+
 #include <d3dx12.h>
 #include <cassert>
 #include <vector>
 #include <WindowsX.h>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
 using Microsoft::WRL::ComPtr;
 
@@ -448,6 +452,47 @@ void DXApp::UpdateDefaultBufferResource(ComPtr<ID3D12GraphicsCommandList2> comma
 	}
 }
 
+void DXApp::UpdateDefaultTextureResource(
+	ComPtr<ID3D12GraphicsCommandList2> commandList,
+	ID3D12Resource** pDestinationResource,
+	ID3D12Resource** pIntermediateResource,
+	size_t numElements, size_t elementSize, const void* bufferData,
+	DXGI_FORMAT format, int width, int height, D3D12_RESOURCE_FLAGS flags)
+{
+	size_t bufferSize = numElements * elementSize;
+
+	// Create a committed resource for the GPU resource in a default heap.
+	ThrowIfFailed(mdxDevice->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Tex2D(format, width, height),
+		D3D12_RESOURCE_STATE_COPY_DEST,
+		nullptr,
+		IID_PPV_ARGS(pDestinationResource)))
+
+		// Create an committed resource for the upload.
+		if (bufferData)
+		{
+			ThrowIfFailed(mdxDevice->CreateCommittedResource(
+				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+				D3D12_HEAP_FLAG_NONE,
+				&CD3DX12_RESOURCE_DESC::Buffer(bufferSize),
+				D3D12_RESOURCE_STATE_GENERIC_READ,
+				nullptr,
+				IID_PPV_ARGS(pIntermediateResource)));
+
+			D3D12_SUBRESOURCE_DATA subresourceData = {};
+			subresourceData.pData = bufferData;
+			subresourceData.RowPitch = bufferSize;
+			subresourceData.SlicePitch = subresourceData.RowPitch;
+
+			//This is command function. Therefore, need to execute command list & flush queue.
+			UpdateSubresources(commandList.Get(),
+				*pDestinationResource, *pIntermediateResource,
+				0, 0, 1, &subresourceData);
+		}
+}
+
 void DXApp::LogAdapters()
 {
 	UINT i = 0;
@@ -594,18 +639,26 @@ void DXApp::Create2DTextureResource(ComPtr<ID3D12Resource>& destination, int wid
 	texDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
 	texDesc.Flags = flag;
 
+	CD3DX12_CLEAR_VALUE* pOptClear = nullptr;
 	CD3DX12_CLEAR_VALUE OptClear;
 	D3D12_RESOURCE_STATES initialState;
 	if(flag == D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET)
 	{
 		float clearColor[] = { 0.f, 0.f, 0.f, 0.f };
 		OptClear = CD3DX12_CLEAR_VALUE(format, clearColor);
+		pOptClear = &OptClear;
 		initialState = D3D12_RESOURCE_STATE_GENERIC_READ;
 	}
-	if(flag == D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL)
+	else if(flag == D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL)
 	{
 		OptClear = CD3DX12_CLEAR_VALUE(format, 1.0f, 0);
+		pOptClear = &OptClear;
 		initialState = D3D12_RESOURCE_STATE_DEPTH_WRITE;
+	}
+	//D3D12_RESOURCE_FLAG_NONE treat as texture resource which wait for copy.
+	else if(flag == D3D12_RESOURCE_FLAG_NONE)
+	{
+		initialState = D3D12_RESOURCE_STATE_COPY_DEST;
 	}
 
 	ThrowIfFailed(mdxDevice->CreateCommittedResource(
@@ -613,9 +666,65 @@ void DXApp::Create2DTextureResource(ComPtr<ID3D12Resource>& destination, int wid
 		D3D12_HEAP_FLAG_NONE,
 		&texDesc,
 		initialState,
-		&OptClear,
+		pOptClear,
 		IID_PPV_ARGS(destination.GetAddressOf())))
 }
+
+void DXApp::CreateCubemapTextureResource(ComPtr<ID3D12Resource>& destination, int width, int height, DXGI_FORMAT format)
+{
+	D3D12_RESOURCE_DESC texDesc = {};
+	ZeroMemory(&texDesc, sizeof(D3D12_RESOURCE_DESC));
+	texDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	texDesc.Alignment = 0;
+	texDesc.Width = width;
+	texDesc.Height = height;
+	texDesc.DepthOrArraySize = 6;//6 becuase it is cubemap
+	texDesc.MipLevels = 1;
+	texDesc.Format = format;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.SampleDesc.Quality = 0;
+	texDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+	texDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+
+	ThrowIfFailed(mdxDevice->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		&texDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(destination.GetAddressOf())))
+}
+
+void DXApp::Load2DTextureFromFile(ComPtr<ID3D12Resource>& destination, const std::string& path, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag)
+{
+	int width, height, channel;
+	unsigned char* data = stbi_load(path.c_str(), &width, &height, &channel, 0);
+	Create2DTextureResource(destination, width, height, DXGI_FORMAT_R8G8B8A8_UINT, D3D12_RESOURCE_FLAG_NONE);
+
+	ComPtr<ID3D12GraphicsCommandList2> tempList = nullptr;
+	mCommandMgr->AllocateTempList(tempList);
+
+	ComPtr<ID3D12Resource> stagingResource = nullptr;
+	UpdateDefaultBufferResource(tempList, destination.GetAddressOf(), stagingResource.GetAddressOf(), width * height, sizeof(float), data);
+
+	mCommandMgr->FlushTempList(tempList);
+}
+
+void DXApp::LoadHDRTextureFromFile(ComPtr<ID3D12Resource>& destination, const std::string& path, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag)
+{
+	int width, height, channel;
+	float* data = stbi_loadf(path.c_str(), &width, &height, &channel, 0);
+	Create2DTextureResource(destination, width, height, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D12_RESOURCE_FLAG_NONE);
+
+	ComPtr<ID3D12GraphicsCommandList2> tempList = nullptr;
+	mCommandMgr->AllocateTempList(tempList);
+
+	ComPtr<ID3D12Resource> stagingResource = nullptr;
+	UpdateDefaultBufferResource(tempList, destination.GetAddressOf(), stagingResource.GetAddressOf(), width * height, sizeof(float), data);
+
+	mCommandMgr->FlushTempList(tempList);
+}
+
 
 void DXApp::CreateRtvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos)
 {
