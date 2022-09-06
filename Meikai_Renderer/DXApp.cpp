@@ -731,6 +731,14 @@ void DXApp::LoadHDRTextureFromFile(ComPtr<ID3D12Resource>& destination, const st
 			break;
 	}
 
+	ThrowIfFailed(mdxDevice->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		&textureDesc,
+		D3D12_RESOURCE_STATE_COMMON,
+		nullptr,
+		IID_PPV_ARGS(destination.GetAddressOf())))
+
 	std::vector<D3D12_SUBRESOURCE_DATA> subresources(scratchImage.GetImageCount());
 	const DirectX::Image* pImages = scratchImage.GetImages();
 	for (int i = 0; i < scratchImage.GetImageCount(); ++i)
@@ -740,6 +748,26 @@ void DXApp::LoadHDRTextureFromFile(ComPtr<ID3D12Resource>& destination, const st
 		subresource.SlicePitch = pImages[i].slicePitch;
 		subresource.pData = pImages[i].pixels;
 	}
+	CopyTextureSubresource(destination, 0, static_cast<uint32_t>(subresources.size()), subresources.data());
+}
+
+void DXApp::CopyTextureSubresource(ComPtr<ID3D12Resource>& destinationTexture, uint32_t firstSubresource, uint32_t numSubresources, D3D12_SUBRESOURCE_DATA* subresourceData)
+{
+	//Resource transition
+	UINT64 requiredSize = GetRequiredIntermediateSize(destinationTexture.Get(), firstSubresource, numSubresources);
+
+	
+	ThrowIfFailed(mdxDevice->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(requiredSize),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(stagingResource.GetAddressOf())))
+
+	UpdateSubresources(mCommandList.Get(), destinationTexture.Get(), stagingResource.Get(),
+		0, firstSubresource, numSubresources, subresourceData);
+	//Resource transition
 }
 
 
