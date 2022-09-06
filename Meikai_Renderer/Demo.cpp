@@ -36,10 +36,12 @@ bool Demo::Initialize()
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
 	CreateDescriptorHeaps();
+
 	CreateBufferResources();
 	CreateBufferDescriptors();
 
 	CreateIBLResources();
+	CreateIBLDescriptors();
 
 	LoadContent();
 
@@ -91,11 +93,6 @@ void Demo::CreateBufferResources()
 	Create2DTextureResource(mFrameResource.mDepthStencilBuffer, mClientWidth, mClientHeight, DepthStencilDSVFormat, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
 }
 
-void Demo::CreateIBLResources()
-{
-	LoadHDRTextureFromFile(mIBLResource.mHDRImage, "../textures/Alexs_Apt_2k.hdr", HDRFormat, D3D12_RESOURCE_FLAG_NONE);
-
-}
 
 void Demo::CreateBufferDescriptors()
 {
@@ -130,9 +127,15 @@ void Demo::CreateBufferDescriptors()
 	CreateDsvDescriptor(DepthStencilDSVFormat, mFrameResource.mDepthStencilBuffer, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
 }
 
+void Demo::CreateIBLResources()
+{
+	LoadHDRTextureFromFile(mIBLResource.mHDRImage, L"../textures/Alexs_Apt_2k.hdr", HDRFormat, D3D12_RESOURCE_FLAG_NONE);
+}
+
 void Demo::CreateIBLDescriptors()
 {
-
+	mIBLIndex.mHDRImageSrvIndex = mCBVSRVUAVHeap->GetNextAvailableIndex();
+	CreateSrvDescriptor(HDRFormat, mIBLResource.mHDRImage, mCBVSRVUAVHeap->GetCpuHandle(mIBLIndex.mHDRImageSrvIndex));
 }
 
 void Demo::BuildModels()
@@ -247,11 +250,13 @@ void Demo::Draw(const GameTimer& gt)
 	// Reusing the command list reuses memory.
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
-	//DrawDefaultPass();
-	DrawGeometryPass();
+	DrawDefaultPass();
+
+	/*DrawGeometryPass();
 	DrawLightingPass();
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));*/
+
 
 	// Done recording commands.
 	ThrowIfFailed(mCommandList->Close());
@@ -289,6 +294,9 @@ void Demo::DrawDefaultPass()
 
 	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), colorClearValue, 0, nullptr);
 	mCommandList->ClearDepthStencilView(mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
+
+	mCommandList->SetDescriptorHeaps(1, mCBVSRVUAVHeap->GetDescriptorHeap().GetAddressOf());
+	mCommandList->SetGraphicsRootDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
 
 	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = {CurrentBackBufferExtView()};
 	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, &mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));

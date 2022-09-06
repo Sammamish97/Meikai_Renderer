@@ -40,6 +40,12 @@ struct FrameBufferDescriptorIndex
 	UINT mMetalicDescSrvIdx;
 
 	UINT mDepthStencilSrvIdx;
-
 	UINT mDepthStencilDsvIdx;
+};
+
+struct IBLDescriptorIndex
+{
+	UINT mHDRImageSrvIndex;
+
+	UINT mCubemapSrvIndex;
 };

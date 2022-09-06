@@ -1,13 +1,13 @@
 ﻿#include "DXApp.h"
 #include "DXUtil.h"
+#include "BufferFormat.h"
 
 #include <d3dx12.h>
 #include <cassert>
 #include <vector>
 #include <WindowsX.h>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include <DirectXTex.h>
 
 using Microsoft::WRL::ComPtr;
 
@@ -88,11 +88,6 @@ UINT DXApp::GetDsvDescSize()
 UINT DXApp::GetCbvSrvUavDescSize()
 {
 	return mCbvSrvUavDescriptorSize;
-}
-
-DXGI_FORMAT DXApp::GetBackBufferFormat()
-{
-	return mBackBufferFormat;
 }
 
 std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> DXApp::GetStaticSamplers()
@@ -314,7 +309,7 @@ bool DXApp::InitDirect3D()
 	// target formats, so we only need to check quality support.
 
 	D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS msQualityLevels;
-	msQualityLevels.Format = mBackBufferFormat;
+	msQualityLevels.Format = BackBufferFormat;
 	msQualityLevels.SampleCount = 4;
 	msQualityLevels.Flags = D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE;
 	msQualityLevels.NumQualityLevels = 0;
@@ -362,7 +357,7 @@ void DXApp::CreateSwapChain()
 	swapChainDesc.BufferDesc.Height = mClientHeight;
 	swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
 	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-	swapChainDesc.BufferDesc.Format = mBackBufferFormat;
+	swapChainDesc.BufferDesc.Format = BackBufferFormat;
 	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	swapChainDesc.SampleDesc.Count = m4xMsaaState ? 4 : 1;
@@ -414,6 +409,7 @@ CD3DX12_CPU_DESCRIPTOR_HANDLE DXApp::CurrentBackBufferExtView() const
 		mRtvDescriptorSize);
 }
 
+//Create default buffer, Create upload buffer, copy
 void DXApp::UpdateDefaultBufferResource(ComPtr<ID3D12GraphicsCommandList2> commandList,
 	ID3D12Resource** pDestinationResource, ID3D12Resource** pIntermediateResource, size_t numElements,
 	size_t elementSize, const void* bufferData, D3D12_RESOURCE_FLAGS flags)
@@ -421,14 +417,17 @@ void DXApp::UpdateDefaultBufferResource(ComPtr<ID3D12GraphicsCommandList2> comma
 	size_t bufferSize = numElements * elementSize;
 
 	// Create a committed resource for the GPU resource in a default heap.
-	ThrowIfFailed(mdxDevice->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(bufferSize, flags),
-		D3D12_RESOURCE_STATE_COPY_DEST,
-		nullptr,
-		IID_PPV_ARGS(pDestinationResource)))
-
+	if (*pDestinationResource == nullptr)
+	{
+		ThrowIfFailed(mdxDevice->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAG_NONE,
+			&CD3DX12_RESOURCE_DESC::Buffer(bufferSize, flags),
+			D3D12_RESOURCE_STATE_COPY_DEST,
+			nullptr,
+			IID_PPV_ARGS(pDestinationResource)))
+	}
+	
 	// Create an committed resource for the upload.
 	if (bufferData)
 	{
@@ -443,7 +442,7 @@ void DXApp::UpdateDefaultBufferResource(ComPtr<ID3D12GraphicsCommandList2> comma
 		D3D12_SUBRESOURCE_DATA subresourceData = {};
 		subresourceData.pData = bufferData;
 		subresourceData.RowPitch = bufferSize;
-		subresourceData.SlicePitch = subresourceData.RowPitch;
+		subresourceData.SlicePitch = 1;
 
 		//This is command function. Therefore, need to execute command list & flush queue.
 		UpdateSubresources(commandList.Get(),
@@ -461,14 +460,17 @@ void DXApp::UpdateDefaultTextureResource(
 {
 	size_t bufferSize = numElements * elementSize;
 
-	// Create a committed resource for the GPU resource in a default heap.
-	ThrowIfFailed(mdxDevice->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Tex2D(format, width, height),
-		D3D12_RESOURCE_STATE_COPY_DEST,
-		nullptr,
-		IID_PPV_ARGS(pDestinationResource)))
+	if (*pDestinationResource == nullptr)
+	{
+		// Create a committed resource for the GPU resource in a default heap.
+		ThrowIfFailed(mdxDevice->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAG_NONE,
+			&CD3DX12_RESOURCE_DESC::Tex2D(format, width, height),
+			D3D12_RESOURCE_STATE_COPY_DEST,
+			nullptr,
+			IID_PPV_ARGS(pDestinationResource)))
+	}
 
 		// Create an committed resource for the upload.
 		if (bufferData)
@@ -535,7 +537,7 @@ void DXApp::LogAdapterOutputs(IDXGIAdapter* adapter)
 		text += L"\n";
 		OutputDebugString(text.c_str());
 
-		LogOutputDisplayModes(output, mBackBufferFormat);
+		LogOutputDisplayModes(output, BackBufferFormat);
 
 		ReleaseCom(output);
 
@@ -625,19 +627,7 @@ void DXApp::ClearDepth(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2> comman
 
 void DXApp::Create2DTextureResource(ComPtr<ID3D12Resource>& destination, int width, int height, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag)
 {
-	D3D12_RESOURCE_DESC texDesc = {};
-	ZeroMemory(&texDesc, sizeof(D3D12_RESOURCE_DESC));
-	texDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	texDesc.Alignment = 0;
-	texDesc.Width = width;
-	texDesc.Height = height;
-	texDesc.DepthOrArraySize = 1;
-	texDesc.MipLevels = 1;
-	texDesc.Format = format;
-	texDesc.SampleDesc.Count = 1;
-	texDesc.SampleDesc.Quality = 0;
-	texDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
-	texDesc.Flags = flag;
+	D3D12_RESOURCE_DESC texDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, width, height, 1U, 0U, 1U, 0U, flag);
 
 	CD3DX12_CLEAR_VALUE* pOptClear = nullptr;
 	CD3DX12_CLEAR_VALUE OptClear;
@@ -658,7 +648,7 @@ void DXApp::Create2DTextureResource(ComPtr<ID3D12Resource>& destination, int wid
 	//D3D12_RESOURCE_FLAG_NONE treat as texture resource which wait for copy.
 	else if(flag == D3D12_RESOURCE_FLAG_NONE)
 	{
-		initialState = D3D12_RESOURCE_STATE_COPY_DEST;
+		initialState = D3D12_RESOURCE_STATE_COMMON;
 	}
 
 	ThrowIfFailed(mdxDevice->CreateCommittedResource(
@@ -668,6 +658,7 @@ void DXApp::Create2DTextureResource(ComPtr<ID3D12Resource>& destination, int wid
 		initialState,
 		pOptClear,
 		IID_PPV_ARGS(destination.GetAddressOf())))
+
 }
 
 void DXApp::CreateCubemapTextureResource(ComPtr<ID3D12Resource>& destination, int width, int height, DXGI_FORMAT format)
@@ -695,36 +686,123 @@ void DXApp::CreateCubemapTextureResource(ComPtr<ID3D12Resource>& destination, in
 		IID_PPV_ARGS(destination.GetAddressOf())))
 }
 
-void DXApp::Load2DTextureFromFile(ComPtr<ID3D12Resource>& destination, const std::string& path, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag)
+//void DXApp::Load2DTextureFromFile(ComPtr<ID3D12Resource>& destination, const std::string& path, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag)
+//{
+//	int width, height, channel;
+//	unsigned char* data = stbi_load(path.c_str(), &width, &height, &channel, 0);
+//	Create2DTextureResource(destination, width, height, DXGI_FORMAT_R8G8B8A8_UINT, flag);
+//
+//	CopyBufferToTexture(data, destination, width, height, sizeof(float), format);
+//
+//	stbi_image_free(data);
+//}
+
+void DXApp::LoadHDRTextureFromFile(ComPtr<ID3D12Resource>& destination, const std::wstring& path, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag)
 {
-	int width, height, channel;
-	unsigned char* data = stbi_load(path.c_str(), &width, &height, &channel, 0);
-	Create2DTextureResource(destination, width, height, DXGI_FORMAT_R8G8B8A8_UINT, D3D12_RESOURCE_FLAG_NONE);
+	DirectX::TexMetadata metadata;
+	DirectX::ScratchImage scratchImage;
 
-	ComPtr<ID3D12GraphicsCommandList2> tempList = nullptr;
-	mCommandMgr->AllocateTempList(tempList);
+	DirectX::LoadFromHDRFile(path.c_str(), &metadata, scratchImage);
+	D3D12_RESOURCE_DESC textureDesc = {};
+	switch (metadata.dimension)
+	{
+		case DirectX::TEX_DIMENSION_TEXTURE1D:
+			textureDesc = CD3DX12_RESOURCE_DESC::Tex1D(
+				metadata.format,
+				static_cast<UINT64>(metadata.width),
+				static_cast<UINT16>(metadata.arraySize));
+			break;
+		case DirectX::TEX_DIMENSION_TEXTURE2D:
+			textureDesc = CD3DX12_RESOURCE_DESC::Tex2D(
+				metadata.format,
+				static_cast<UINT64>(metadata.width),
+				static_cast<UINT>(metadata.height),
+				static_cast<UINT16>(metadata.arraySize));
+			break;
+		case DirectX::TEX_DIMENSION_TEXTURE3D:
+			textureDesc = CD3DX12_RESOURCE_DESC::Tex3D(
+				metadata.format,
+				static_cast<UINT64>(metadata.width),
+				static_cast<UINT>(metadata.height),
+				static_cast<UINT16>(metadata.depth));
+			break;
+		default:
+			throw std::exception("Invalid texture dimension.");
+			break;
+	}
 
-	ComPtr<ID3D12Resource> stagingResource = nullptr;
-	UpdateDefaultBufferResource(tempList, destination.GetAddressOf(), stagingResource.GetAddressOf(), width * height, sizeof(float), data);
-
-	mCommandMgr->FlushTempList(tempList);
+	std::vector<D3D12_SUBRESOURCE_DATA> subresources(scratchImage.GetImageCount());
+	const DirectX::Image* pImages = scratchImage.GetImages();
+	for (int i = 0; i < scratchImage.GetImageCount(); ++i)
+	{
+		auto& subresource = subresources[i];
+		subresource.RowPitch = pImages[i].rowPitch;
+		subresource.SlicePitch = pImages[i].slicePitch;
+		subresource.pData = pImages[i].pixels;
+	}
 }
 
-void DXApp::LoadHDRTextureFromFile(ComPtr<ID3D12Resource>& destination, const std::string& path, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag)
-{
-	int width, height, channel;
-	float* data = stbi_loadf(path.c_str(), &width, &height, &channel, 0);
-	Create2DTextureResource(destination, width, height, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D12_RESOURCE_FLAG_NONE);
 
-	ComPtr<ID3D12GraphicsCommandList2> tempList = nullptr;
-	mCommandMgr->AllocateTempList(tempList);
+//
+//		//Transition state
+//		UINT64 requiredSize = GetRequiredIntermediateSize(destination.Get(), );
+//	ComPtr<ID3D12Resource> intermediateResource;
+//	ThrowIfFailed(mdxDevice->CreateCommittedResource(
+//		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+//		D3D12_HEAP_FLAG_NONE,
+//		&CD3DX12_RESOURCE_DESC::Buffer(requiredSize),
+//		D3D12_RESOURCE_STATE_GENERIC_READ,
+//		nullptr,
+//		IID_PPV_ARGS(&intermediateResource)
+//	));
+//}
 
-	ComPtr<ID3D12Resource> stagingResource = nullptr;
-	UpdateDefaultBufferResource(tempList, destination.GetAddressOf(), stagingResource.GetAddressOf(), width * height, sizeof(float), data);
-
-	mCommandMgr->FlushTempList(tempList);
-}
-
+//void DXApp::CopyBufferToTexture(void* data, ComPtr<ID3D12Resource>& destination, int width, int height, size_t elementSize, DXGI_FORMAT format)
+//{
+//	size_t bufferByteSize = elementSize * width * height;
+//	ComPtr<ID3D12Resource> stagingResource;
+//
+//	//Create upload buffer
+//	ThrowIfFailed(mdxDevice->CreateCommittedResource(
+//		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+//		D3D12_HEAP_FLAG_NONE,
+//		&CD3DX12_RESOURCE_DESC::Buffer(bufferByteSize),
+//		D3D12_RESOURCE_STATE_GENERIC_READ,
+//		nullptr,
+//		IID_PPV_ARGS(stagingResource.GetAddressOf())))
+//
+//	CD3DX12_RANGE textureSize(0, bufferByteSize);
+//	stagingResource->Map(0, &textureSize, &data);
+//
+//
+//	ComPtr<ID3D12GraphicsCommandList2> tempList;
+//	mCommandMgr->AllocateTempList(tempList);
+//
+//	CD3DX12_TEXTURE_COPY_LOCATION destLocation(destination.Get(), D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX);
+//	CD3DX12_TEXTURE_COPY_LOCATION sourceLocation(stagingResource.Get(), D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT);
+//
+//	D3D12_TEXTURE_COPY_LOCATION destTextureLocation = {};
+//	destLocation.pResource = destination.Get();
+//	destLocation.Type = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
+//	destLocation.SubresourceIndex = 0;
+//
+//	CD3DX12_TEXTURE_COPY_LOCATION sourceBufferLocation = {};
+//	sourceLocation.pResource = stagingResource.Get();
+//	sourceLocation.Type = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
+//	sourceLocation.PlacedFootprint.Offset = 0;
+//	sourceLocation.PlacedFootprint.Footprint.Width = 1;
+//	sourceLocation.PlacedFootprint.Footprint.Height = 1;
+//	sourceLocation.PlacedFootprint.Footprint.Depth = 1;
+//	sourceLocation.PlacedFootprint.Footprint.RowPitch = bufferByteSize;
+//	sourceLocation.PlacedFootprint.Footprint.Format = format;
+//
+//	tempList->CopyTextureRegion(&destLocation, 
+//		0, 0, 0, 
+//		&sourceLocation,
+//		nullptr);
+//	
+//	mCommandMgr->FlushTempList(tempList);
+//}
 
 void DXApp::CreateRtvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos)
 {
@@ -784,7 +862,7 @@ void DXApp::OnResize()
 		SwapChainBufferCount,
 		mClientWidth,
 		mClientHeight,
-		mBackBufferFormat,
+		BackBufferFormat,
 		DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH))
 
 	mCurrBackBuffer = 0;

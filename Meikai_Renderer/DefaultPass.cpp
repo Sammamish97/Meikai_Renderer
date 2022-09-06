@@ -23,19 +23,28 @@ void DefaultPass::InitRootSignature()
         D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
         D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
         D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
-        D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
-        D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
+        D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
 
     //Default pass use these values for shader
         //0. PassCB for other matrix.
         //1. World matrix for each object.
-        
-    CD3DX12_ROOT_PARAMETER1 rootParameters[2];
+        //2. test texture
+
+    UINT descriptorNumber = 8;//Pos + Normal + Albedo + Roughness + Metalic + SSAO + Depth + test
+
+    CD3DX12_DESCRIPTOR_RANGE srvRange = {};
+    srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, descriptorNumber, 0, 0);
+
+    CD3DX12_ROOT_PARAMETER rootParameters[3];
     rootParameters[0].InitAsConstants(sizeof(DirectX::XMMATRIX) / 4, 0, 0, D3D12_SHADER_VISIBILITY_VERTEX);
     rootParameters[1].InitAsConstantBufferView(1);
+    rootParameters[2].InitAsDescriptorTable(1, &srvRange, D3D12_SHADER_VISIBILITY_PIXEL);
+
+    auto staticSamplers = mApp->GetStaticSamplers();
 
     CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDescription;
-    rootSignatureDescription.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, rootSignatureFlags);
+    rootSignatureDescription.Init_1_0(_countof(rootParameters), rootParameters, 
+        (UINT)staticSamplers.size(), staticSamplers.data(), rootSignatureFlags);
 
     ComPtr<ID3DBlob> rootSignatureBlob;
     ComPtr<ID3DBlob> errorBlob;

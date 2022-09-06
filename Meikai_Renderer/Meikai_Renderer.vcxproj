@@ -11,6 +11,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\DirectXTex\BC.h" />
+    <ClInclude Include="..\include\DirectXTex\BCDirectCompute.h" />
+    <ClInclude Include="..\include\DirectXTex\d3dx12.h" />
+    <ClInclude Include="..\include\DirectXTex\DDS.h" />
+    <ClInclude Include="..\include\DirectXTex\DirectXTex.h" />
+    <ClInclude Include="..\include\DirectXTex\DirectXTexP.h" />
+    <ClInclude Include="..\include\DirectXTex\filters.h" />
+    <ClInclude Include="..\include\DirectXTex\scoped.h" />
     <ClInclude Include="BufferFormat.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommandManager.h" />
@@ -35,6 +43,27 @@
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\include\DirectXTex\BC.cpp" />
+    <ClCompile Include="..\include\DirectXTex\BC4BC5.cpp" />
+    <ClCompile Include="..\include\DirectXTex\BC6HBC7.cpp" />
+    <ClCompile Include="..\include\DirectXTex\BCDirectCompute.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexCompress.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexCompressGPU.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexConvert.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexD3D11.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexD3D12.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexDDS.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexFlipRotate.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexHDR.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexImage.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexMipmaps.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexMisc.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexNormalMaps.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexPMAlpha.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexResize.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexTGA.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexUtil.cpp" />
+    <ClCompile Include="..\include\DirectXTex\DirectXTexWIC.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CommandManager.cpp" />
     <ClCompile Include="DefaultPass.cpp" />
@@ -54,6 +83,9 @@
     <ClCompile Include="Page.cpp" />
     <ClCompile Include="ResourceAllocator.cpp" />
     <ClCompile Include="Texture.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\include\DirectXTex\DirectXTex.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -104,7 +136,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)include\assimp-master\build\include;$(SolutionDir)include\assimp-master\include;$(SolutionDir)include\tools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include\assimp-master\build\include;$(SolutionDir)include\assimp-master\include;$(SolutionDir)include\tools;$(SolutionDir)include\DirectXTex</AdditionalIncludeDirectories>
       <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
@@ -124,7 +156,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)include\assimp-master\build\include;$(SolutionDir)include\assimp-master\include;$(SolutionDir)include\tools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include\assimp-master\build\include;$(SolutionDir)include\assimp-master\include;$(SolutionDir)include\tools;$(SolutionDir)include\DirectXTex</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

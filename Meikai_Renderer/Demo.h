@@ -82,6 +82,7 @@ private://RTV & DSV SRV Resource
 	IBLResource mIBLResource;
 
 	FrameBufferDescriptorIndex mDescIndex;
+	IBLDescriptorIndex mIBLIndex;
 
 private://CBV resource & allocation
 	std::unique_ptr<CommonCB> mCommonCB;

@@ -44,8 +44,6 @@ public:
     UINT GetDsvDescSize();
     UINT GetCbvSrvUavDescSize();
 
-    DXGI_FORMAT GetBackBufferFormat();
-
     std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
 
     int Run();
@@ -94,13 +92,17 @@ protected:
     void Create2DTextureResource(ComPtr<ID3D12Resource>& destination, int width, int height, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag);
     void CreateCubemapTextureResource(ComPtr<ID3D12Resource>& destination, int width, int height, DXGI_FORMAT format);
 
-    void Load2DTextureFromFile(ComPtr<ID3D12Resource>& destination, const std::string& path, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag);
-    void LoadHDRTextureFromFile(ComPtr<ID3D12Resource>& destination, const std::string& path, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag);
+    void Load2DTextureFromFile(ComPtr<ID3D12Resource>& destination, const std::wstring& path, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag);
+    void LoadHDRTextureFromFile(ComPtr<ID3D12Resource>& destination, const std::wstring& path, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag);
+
+    void CopyBufferToTexture(void* data, ComPtr<ID3D12Resource>& destination, int width, int height, size_t elementSize, DXGI_FORMAT format);
 
     void CreateRtvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
     void CreateDsvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
     void CreateCbvDescriptor(D3D12_GPU_VIRTUAL_ADDRESS gpuLocation, size_t bufferSize, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
     void CreateSrvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
+
+    //void TransitionBarrier()
     //void CreateUavDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
 
 public:
@@ -173,8 +175,6 @@ protected:
     // Derived class should set these in derived constructor to customize starting values.
     std::wstring mMainWndCaption = L"dx App";
     D3D_DRIVER_TYPE md3dDriverType = D3D_DRIVER_TYPE_HARDWARE;
-    DXGI_FORMAT mBackBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
-    DXGI_FORMAT mDepthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
     int mClientWidth = 800;
     int mClientHeight = 600;

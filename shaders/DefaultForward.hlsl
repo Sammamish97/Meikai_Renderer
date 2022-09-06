@@ -4,6 +4,8 @@ struct WorldMatrix
 };
 
 ConstantBuffer<WorldMatrix> objectWorld : register(b0);
+Texture2D<float4> testTexture : register(t6);
+
 
 cbuffer cbPass : register(b1)
 {
@@ -24,6 +26,17 @@ cbuffer cbPass : register(b1)
     float gDeltaTime;
 };
 
+SamplerState gsamPointClamp : register(s0);
+SamplerState gsamLinearClamp : register(s1);
+SamplerState gsamDepthMap : register(s2);
+SamplerState gsamLinearWrap : register(s3);
+
+float3 ToneMapping(float3 HDRColor)
+{
+    const float gamma = 2.2;
+    float3 mapped = HDRColor / (HDRColor + float3(1.f, 1.f, 1.f));
+    return pow(mapped, float3(1.f, 1.f, 1.f) / gamma);
+}
 
 struct VertexIn
 {
@@ -37,7 +50,9 @@ struct VertexIn
 
 struct VertexOut
 {
-	float4 Pos     : SV_POSITION;
+	float4 position     : SV_POSITION;
+    float3 normal : NORMAL;
+    float2 uv : UV;
 };
 
 struct PS_OUTPUT
@@ -51,15 +66,19 @@ VertexOut VS(VertexIn vin)
 
     // Transform to homogeneous clip space.
     float4 posW = mul(float4(vin.PosL, 1.0f), objectWorld.mat);
-    vout.Pos = mul(posW, gViewProj);
+    vout.position = mul(posW, gViewProj);
+    vout.normal = vin.NormalL;
+    vout.uv = vin.TexC;
 
     return vout;
 }
 
 PS_OUTPUT PS(VertexOut pin)
 {
+    float3 texColor = testTexture.SampleLevel(gsamPointClamp, pin.uv, 0.0f).xyz;
+    //여기 HDR 톤매핑 기능을 넣어야할듯
 	// Interpolating normal can unnormalize it, so renormalize it.
     PS_OUTPUT output;
-    output.Color = float4(1, 0, 0, 1);
+    output.Color = float4(ToneMapping(texColor), 1);
     return output;
 }

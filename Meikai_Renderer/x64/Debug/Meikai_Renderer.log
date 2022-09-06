@@ -1,10 +1,4 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  CommandManager.cpp
-  DefaultPass.cpp
-  DescriptorHeap.cpp
-  IPass.cpp
-  Page.cpp
-  ResourceAllocator.cpp
-  Generating Code...
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\ResourceAllocator.cpp(46): warning C4715: 'ResourceAllocator::AllocateToUploadHeap': not all control paths return a value
+  DXApp.cpp
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\DXApp.cpp(831,34): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
   Meikai_Renderer.vcxproj -> C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\bin\Meikai_Renderer_debug.exe
