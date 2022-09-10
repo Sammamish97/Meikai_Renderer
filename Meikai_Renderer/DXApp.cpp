@@ -1,6 +1,7 @@
 ﻿#include "DXApp.h"
 #include "DXUtil.h"
 #include "BufferFormat.h"
+#include "CommandList.h"
 
 #include <d3dx12.h>
 #include <cassert>
@@ -216,7 +217,7 @@ bool DXApp::Initialize()
 		return false;
 
 	CreateFence();
-	mCommandMgr = std::make_unique<CommandManager>(this);
+	mCommandList = std::make_unique<CommandList>(this);
 	mResourceAllocator = std::make_unique<ResourceAllocator>(this);
 	return true;
 }
@@ -337,15 +338,7 @@ void DXApp::CreateCommandObjects()
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	ThrowIfFailed(mdxDevice->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&mCommandQueue)))
 
-	ThrowIfFailed(mdxDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(mDirectCmdListAlloc.GetAddressOf())))
-
-	ThrowIfFailed(mdxDevice->CreateCommandList(0,
-		D3D12_COMMAND_LIST_TYPE_DIRECT,
-		mDirectCmdListAlloc.Get(),
-		nullptr,
-		IID_PPV_ARGS(mCommandList.GetAddressOf())))
-
-	mCommandList->Close();
+	mCommandList = std::make_unique<CommandList>(this, D3D12_COMMAND_LIST_TYPE_DIRECT);
 }
 
 void DXApp::CreateSwapChain()
@@ -756,7 +749,6 @@ void DXApp::CopyTextureSubresource(ComPtr<ID3D12Resource>& destinationTexture, u
 	//Resource transition
 	UINT64 requiredSize = GetRequiredIntermediateSize(destinationTexture.Get(), firstSubresource, numSubresources);
 
-	
 	ThrowIfFailed(mdxDevice->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
@@ -765,7 +757,7 @@ void DXApp::CopyTextureSubresource(ComPtr<ID3D12Resource>& destinationTexture, u
 		nullptr,
 		IID_PPV_ARGS(stagingResource.GetAddressOf())))
 
-	UpdateSubresources(mCommandList.Get(), destinationTexture.Get(), stagingResource.Get(),
+	UpdateSubresources(mCommandList->GetList().Get(), destinationTexture.Get(), stagingResource.Get(),
 		0, firstSubresource, numSubresources, subresourceData);
 	//Resource transition
 }
@@ -877,7 +869,7 @@ void DXApp::OnResize()
 {
 	assert(mdxDevice);
 	assert(mSwapChain);
-	assert(mDirectCmdListAlloc);
+	//assert(mDirectCmdListAlloc);
 
 	// Release the previous resources we will be recreating.
 	for(int i = 0; i < SwapChainBufferCount; ++i)

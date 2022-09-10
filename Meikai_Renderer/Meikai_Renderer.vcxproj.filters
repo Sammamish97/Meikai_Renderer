@@ -69,7 +69,7 @@
     <ClInclude Include="Page.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CommandManager.h">
+    <ClInclude Include="CommandList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DefaultPass.h">
@@ -114,6 +114,12 @@
     <ClInclude Include="..\include\DirectXTex\scoped.h">
       <Filter>DXTex</Filter>
     </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureUsage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXApp.cpp">
@@ -155,7 +161,7 @@
     <ClCompile Include="Page.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CommandManager.cpp">
+    <ClCompile Include="CommandList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DefaultPass.cpp">
@@ -235,6 +241,9 @@
     </ClCompile>
     <ClCompile Include="..\include\DirectXTex\DirectXTexWIC.cpp">
       <Filter>DXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -102,11 +102,12 @@ DefaultAllocation DefaultPage::Allocate(void* data, size_t sizeInBytes, size_t a
 
 	if (data != nullptr)
 	{
-		memcpy(stagingCPU, data, sizeInBytes);
+		//TODO: Implement Default allocation
+		/*memcpy(stagingCPU, data, sizeInBytes);
 		ComPtr<ID3D12GraphicsCommandList2> tempList;
 		mApp->mCommandMgr->AllocateTempList(tempList);
 		tempList->CopyBufferRegion(mResource.Get(), mOffset, stagingResource.Get(), 0, sizeInBytes);
-		mApp->mCommandMgr->FlushTempList(tempList);
+		mApp->mCommandMgr->FlushTempList(tempList);*/
 	}
 	
 	DefaultAllocation allocation;

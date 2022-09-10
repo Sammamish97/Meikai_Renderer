@@ -14,7 +14,7 @@
 #include <array>
 #include <memory>
 
-#include "CommandManager.h"
+#include "CommandList.h"
 #include "GameTimer.h"
 #include "ResourceAllocator.h"
 
@@ -131,7 +131,7 @@ private:
 
 public:
     // Manage Command list things.
-    std::unique_ptr<CommandManager> mCommandMgr;
+    std::unique_ptr<CommandList> mCommandList;
     std::unique_ptr<ResourceAllocator> mResourceAllocator;
 
 protected:
@@ -159,8 +159,6 @@ protected:
     UINT64 mCurrentFence = 0;
 
     ComPtr<ID3D12CommandQueue> mCommandQueue;
-    ComPtr<ID3D12CommandAllocator> mDirectCmdListAlloc;
-    ComPtr<ID3D12GraphicsCommandList2> mCommandList;
 
     static const int SwapChainBufferCount = 2;
     int mCurrBackBuffer = 0;

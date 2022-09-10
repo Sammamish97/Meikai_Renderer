@@ -10,7 +10,6 @@
 
 struct Model;
 struct Object;
-struct Texture;
 class Camera;
 
 class DefaultPass;
