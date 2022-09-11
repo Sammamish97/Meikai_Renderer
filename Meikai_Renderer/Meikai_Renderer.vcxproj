@@ -22,6 +22,7 @@
     <ClInclude Include="BufferFormat.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommandList.h" />
+    <ClInclude Include="CommandQueue.h" />
     <ClInclude Include="ConstantBuffers.h" />
     <ClInclude Include="DefaultPass.h" />
     <ClInclude Include="Demo.h" />
@@ -41,8 +42,10 @@
     <ClInclude Include="Page.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceAllocator.h" />
+    <ClInclude Include="ResourceStateTracker.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureUsage.h" />
+    <ClInclude Include="ThreadSafeQueue.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\include\DirectXTex\BC.cpp" />
@@ -68,6 +71,7 @@
     <ClCompile Include="..\include\DirectXTex\DirectXTexWIC.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CommandList.cpp" />
+    <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="DefaultPass.cpp" />
     <ClCompile Include="Demo.cpp" />
     <ClCompile Include="DescriptorHeap.cpp" />
@@ -85,6 +89,7 @@
     <ClCompile Include="Page.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceAllocator.cpp" />
+    <ClCompile Include="ResourceStateTracker.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>

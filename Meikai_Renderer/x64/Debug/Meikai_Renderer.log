@@ -1,127 +1,128 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  BC.cpp
+  DirectXTexUtil.cpp
+  DirectXTexWIC.cpp
   CommandList.cpp
+  CommandQueue.cpp
   DefaultPass.cpp
   Demo.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(36,2): error C2065: 'mDirectCmdListAlloc': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(36,2): error C2660: 'CommandList::Reset': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(22,7): message : see declaration of 'CommandList::Reset'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(48,2): error C2440: 'initializing': cannot convert from 'void' to 'HRESULT'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(48,2): message : Expressions of type void cannot be converted to other types
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(49,50): error C2039: 'Get': is not a member of 'std::unique_ptr<CommandList,std::default_delete<CommandList>>'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\DXApp.h(134): message : see declaration of 'std::unique_ptr<CommandList,std::default_delete<CommandList>>'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(49,21): error C2466: cannot allocate an array of constant size 0
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(247,2): error C2065: 'mDirectCmdListAlloc': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(251,2): error C2065: 'mDirectCmdListAlloc': undeclared identifier
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(251,2): error C2660: 'CommandList::Reset': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(22,7): message : see declaration of 'CommandList::Reset'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(262,2): error C2440: 'initializing': cannot convert from 'void' to 'HRESULT'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(262,2): message : Expressions of type void cannot be converted to other types
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(265,50): error C2039: 'Get': is not a member of 'std::unique_ptr<CommandList,std::default_delete<CommandList>>'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\DXApp.h(134): message : see declaration of 'std::unique_ptr<CommandList,std::default_delete<CommandList>>'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(265,21): error C2466: cannot allocate an array of constant size 0
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(280,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(26,7): message : see declaration of 'CommandList::ResourceBarrier'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(290,16): error C2039: 'SetGraphicsRootConstantBufferView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(292,16): error C2039: 'RSSetViewports': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(293,16): error C2039: 'RSSetScissorRects': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(295,16): error C2039: 'ClearRenderTargetView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(296,16): error C2039: 'ClearDepthStencilView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(298,16): error C2039: 'SetDescriptorHeaps': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(299,16): error C2039: 'SetGraphicsRootDescriptorTable': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(302,16): error C2039: 'OMSetRenderTargets': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(304,16): error C2039: 'IASetPrimitiveTopology': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(308,28): error C2664: 'void Object::Draw(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2>)': cannot convert argument 1 from 'std::unique_ptr<CommandList,std::default_delete<CommandList>>' to 'Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2>'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(308,16): message : No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Object.h(16,7): message : see declaration of 'Object::Draw'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(311,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(26,7): message : see declaration of 'CommandList::ResourceBarrier'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(317,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(26,7): message : see declaration of 'CommandList::ResourceBarrier'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(320,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(26,7): message : see declaration of 'CommandList::ResourceBarrier'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(323,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(26,7): message : see declaration of 'CommandList::ResourceBarrier'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(326,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(26,7): message : see declaration of 'CommandList::ResourceBarrier'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(329,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(26,7): message : see declaration of 'CommandList::ResourceBarrier'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(339,16): error C2039: 'ClearRenderTargetView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(340,16): error C2039: 'ClearRenderTargetView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(341,16): error C2039: 'ClearRenderTargetView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(342,16): error C2039: 'ClearRenderTargetView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(343,16): error C2039: 'ClearRenderTargetView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(345,16): error C2039: 'ClearDepthStencilView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(352,16): error C2039: 'SetGraphicsRootConstantBufferView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(354,16): error C2039: 'RSSetViewports': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(355,16): error C2039: 'RSSetScissorRects': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(359,16): error C2039: 'OMSetRenderTargets': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(362,16): error C2039: 'IASetPrimitiveTopology': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(366,28): error C2664: 'void Object::Draw(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2>)': cannot convert argument 1 from 'std::unique_ptr<CommandList,std::default_delete<CommandList>>' to 'Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2>'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(366,16): message : No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Object.h(16,7): message : see declaration of 'Object::Draw'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(372,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(26,7): message : see declaration of 'CommandList::ResourceBarrier'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(375,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(26,7): message : see declaration of 'CommandList::ResourceBarrier'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(378,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(26,7): message : see declaration of 'CommandList::ResourceBarrier'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(381,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(26,7): message : see declaration of 'CommandList::ResourceBarrier'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(384,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(26,7): message : see declaration of 'CommandList::ResourceBarrier'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(387,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(26,7): message : see declaration of 'CommandList::ResourceBarrier'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(392,16): error C2039: 'ClearRenderTargetView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(399,16): error C2039: 'SetGraphicsRootConstantBufferView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(402,16): error C2039: 'SetGraphicsRootConstantBufferView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(404,16): error C2039: 'SetDescriptorHeaps': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(407,16): error C2039: 'SetGraphicsRootDescriptorTable': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(410,16): error C2039: 'RSSetViewports': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(411,16): error C2039: 'RSSetScissorRects': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(415,16): error C2039: 'OMSetRenderTargets': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(417,16): error C2039: 'IASetPrimitiveTopology': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(419,16): error C2039: 'IASetVertexBuffers': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(420,16): error C2039: 'IASetIndexBuffer': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(421,16): error C2039: 'DrawInstanced': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(46,2): error C2440: 'initializing': cannot convert from 'void' to 'HRESULT'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(46,2): message : Expressions of type void cannot be converted to other types
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(47,50): error C2039: 'Get': is not a member of 'std::unique_ptr<CommandList,std::default_delete<CommandList>>'
+C:\Data\Meikai_Renderer\Meikai_Renderer\DXApp.h(134): message : see declaration of 'std::unique_ptr<CommandList,std::default_delete<CommandList>>'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(47,21): error C2466: cannot allocate an array of constant size 0
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(245,2): error C2065: 'mDirectCmdListAlloc': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(249,2): error C2065: 'mDirectCmdListAlloc': undeclared identifier
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(249,2): error C2660: 'CommandList::Reset': function does not take 2 arguments
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(23,7): message : see declaration of 'CommandList::Reset'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(260,2): error C2440: 'initializing': cannot convert from 'void' to 'HRESULT'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(260,2): message : Expressions of type void cannot be converted to other types
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(263,50): error C2039: 'Get': is not a member of 'std::unique_ptr<CommandList,std::default_delete<CommandList>>'
+C:\Data\Meikai_Renderer\Meikai_Renderer\DXApp.h(134): message : see declaration of 'std::unique_ptr<CommandList,std::default_delete<CommandList>>'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(263,21): error C2466: cannot allocate an array of constant size 0
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(278,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(27,7): message : see declaration of 'CommandList::ResourceBarrier'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(288,16): error C2039: 'SetGraphicsRootConstantBufferView': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(290,16): error C2039: 'RSSetViewports': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(291,16): error C2039: 'RSSetScissorRects': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(293,16): error C2039: 'ClearRenderTargetView': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(294,16): error C2039: 'ClearDepthStencilView': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(296,16): error C2039: 'SetDescriptorHeaps': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(297,16): error C2039: 'SetGraphicsRootDescriptorTable': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(300,16): error C2039: 'OMSetRenderTargets': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(302,16): error C2039: 'IASetPrimitiveTopology': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(306,28): error C2664: 'void Object::Draw(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2>)': cannot convert argument 1 from 'std::unique_ptr<CommandList,std::default_delete<CommandList>>' to 'Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2>'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(306,16): message : No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
+C:\Data\Meikai_Renderer\Meikai_Renderer\Object.h(16,7): message : see declaration of 'Object::Draw'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(309,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(27,7): message : see declaration of 'CommandList::ResourceBarrier'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(315,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(27,7): message : see declaration of 'CommandList::ResourceBarrier'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(318,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(27,7): message : see declaration of 'CommandList::ResourceBarrier'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(321,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(27,7): message : see declaration of 'CommandList::ResourceBarrier'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(324,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(27,7): message : see declaration of 'CommandList::ResourceBarrier'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(327,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(27,7): message : see declaration of 'CommandList::ResourceBarrier'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(337,16): error C2039: 'ClearRenderTargetView': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(338,16): error C2039: 'ClearRenderTargetView': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(339,16): error C2039: 'ClearRenderTargetView': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(340,16): error C2039: 'ClearRenderTargetView': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(341,16): error C2039: 'ClearRenderTargetView': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(343,16): error C2039: 'ClearDepthStencilView': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(350,16): error C2039: 'SetGraphicsRootConstantBufferView': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(352,16): error C2039: 'RSSetViewports': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(353,16): error C2039: 'RSSetScissorRects': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(357,16): error C2039: 'OMSetRenderTargets': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(360,16): error C2039: 'IASetPrimitiveTopology': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(364,28): error C2664: 'void Object::Draw(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2>)': cannot convert argument 1 from 'std::unique_ptr<CommandList,std::default_delete<CommandList>>' to 'Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2>'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(364,16): message : No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
+C:\Data\Meikai_Renderer\Meikai_Renderer\Object.h(16,7): message : see declaration of 'Object::Draw'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(370,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(27,7): message : see declaration of 'CommandList::ResourceBarrier'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(373,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(27,7): message : see declaration of 'CommandList::ResourceBarrier'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(376,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(27,7): message : see declaration of 'CommandList::ResourceBarrier'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(379,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(27,7): message : see declaration of 'CommandList::ResourceBarrier'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(382,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(27,7): message : see declaration of 'CommandList::ResourceBarrier'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(385,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(27,7): message : see declaration of 'CommandList::ResourceBarrier'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(390,16): error C2039: 'ClearRenderTargetView': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(397,16): error C2039: 'SetGraphicsRootConstantBufferView': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(400,16): error C2039: 'SetGraphicsRootConstantBufferView': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(402,16): error C2039: 'SetDescriptorHeaps': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(405,16): error C2039: 'SetGraphicsRootDescriptorTable': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(408,16): error C2039: 'RSSetViewports': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(409,16): error C2039: 'RSSetScissorRects': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(413,16): error C2039: 'OMSetRenderTargets': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(415,16): error C2039: 'IASetPrimitiveTopology': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(417,16): error C2039: 'IASetVertexBuffers': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(418,16): error C2039: 'IASetIndexBuffer': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(419,16): error C2039: 'DrawInstanced': is not a member of 'CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(9): message : see declaration of 'CommandList'
   DescriptorHeap.cpp
   DXApp.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\DXApp.cpp(851,34): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\DXApp.cpp(851,34): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.32.31326\include\memory(3423,35): error C2664: 'CommandList::CommandList(const CommandList &)': cannot convert argument 1 from '_Ty' to 'const CommandList &'
           with
           [
@@ -133,22 +134,28 @@ C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.32.3132
               _Ty=DXApp *
           ]
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.32.31326\include\memory(3422,59): message : No constructor could take the source type, or constructor overload resolution was ambiguous
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(17,2): message : see declaration of 'CommandList::CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\DXApp.cpp(220): message : see reference to function template instantiation 'std::unique_ptr<CommandList,std::default_delete<CommandList>> std::make_unique<CommandList,DXApp*,0>(DXApp *&&)' being compiled
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(17,2): message : see declaration of 'CommandList::CommandList'
+C:\Data\Meikai_Renderer\Meikai_Renderer\DXApp.cpp(220): message : see reference to function template instantiation 'std::unique_ptr<CommandList,std::default_delete<CommandList>> std::make_unique<CommandList,DXApp*,0>(DXApp *&&)' being compiled
+  DXUtil.cpp
   GeometryPass.cpp
   IPass.cpp
   LightingPass.cpp
   main.cpp
   Mesh.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.cpp(18,69): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.cpp(28,65): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.cpp(18,69): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.cpp(28,65): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
   Model.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Model.cpp(17,9): warning C4002: too many arguments for function-like macro invocation 'assert'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.cpp(17,9): warning C4002: too many arguments for function-like macro invocation 'assert'
   Page.cpp
   Resource.cpp
   ResourceAllocator.cpp
+  ResourceStateTracker.cpp
+  Generating Code...
+C:\Data\Meikai_Renderer\Meikai_Renderer\ResourceAllocator.cpp(46): warning C4715: 'ResourceAllocator::AllocateToUploadHeap': not all control paths return a value
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandQueue.cpp(68): error C4716: 'CommandQueue::WaitForFenceValue': must return a value
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.cpp(31): error C4700: uninitialized local variable 'numPendingBarriers' used
+  Compiling...
   Texture.cpp
   Generating Code...
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\ResourceAllocator.cpp(46): warning C4715: 'ResourceAllocator::AllocateToUploadHeap': not all control paths return a value

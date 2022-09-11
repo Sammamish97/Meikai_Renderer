@@ -33,8 +33,6 @@ bool Demo::Initialize()
 		return false;
 	}
 
-	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
-
 	CreateDescriptorHeaps();
 
 	CreateBufferResources();

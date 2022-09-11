@@ -16,9 +16,19 @@ CommandList::~CommandList()
 
 }
 
-void CommandList::Close()
+void CommandList::Close(void)
 {
 	mCommandList->Close();
+}
+
+bool CommandList::Close(CommandList& pendingCommandList)
+{
+	FlushResourceBarriers();
+	mCommandList->Close();
+	uint32_t numPendingBarriers;
+	//Resource Tracker something...
+
+	return numPendingBarriers > 0;
 }
 
 void CommandList::Reset()

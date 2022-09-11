@@ -19,10 +19,11 @@ public:
 
 public:
 	void Close();
+	bool Close(CommandList& pendingCommandList);
 	void Reset();
 
-	//void TransitionBarrier();
-	//void FlushResourceBarriers();
+	void TransitionBarrier();
+	void FlushResourceBarriers();
 	void ResourceBarrier(ComPtr<ID3D12Resource> resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
 
 	void CopyResource(ComPtr<ID3D12Resource> dstRes, Microsoft::WRL::ComPtr<ID3D12Resource> srcRes);
