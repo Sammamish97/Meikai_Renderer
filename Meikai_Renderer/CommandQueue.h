@@ -26,6 +26,7 @@ public:
 	void Flush();
 	void Wait(const CommandQueue& other);
 	std::shared_ptr<CommandList> GetCommandList();
+	ComPtr<ID3D12CommandQueue> GetCommandQueue();
 
 private:
 	void ProcessInFlightCommandLists();

@@ -1,25 +1,28 @@
 #pragma once
 #include <wrl.h>
 #include <d3dx12.h>
+#include <memory>
+#include "Texture.h"
 
 using namespace Microsoft::WRL;
 
 struct FrameBufferResource
 {
-	ComPtr<ID3D12Resource> mDepthStencilBuffer;
-	ComPtr<ID3D12Resource> mPositionMap;
-	ComPtr<ID3D12Resource> mNormalMap;
-	ComPtr<ID3D12Resource> mAlbedoMap;
-	ComPtr<ID3D12Resource> mMetalicMap;
-	ComPtr<ID3D12Resource> mRoughnessMap;
+	std::shared_ptr<Texture> mDepthStencilBuffer;
+	std::shared_ptr<Texture> mPositionMap;
+	std::shared_ptr<Texture> mNormalMap;
+	std::shared_ptr<Texture> mAlbedoMap;
+	std::shared_ptr<Texture> mMetalicMap;
+	std::shared_ptr<Texture> mRoughnessMap;
+	std::shared_ptr<Texture> mAoMap;
 };
 
 struct IBLResource
 {
-	ComPtr<ID3D12Resource> mHDRImage;
-	ComPtr<ID3D12Resource> mCubeMap;
-	ComPtr<ID3D12Resource> mDIffuseCubeMap;
-	ComPtr<ID3D12Resource> mSpecularCubeMap;
+	std::shared_ptr<Texture> mHDRImage;
+	std::shared_ptr<Texture> mCubeMap;
+	std::shared_ptr<Texture> mDIffuseCubeMap;
+	std::shared_ptr<Texture> mSpecularCubeMap;
 };
 
 struct FrameBufferDescriptorIndex

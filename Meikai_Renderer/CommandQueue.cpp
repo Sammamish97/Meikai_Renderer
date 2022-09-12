@@ -89,6 +89,12 @@ std::shared_ptr<CommandList> CommandQueue::GetCommandList()
     return commandList;
 }
 
+ComPtr<ID3D12CommandQueue> CommandQueue::GetCommandQueue()
+{
+    return mCommandQueue;
+}
+
+
 uint64_t CommandQueue::ExecuteCommandList(std::shared_ptr<CommandList> commandList)
 {
     return ExecuteCommandLists(std::vector<std::shared_ptr<CommandList>>({commandList}));

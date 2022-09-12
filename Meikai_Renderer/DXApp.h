@@ -15,8 +15,10 @@
 #include <memory>
 
 #include "CommandList.h"
+#include "CommandQueue.h"
 #include "GameTimer.h"
 #include "ResourceAllocator.h"
+
 
 using Microsoft::WRL::ComPtr;
 
@@ -51,12 +53,8 @@ public:
     virtual bool Initialize();
     virtual LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-private:
-    void CreateFence();
-
 protected:
     virtual void CreateSwapChainRtvDescriptorHeap();
-    virtual void OnResize();
     virtual void Update(const GameTimer& gt) = 0;
     virtual void Draw(const GameTimer& gt) = 0;
 
@@ -70,8 +68,6 @@ protected:
     bool InitDirect3D();
     void CreateCommandObjects();
     void CreateSwapChain();
-
-    void FlushCommandQueue();
 
     ID3D12Resource* CurrentBackBuffer()const;
     D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView() const;
@@ -89,38 +85,12 @@ protected:
     void ClearDepth(ComPtr<ID3D12GraphicsCommandList2> commandList,
         D3D12_CPU_DESCRIPTOR_HANDLE dsv, FLOAT depth = 1.0f);
 
-    void Create2DTextureResource(ComPtr<ID3D12Resource>& destination, int width, int height, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag);
     void CreateCubemapTextureResource(ComPtr<ID3D12Resource>& destination, int width, int height, DXGI_FORMAT format);
-
-    //void Load2DTextureFromFile(ComPtr<ID3D12Resource>& destination, const std::wstring& path, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag);
-    void LoadHDRTextureFromFile(ComPtr<ID3D12Resource>& destination, const std::wstring& path, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS flag);
-
-    void CopyTextureSubresource(ComPtr<ID3D12Resource>& destinationTexture, uint32_t firstSubresource, uint32_t numSubresources, D3D12_SUBRESOURCE_DATA* subresourceData);
 
     void CreateRtvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
     void CreateDsvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
     void CreateCbvDescriptor(D3D12_GPU_VIRTUAL_ADDRESS gpuLocation, size_t bufferSize, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
     void CreateSrvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
-
-    //void TransitionBarrier()
-    //void CreateUavDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
-
-public:
-    //Update buffer by buffer
-    void UpdateDefaultBufferResource(
-        ComPtr<ID3D12GraphicsCommandList2> commandList,
-        ID3D12Resource** pDestinationResource,
-        ID3D12Resource** pIntermediateResource,
-        size_t numElements, size_t elementSize, const void* bufferData,
-        D3D12_RESOURCE_FLAGS flags = D3D12_RESOURCE_FLAG_NONE);
-
-    //Upldate texture by buffer
-    void UpdateDefaultTextureResource(
-        ComPtr<ID3D12GraphicsCommandList2> commandList,
-        ID3D12Resource** pDestinationResource,
-        ID3D12Resource** pIntermediateResource,
-        size_t numElements, size_t elementSize, const void* bufferData,
-        DXGI_FORMAT format, int width, int height, D3D12_RESOURCE_FLAGS flags = D3D12_RESOURCE_FLAG_NONE);
 
 private:
     void LogAdapters();
@@ -132,6 +102,7 @@ private:
 public:
     // Manage Command list things.
     std::unique_ptr<CommandList> mCommandList;
+    std::unique_ptr<CommandQueue> mCommandQueue;
     std::unique_ptr<ResourceAllocator> mResourceAllocator;
 
 protected:
@@ -154,11 +125,6 @@ protected:
     ComPtr<IDXGIFactory4> mdxgiFactory;
     ComPtr<IDXGISwapChain> mSwapChain;
     ComPtr<ID3D12Device2> mdxDevice;
-
-    ComPtr<ID3D12Fence> mFence;
-    UINT64 mCurrentFence = 0;
-
-    ComPtr<ID3D12CommandQueue> mCommandQueue;
 
     static const int SwapChainBufferCount = 2;
     int mCurrBackBuffer = 0;

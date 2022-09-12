@@ -25,7 +25,6 @@ public:
 	bool Initialize() override;
 
 protected:
-	void OnResize() override;
 	void Update(const GameTimer& gt) override;
 	void Draw(const GameTimer& gt) override;
 
@@ -45,9 +44,9 @@ private:
 	void CreateBufferDescriptors();
 	void CreateIBLDescriptors();
 
-	void DrawDefaultPass();
-	void DrawGeometryPass();
-	void DrawLightingPass();
+	void DrawDefaultPass(std::shared_ptr<CommandList> cmdList);
+	//void DrawGeometryPass();
+	//void DrawLightingPass();
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
 

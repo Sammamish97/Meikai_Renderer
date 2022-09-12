@@ -1,6 +1,7 @@
 #pragma once
 enum class TextureUsage
 {
+    Position,
     Albedo,
     Diffuse = Albedo,       // Treat Diffuse and Albedo textures the same.
     Heightmap,
@@ -8,6 +9,6 @@ enum class TextureUsage
     Normalmap,
     RenderTarget,           // Texture is used as a render target.
     Metalic,
-    Roughtness,
+    Roughness,
     SSAO,
 };
