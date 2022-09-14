@@ -15,8 +15,10 @@ CommandList::CommandList(DXApp* appPtr, D3D12_COMMAND_LIST_TYPE type)
 	:mApp(appPtr), mCommandListType(type)
 {
 	auto device = mApp->GetDevice();
-	ThrowIfFailed(device->CreateCommandAllocator(mCommandListType, IID_PPV_ARGS(&mCommandAllocator)))
-		ThrowIfFailed(device->CreateCommandList(0, mCommandListType, mCommandAllocator.Get(),
+	
+	ThrowIfFailed(device->CreateCommandAllocator(mCommandListType, IID_PPV_ARGS(mCommandAllocator.GetAddressOf())))
+
+	ThrowIfFailed(device->CreateCommandList(0, mCommandListType, mCommandAllocator.Get(),
 			nullptr, IID_PPV_ARGS(mCommandList.GetAddressOf())))
 
 	mResourceStateTracker = std::make_unique<ResourceStateTracker>();

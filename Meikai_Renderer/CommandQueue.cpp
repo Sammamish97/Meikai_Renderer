@@ -143,13 +143,12 @@ void CommandQueue::Wait(const CommandQueue& other)
 void CommandQueue::ProcessInFlightCommandLists()
 {
     std::unique_lock<std::mutex> lock(mProcessInFlightCommandListsThreadMutex, std::defer_lock);
-    
 
     while(mProcessInFlightCommandLists)
     {
         CommandListEntry commandListEntry;
         lock.lock();
-        while (mInFlightCommandLists.TryPop(commandListEntry));
+        while (mInFlightCommandLists.TryPop(commandListEntry))
         {
             auto fenceValue = std::get<0>(commandListEntry);
             auto commandList = std::get<1>(commandListEntry);

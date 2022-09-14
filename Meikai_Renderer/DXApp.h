@@ -102,8 +102,6 @@ private:
     ComPtr<ID3D12Resource> stagingResource;
 
 public:
-    // Manage Command list things.
-    std::unique_ptr<CommandList> mCommandList;
     std::unique_ptr<CommandQueue> mCommandQueue;
     std::unique_ptr<ResourceAllocator> mResourceAllocator;
 

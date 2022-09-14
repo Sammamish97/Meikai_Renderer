@@ -296,7 +296,7 @@ bool DXApp::InitDirect3D()
 
 	mRtvDescriptorSize = mdxDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	mDsvDescriptorSize = mdxDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
-	mCbvSrvUavDescriptorSize = mdxDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+ 	mCbvSrvUavDescriptorSize = mdxDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	// Check 4X MSAA quality support for our back buffer format.
 	// All Direct3D 11 capable devices support 4X MSAA for all render 
@@ -327,7 +327,6 @@ bool DXApp::InitDirect3D()
 void DXApp::CreateCommandObjects()
 {
 	mCommandQueue = std::make_unique<CommandQueue>(this, D3D12_COMMAND_LIST_TYPE_DIRECT);
-	mCommandList = std::make_unique<CommandList>(this, D3D12_COMMAND_LIST_TYPE_DIRECT);
 }
 
 void DXApp::CreateSwapChain()
@@ -352,7 +351,7 @@ void DXApp::CreateSwapChain()
 	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	// Note: Swap chain uses queue to perform flush.
-	ThrowIfFailed(mdxgiFactory->CreateSwapChain(mCommandQueue->GetCommandQueue().Get(), &swapChainDesc, mSwapChain.GetAddressOf()))
+	mdxgiFactory->CreateSwapChain(mCommandQueue->GetCommandQueue().Get(), &swapChainDesc, mSwapChain.GetAddressOf());
 }
 
 ID3D12Resource* DXApp::CurrentBackBuffer() const
