@@ -6,6 +6,7 @@
 #include "BufferFormat.h"
 #include "MathHelper.h"
 #include "DefaultPass.h"
+//#include "Texture.h"
 
 #include <d3dcompiler.h>
 #include <d3dx12.h>
@@ -134,11 +135,11 @@ void Demo::CreateIBLDescriptors()
 void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 {
 	//TODO: Init 파트에서 Command list가 필요한 부분을 모아 따로 한번 flush해야 한다.
-	mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, cmdList->GetList());
-	mModels["Quad"] = std::make_shared<Model>("../models/Quad.obj", this, cmdList->GetList());
-	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, cmdList->GetList());
-	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, cmdList->GetList());
-	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, cmdList->GetList());
+	mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, *cmdList);
+	mModels["Quad"] = std::make_shared<Model>("../models/Quad.obj", this, *cmdList);
+	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);
+	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
+	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
 
 	objects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(10.f, 10.f, 10.f)));
 	objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(0.f, 0.f, 0.f)));
@@ -238,52 +239,51 @@ void Demo::Draw(const GameTimer& gt)
 {
 	auto drawcmdList = mCommandQueue->GetCommandList();
 
-	DrawDefaultPass(drawcmdList);
-
+	DrawDefaultPass(*drawcmdList);
+	mCommandQueue->ExecuteCommandList(drawcmdList);
 	/*DrawGeometryPass();
 	DrawLightingPass();
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));*/
 
 
-	mCommandQueue->ExecuteCommandList(drawcmdList);
+	
 	// swap the back and front buffers
 	//ThrowIfFailed(mSwapChain->Present(0, 0));
 	Present(mFrameResource.mRenderTarget);
 	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
 }
 
-void Demo::DrawDefaultPass(std::shared_ptr<CommandList> cmdList)
+void Demo::DrawDefaultPass(CommandList& cmdList)
 {
 	float colorClearValue[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
-	cmdList->SetPipelineState(mDefaultPass->mPSO.Get());
-	cmdList->SetGraphicsRootSignature(mDefaultPass->mRootSig.Get());
+	cmdList.SetPipelineState(mDefaultPass->mPSO.Get());
+	cmdList.SetGraphicsRootSignature(mDefaultPass->mRootSig.Get());
 
 	//Remove it with bindless later.
 	D3D12_GPU_VIRTUAL_ADDRESS commonCBAddress = mCommonCBAllocation.GPU;
-	mCommandList->SetRootConstant(1, commonCBAddress);
+	cmdList.SetRootConstant(1, commonCBAddress);
 
-	cmdList->SetViewport(mScreenViewport);
-	cmdList->SetScissorRect(mScissorRect);
+	cmdList.SetViewport(mScreenViewport);
+	cmdList.SetScissorRect(mScissorRect);
 
-	cmdList->ClearTexture(*mFrameResource.mRenderTarget, mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx),colorClearValue);
-	cmdList->ClearDepthStencilTexture(*mFrameResource.mDepthStencilBuffer, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL);
+	cmdList.ClearTexture(*mFrameResource.mRenderTarget, mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx),colorClearValue);
+	cmdList.ClearDepthStencilTexture(*mFrameResource.mDepthStencilBuffer, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL);
 
-	cmdList->SetDescriptorHeap(mCBVSRVUAVHeap->GetDescriptorHeap());
+	cmdList.SetDescriptorHeap(mCBVSRVUAVHeap->GetDescriptorHeap());
 
-	cmdList->SetDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
+	cmdList.SetDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
 
 	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = {CurrentBackBufferExtView()};
-	cmdList->SetRenderTargets(rtvArray, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
+	cmdList.SetRenderTargets(rtvArray, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
 
-	cmdList->SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	for (const auto& object : objects)
+	for (auto& object : objects)
 	{
-		object->Draw(cmdList->GetList());
+		object->Draw(cmdList);
 	}
-	mCommandQueue->ExecuteCommandList(cmdList);
 }
 
 //void Demo::DrawGeometryPass()

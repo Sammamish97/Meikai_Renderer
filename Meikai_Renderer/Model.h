@@ -14,22 +14,22 @@ using namespace Microsoft::WRL;
 using namespace DirectX;
 
 struct DXApp;
+class CommandList;
 
 struct Model
 {
 private:
 	DXApp* mApp;
-	ComPtr<ID3D12GraphicsCommandList2> mCommandList;
 
 public:
-	Model(const std::string& file_path, DXApp* app, ComPtr<ID3D12GraphicsCommandList2> commandList);
+	Model(const std::string& file_path, DXApp* app, CommandList& commandList);
 	std::string name;
 
-	void LoadModel(const std::string& file_path);
-	void ProcessNode(aiNode* node, const aiScene* scene);
-	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
+	void LoadModel(const std::string& file_path, CommandList& commandList);
+	void ProcessNode(aiNode* node, const aiScene* scene, CommandList& commandList);
+	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, CommandList& commandList);
 
-	void SetCommandList(ComPtr<ID3D12GraphicsCommandList2> commandList);
+public:
 	std::vector<Mesh> meshes;
 };
 

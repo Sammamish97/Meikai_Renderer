@@ -11,6 +11,7 @@ Resource::Resource(DXApp* appPtr, const std::wstring& name)
 {
 
 }
+
 Resource::Resource(DXApp* appPtr, const D3D12_RESOURCE_DESC& resourceDesc,
 	const D3D12_CLEAR_VALUE* clearValue,
 	const std::wstring& name)

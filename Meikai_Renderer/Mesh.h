@@ -30,6 +30,7 @@ private:
 public:
 	Mesh(DXApp* dxApp, std::vector<Vertex> input_vertices, std::vector<WORD> input_indices, CommandList& commandList);
 	void Draw(CommandList& commandList);
+
 private:
 	VertexBuffer mVertexBuffer;
 	IndexBuffer mIndexBuffer;

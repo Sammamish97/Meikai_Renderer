@@ -8,6 +8,8 @@
 #include "ConstantBuffers.h"
 #include "DescriptorHeap.h"
 
+#include "Texture.h"
+
 struct Model;
 struct Object;
 class Camera;
@@ -44,7 +46,7 @@ private:
 	void CreateBufferDescriptors();
 	void CreateIBLDescriptors();
 
-	void DrawDefaultPass(std::shared_ptr<CommandList> cmdList);
+	void DrawDefaultPass(CommandList& commandList);
 	//void DrawGeometryPass();
 	//void DrawLightingPass();
 

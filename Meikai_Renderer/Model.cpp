@@ -1,12 +1,13 @@
 #include "Model.h"
 #include "DXApp.h"
-Model::Model(const std::string& file_path, DXApp* app, ComPtr<ID3D12GraphicsCommandList2> commandList)
-	:mApp(app), mCommandList(commandList)
+#include "CommandList.h"
+Model::Model(const std::string& file_path, DXApp* app, CommandList& commandList)
+	:mApp(app)
 {
-    LoadModel(file_path);
+    LoadModel(file_path, commandList);
 }
 
-void Model::LoadModel(const std::string& file_path)
+void Model::LoadModel(const std::string& file_path, CommandList& commandList)
 {
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(file_path,
@@ -18,11 +19,11 @@ void Model::LoadModel(const std::string& file_path)
     }
 
     name = file_path.substr(0, file_path.find_last_of('/'));
-    ProcessNode(scene->mRootNode, scene);
+    ProcessNode(scene->mRootNode, scene, commandList);
 }
 
 
-void Model::ProcessNode(aiNode* node, const aiScene* scene)
+void Model::ProcessNode(aiNode* node, const aiScene* scene, CommandList& commandList)
 {
     // process each mesh located at the current node
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
@@ -30,16 +31,16 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
         // the node object only contains indices to index the actual objects in the scene. 
         // the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(ProcessMesh(mesh, scene));
+        meshes.push_back(ProcessMesh(mesh, scene, commandList));
     }
     // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
     for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
-        ProcessNode(node->mChildren[i], scene);
+        ProcessNode(node->mChildren[i], scene, commandList);
     }
 }
 
-Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, CommandList& commandList)
 {
     std::vector<Vertex> vertices;
     std::vector<WORD> indices;
@@ -98,11 +99,5 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
             indices.push_back(face.mIndices[j]);
         }
     }
-
-    return Mesh(vertices, indices, mApp, mCommandList);
-}
-
-void Model::SetCommandList(ComPtr<ID3D12GraphicsCommandList2> commandList)
-{
-    mCommandList = commandList;
+    return Mesh(mApp, vertices, indices, commandList);
 }

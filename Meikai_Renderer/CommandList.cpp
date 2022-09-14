@@ -301,6 +301,11 @@ void CommandList::SetDescriptorTable(UINT rootParamIndex, D3D12_GPU_DESCRIPTOR_H
 	mCommandList->SetGraphicsRootDescriptorTable(rootParamIndex, GPUHandle);
 }
 
+void CommandList::SetGraphics32BitConstants(uint32_t rootParameterIndex, uint32_t numConstants, const void* constants)
+{
+	mCommandList->SetGraphicsRoot32BitConstants(rootParameterIndex, numConstants, constants, 0);
+}
+
 void CommandList::Close(void)
 {
 	mCommandList->Close();

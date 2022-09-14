@@ -54,7 +54,7 @@ bool CommandQueue::IsFenceComplete()
     return mFence->GetCompletedValue() >= mFenceValue;
 }
 
-bool CommandQueue::WaitForFenceValue(uint64_t fenceValue)
+void CommandQueue::WaitForFenceValue(uint64_t fenceValue)
 {
     if(!IsFenceComplete())
     {

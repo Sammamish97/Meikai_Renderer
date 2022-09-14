@@ -10,7 +10,7 @@
 using Microsoft::WRL::ComPtr;
 class DXApp;
 
-struct Texture : public Resource
+class Texture : public Resource
 {
 public:
 	explicit Texture(DXApp* mApp, TextureUsage textureUsage = TextureUsage::Albedo,

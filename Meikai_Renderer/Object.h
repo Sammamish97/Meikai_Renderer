@@ -1,23 +1,23 @@
 #pragma once
 #include <DirectXMath.h>
-#include <d3d12.h>
+#include <d3dx12.h>
 #include <wrl.h>
 #include <memory>
 
 using namespace Microsoft::WRL;
 using namespace DirectX;
-
+class CommandList;
 struct Model;
 struct Object
 {
-	Object(std::shared_ptr<Model>, XMFLOAT3 position, XMFLOAT3 scale = XMFLOAT3(1.f, 1.f, 1.f));
+	Object(std::shared_ptr<Model> model, XMFLOAT3 position, XMFLOAT3 scale = XMFLOAT3(1.f, 1.f, 1.f));
 
 	void Update(float dt);
-	void Draw(ComPtr<ID3D12GraphicsCommandList2> commandList);
-	void DrawWithoutWorld(ComPtr<ID3D12GraphicsCommandList2> commandList);
+	void Draw(CommandList& commandList);
+	void DrawWithoutWorld(CommandList& commandList);
 	XMMATRIX GetWorldMat() const;
 private:
-	void SetWorldMatrix(ComPtr<ID3D12GraphicsCommandList2> commandList);
+	void SetWorldMatrix(CommandList& commandList);
 
 	std::shared_ptr<Model> mModel = nullptr;
 	XMFLOAT3 mPosition;

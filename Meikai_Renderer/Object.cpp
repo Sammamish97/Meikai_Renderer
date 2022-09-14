@@ -1,16 +1,18 @@
 #include "Object.h"
 #include "Model.h"
+#include "CommandList.h"
+
 
 Object::Object(std::shared_ptr<Model> model, XMFLOAT3 position, XMFLOAT3 scale)
 	:mModel(model), mPosition(position), mScale(scale)
 {
 }
 
-void Object::SetWorldMatrix(ComPtr<ID3D12GraphicsCommandList2> commandList)
+void Object::SetWorldMatrix(CommandList& commandList)
 {
 	XMMATRIX worldMat = GetWorldMat();
 	worldMat = XMMatrixTranspose(worldMat);
-	commandList->SetGraphicsRoot32BitConstants(0, sizeof(XMMATRIX) / 4, &worldMat, 0);
+	commandList.SetGraphics32BitConstants(0, worldMat);
 }
 
 void Object::Update(float dt)
@@ -25,25 +27,19 @@ XMMATRIX Object::GetWorldMat() const
 	return XMMatrixMultiply(translationMat, scaleMat);
 }
 
-void Object::Draw(ComPtr<ID3D12GraphicsCommandList2> commandList)
+void Object::Draw(CommandList& commandList)
 {
-	for (const auto& mesh : mModel->meshes)
+	for (auto& mesh : mModel->meshes)
 	{
 		SetWorldMatrix(commandList);
-		commandList->IASetVertexBuffers(0, 1, &mesh.m_VertexBufferView);
-		commandList->IASetIndexBuffer(&mesh.m_IndexBufferView);
-
-		commandList->DrawIndexedInstanced(mesh.m_indices.size(), 1, 0, 0, 0);
+		mesh.Draw(commandList);
 	}
 }
 
-void Object::DrawWithoutWorld(ComPtr<ID3D12GraphicsCommandList2> commandList)
+void Object::DrawWithoutWorld(CommandList& commandList)
 {
-	for (const auto& mesh : mModel->meshes)
+	for (auto& mesh : mModel->meshes)
 	{
-		commandList->IASetVertexBuffers(0, 1, &mesh.m_VertexBufferView);
-		commandList->IASetIndexBuffer(&mesh.m_IndexBufferView);
-
-		commandList->DrawIndexedInstanced(mesh.m_indices.size(), 1, 0, 0, 0);
+		mesh.Draw(commandList);
 	}
 }

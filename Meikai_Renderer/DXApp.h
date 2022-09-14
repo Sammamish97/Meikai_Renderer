@@ -50,8 +50,8 @@ public:
     std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
 
     int Run();
-    void Present(const std::shared_ptr<Texture>& texture);
-
+    void Present(std::shared_ptr<Texture>& texture);
+   
     virtual bool Initialize();
     virtual LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -59,6 +59,7 @@ protected:
     virtual void CreateSwapChainRtvDescriptorHeap();
     virtual void Update(const GameTimer& gt) = 0;
     virtual void Draw(const GameTimer& gt) = 0;
+    
 
     // Convenience overrides for handling mouse input.
     virtual void OnMouseDown(WPARAM btnState, int x, int y) { }
@@ -98,7 +99,6 @@ private:
     void LogAdapters();
     void LogAdapterOutputs(IDXGIAdapter* adapter);
     void LogOutputDisplayModes(IDXGIOutput* output, DXGI_FORMAT format);
-
     ComPtr<ID3D12Resource> stagingResource;
 
 public:

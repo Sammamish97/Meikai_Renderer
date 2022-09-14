@@ -82,6 +82,13 @@ public:
 
 	void SetDescriptorHeap(ComPtr<ID3D12DescriptorHeap>& heap);
 	void SetDescriptorTable(UINT rootParamIndex, D3D12_GPU_DESCRIPTOR_HANDLE GPUHandle);
+	void SetGraphics32BitConstants(uint32_t rootParameterIndex, uint32_t numConstants, const void* constants);
+	template<typename T>
+	void SetGraphics32BitConstants(uint32_t rootParameterIndex, const T& constants)
+	{
+		static_assert(sizeof(T) % sizeof(uint32_t) == 0, "Size of type must be a multiple of 4 bytes");
+		SetGraphics32BitConstants(rootParameterIndex, sizeof(T) / sizeof(uint32_t), &constants);
+	}
 	void ReleaseTrackedObjects();
 
 private:

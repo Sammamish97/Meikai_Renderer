@@ -22,7 +22,7 @@ public:
 
 	uint64_t Signal();
 	bool IsFenceComplete();
-	bool WaitForFenceValue(uint64_t fenceValue);
+	void WaitForFenceValue(uint64_t fenceValue);
 	void Flush();
 	void Wait(const CommandQueue& other);
 	std::shared_ptr<CommandList> GetCommandList();

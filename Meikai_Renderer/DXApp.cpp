@@ -483,7 +483,7 @@ void DXApp::CalculateFrameStats()
 	}
 }
 
-void DXApp::Present(const std::shared_ptr<Texture>& texture)
+void DXApp::Present(std::shared_ptr<Texture>& texture)
 {
 	auto cmdList = mCommandQueue->GetCommandList();
 	if(texture->IsValid())
@@ -504,7 +504,6 @@ void DXApp::Present(const std::shared_ptr<Texture>& texture)
 	//UINT syncInterval = m_VSync ? 1 : 0;
 	//UINT presentFlags = m_IsTearingSupported && !m_VSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
 	ThrowIfFailed(mSwapChain->Present(false, 0))
-
 }
 
 void DXApp::TransitionResource(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2> commandList,
