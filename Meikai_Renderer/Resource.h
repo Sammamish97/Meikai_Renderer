@@ -42,7 +42,7 @@ protected:
 protected:
 	ComPtr<ID3D12Resource> mResource;
 	D3D12_FEATURE_DATA_FORMAT_SUPPORT mFormatSupport;
-	std::unique_ptr<D3D12_CLEAR_VALUE> mClearValue;
+	std::unique_ptr<D3D12_CLEAR_VALUE> mClearValue = nullptr;
 	std::wstring mResourceName;
 
 private:

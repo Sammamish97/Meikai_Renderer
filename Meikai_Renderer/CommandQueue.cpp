@@ -32,7 +32,7 @@ CommandQueue::CommandQueue(DXApp* appPtr, D3D12_COMMAND_LIST_TYPE type)
         mCommandQueue->SetName(L"Direct Command Queue");
         break;
     }
-
+    //TODO: 스레드를 안전하게 돌릴 방법을 찾아야 함.
     mProcessInFlightCommandListsThread = std::thread(&CommandQueue::ProcessInFlightCommandLists, this);
 }
 
