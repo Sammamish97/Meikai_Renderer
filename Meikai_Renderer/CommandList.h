@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <cassert>
 #include <d3dx12.h>
 #include <wrl.h>
 #include <vector>
@@ -7,6 +8,9 @@
 
 class ResourceStateTracker;
 class DXApp;
+class Buffer;
+class VertexBuffer;
+class IndexBuffer;
 using namespace Microsoft::WRL;
 class CommandList
 {
@@ -33,19 +37,32 @@ public:
 	void CopyResource(Resource& dstRes, const Resource& srcRes);
 	void CopyResource(ComPtr<ID3D12Resource> dstRes, ComPtr<ID3D12Resource> srcRes);
 
-	//void CopyVertexBuffer(VertexBuffer& vertexBuffer, size_t numVertices, size_t vertexStride, const void* vertexBufferData);
-	//void CopyIndexBuffer(IndexBuffer& indexBuffer, size_t numIndicies, DXGI_FORMAT indexFormat, const void* indexBufferData);
+	void CopyVertexBuffer(VertexBuffer& vertexBuffer, size_t numVertices, size_t vertexStride, const void* vertexBufferData);
+	template<typename T>
+	void CopyVertexBuffer(VertexBuffer& vertexBuffer, const std::vector<T>& vertexBufferData)
+	{
+		CopyVertexBuffer(vertexBuffer, vertexBufferData.size(), sizeof(T), vertexBufferData.data());
+	}
 
-	//void CopyByteAddressBuffer(ByteAddressBuffer& byteAddressBuffer, size_t bufferSize, const void* bufferData);
-	//void CopyStructuredBuffer(StructuredBuffer& structuredBuffer, size_t numElements, size_t elementSize, const void* bufferData);
+	void CopyIndexBuffer(IndexBuffer& indexBuffer, size_t numIndicies, DXGI_FORMAT indexFormat, const void* indexBufferData);
+	template<typename T>
+	void CopyIndexBuffer(IndexBuffer& indexBuffer, const std::vector<T>& indexBufferData)
+	{
+		assert(sizeof(T) == 2 || sizeof(T) == 4);
 
+		DXGI_FORMAT indexFormat = (sizeof(T) == 2) ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
+		CopyIndexBuffer(indexBuffer, indexBufferData.size(), indexFormat, indexBufferData.data());
+	}
+
+	void SetRootConstant(int rootParameterIndex, D3D12_GPU_VIRTUAL_ADDRESS GPUAddress);
 	void LoadTextureFromFile(Texture& texture, const std::wstring& fileName, TextureUsage textureUsage = TextureUsage::Albedo);
 	void CopyTextureSubresource(Texture& texture, uint32_t firstSubresource, uint32_t numSubresources, D3D12_SUBRESOURCE_DATA* subresourceData);
 
-	void ClearTexture(const Texture& texture, const float clearColor[4]);
-	void ClearDepthStencilTexture(const Texture& texture, D3D12_CLEAR_FLAGS clearFlags, float depth = 1.0f, uint8_t stencil = 0);
+	void ClearTexture(const Texture& texture, D3D12_CPU_DESCRIPTOR_HANDLE rtvCPUHandle, const float clearColor[4]);
+	void ClearDepthStencilTexture(const Texture& texture, D3D12_CPU_DESCRIPTOR_HANDLE dsvCPUHandle, D3D12_CLEAR_FLAGS clearFlags, float depth = 1.0f, uint8_t stencil = 0);
 
 	void SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY primitiveTopology);
+	void SetRenderTargets(const std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE>& rtvArray, D3D12_CPU_DESCRIPTOR_HANDLE& dsvCPUHandle);
 
 	void SetViewport(const D3D12_VIEWPORT& viewport);
 	void SetScissorRect(const D3D12_RECT& scissorRect);
@@ -53,18 +70,23 @@ public:
 
 	void SetGraphicsRootSignature(ComPtr<ID3D12RootSignature> rootSignature);
 
+	void SetVertexBuffer(uint32_t slot, const VertexBuffer& vertexBuffer);
+	void SetIndexBuffer(const IndexBuffer& indexBuffer);
+
 	void Draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t startVertex, uint32_t startInstance);
-	void DrawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t startIndex, int32_t baseVertex, uint32_t startInstance);
+	void DrawIndexed(uint32_t indexCount, uint32_t instanceCount = 1, uint32_t startIndex = 0, int32_t baseVertex = 0, uint32_t startInstance = 0);
 
 	ComPtr<ID3D12GraphicsCommandList2> GetList();
 	ComPtr<ID3D12CommandAllocator> GetAllocator();
 	D3D12_COMMAND_LIST_TYPE GetCommandListType();
 
-	void SetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, ID3D12DescriptorHeap* heap);
-
+	void SetDescriptorHeap(ComPtr<ID3D12DescriptorHeap>& heap);
+	void SetDescriptorTable(UINT rootParamIndex, D3D12_GPU_DESCRIPTOR_HANDLE GPUHandle);
 	void ReleaseTrackedObjects();
 
 private:
+	void CopyBuffer(Buffer& buffer, size_t numElements, size_t elementSize, const void* bufferData, D3D12_RESOURCE_FLAGS flags = D3D12_RESOURCE_FLAG_NONE);
+
 	void TrackResource(ComPtr<ID3D12Object> object);
 	void TrackResource(const Resource& res);
 	

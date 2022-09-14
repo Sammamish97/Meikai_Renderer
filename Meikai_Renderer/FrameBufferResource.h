@@ -8,6 +8,7 @@ using namespace Microsoft::WRL;
 
 struct FrameBufferResource
 {
+	std::shared_ptr<Texture> mRenderTarget;
 	std::shared_ptr<Texture> mDepthStencilBuffer;
 	std::shared_ptr<Texture> mPositionMap;
 	std::shared_ptr<Texture> mNormalMap;
@@ -27,6 +28,9 @@ struct IBLResource
 
 struct FrameBufferDescriptorIndex
 {
+	UINT mRenderTargetRtvIdx;
+	UINT mRenderTargetSrvIdx;
+
 	UINT mPositionDescRtvIdx;
 	UINT mPositionDescSrvIdx;
 

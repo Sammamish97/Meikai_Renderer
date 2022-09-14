@@ -1,30 +1,29 @@
 #include "Mesh.h"
 #include "DXApp.h"
 
-Mesh::Mesh(std::vector<Vertex> input_vertices, std::vector<WORD> input_indices, DXApp* dxApp,
-	ComPtr<ID3D12GraphicsCommandList2> commandList)
-	:m_dxApp(dxApp), m_vertices(input_vertices), m_indices(input_indices)
+Mesh::Mesh(DXApp* dxApp, std::vector<Vertex> input_vertices, std::vector<WORD> input_indices, CommandList& commandList)
+	:mApp(dxApp), mVertices(std::move(input_vertices)), mIndices(std::move(input_indices)), mVertexBuffer(dxApp), mIndexBuffer(dxApp)
 {
-	InitVB(commandList);
-	InitIB(commandList);
+	Init(commandList);
 }
 
-void Mesh::InitVB(ComPtr<ID3D12GraphicsCommandList2> commandList)
+void Mesh::Init(CommandList& commandList)
 {
-	m_dxApp->UpdateDefaultBufferResource(commandList, &m_VertexBuffer, &stagingVB,
-		m_vertices.size(), sizeof(Vertex), m_vertices.data());
+	if(mVertices.size() >= USHRT_MAX)
+	{
+		throw std::exception("Too many vertices for 16-bit index buffer");
+	}
 
-	m_VertexBufferView.BufferLocation = m_VertexBuffer->GetGPUVirtualAddress();
-	m_VertexBufferView.SizeInBytes = m_vertices.size() * sizeof(Vertex);
-	m_VertexBufferView.StrideInBytes = sizeof(Vertex);
+	commandList.CopyVertexBuffer(mVertexBuffer, mVertices);
+	commandList.CopyIndexBuffer(mIndexBuffer, mIndices);
+
+	mIndexCount = static_cast<UINT>(mIndices.size());
 }
 
-void Mesh::InitIB(ComPtr<ID3D12GraphicsCommandList2> commandList)
+void Mesh::Draw(CommandList& commandList)
 {
-	m_dxApp->UpdateDefaultBufferResource(commandList, &m_IndexBuffer, &stagingIB,
-		m_indices.size(), sizeof(WORD), m_indices.data());
-
-	m_IndexBufferView.BufferLocation = m_IndexBuffer->GetGPUVirtualAddress();
-	m_IndexBufferView.SizeInBytes = m_indices.size() * sizeof(WORD);
-	m_IndexBufferView.Format = DXGI_FORMAT_R16_UINT;
+	commandList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	commandList.SetVertexBuffer(0, mVertexBuffer);
+	commandList.SetIndexBuffer(mIndexBuffer);
+	commandList.DrawIndexed(mIndexCount);
 }

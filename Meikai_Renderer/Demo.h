@@ -29,7 +29,7 @@ protected:
 	void Draw(const GameTimer& gt) override;
 
 private:
-	void BuildModels();
+	void BuildModels(std::shared_ptr<CommandList>& cmdList);
 	void BuildFrameResource();
 	void CreateShader();
 

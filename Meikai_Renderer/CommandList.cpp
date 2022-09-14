@@ -2,6 +2,9 @@
 #include "DXApp.h"
 #include "DXUtil.h"
 #include "ResourceStateTracker.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+
 #include <DirectXTex.h>
 #include <filesystem>
 
@@ -48,6 +51,7 @@ void CommandList::CopyResource(Resource& dstRes, const Resource& srcRes)
 {
 	CopyResource(dstRes.GetResource(), srcRes.GetResource());
 }
+
 void CommandList::CopyResource(ComPtr<ID3D12Resource> dstRes, ComPtr<ID3D12Resource> srcRes)
 {
 	TransitionBarrier(dstRes, D3D12_RESOURCE_STATE_COPY_DEST);
@@ -59,6 +63,75 @@ void CommandList::CopyResource(ComPtr<ID3D12Resource> dstRes, ComPtr<ID3D12Resou
 
 	TrackResource(dstRes);
 	TrackResource(srcRes);
+}
+
+void CommandList::CopyVertexBuffer(VertexBuffer& vertexBuffer, size_t numVertices, size_t vertexStride,
+	const void* vertexBufferData)
+{
+	CopyBuffer(vertexBuffer, numVertices, vertexStride, vertexBufferData);
+}
+
+void CommandList::CopyIndexBuffer(IndexBuffer& indexBuffer, size_t numIndicies, DXGI_FORMAT indexFormat,
+	const void* indexBufferData)
+{
+	size_t indexSizeInBytes = indexFormat == DXGI_FORMAT_R16_UINT ? 2 : 4;
+	CopyBuffer(indexBuffer, numIndicies, indexSizeInBytes, indexBufferData);
+}
+
+void CommandList::CopyBuffer(Buffer& buffer, size_t numElements, size_t elementSize, const void* bufferData,
+	D3D12_RESOURCE_FLAGS flags)
+{
+	auto device = mApp->GetDevice();
+	size_t bufferSize = numElements * elementSize;
+
+	ComPtr<ID3D12Resource> tempResource;
+	if(bufferSize == 0)
+	{
+		//Null reference.
+	}
+	else
+	{
+		ThrowIfFailed(device->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAG_NONE,
+			&CD3DX12_RESOURCE_DESC::Buffer(bufferSize, flags),
+			D3D12_RESOURCE_STATE_COMMON,
+			nullptr,
+			IID_PPV_ARGS(&tempResource)));
+
+		ResourceStateTracker::AddGlobalResourceState(tempResource.Get(), D3D12_RESOURCE_STATE_COMMON);
+		if(bufferData != nullptr)
+		{
+			ComPtr<ID3D12Resource> uploadResource;
+			ThrowIfFailed(device->CreateCommittedResource(
+				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+				D3D12_HEAP_FLAG_NONE,
+				&CD3DX12_RESOURCE_DESC::Buffer(bufferSize),
+				D3D12_RESOURCE_STATE_GENERIC_READ,
+				nullptr,
+				IID_PPV_ARGS(&uploadResource)));
+
+			D3D12_SUBRESOURCE_DATA subresourceData = {};
+			subresourceData.pData = bufferData;
+			subresourceData.RowPitch = bufferSize;
+			subresourceData.SlicePitch = subresourceData.RowPitch;
+
+			mResourceStateTracker->TransitionResource(tempResource.Get(), D3D12_RESOURCE_STATE_COPY_DEST);
+			FlushResourceBarriers();
+
+			UpdateSubresources(mCommandList.Get(), tempResource.Get(), uploadResource.Get(), 
+				0, 0, 1, &subresourceData);
+
+			TrackResource(uploadResource);
+		}
+		TrackResource(tempResource);
+	}
+	buffer.SetD3D12Resource(tempResource);
+}
+
+void CommandList::SetRootConstant(int rootParameterIndex, D3D12_GPU_VIRTUAL_ADDRESS GPUAddress)
+{
+	mCommandList->SetGraphicsRootConstantBufferView(rootParameterIndex, GPUAddress);
 }
 
 void CommandList::FlushResourceBarriers()
@@ -201,6 +274,33 @@ void CommandList::CopyTextureSubresource(Texture& texture, uint32_t firstSubreso
 	}
 }
 
+void CommandList::ClearTexture(const Texture& texture, D3D12_CPU_DESCRIPTOR_HANDLE rtvCPUHandle, const float clearColor[4])
+{
+	TransitionBarrier(texture, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	mCommandList->ClearRenderTargetView(rtvCPUHandle, clearColor, 0, nullptr);
+
+	TrackResource(texture);
+}
+
+void CommandList::ClearDepthStencilTexture(const Texture& texture, D3D12_CPU_DESCRIPTOR_HANDLE dsvCPUHandle, D3D12_CLEAR_FLAGS clearFlags, float depth,
+	uint8_t stencil)
+{
+	TransitionBarrier(texture, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+	mCommandList->ClearDepthStencilView(dsvCPUHandle, clearFlags, depth, stencil, 0, nullptr);
+
+	TrackResource(texture);
+}
+
+void CommandList::SetDescriptorHeap(ComPtr<ID3D12DescriptorHeap>& heap)
+{
+	mCommandList->SetDescriptorHeaps(1, heap.GetAddressOf());
+}
+
+void CommandList::SetDescriptorTable(UINT rootParamIndex, D3D12_GPU_DESCRIPTOR_HANDLE GPUHandle)
+{
+	mCommandList->SetGraphicsRootDescriptorTable(rootParamIndex, GPUHandle);
+}
+
 void CommandList::Close(void)
 {
 	mCommandList->Close();
@@ -210,7 +310,7 @@ bool CommandList::Close(CommandList& pendingCommandList)
 {
 	FlushResourceBarriers();
 	mCommandList->Close();
-	uint32_t numPendingBarriers;
+	uint32_t numPendingBarriers = 0;
 	//Resource Tracker something...
 
 	return numPendingBarriers > 0;
@@ -227,6 +327,27 @@ void CommandList::Reset()
 void CommandList::SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY primitiveTopology)
 {
 	mCommandList->IASetPrimitiveTopology(primitiveTopology);
+}
+
+void CommandList::SetRenderTargets(const std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE>& rtvArray, D3D12_CPU_DESCRIPTOR_HANDLE& dsvCPUHandle)
+{
+	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, &dsvCPUHandle);
+}
+
+void CommandList::SetVertexBuffer(uint32_t slot, const VertexBuffer& vertexBuffer)
+{
+	TransitionBarrier(vertexBuffer, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+	auto vertexBufferView = vertexBuffer.GetVertexBufferView();
+	mCommandList->IASetVertexBuffers(slot, 1, &vertexBufferView);
+	TrackResource(vertexBuffer);
+}
+
+void CommandList::SetIndexBuffer(const IndexBuffer& indexBuffer)
+{
+	TransitionBarrier(indexBuffer, D3D12_RESOURCE_STATE_INDEX_BUFFER);
+	auto indexBufferView = indexBuffer.GetIndexBufferView();
+	mCommandList->IASetIndexBuffer(&indexBufferView);
+	TrackResource(indexBuffer);
 }
 
 void CommandList::Draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t startVertex, uint32_t startInstance)

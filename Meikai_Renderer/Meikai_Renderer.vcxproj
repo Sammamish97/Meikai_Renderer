@@ -19,6 +19,7 @@
     <ClInclude Include="..\include\DirectXTex\DirectXTexP.h" />
     <ClInclude Include="..\include\DirectXTex\filters.h" />
     <ClInclude Include="..\include\DirectXTex\scoped.h" />
+    <ClInclude Include="Buffer.h" />
     <ClInclude Include="BufferFormat.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommandList.h" />
@@ -31,6 +32,7 @@
     <ClInclude Include="DXUtil.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GeometryPass.h" />
+    <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="IPass.h" />
     <ClInclude Include="LightingPass.h" />
     <ClInclude Include="FrameBufferResource.h" />
@@ -46,6 +48,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureUsage.h" />
     <ClInclude Include="ThreadSafeQueue.h" />
+    <ClInclude Include="VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\include\DirectXTex\BC.cpp" />
@@ -69,6 +72,7 @@
     <ClCompile Include="..\include\DirectXTex\DirectXTexTGA.cpp" />
     <ClCompile Include="..\include\DirectXTex\DirectXTexUtil.cpp" />
     <ClCompile Include="..\include\DirectXTex\DirectXTexWIC.cpp" />
+    <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CommandList.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
@@ -79,6 +83,7 @@
     <ClCompile Include="DXUtil.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GeometryPass.cpp" />
+    <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="IPass.cpp" />
     <ClCompile Include="LightingPass.cpp" />
     <ClCompile Include="main.cpp" />
@@ -91,6 +96,7 @@
     <ClCompile Include="ResourceAllocator.cpp" />
     <ClCompile Include="ResourceStateTracker.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\include\DirectXTex\DirectXTex.inl" />

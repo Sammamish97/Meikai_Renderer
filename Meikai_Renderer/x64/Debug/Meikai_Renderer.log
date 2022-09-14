@@ -1,69 +1,53 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
   CommandList.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\DXApp.h(24,14): warning C4099: 'Texture': type name first seen using 'struct' now seen using 'class'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Texture.h(13): message : see declaration of 'Texture'
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.cpp(334,88): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
   CommandQueue.cpp
-  DefaultPass.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\Texture.h(13,16): warning C4099: 'Texture': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Texture.h(13): message : see declaration of 'Texture'
   Demo.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(255,16): error C2039: 'SetGraphicsRootConstantBufferView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandQueue.h(12): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(257,39): error C2664: 'void CommandList::SetViewport(const D3D12_VIEWPORT &)': cannot convert argument 1 from 'D3D12_VIEWPORT *' to 'const D3D12_VIEWPORT &'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(257,39): message : Reason: cannot convert from 'D3D12_VIEWPORT *' to 'const D3D12_VIEWPORT'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(257,39): message : No constructor could take the source type, or constructor overload resolution was ambiguous
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(50,7): message : see declaration of 'CommandList::SetViewport'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(260,24): error C2660: 'CommandList::ClearTexture': function does not take 0 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(45,7): message : see declaration of 'CommandList::ClearTexture'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(261,36): error C2660: 'CommandList::ClearDepthStencilTexture': function does not take 0 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(46,7): message : see declaration of 'CommandList::ClearDepthStencilTexture'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(263,16): error C2039: 'ClearRenderTargetView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandQueue.h(12): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(264,16): error C2039: 'ClearDepthStencilView': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandQueue.h(12): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(266,16): error C2039: 'SetDescriptorHeaps': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandQueue.h(12): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(267,16): error C2039: 'SetGraphicsRootDescriptorTable': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandQueue.h(12): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(270,16): error C2039: 'OMSetRenderTargets': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandQueue.h(12): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(272,16): error C2039: 'IASetPrimitiveTopology': is not a member of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandQueue.h(12): message : see declaration of 'CommandList'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(276,28): error C2664: 'void Object::Draw(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2>)': cannot convert argument 1 from 'std::unique_ptr<CommandList,std::default_delete<CommandList>>' to 'Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2>'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(276,16): message : No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Object.h(16,7): message : see declaration of 'Object::Draw'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(279,14): error C2660: 'CommandList::ResourceBarrier': function does not take 2 arguments
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.h(31,7): message : see declaration of 'CommandList::ResourceBarrier'
-  DescriptorHeap.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\DXApp.h(24,14): warning C4099: 'Texture': type name first seen using 'struct' now seen using 'class'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Texture.h(13): message : see declaration of 'Texture'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(14): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
   DXApp.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\DXApp.cpp(166,3): error C3861: 'OnResize': identifier not found
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\DXApp.cpp(556,34): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\DXApp.cpp(611,5): error C3861: 'OnResize': identifier not found
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\DXApp.cpp(621,6): error C3861: 'OnResize': identifier not found
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\DXApp.cpp(629,6): error C3861: 'OnResize': identifier not found
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\DXApp.cpp(644,6): error C3861: 'OnResize': identifier not found
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\DXApp.cpp(663,3): error C3861: 'OnResize': identifier not found
-  GeometryPass.cpp
-  IPass.cpp
-  LightingPass.cpp
-  main.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\Texture.h(13,16): warning C4099: 'Texture': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Texture.h(13): message : see declaration of 'Texture'
+C:\Data\Meikai_Renderer\Meikai_Renderer\DXApp.cpp(582,34): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
   Mesh.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.cpp(14,11): error C2039: 'UpdateDefaultBufferResource': is not a member of 'DXApp'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\DXApp.h(25): message : see declaration of 'DXApp'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.cpp(18,69): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.cpp(24,11): error C2039: 'UpdateDefaultBufferResource': is not a member of 'DXApp'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\DXApp.h(25): message : see declaration of 'DXApp'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.cpp(28,65): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\DXApp.h(24,14): warning C4099: 'Texture': type name first seen using 'struct' now seen using 'class'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Texture.h(13): message : see declaration of 'Texture'
   Model.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(10): message : see declaration of 'DXApp'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Model.cpp(17,9): warning C4002: too many arguments for function-like macro invocation 'assert'
-  Page.cpp
-  Resource.cpp
-  ResourceAllocator.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(14): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Meikai_Renderer\DXApp.h(24,14): warning C4099: 'Texture': type name first seen using 'struct' now seen using 'class'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Texture.h(13): message : see declaration of 'Texture'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.cpp(17,9): warning C4002: too many arguments for function-like macro invocation 'assert'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.cpp(102,54): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'Mesh'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.cpp(102,54): message : No constructor could take the source type, or constructor overload resolution was ambiguous
+  Object.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(14): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Object.cpp(33,47): error C2039: 'm_VertexBufferView': is not a member of 'Mesh'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(25): message : see declaration of 'Mesh'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Object.cpp(33,65): error C2660: 'ID3D12GraphicsCommandList::IASetVertexBuffers': function does not take 2 arguments
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\d3d12.h(5942,40): message : see declaration of 'ID3D12GraphicsCommandList::IASetVertexBuffers'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Object.cpp(34,39): error C2039: 'm_IndexBufferView': is not a member of 'Mesh'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(25): message : see declaration of 'Mesh'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Object.cpp(36,42): error C2039: 'm_indices': is not a member of 'Mesh'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(25): message : see declaration of 'Mesh'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Object.cpp(44,47): error C2039: 'm_VertexBufferView': is not a member of 'Mesh'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(25): message : see declaration of 'Mesh'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Object.cpp(44,65): error C2660: 'ID3D12GraphicsCommandList::IASetVertexBuffers': function does not take 2 arguments
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\d3d12.h(5942,40): message : see declaration of 'ID3D12GraphicsCommandList::IASetVertexBuffers'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Object.cpp(45,39): error C2039: 'm_IndexBufferView': is not a member of 'Mesh'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(25): message : see declaration of 'Mesh'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Object.cpp(47,42): error C2039: 'm_indices': is not a member of 'Mesh'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(25): message : see declaration of 'Mesh'
   ResourceStateTracker.cpp
-  Texture.cpp
+  VertexBuffer.cpp
   Generating Code...
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\ResourceAllocator.cpp(46): warning C4715: 'ResourceAllocator::AllocateToUploadHeap': not all control paths return a value
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandQueue.cpp(68): error C4716: 'CommandQueue::WaitForFenceValue': must return a value
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.cpp(216): error C4700: uninitialized local variable 'numPendingBarriers' used
+C:\Data\Meikai_Renderer\Meikai_Renderer\CommandQueue.cpp(68): error C4716: 'CommandQueue::WaitForFenceValue': must return a value

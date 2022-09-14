@@ -1,8 +1,12 @@
 #pragma once
 #include <DirectXMath.h>
-#include <d3d12.h>
+#include <d3dx12.h>
 #include <vector>
 #include <wrl.h>
+
+#include "CommandList.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
 using namespace Microsoft::WRL;
 using namespace DirectX;
@@ -21,26 +25,21 @@ struct Vertex
 struct Mesh
 {
 private:
-	DXApp* m_dxApp = nullptr;
+	DXApp* mApp = nullptr;
 
 public:
-	Mesh(std::vector<Vertex> input_vertices, std::vector<WORD> input_indices, DXApp* dxApp, ComPtr<ID3D12GraphicsCommandList2> commandList);
-	ComPtr<ID3D12Resource> m_VertexBuffer;
-	ComPtr<ID3D12Resource> m_IndexBuffer;
+	Mesh(DXApp* dxApp, std::vector<Vertex> input_vertices, std::vector<WORD> input_indices, CommandList& commandList);
+	void Draw(CommandList& commandList);
+private:
+	VertexBuffer mVertexBuffer;
+	IndexBuffer mIndexBuffer;
 
-	//Staging resource must not deleted before staging command is flushed by queue.
-	//Therefore, before command list manager implemented, need to cache staging resource.
-	ComPtr<ID3D12Resource> stagingVB;
-	ComPtr<ID3D12Resource> stagingIB;
+	std::vector<Vertex> mVertices;
+	std::vector<WORD> mIndices;
 
-	D3D12_VERTEX_BUFFER_VIEW m_VertexBufferView;
-	D3D12_INDEX_BUFFER_VIEW m_IndexBufferView;
-
-	std::vector<Vertex> m_vertices;
-	std::vector<WORD> m_indices;
+	UINT mIndexCount;
 
 private:
-	void InitVB(ComPtr<ID3D12GraphicsCommandList2> commandList);
-	void InitIB(ComPtr<ID3D12GraphicsCommandList2> commandList);
+	void Init(CommandList& commandList);
 };
 

@@ -10,6 +10,8 @@
 #include <d3dcompiler.h>
 #include <d3dx12.h>
 
+#include "CommandList.h"
+#include "CommandQueue.h"
 #include "GeometryPass.h"
 #include "LightingPass.h"
 
@@ -32,7 +34,9 @@ bool Demo::Initialize()
 	{
 		return false;
 	}
+	auto initList = mCommandQueue->GetCommandList();
 
+	//TODO: Load contents부분을 별개의 command list로 한번 감싸줘야 한다.
 	CreateDescriptorHeaps();
 
 	CreateBufferResources();
@@ -40,13 +44,15 @@ bool Demo::Initialize()
 
 	CreateIBLResources();
 	CreateIBLDescriptors();
-
+	BuildModels(initList);
 	LoadContent();
 
 	mDefaultPass = std::make_unique<DefaultPass>(this, mShaders["DefaultForwardVS"], mShaders["DefaultForwardPS"]);
 	mGeometryPass = std::make_unique<GeometryPass>(this, mShaders["GeomVS"], mShaders["GeomPS"]);
 	mLightingPass = std::make_unique<LightingPass>(this, mShaders["ScreenQuadVS"], mShaders["LightingPS"]);
 
+	auto fenceValue = mCommandQueue->ExecuteCommandList(initList);
+	mCommandQueue->WaitForFenceValue(fenceValue);
 	return true;
 }
 
@@ -54,7 +60,6 @@ void Demo::LoadContent()
 {
 	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
 	mCamera = std::make_unique<Camera>(aspectRatio);
-	BuildModels();
 	BuildFrameResource();
 	CreateShader();
 	
@@ -70,6 +75,7 @@ void Demo::CreateDescriptorHeaps()
 
 void Demo::CreateBufferResources()
 {
+	mFrameResource.mRenderTarget = std::make_shared<Texture>(this, TextureUsage::Albedo, L"RenderTarget");
 	mFrameResource.mPositionMap = std::make_shared<Texture>(this, TextureUsage::Position, L"Position");
 	mFrameResource.mNormalMap = std::make_shared<Texture>(this, TextureUsage::Normalmap, L"Normal");
 	mFrameResource.mAlbedoMap = std::make_shared<Texture>(this, TextureUsage::Albedo, L"Albedo");
@@ -82,12 +88,14 @@ void Demo::CreateBufferResources()
 
 void Demo::CreateBufferDescriptors()
 {
+	mDescIndex.mRenderTargetRtvIdx = mRTVHeap->GetNextAvailableIndex();
 	mDescIndex.mPositionDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
 	mDescIndex.mNormalDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
 	mDescIndex.mAlbedoDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
 	mDescIndex.mRoughnessDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
 	mDescIndex.mMetalicDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
 
+	mDescIndex.mRenderTargetSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
 	mDescIndex.mPositionDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
 	mDescIndex.mNormalDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
 	mDescIndex.mAlbedoDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
@@ -97,12 +105,14 @@ void Demo::CreateBufferDescriptors()
 
 	mDescIndex.mDepthStencilDsvIdx = mDSVHeap->GetNextAvailableIndex();
 
+	CreateRtvDescriptor(AlbedoFormat, mFrameResource.mRenderTarget->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx));
 	CreateRtvDescriptor(PositionFormat, mFrameResource.mPositionMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mPositionDescRtvIdx));
 	CreateRtvDescriptor(NormalFormat, mFrameResource.mNormalMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mNormalDescRtvIdx));
 	CreateRtvDescriptor(AlbedoFormat, mFrameResource.mAlbedoMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mAlbedoDescRtvIdx));
 	CreateRtvDescriptor(RoughnessFormat, mFrameResource.mRoughnessMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mRoughnessDescRtvIdx));
 	CreateRtvDescriptor(MetalicFormat, mFrameResource.mMetalicMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mMetalicDescRtvIdx));
 
+	CreateSrvDescriptor(AlbedoFormat, mFrameResource.mRenderTarget->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mRenderTargetSrvIdx));
 	CreateSrvDescriptor(PositionFormat, mFrameResource.mPositionMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mPositionDescSrvIdx));
 	CreateSrvDescriptor(NormalFormat, mFrameResource.mNormalMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mNormalDescSrvIdx));
 	CreateSrvDescriptor(AlbedoFormat, mFrameResource.mAlbedoMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mAlbedoDescSrvIdx));
@@ -121,13 +131,14 @@ void Demo::CreateIBLDescriptors()
 {
 }
 
-void Demo::BuildModels()
+void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 {
-	mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, mCommandList);
-	mModels["Quad"] = std::make_shared<Model>("../models/Quad.obj", this, mCommandList);
-	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, mCommandList);
-	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, mCommandList);
-	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, mCommandList);
+	//TODO: Init 파트에서 Command list가 필요한 부분을 모아 따로 한번 flush해야 한다.
+	mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, cmdList->GetList());
+	mModels["Quad"] = std::make_shared<Model>("../models/Quad.obj", this, cmdList->GetList());
+	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, cmdList->GetList());
+	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, cmdList->GetList());
+	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, cmdList->GetList());
 
 	objects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(10.f, 10.f, 10.f)));
 	objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(0.f, 0.f, 0.f)));
@@ -237,14 +248,13 @@ void Demo::Draw(const GameTimer& gt)
 
 	mCommandQueue->ExecuteCommandList(drawcmdList);
 	// swap the back and front buffers
-	ThrowIfFailed(mSwapChain->Present(0, 0));
+	//ThrowIfFailed(mSwapChain->Present(0, 0));
+	Present(mFrameResource.mRenderTarget);
 	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
 }
 
 void Demo::DrawDefaultPass(std::shared_ptr<CommandList> cmdList)
 {
-	cmdList->ResourceBarrier(CurrentBackBuffer(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_RENDER_TARGET);
-
 	float colorClearValue[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 	cmdList->SetPipelineState(mDefaultPass->mPSO.Get());
@@ -252,32 +262,28 @@ void Demo::DrawDefaultPass(std::shared_ptr<CommandList> cmdList)
 
 	//Remove it with bindless later.
 	D3D12_GPU_VIRTUAL_ADDRESS commonCBAddress = mCommonCBAllocation.GPU;
-	mCommandList->SetGraphicsRootConstantBufferView(1, commonCBAddress);
+	mCommandList->SetRootConstant(1, commonCBAddress);
 
-	cmdList->SetViewport(&mScreenViewport);
+	cmdList->SetViewport(mScreenViewport);
 	cmdList->SetScissorRect(mScissorRect);
 
-	cmdList->ClearTexture();
-	cmdList->ClearDepthStencilTexture();
+	cmdList->ClearTexture(*mFrameResource.mRenderTarget, mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx),colorClearValue);
+	cmdList->ClearDepthStencilTexture(*mFrameResource.mDepthStencilBuffer, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL);
 
-	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), colorClearValue, 0, nullptr);
-	mCommandList->ClearDepthStencilView(mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
+	cmdList->SetDescriptorHeap(mCBVSRVUAVHeap->GetDescriptorHeap());
 
-	mCommandList->SetDescriptorHeaps(1, mCBVSRVUAVHeap->GetDescriptorHeap().GetAddressOf());
-	mCommandList->SetGraphicsRootDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
+	cmdList->SetDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
 
 	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = {CurrentBackBufferExtView()};
-	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, &mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
+	cmdList->SetRenderTargets(rtvArray, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
 
-	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	cmdList->SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	for (const auto& object : objects)
 	{
-		object->Draw(mCommandList);
+		object->Draw(cmdList->GetList());
 	}
-
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+	mCommandQueue->ExecuteCommandList(cmdList);
 }
 
 //void Demo::DrawGeometryPass()

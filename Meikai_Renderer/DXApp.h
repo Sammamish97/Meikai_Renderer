@@ -14,13 +14,14 @@
 #include <array>
 #include <memory>
 
-#include "CommandList.h"
-#include "CommandQueue.h"
 #include "GameTimer.h"
 #include "ResourceAllocator.h"
 
 
 using Microsoft::WRL::ComPtr;
+class CommandList;
+class CommandQueue;
+class Texture;
 
 class DXApp
 {
@@ -49,6 +50,7 @@ public:
     std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
 
     int Run();
+    void Present(const std::shared_ptr<Texture>& texture);
 
     virtual bool Initialize();
     virtual LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

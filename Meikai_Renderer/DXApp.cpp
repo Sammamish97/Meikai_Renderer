@@ -1,7 +1,10 @@
 ﻿#include "DXApp.h"
 #include "DXUtil.h"
 #include "BufferFormat.h"
+
 #include "CommandList.h"
+#include "CommandQueue.h"
+#include "Texture.h"
 
 #include <d3dx12.h>
 #include <cassert>
@@ -163,7 +166,6 @@ void DXApp::Set4xMsaaState(bool value)
 
 		// Recreate the swapchain and buffers with new multisample settings.
 		CreateSwapChain();
-		OnResize();
 	}
 }
 
@@ -481,9 +483,33 @@ void DXApp::CalculateFrameStats()
 	}
 }
 
+void DXApp::Present(const std::shared_ptr<Texture>& texture)
+{
+	auto cmdList = mCommandQueue->GetCommandList();
+	if(texture->IsValid())
+	{
+		if(texture->GetD3D12ResourceDesc().SampleDesc.Count>1)
+		{
+			//If texture is multi sampled, need to Resolve.
+		}
+		else
+		{
+			cmdList->CopyResource(CurrentBackBuffer(), texture->GetResource());
+		}
+	}
+
+	cmdList->TransitionBarrier(CurrentBackBuffer(), D3D12_RESOURCE_STATE_PRESENT);
+	mCommandQueue->ExecuteCommandList(cmdList);
+
+	//UINT syncInterval = m_VSync ? 1 : 0;
+	//UINT presentFlags = m_IsTearingSupported && !m_VSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
+	ThrowIfFailed(mSwapChain->Present(false, 0))
+
+}
+
 void DXApp::TransitionResource(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2> commandList,
-	Microsoft::WRL::ComPtr<ID3D12Resource> resource, D3D12_RESOURCE_STATES beforeState,
-	D3D12_RESOURCE_STATES afterState)
+                               Microsoft::WRL::ComPtr<ID3D12Resource> resource, D3D12_RESOURCE_STATES beforeState,
+                               D3D12_RESOURCE_STATES afterState)
 {
 	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
 		resource.Get(),
@@ -608,7 +634,6 @@ LRESULT DXApp::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				mAppPaused = false;
 				mMinimized = false;
 				mMaximized = true;
-				OnResize();
 			}
 			else if (wParam == SIZE_RESTORED)
 			{
@@ -618,7 +643,6 @@ LRESULT DXApp::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				{
 					mAppPaused = false;
 					mMinimized = false;
-					OnResize();
 				}
 
 				// Restoring from maximized state?
@@ -626,7 +650,6 @@ LRESULT DXApp::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				{
 					mAppPaused = false;
 					mMaximized = false;
-					OnResize();
 				}
 				else if (mResizing)
 				{
@@ -641,7 +664,6 @@ LRESULT DXApp::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				}
 				else // API call such as SetWindowPos or mSwapChain->SetFullscreenState.
 				{
-					OnResize();
 				}
 			}
 		}
@@ -660,7 +682,6 @@ LRESULT DXApp::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		mAppPaused = false;
 		mResizing = false;
 		mTimer.Start();
-		OnResize();
 		return 0;
 
 		// WM_DESTROY is sent when the window is being destroyed.
