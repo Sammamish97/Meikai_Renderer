@@ -5,6 +5,7 @@
 #include "DXApp.h"
 #include "DXUtil.h"
 #include "CommandList.h"
+#include "ResourceStateTracker.h"
 
 CommandQueue::CommandQueue(DXApp* appPtr, D3D12_COMMAND_LIST_TYPE type)
 	:mApp(appPtr), mCommandListType(type), mProcessInFlightCommandLists(true)
@@ -102,6 +103,8 @@ uint64_t CommandQueue::ExecuteCommandList(std::shared_ptr<CommandList> commandLi
 
 uint64_t CommandQueue::ExecuteCommandLists(const std::vector<std::shared_ptr<CommandList>>& commandLists)
 {
+    ResourceStateTracker::Lock();
+
     //Command lists that will be recycle.
     std::vector<std::shared_ptr<CommandList>> toBeQueued;
     toBeQueued.reserve(commandLists.size() * 2);
@@ -127,6 +130,8 @@ uint64_t CommandQueue::ExecuteCommandLists(const std::vector<std::shared_ptr<Com
     UINT numCommandLists = static_cast<UINT>(toBeExecute.size());
     mCommandQueue->ExecuteCommandLists(numCommandLists, toBeExecute.data());
     uint64_t fenceValue = Signal();
+
+    ResourceStateTracker::Unlock();
 
     for(auto commandList : toBeQueued)
     {

@@ -317,8 +317,8 @@ bool CommandList::Close(CommandList& pendingCommandList)
 {
 	FlushResourceBarriers();
 	mCommandList->Close();
-	uint32_t numPendingBarriers = 0;
-	//Resource Tracker something...
+	uint32_t numPendingBarriers = mResourceStateTracker->FlushPendingResourceBarriers(pendingCommandList);
+	mResourceStateTracker->CommitFinalResourceStates();
 
 	return numPendingBarriers > 0;
 }

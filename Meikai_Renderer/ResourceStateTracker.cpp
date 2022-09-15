@@ -172,7 +172,7 @@ void ResourceStateTracker::Lock()
 
 void ResourceStateTracker::Unlock()
 {
-	msGlobalMutex.lock();
+	msGlobalMutex.unlock();
 	msIsLocked = false;
 }
 
