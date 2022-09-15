@@ -153,6 +153,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)include\assimp-master\build\include;$(SolutionDir)include\assimp-master\include;$(SolutionDir)include\tools;$(SolutionDir)include\DirectXTex</AdditionalIncludeDirectories>
       <PreprocessToFile>false</PreprocessToFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <ProgramDataBaseFileName>$(TEMP)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -173,6 +174,7 @@
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)include\assimp-master\build\include;$(SolutionDir)include\assimp-master\include;$(SolutionDir)include\tools;$(SolutionDir)include\DirectXTex</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <ProgramDataBaseFileName>$(TEMP)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

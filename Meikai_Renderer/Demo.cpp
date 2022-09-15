@@ -49,6 +49,9 @@ bool Demo::Initialize()
 	BuildModels(initList);
 	LoadContent();
 
+	mScissorRect = { 0, 0, mClientWidth, mClientHeight };
+	mScreenViewport = {0, 0, (float)mClientWidth, (float)mClientHeight,0, 1};
+
 	mDefaultPass = std::make_unique<DefaultPass>(this, mShaders["DefaultForwardVS"], mShaders["DefaultForwardPS"]);
 	mGeometryPass = std::make_unique<GeometryPass>(this, mShaders["GeomVS"], mShaders["GeomPS"]);
 	mLightingPass = std::make_unique<LightingPass>(this, mShaders["ScreenQuadVS"], mShaders["LightingPS"]);
