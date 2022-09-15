@@ -69,21 +69,56 @@ void Demo::LoadContent()
 
 void Demo::CreateDescriptorHeaps()
 {
+	mCBVSRVUAVHeap = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, mCbvSrvUavDescriptorSize, 128);
 	mRTVHeap = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, mRtvDescriptorSize, 128);
 	mDSVHeap = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, mDsvDescriptorSize, 128);
-	mCBVSRVUAVHeap = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, mCbvSrvUavDescriptorSize, 128);
 }
 
 void Demo::CreateBufferResources()
 {
-	mFrameResource.mRenderTarget = std::make_shared<Texture>(this, TextureUsage::Albedo, L"RenderTarget");
-	mFrameResource.mPositionMap = std::make_shared<Texture>(this, TextureUsage::Position, L"Position");
-	mFrameResource.mNormalMap = std::make_shared<Texture>(this, TextureUsage::Normalmap, L"Normal");
-	mFrameResource.mAlbedoMap = std::make_shared<Texture>(this, TextureUsage::Albedo, L"Albedo");
-	mFrameResource.mMetalicMap = std::make_shared<Texture>(this, TextureUsage::Metalic, L"Metalic");
-	mFrameResource.mRoughnessMap = std::make_shared<Texture>(this, TextureUsage::Roughness, L"Roughness");
-	mFrameResource.mDepthStencilBuffer = std::make_shared<Texture>(this, TextureUsage::Depth, L"DepthStencil");
-	mFrameResource.mAoMap = std::make_shared<Texture>(this, TextureUsage::SSAO, L"AO");
+	auto colorDesc = CD3DX12_RESOURCE_DESC::Tex2D(AlbedoFormat, mClientWidth, mClientHeight, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+	auto posDesc = CD3DX12_RESOURCE_DESC::Tex2D(PositionFormat, mClientWidth, mClientHeight, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+	auto normalDesc = CD3DX12_RESOURCE_DESC::Tex2D(NormalFormat, mClientWidth, mClientHeight, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+	auto monoDesc = CD3DX12_RESOURCE_DESC::Tex2D(MonoFormat, mClientWidth, mClientHeight, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+	auto depthDesc = CD3DX12_RESOURCE_DESC::Tex2D(DepthStencilDSVFormat, mClientWidth, mClientHeight, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+
+	CD3DX12_CLEAR_VALUE clearColorBlack;
+	clearColorBlack.Color[0] = 0.f;
+	clearColorBlack.Color[1] = 0.f;
+	clearColorBlack.Color[2] = 0.f;
+	clearColorBlack.Color[3] = 0.f;
+
+	CD3DX12_CLEAR_VALUE clearColorWhite;
+	clearColorWhite.Color[0] = 1.f;
+	clearColorWhite.Color[1] = 1.f;
+	clearColorWhite.Color[2] = 1.f;
+	clearColorWhite.Color[3] = 1.f;
+
+	CD3DX12_CLEAR_VALUE clearAlbedo = clearColorBlack;
+	clearAlbedo.Format = AlbedoFormat;
+
+	CD3DX12_CLEAR_VALUE clearPos = clearColorBlack;
+	clearPos.Format = PositionFormat;
+
+	CD3DX12_CLEAR_VALUE clearNormal = clearColorBlack;
+	clearNormal.Format = NormalFormat;
+
+	CD3DX12_CLEAR_VALUE clearMetalicRoughnessSSAO = clearColorBlack;
+	clearMetalicRoughnessSSAO.Format = MonoFormat;
+
+	CD3DX12_CLEAR_VALUE clearColorDepth;
+	clearColorDepth.Format = DepthStencilDSVFormat;
+	clearColorDepth.DepthStencil = { 1.f, 0 };
+
+	mFrameResource.mRenderTarget = std::make_shared<Texture>(this, colorDesc, &clearAlbedo, TextureUsage::RenderTarget, L"RenderTarget");
+
+	mFrameResource.mPositionMap = std::make_shared<Texture>(this, posDesc, &clearPos, TextureUsage::Position,L"Pos");
+	mFrameResource.mNormalMap = std::make_shared<Texture>(this, normalDesc, &clearNormal, TextureUsage::Normalmap, L"Normal");
+	mFrameResource.mAlbedoMap = std::make_shared<Texture>(this, colorDesc, &clearAlbedo, TextureUsage::Albedo, L"Albedo");
+	mFrameResource.mMetalicMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO, TextureUsage::Metalic, L"Metalic");
+	mFrameResource.mRoughnessMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO, TextureUsage::Roughness, L"Roughness");
+	mFrameResource.mAoMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO, TextureUsage::SSAO, L"SSAO");
+	mFrameResource.mDepthStencilBuffer = std::make_shared<Texture>(this, depthDesc, &clearColorDepth, TextureUsage::Depth, L"DepthStencil");
 }
 
 
@@ -157,8 +192,6 @@ void Demo::BuildFrameResource()
 	
 	mLightCB = std::make_unique<LightCB>();
 	mLightAllocation = mResourceAllocator->AllocateToUploadHeap(&mLightCB, sizeof(LightCB), ConstantBufferAlignment);
-
-	mTestDeafult = mResourceAllocator->AllocateToDefaultHeap(&mCommonCB, sizeof(CommonCB), ConstantBufferAlignment);
 }
 
 void Demo::CreateShader()
@@ -268,14 +301,17 @@ void Demo::DrawDefaultPass(CommandList& cmdList)
 	cmdList.SetViewport(mScreenViewport);
 	cmdList.SetScissorRect(mScissorRect);
 
-	cmdList.ClearTexture(*mFrameResource.mRenderTarget, mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx),colorClearValue);
-	cmdList.ClearDepthStencilTexture(*mFrameResource.mDepthStencilBuffer, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL);
+
+
+
+	cmdList.ClearTexture(mFrameResource.mRenderTarget, mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx),colorClearValue);
+	cmdList.ClearDepthStencilTexture(mFrameResource.mDepthStencilBuffer, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL);
 
 	cmdList.SetDescriptorHeap(mCBVSRVUAVHeap->GetDescriptorHeap());
 
 	cmdList.SetDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
 
-	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = {CurrentBackBufferExtView()};
+	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { CD3DX12_CPU_DESCRIPTOR_HANDLE(mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx)) };
 	cmdList.SetRenderTargets(rtvArray, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
 
 	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

@@ -14,6 +14,7 @@ Texture::Texture(DXApp* mApp, const D3D12_RESOURCE_DESC& resourceDesc,
 	const std::wstring& name)
 	:Resource(mApp, resourceDesc, clearValue, name), mTextureUsage(textureUsage)
 {
+
 }
 
 Texture::Texture(DXApp* mApp, Microsoft::WRL::ComPtr<ID3D12Resource> resource,

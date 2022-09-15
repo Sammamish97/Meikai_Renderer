@@ -276,21 +276,21 @@ void CommandList::CopyTextureSubresource(Texture& texture, uint32_t firstSubreso
 	}
 }
 
-void CommandList::ClearTexture(const Texture& texture, D3D12_CPU_DESCRIPTOR_HANDLE rtvCPUHandle, const float clearColor[4])
+void CommandList::ClearTexture(std::shared_ptr<Texture> texture, D3D12_CPU_DESCRIPTOR_HANDLE rtvCPUHandle, const float clearColor[4])
 {
-	TransitionBarrier(texture, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	TransitionBarrier(texture->GetResource(), D3D12_RESOURCE_STATE_RENDER_TARGET);
 	mCommandList->ClearRenderTargetView(rtvCPUHandle, clearColor, 0, nullptr);
 
-	TrackResource(texture);
+	TrackResource(texture->GetResource());
 }
 
-void CommandList::ClearDepthStencilTexture(const Texture& texture, D3D12_CPU_DESCRIPTOR_HANDLE dsvCPUHandle, D3D12_CLEAR_FLAGS clearFlags, float depth,
+void CommandList::ClearDepthStencilTexture(std::shared_ptr<Texture> texture, D3D12_CPU_DESCRIPTOR_HANDLE dsvCPUHandle, D3D12_CLEAR_FLAGS clearFlags, float depth,
 	uint8_t stencil)
 {
-	TransitionBarrier(texture, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+	TransitionBarrier(texture->GetResource(), D3D12_RESOURCE_STATE_DEPTH_WRITE);
 	mCommandList->ClearDepthStencilView(dsvCPUHandle, clearFlags, depth, stencil, 0, nullptr);
 
-	TrackResource(texture);
+	TrackResource(texture->GetResource());
 }
 
 void CommandList::SetDescriptorHeap(ComPtr<ID3D12DescriptorHeap>& heap)

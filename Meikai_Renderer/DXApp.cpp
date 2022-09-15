@@ -320,7 +320,8 @@ bool DXApp::InitDirect3D()
 	CreateCommandObjects();
 	CreateSwapChain();
 	CreateSwapChainRtvDescriptorHeap();
-
+	CacheSwapChainImage();
+	mResourceAllocator = std::make_unique<ResourceAllocator>(this);
 	return true;
 }
 
@@ -352,6 +353,19 @@ void DXApp::CreateSwapChain()
 
 	// Note: Swap chain uses queue to perform flush.
 	mdxgiFactory->CreateSwapChain(mCommandQueue->GetCommandQueue().Get(), &swapChainDesc, mSwapChain.GetAddressOf());
+}
+
+void DXApp::CacheSwapChainImage()
+{
+	for (int i = 0; i < SwapChainBufferCount; ++i)
+	{
+		mSwapChainBuffer[i].Reset();
+	}
+
+	for (UINT i = 0; i < SwapChainBufferCount; ++i)
+	{
+		ThrowIfFailed(mSwapChain->GetBuffer(i, IID_PPV_ARGS(&mSwapChainBuffer[i])))
+	}
 }
 
 ID3D12Resource* DXApp::CurrentBackBuffer() const

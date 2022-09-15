@@ -71,6 +71,7 @@ protected:
     bool InitDirect3D();
     void CreateCommandObjects();
     void CreateSwapChain();
+    void CacheSwapChainImage();
 
     ID3D12Resource* CurrentBackBuffer()const;
     D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView() const;

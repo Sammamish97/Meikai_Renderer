@@ -15,7 +15,9 @@ void Mesh::Init(CommandList& commandList)
 	}
 
 	commandList.CopyVertexBuffer(mVertexBuffer, mVertices);
+	mVertexBuffer.CreateVertexBufferView(mVertices.size(), sizeof(mVertices[0]));
 	commandList.CopyIndexBuffer(mIndexBuffer, mIndices);
+	mIndexBuffer.CreateViews(mIndices.size(), sizeof(mIndices[0]));
 
 	mIndexCount = static_cast<UINT>(mIndices.size());
 }

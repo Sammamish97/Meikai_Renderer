@@ -41,8 +41,7 @@ UploadAllocation ResourceAllocator::AllocateToUploadHeap(void* data, size_t size
 	{
 		mCurrentUploadPage = RequestUploadPage();
 	}
-	mCurrentUploadPage->Allocate(data, sizeInBytes, alignment);
-	//TODO: 여기서 page에게 data를 넘기고, Page안에서 GPU로의 data복사가 일어나게 해야 한다.
+	return mCurrentUploadPage->Allocate(data, sizeInBytes, alignment);
 }
 
 DefaultAllocation ResourceAllocator::AllocateToDefaultHeap(void* data, size_t sizeInBytes, size_t alignment)
