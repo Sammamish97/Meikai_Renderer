@@ -131,6 +131,7 @@ protected:
     int mCurrBackBuffer = 0;
     ComPtr<ID3D12Resource> mSwapChainBuffer[SwapChainBufferCount];
     ComPtr<ID3D12DescriptorHeap> mSwapChainRtvHeap;
+    UINT64 mFenceValues[SwapChainBufferCount] = {0};
 
     D3D12_VIEWPORT mScreenViewport;
     D3D12_RECT mScissorRect;

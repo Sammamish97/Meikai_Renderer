@@ -283,18 +283,8 @@ void Demo::Update(const GameTimer& gt)
 void Demo::Draw(const GameTimer& gt)
 {
 	auto drawcmdList = mCommandQueue->GetCommandList();
-
 	DrawDefaultPass(*drawcmdList);
 	mCommandQueue->ExecuteCommandList(drawcmdList);
-	/*DrawGeometryPass();
-	DrawLightingPass();
-	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));*/
-
-
-	
-	// swap the back and front buffers
-	//ThrowIfFailed(mSwapChain->Present(0, 0));
 	Present(mFrameResource.mRenderTarget);
 	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
 }
