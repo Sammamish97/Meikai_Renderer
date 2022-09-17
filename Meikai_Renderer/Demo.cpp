@@ -38,7 +38,6 @@ bool Demo::Initialize()
 	}
 	auto initList = mCommandQueue->GetCommandList();
 
-	//TODO: Load contents부분을 별개의 command list로 한번 감싸줘야 한다.
 	CreateDescriptorHeaps();
 
 	CreateBufferResources();
@@ -47,7 +46,11 @@ bool Demo::Initialize()
 	CreateIBLResources();
 	CreateIBLDescriptors();
 	BuildModels(initList);
-	LoadContent();
+
+	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
+	mCamera = std::make_unique<Camera>(aspectRatio);
+	BuildFrameResource();
+	CreateShader();
 
 	mScissorRect = { 0, 0, mClientWidth, mClientHeight };
 	mScreenViewport = {0, 0, (float)mClientWidth, (float)mClientHeight,0, 1};
@@ -58,17 +61,8 @@ bool Demo::Initialize()
 
 	auto fenceValue = mCommandQueue->ExecuteCommandList(initList);
 	mCommandQueue->WaitForFenceValue(fenceValue);
+	m_ContentLoaded = true;
 	return true;
-}
-
-void Demo::LoadContent()
-{
-	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
-	mCamera = std::make_unique<Camera>(aspectRatio);
-	BuildFrameResource();
-	CreateShader();
-	
-	m_ContentLoaded = true; 
 }
 
 void Demo::CreateDescriptorHeaps()
@@ -91,12 +85,6 @@ void Demo::CreateBufferResources()
 	clearColorBlack.Color[1] = 0.f;
 	clearColorBlack.Color[2] = 0.f;
 	clearColorBlack.Color[3] = 0.f;
-
-	CD3DX12_CLEAR_VALUE clearColorWhite;
-	clearColorWhite.Color[0] = 1.f;
-	clearColorWhite.Color[1] = 1.f;
-	clearColorWhite.Color[2] = 1.f;
-	clearColorWhite.Color[3] = 1.f;
 
 	CD3DX12_CLEAR_VALUE clearAlbedo = clearColorBlack;
 	clearAlbedo.Format = AlbedoFormat;
@@ -185,7 +173,6 @@ void Demo::CreateIBLDescriptors()
 
 void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 {
-	//TODO: Init 파트에서 Command list가 필요한 부분을 모아 따로 한번 flush해야 한다.
 	mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, *cmdList);
 	mModels["Quad"] = std::make_shared<Model>("../models/Quad.obj", this, *cmdList);
 	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);

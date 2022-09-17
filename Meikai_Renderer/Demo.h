@@ -36,8 +36,6 @@ private:
 	void CreateShader();
 
 private:
-	void LoadContent();
-
 	void CreateDescriptorHeaps();
 
 	void CreateBufferResources();
