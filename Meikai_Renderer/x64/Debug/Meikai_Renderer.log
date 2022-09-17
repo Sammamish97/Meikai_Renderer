@@ -1,22 +1,7 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  CommandList.cpp
-C:\Data\Meikai_Renderer\Meikai_Renderer\CommandList.cpp(346,87): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
-  CommandQueue.cpp
-  DXApp.cpp
-C:\Data\Meikai_Renderer\Meikai_Renderer\DXApp.cpp(620,34): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
   Demo.cpp
 C:\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
 C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(14): message : see declaration of 'DXApp'
 C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
 C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
-  Mesh.cpp
-  Model.cpp
-C:\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
-C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(14): message : see declaration of 'DXApp'
-C:\Data\Meikai_Renderer\Meikai_Renderer\Model.cpp(18,9): warning C4002: too many arguments for function-like macro invocation 'assert'
-  Object.cpp
-C:\Data\Meikai_Renderer\Meikai_Renderer\Model.h(16,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
-C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(14): message : see declaration of 'DXApp'
-  ResourceStateTracker.cpp
-  Generating Code...
   Meikai_Renderer.vcxproj -> C:\Data\Meikai_Renderer\bin\Meikai_Renderer_debug.exe

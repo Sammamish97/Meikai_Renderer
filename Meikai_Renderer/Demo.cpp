@@ -44,7 +44,7 @@ bool Demo::Initialize()
 	CreateBufferDescriptors();
 
 	CreateIBLResources(initList);
-	//CreateIBLDescriptors();
+	CreateIBLDescriptors();
 	BuildModels(initList);
 
 	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
@@ -111,7 +111,6 @@ void Demo::CreateBufferResources()
 	mFrameResource.mSsaoMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO, TextureUsage::SSAO, L"SSAO");
 	mFrameResource.mDepthStencilBuffer = std::make_shared<Texture>(this, depthDesc, &clearColorDepth, TextureUsage::Depth, L"DepthStencil");
 
-	
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mPositionMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mNormalMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mAlbedoMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
@@ -166,8 +165,8 @@ void Demo::CreateBufferDescriptors()
 
 void Demo::CreateIBLResources(std::shared_ptr<CommandList>& commandList)
 {
-	auto cmdList = mDirectCommandQueue->GetCommandList();
-	cmdList->LoadTextureFromFile(*mIBLResource.mHDRImage, L"../textures/Alexs_Apt_2k.hdr", TextureUsage::HDR);
+	mIBLResource.mHDRImage = std::make_shared<Texture>(this);
+	commandList->LoadTextureFromFile(*mIBLResource.mHDRImage, L"../textures/Alexs_Apt_2k.hdr", TextureUsage::HDR);
 	//mIBLResource.mCubeMap;
 	//mIBLResource.mDIffuseCubeMap;
 	//mIBLResource.mSpecularCubeMap;

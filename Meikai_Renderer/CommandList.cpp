@@ -144,10 +144,11 @@ void CommandList::FlushResourceBarriers()
 void CommandList::LoadTextureFromFile(Texture& texture, const std::wstring& fileName, TextureUsage textureUsage)
 {
 	std::filesystem::path filePath(fileName);
-	if (std::filesystem::exists(filePath))
+	//std::file system's directory is different with this file. Therefore, remove it temporarly.
+	/*if (std::filesystem::exists(filePath))
 	{
 		throw std::exception("File not found.");
-	}
+	}*/
 
 	std::lock_guard<std::mutex> lock(msTextureCacheMutex);
 

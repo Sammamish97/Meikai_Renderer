@@ -84,11 +84,11 @@ VertexOut VS(VertexIn vin)
 
 PS_OUTPUT PS(VertexOut pin)
 {
-    float3 texColor = gMetalic.SampleLevel(gsamPointClamp, pin.uv, 0.0f).xyz;
+    float3 texColor = gTestTex.SampleLevel(gsamPointClamp, pin.uv, 0.0f).xyz;
     //여기 HDR 톤매핑 기능을 넣어야할듯
 	// Interpolating normal can unnormalize it, so renormalize it.
     PS_OUTPUT output;
     output.Color = float4(ToneMapping(texColor), 1);
-    output.Color = float4(0, 0, 1, 1);
+    //output.Color = float4(0, 0, 1, 1);
     return output;
 }
