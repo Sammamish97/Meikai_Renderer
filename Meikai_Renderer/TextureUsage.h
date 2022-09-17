@@ -11,4 +11,5 @@ enum class TextureUsage
     Metalic,
     Roughness,
     SSAO,
+    HDR
 };

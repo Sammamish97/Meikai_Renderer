@@ -36,15 +36,15 @@ bool Demo::Initialize()
 	{
 		return false;
 	}
-	auto initList = mCommandQueue->GetCommandList();
+	auto initList = mDirectCommandQueue->GetCommandList();
 
 	CreateDescriptorHeaps();
 
 	CreateBufferResources();
 	CreateBufferDescriptors();
 
-	CreateIBLResources();
-	CreateIBLDescriptors();
+	CreateIBLResources(initList);
+	//CreateIBLDescriptors();
 	BuildModels(initList);
 
 	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
@@ -59,8 +59,8 @@ bool Demo::Initialize()
 	mGeometryPass = std::make_unique<GeometryPass>(this, mShaders["GeomVS"], mShaders["GeomPS"]);
 	mLightingPass = std::make_unique<LightingPass>(this, mShaders["ScreenQuadVS"], mShaders["LightingPS"]);
 
-	auto fenceValue = mCommandQueue->ExecuteCommandList(initList);
-	mCommandQueue->WaitForFenceValue(fenceValue);
+	auto fenceValue = mDirectCommandQueue->ExecuteCommandList(initList);
+	mDirectCommandQueue->WaitForFenceValue(fenceValue);
 	m_ContentLoaded = true;
 	return true;
 }
@@ -108,7 +108,7 @@ void Demo::CreateBufferResources()
 	mFrameResource.mAlbedoMap = std::make_shared<Texture>(this, colorDesc, &clearAlbedo, TextureUsage::Albedo, L"Albedo");
 	mFrameResource.mMetalicMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO, TextureUsage::Metalic, L"Metalic");
 	mFrameResource.mRoughnessMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO, TextureUsage::Roughness, L"Roughness");
-	mFrameResource.mAoMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO, TextureUsage::SSAO, L"SSAO");
+	mFrameResource.mSsaoMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO, TextureUsage::SSAO, L"SSAO");
 	mFrameResource.mDepthStencilBuffer = std::make_shared<Texture>(this, depthDesc, &clearColorDepth, TextureUsage::Depth, L"DepthStencil");
 
 	
@@ -117,7 +117,7 @@ void Demo::CreateBufferResources()
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mAlbedoMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mMetalicMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mRoughnessMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
-	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mAoMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
+	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mSsaoMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mDepthStencilBuffer->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mRenderTarget->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 }
@@ -130,6 +130,7 @@ void Demo::CreateBufferDescriptors()
 	mDescIndex.mAlbedoDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
 	mDescIndex.mRoughnessDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
 	mDescIndex.mMetalicDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
+	mDescIndex.mSsaoDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
 	mDescIndex.mRenderTargetRtvIdx = mRTVHeap->GetNextAvailableIndex();
 
 
@@ -139,8 +140,7 @@ void Demo::CreateBufferDescriptors()
 	mDescIndex.mRoughnessDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
 	mDescIndex.mMetalicDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
 	mDescIndex.mDepthStencilSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
-	mDescIndex.mRenderTargetSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
-
+	mDescIndex.mSsaoDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
 
 	mDescIndex.mDepthStencilDsvIdx = mDSVHeap->GetNextAvailableIndex();
 
@@ -150,6 +150,7 @@ void Demo::CreateBufferDescriptors()
 	CreateRtvDescriptor(AlbedoFormat, mFrameResource.mAlbedoMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mAlbedoDescRtvIdx));
 	CreateRtvDescriptor(RoughnessFormat, mFrameResource.mRoughnessMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mRoughnessDescRtvIdx));
 	CreateRtvDescriptor(MetalicFormat, mFrameResource.mMetalicMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mMetalicDescRtvIdx));
+	CreateRtvDescriptor(SSAOFormat, mFrameResource.mSsaoMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mSsaoDescRtvIdx));
 	CreateRtvDescriptor(AlbedoFormat, mFrameResource.mRenderTarget->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx));
 
 	CreateSrvDescriptor(PositionFormat, mFrameResource.mPositionMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mPositionDescSrvIdx));
@@ -158,17 +159,24 @@ void Demo::CreateBufferDescriptors()
 	CreateSrvDescriptor(RoughnessFormat, mFrameResource.mRoughnessMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mRoughnessDescSrvIdx));
 	CreateSrvDescriptor(MetalicFormat, mFrameResource.mMetalicMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mMetalicDescSrvIdx));
 	CreateSrvDescriptor(DepthStencilSRVFormat, mFrameResource.mDepthStencilBuffer->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mDepthStencilSrvIdx));
-	CreateSrvDescriptor(AlbedoFormat, mFrameResource.mRenderTarget->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mRenderTargetSrvIdx));
+	CreateSrvDescriptor(SSAOFormat, mFrameResource.mSsaoMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mSsaoDescSrvIdx));
 
 	CreateDsvDescriptor(DepthStencilDSVFormat, mFrameResource.mDepthStencilBuffer->GetResource(), mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
 }
 
-void Demo::CreateIBLResources()
+void Demo::CreateIBLResources(std::shared_ptr<CommandList>& commandList)
 {
+	auto cmdList = mDirectCommandQueue->GetCommandList();
+	cmdList->LoadTextureFromFile(*mIBLResource.mHDRImage, L"../textures/Alexs_Apt_2k.hdr", TextureUsage::HDR);
+	//mIBLResource.mCubeMap;
+	//mIBLResource.mDIffuseCubeMap;
+	//mIBLResource.mSpecularCubeMap;
 }
 
 void Demo::CreateIBLDescriptors()
 {
+	mIBLIndex.mHDRImageSrvIndex = mCBVSRVUAVHeap->GetNextAvailableIndex();
+	CreateSrvDescriptor(HDRFormat, mIBLResource.mHDRImage->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mIBLIndex.mHDRImageSrvIndex));
 }
 
 void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
@@ -273,11 +281,11 @@ void Demo::Update(const GameTimer& gt)
 
 void Demo::Draw(const GameTimer& gt)
 {
-	auto drawcmdList = mCommandQueue->GetCommandList();
-	//DrawDefaultPass(*drawcmdList);
-	DrawGeometryPass(*drawcmdList);
-	DrawLightingPass(*drawcmdList);
-	mCommandQueue->ExecuteCommandList(drawcmdList);
+	auto drawcmdList = mDirectCommandQueue->GetCommandList();
+	DrawDefaultPass(*drawcmdList);
+	//DrawGeometryPass(*drawcmdList);
+	//DrawLightingPass(*drawcmdList);
+	mDirectCommandQueue->ExecuteCommandList(drawcmdList);
 	Present(mFrameResource.mRenderTarget);
 	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
 }

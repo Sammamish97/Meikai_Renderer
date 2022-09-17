@@ -3,8 +3,9 @@ Texture2D gNormalMap  : register(t1);
 Texture2D gAlbedoMap  : register(t2);
 Texture2D gRoughness  : register(t3);
 Texture2D gMetalic  : register(t4);
-Texture2D gSsaoMap  : register(t5);
-Texture2D gDepthMap  : register(t6);
+Texture2D gDepthMap  : register(t5);
+Texture2D gSsaoMap : register(t6);
+Texture2D<float4> gTestTex : register(t7);
 
 SamplerState gsamPointClamp : register(s0);
 SamplerState gsamLinearClamp : register(s1);

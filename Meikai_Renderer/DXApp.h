@@ -33,6 +33,7 @@ protected:
 
 public:
     static DXApp* GetApp();
+    std::shared_ptr<CommandQueue> GetCommandQueue(D3D12_COMMAND_LIST_TYPE type);
     HINSTANCE AppInst()const;
     HWND      MainWnd()const;
     ComPtr<ID3D12Device2> GetDevice();
@@ -102,8 +103,11 @@ private:
     void LogOutputDisplayModes(IDXGIOutput* output, DXGI_FORMAT format);
     ComPtr<ID3D12Resource> stagingResource;
 
-public:
-    std::unique_ptr<CommandQueue> mCommandQueue;
+protected:
+    std::shared_ptr<CommandQueue> mDirectCommandQueue;
+    std::shared_ptr<CommandQueue> mComputeCommandQueue;
+    std::shared_ptr<CommandQueue> mCopyCommandQueue;
+
     std::unique_ptr<ResourceAllocator> mResourceAllocator;
 
 protected:

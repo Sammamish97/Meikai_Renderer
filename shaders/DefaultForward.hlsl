@@ -4,7 +4,16 @@ struct WorldMatrix
 };
 
 ConstantBuffer<WorldMatrix> objectWorld : register(b0);
-Texture2D<float4> testTexture : register(t6);
+
+Texture2D gPositionMap : register(t0);
+Texture2D gNormalMap  : register(t1);
+Texture2D gAlbedoMap  : register(t2);
+Texture2D gRoughness  : register(t3);
+Texture2D gMetalic  : register(t4);
+Texture2D gDepthMap  : register(t5);
+Texture2D gSsaoMap : register(t6);
+Texture2D<float4> gTestTex : register(t7);
+
 
 
 cbuffer cbPass : register(b1)
@@ -75,10 +84,11 @@ VertexOut VS(VertexIn vin)
 
 PS_OUTPUT PS(VertexOut pin)
 {
-    float3 texColor = testTexture.SampleLevel(gsamPointClamp, pin.uv, 0.0f).xyz;
+    float3 texColor = gMetalic.SampleLevel(gsamPointClamp, pin.uv, 0.0f).xyz;
     //여기 HDR 톤매핑 기능을 넣어야할듯
 	// Interpolating normal can unnormalize it, so renormalize it.
     PS_OUTPUT output;
     output.Color = float4(ToneMapping(texColor), 1);
+    output.Color = float4(0, 0, 1, 1);
     return output;
 }

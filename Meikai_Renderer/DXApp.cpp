@@ -38,6 +38,27 @@ DXApp* DXApp::GetApp()
 	return mApp;
 }
 
+std::shared_ptr<CommandQueue> DXApp::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type)
+{
+	std::shared_ptr<CommandQueue> commandQueue;
+	switch (type)
+	{
+	case D3D12_COMMAND_LIST_TYPE_DIRECT:
+		commandQueue = mDirectCommandQueue;
+		break;
+	case D3D12_COMMAND_LIST_TYPE_COMPUTE:
+		commandQueue = mComputeCommandQueue;
+		break;
+	case D3D12_COMMAND_LIST_TYPE_COPY:
+		commandQueue = mCopyCommandQueue;
+		break;
+	default:
+		assert(false && "Invalid command queue type.");
+	}
+
+	return commandQueue;
+}
+
 HINSTANCE DXApp::AppInst() const
 {
 	return mhAppInst;
@@ -327,7 +348,9 @@ bool DXApp::InitDirect3D()
 
 void DXApp::CreateCommandObjects()
 {
-	mCommandQueue = std::make_unique<CommandQueue>(this, D3D12_COMMAND_LIST_TYPE_DIRECT);
+	mDirectCommandQueue = std::make_unique<CommandQueue>(this, D3D12_COMMAND_LIST_TYPE_DIRECT);
+	mComputeCommandQueue = std::make_unique<CommandQueue>(this, D3D12_COMMAND_LIST_TYPE_COMPUTE);
+	mCopyCommandQueue = std::make_unique<CommandQueue>(this, D3D12_COMMAND_LIST_TYPE_COPY);
 }
 
 void DXApp::CreateSwapChain()
@@ -352,7 +375,7 @@ void DXApp::CreateSwapChain()
 	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	// Note: Swap chain uses queue to perform flush.
-	mdxgiFactory->CreateSwapChain(mCommandQueue->GetCommandQueue().Get(), &swapChainDesc, mSwapChain.GetAddressOf());
+	mdxgiFactory->CreateSwapChain(mDirectCommandQueue->GetCommandQueue().Get(), &swapChainDesc, mSwapChain.GetAddressOf());
 }
 
 void DXApp::CacheSwapChainImage()
@@ -498,7 +521,7 @@ void DXApp::CalculateFrameStats()
 
 void DXApp::Present(std::shared_ptr<Texture>& texture)
 {
-	auto cmdList = mCommandQueue->GetCommandList();
+	auto cmdList = mDirectCommandQueue->GetCommandList();
 	if(texture->IsValid())
 	{
 		if(texture->GetD3D12ResourceDesc().SampleDesc.Count>1)
@@ -512,14 +535,14 @@ void DXApp::Present(std::shared_ptr<Texture>& texture)
 	}
 
 	cmdList->TransitionBarrier(CurrentBackBuffer(), D3D12_RESOURCE_STATE_PRESENT);
-	mCommandQueue->ExecuteCommandList(cmdList);
+	mDirectCommandQueue->ExecuteCommandList(cmdList);
 
 	//UINT syncInterval = m_VSync ? 1 : 0;
 	//UINT presentFlags = m_IsTearingSupported && !m_VSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
 	ThrowIfFailed(mSwapChain->Present(false, 0))
-	mFenceValues[mCurrBackBuffer] = mCommandQueue->Signal();
+	mFenceValues[mCurrBackBuffer] = mDirectCommandQueue->Signal();
 
-	mCommandQueue->WaitForFenceValue(mFenceValues[mCurrBackBuffer]);
+	mDirectCommandQueue->WaitForFenceValue(mFenceValues[mCurrBackBuffer]);
 }
 
 void DXApp::TransitionResource(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2> commandList,

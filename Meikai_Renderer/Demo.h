@@ -33,13 +33,14 @@ protected:
 private:
 	void BuildModels(std::shared_ptr<CommandList>& cmdList);
 	void BuildFrameResource();
+	void CreateIBLResources(std::shared_ptr<CommandList>& commandList);
 	void CreateShader();
 
 private:
 	void CreateDescriptorHeaps();
 
 	void CreateBufferResources();
-	void CreateIBLResources();
+	
 
 	void CreateBufferDescriptors();
 	void CreateIBLDescriptors();

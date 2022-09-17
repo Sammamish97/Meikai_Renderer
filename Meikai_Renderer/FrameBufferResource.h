@@ -15,7 +15,7 @@ struct FrameBufferResource
 	std::shared_ptr<Texture> mAlbedoMap;
 	std::shared_ptr<Texture> mMetalicMap;
 	std::shared_ptr<Texture> mRoughnessMap;
-	std::shared_ptr<Texture> mAoMap;
+	std::shared_ptr<Texture> mSsaoMap;
 };
 
 struct IBLResource
@@ -45,6 +45,9 @@ struct FrameBufferDescriptorIndex
 
 	UINT mMetalicDescRtvIdx;
 	UINT mMetalicDescSrvIdx;
+
+	UINT mSsaoDescRtvIdx;
+	UINT mSsaoDescSrvIdx;
 
 	UINT mDepthStencilSrvIdx;
 	UINT mDepthStencilDsvIdx;
