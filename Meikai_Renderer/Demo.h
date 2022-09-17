@@ -47,8 +47,8 @@ private:
 	void CreateIBLDescriptors();
 
 	void DrawDefaultPass(CommandList& commandList);
-	//void DrawGeometryPass();
-	//void DrawLightingPass();
+	void DrawGeometryPass(CommandList& cmdList);
+	void DrawLightingPass(CommandList& cmdList);
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
 

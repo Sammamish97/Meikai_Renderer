@@ -62,7 +62,7 @@ public:
 	void ClearDepthStencilTexture(std::shared_ptr<Texture> texture, D3D12_CPU_DESCRIPTOR_HANDLE dsvCPUHandle, D3D12_CLEAR_FLAGS clearFlags, float depth = 1.0f, uint8_t stencil = 0);
 
 	void SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY primitiveTopology);
-	void SetRenderTargets(const std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE>& rtvArray, D3D12_CPU_DESCRIPTOR_HANDLE& dsvCPUHandle);
+	void SetRenderTargets(const std::vector<D3D12_CPU_DESCRIPTOR_HANDLE>& rtvArray, D3D12_CPU_DESCRIPTOR_HANDLE* dsvCPUHandle);
 
 	void SetViewport(const D3D12_VIEWPORT& viewport);
 	void SetScissorRect(const D3D12_RECT& scissorRect);
@@ -80,6 +80,7 @@ public:
 	ComPtr<ID3D12CommandAllocator> GetAllocator();
 	D3D12_COMMAND_LIST_TYPE GetCommandListType();
 
+
 	void SetDescriptorHeap(ComPtr<ID3D12DescriptorHeap>& heap);
 	void SetDescriptorTable(UINT rootParamIndex, D3D12_GPU_DESCRIPTOR_HANDLE GPUHandle);
 	void SetGraphics32BitConstants(uint32_t rootParameterIndex, uint32_t numConstants, const void* constants);
@@ -89,6 +90,7 @@ public:
 		static_assert(sizeof(T) % sizeof(uint32_t) == 0, "Size of type must be a multiple of 4 bytes");
 		SetGraphics32BitConstants(rootParameterIndex, sizeof(T) / sizeof(uint32_t), &constants);
 	}
+	void SetConstantBufferView(uint32_t rootParameterIndex, D3D12_GPU_VIRTUAL_ADDRESS dataGPUAddress);
 	void ReleaseTrackedObjects();
 
 private:

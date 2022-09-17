@@ -308,6 +308,11 @@ void CommandList::SetGraphics32BitConstants(uint32_t rootParameterIndex, uint32_
 	mCommandList->SetGraphicsRoot32BitConstants(rootParameterIndex, numConstants, constants, 0);
 }
 
+void CommandList::SetConstantBufferView(uint32_t rootParameterIndex, D3D12_GPU_VIRTUAL_ADDRESS dataGPUAddress)
+{
+	mCommandList->SetGraphicsRootConstantBufferView(rootParameterIndex, dataGPUAddress);
+}
+
 void CommandList::Close(void)
 {
 	mCommandList->Close();
@@ -336,9 +341,9 @@ void CommandList::SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY primitiveTopology)
 	mCommandList->IASetPrimitiveTopology(primitiveTopology);
 }
 
-void CommandList::SetRenderTargets(const std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE>& rtvArray, D3D12_CPU_DESCRIPTOR_HANDLE& dsvCPUHandle)
+void CommandList::SetRenderTargets(const std::vector<D3D12_CPU_DESCRIPTOR_HANDLE>& rtvArray, D3D12_CPU_DESCRIPTOR_HANDLE* dsvCPUHandle)
 {
-	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, &dsvCPUHandle);
+	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, dsvCPUHandle);
 }
 
 void CommandList::SetVertexBuffer(uint32_t slot, const VertexBuffer& vertexBuffer)

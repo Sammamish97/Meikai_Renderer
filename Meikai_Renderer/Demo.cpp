@@ -310,8 +310,8 @@ void Demo::DrawDefaultPass(CommandList& cmdList)
 
 	cmdList.SetDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
 
-	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { CD3DX12_CPU_DESCRIPTOR_HANDLE(mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx)) };
-	cmdList.SetRenderTargets(rtvArray, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx) };
+	cmdList.SetRenderTargets(rtvArray, &mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
 
 	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -321,114 +321,101 @@ void Demo::DrawDefaultPass(CommandList& cmdList)
 	}
 }
 
-//void Demo::DrawGeometryPass()
-//{
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mPositionMap.Get(),
-//		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mNormalMap.Get(),
-//		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mAlbedoMap.Get(),
-//		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mRoughnessMap.Get(),
-//		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mMetalicMap.Get(),
-//		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET));
-//
-//	auto positionRTV = mRTVHeap->GetCpuHandle(mDescIndex.mPositionDescRtvIdx);
-//	auto normalRTV = mRTVHeap->GetCpuHandle(mDescIndex.mNormalDescRtvIdx);
-//	auto albedoRTV = mRTVHeap->GetCpuHandle(mDescIndex.mAlbedoDescRtvIdx);
-//	auto roughnessRTV = mRTVHeap->GetCpuHandle(mDescIndex.mRoughnessDescRtvIdx);
-//	auto metalicRTV = mRTVHeap->GetCpuHandle(mDescIndex.mMetalicDescRtvIdx);
-//
-//	float colorClearValue[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-//	mCommandList->ClearRenderTargetView(positionRTV, colorClearValue, 0, nullptr);
-//	mCommandList->ClearRenderTargetView(normalRTV, colorClearValue, 0, nullptr);
-//	mCommandList->ClearRenderTargetView(albedoRTV, colorClearValue, 0, nullptr);
-//	mCommandList->ClearRenderTargetView(roughnessRTV, colorClearValue, 0, nullptr);
-//	mCommandList->ClearRenderTargetView(metalicRTV, colorClearValue, 0, nullptr);
-//
-//	mCommandList->ClearDepthStencilView(mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), 
-//		D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
-//
-//	mCommandList->SetPipelineState(mGeometryPass->mPSO.Get());
-//	mCommandList->SetGraphicsRootSignature(mGeometryPass->mRootSig.Get());
-//
-//	D3D12_GPU_VIRTUAL_ADDRESS commonCBAddress = mCommonCBAllocation.GPU;
-//	mCommandList->SetGraphicsRootConstantBufferView(1, commonCBAddress);
-//
-//	mCommandList->RSSetViewports(1, &mScreenViewport);
-//	mCommandList->RSSetScissorRects(1, &mScissorRect);
-//
-//	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { positionRTV, normalRTV, albedoRTV, roughnessRTV, metalicRTV };
-//	// Specify the buffers we are going to render to.
-//	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(),
-//		true, &mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
-//
-//	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-//
-//	for (const auto& object : objects)
-//	{
-//		object->Draw(mCommandList);
-//	}
-//}
-//
-//void Demo::DrawLightingPass()
-//{
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mPositionMap.Get(),
-//		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mNormalMap.Get(),
-//		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mAlbedoMap.Get(),
-//		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mRoughnessMap.Get(),
-//		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mFrameResource.mMetalicMap.Get(),
-//		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ));
-//
-//	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
-//		D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
-//
-//	// Clear the screen normal map and depth buffer.
-//	float ClearColor[] = { 0.f, 0.f, 0.f, 0.f };
-//	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), ClearColor, 0, nullptr);
-//
-//	//Set Pipeline & Root signature
-//	mCommandList->SetPipelineState(mLightingPass->mPSO.Get());
-//	mCommandList->SetGraphicsRootSignature(mLightingPass->mRootSig.Get());
-//
-//	D3D12_GPU_VIRTUAL_ADDRESS commonCBAddress = mCommonCBAllocation.GPU;
-//	mCommandList->SetGraphicsRootConstantBufferView(0, commonCBAddress);
-//
-//	D3D12_GPU_VIRTUAL_ADDRESS lightCBAddress = mLightAllocation.GPU;
-//	mCommandList->SetGraphicsRootConstantBufferView(1, lightCBAddress);
-//
-//	mCommandList->SetDescriptorHeaps(1, mCBVSRVUAVHeap->GetDescriptorHeap().GetAddressOf());
-//
-//	//Test descriptor heap accessing
-//	mCommandList->SetGraphicsRootDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
-//
-//	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
-//	mCommandList->RSSetViewports(1, &mScreenViewport);
-//	mCommandList->RSSetScissorRects(1, &mScissorRect);
-//
-//	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { CurrentBackBufferExtView() };
-//	// Specify the buffers we are going to render to.
-//	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, nullptr);
-//
-//	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-//
-//	mCommandList->IASetVertexBuffers(0, 0, nullptr);
-//	mCommandList->IASetIndexBuffer(nullptr);
-//	mCommandList->DrawInstanced(3, 1, 0, 0);
-//}
+void Demo::DrawGeometryPass(CommandList& cmdList)
+{
+	auto positionRTV = mRTVHeap->GetCpuHandle(mDescIndex.mPositionDescRtvIdx);
+	auto normalRTV = mRTVHeap->GetCpuHandle(mDescIndex.mNormalDescRtvIdx);
+	auto albedoRTV = mRTVHeap->GetCpuHandle(mDescIndex.mAlbedoDescRtvIdx);
+	auto roughnessRTV = mRTVHeap->GetCpuHandle(mDescIndex.mRoughnessDescRtvIdx);
+	auto metalicRTV = mRTVHeap->GetCpuHandle(mDescIndex.mMetalicDescRtvIdx);
+
+	auto positionResource = mFrameResource.mPositionMap;
+	auto normalResource = mFrameResource.mNormalMap;
+	auto albedoResource = mFrameResource.mAlbedoMap;
+	auto roughnessResource = mFrameResource.mRoughnessMap;
+	auto metalicResource = mFrameResource.mMetalicMap;
+
+	float colorClearValue[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	
+	cmdList.ClearTexture(positionResource, positionRTV, colorClearValue);
+	cmdList.ClearTexture(normalResource, normalRTV, colorClearValue);
+	cmdList.ClearTexture(albedoResource, albedoRTV, colorClearValue);
+	cmdList.ClearTexture(roughnessResource, roughnessRTV, colorClearValue);
+	cmdList.ClearTexture(metalicResource, metalicRTV, colorClearValue);
+
+	cmdList.ClearDepthStencilTexture(mFrameResource.mDepthStencilBuffer, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL);
+
+	cmdList.SetPipelineState(mGeometryPass->mPSO.Get());
+	cmdList.SetGraphicsRootSignature(mGeometryPass->mRootSig.Get());
+
+	D3D12_GPU_VIRTUAL_ADDRESS commonCBAddress = mCommonCBAllocation.GPU;
+	cmdList.SetConstantBufferView(1, commonCBAddress);
+
+	cmdList.SetViewport(mScreenViewport);
+	cmdList.SetScissorRect(mScissorRect);
+
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { positionRTV, normalRTV, albedoRTV, roughnessRTV, metalicRTV };
+	cmdList.SetRenderTargets(rtvArray, nullptr);
+
+	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	for (const auto& object : objects)
+	{
+		object->Draw(cmdList);
+	}
+}
+
+void Demo::DrawLightingPass(CommandList& cmdList)
+{
+	auto renderTargetResource = mFrameResource.mRenderTarget;
+
+	auto positionResource = mFrameResource.mPositionMap;
+	auto normalResource = mFrameResource.mNormalMap;
+	auto albedoResource = mFrameResource.mAlbedoMap;
+	auto roughnessResource = mFrameResource.mRoughnessMap;
+	auto metalicResource = mFrameResource.mMetalicMap;
+
+	auto renderTargetRTV = mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx);
+
+	cmdList.TransitionBarrier(positionResource->GetResource(), D3D12_RESOURCE_STATE_GENERIC_READ);
+	cmdList.TransitionBarrier(normalResource->GetResource(), D3D12_RESOURCE_STATE_GENERIC_READ);
+	cmdList.TransitionBarrier(albedoResource->GetResource(), D3D12_RESOURCE_STATE_GENERIC_READ);
+	cmdList.TransitionBarrier(roughnessResource->GetResource(), D3D12_RESOURCE_STATE_GENERIC_READ);
+	cmdList.TransitionBarrier(metalicResource->GetResource(), D3D12_RESOURCE_STATE_GENERIC_READ);
+
+	// Clear the screen normal map and depth buffer.
+	float ClearColor[] = { 0.f, 0.f, 0.f, 0.f };
+	cmdList.ClearTexture(renderTargetResource, renderTargetRTV, ClearColor);
+
+	//Set Pipeline & Root signature
+	mCommandList->SetPipelineState(mLightingPass->mPSO.Get());
+	mCommandList->SetGraphicsRootSignature(mLightingPass->mRootSig.Get());
+
+	D3D12_GPU_VIRTUAL_ADDRESS commonCBAddress = mCommonCBAllocation.GPU;
+	mCommandList->SetGraphicsRootConstantBufferView(0, commonCBAddress);
+
+	D3D12_GPU_VIRTUAL_ADDRESS lightCBAddress = mLightAllocation.GPU;
+	mCommandList->SetGraphicsRootConstantBufferView(1, lightCBAddress);
+
+	mCommandList->SetDescriptorHeaps(1, mCBVSRVUAVHeap->GetDescriptorHeap().GetAddressOf());
+
+	//Test descriptor heap accessing
+	mCommandList->SetGraphicsRootDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
+
+	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
+	mCommandList->RSSetViewports(1, &mScreenViewport);
+	mCommandList->RSSetScissorRects(1, &mScissorRect);
+
+	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { CurrentBackBufferExtView() };
+	// Specify the buffers we are going to render to.
+	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, nullptr);
+
+	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	mCommandList->IASetVertexBuffers(0, 0, nullptr);
+	mCommandList->IASetIndexBuffer(nullptr);
+	mCommandList->DrawInstanced(3, 1, 0, 0);
+}
 
 void Demo::OnMouseDown(WPARAM btnState, int x, int y)
 {
