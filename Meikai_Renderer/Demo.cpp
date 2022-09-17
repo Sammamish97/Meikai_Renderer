@@ -123,50 +123,54 @@ void Demo::CreateBufferResources()
 	mFrameResource.mAoMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO, TextureUsage::SSAO, L"SSAO");
 	mFrameResource.mDepthStencilBuffer = std::make_shared<Texture>(this, depthDesc, &clearColorDepth, TextureUsage::Depth, L"DepthStencil");
 
-	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mRenderTarget->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
+	
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mPositionMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mNormalMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mAlbedoMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mMetalicMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mRoughnessMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mAoMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
-	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mDepthStencilBuffer->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON); 
+	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mDepthStencilBuffer->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
+	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mRenderTarget->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 }
 
 
 void Demo::CreateBufferDescriptors()
 {
-	mDescIndex.mRenderTargetRtvIdx = mRTVHeap->GetNextAvailableIndex();
 	mDescIndex.mPositionDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
 	mDescIndex.mNormalDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
 	mDescIndex.mAlbedoDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
 	mDescIndex.mRoughnessDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
 	mDescIndex.mMetalicDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
+	mDescIndex.mRenderTargetRtvIdx = mRTVHeap->GetNextAvailableIndex();
 
-	mDescIndex.mRenderTargetSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
+
 	mDescIndex.mPositionDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
 	mDescIndex.mNormalDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
 	mDescIndex.mAlbedoDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
 	mDescIndex.mRoughnessDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
 	mDescIndex.mMetalicDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
 	mDescIndex.mDepthStencilSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
+	mDescIndex.mRenderTargetSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
+
 
 	mDescIndex.mDepthStencilDsvIdx = mDSVHeap->GetNextAvailableIndex();
 
-	CreateRtvDescriptor(AlbedoFormat, mFrameResource.mRenderTarget->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx));
+	
 	CreateRtvDescriptor(PositionFormat, mFrameResource.mPositionMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mPositionDescRtvIdx));
 	CreateRtvDescriptor(NormalFormat, mFrameResource.mNormalMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mNormalDescRtvIdx));
 	CreateRtvDescriptor(AlbedoFormat, mFrameResource.mAlbedoMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mAlbedoDescRtvIdx));
 	CreateRtvDescriptor(RoughnessFormat, mFrameResource.mRoughnessMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mRoughnessDescRtvIdx));
 	CreateRtvDescriptor(MetalicFormat, mFrameResource.mMetalicMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mMetalicDescRtvIdx));
+	CreateRtvDescriptor(AlbedoFormat, mFrameResource.mRenderTarget->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx));
 
-	CreateSrvDescriptor(AlbedoFormat, mFrameResource.mRenderTarget->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mRenderTargetSrvIdx));
 	CreateSrvDescriptor(PositionFormat, mFrameResource.mPositionMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mPositionDescSrvIdx));
 	CreateSrvDescriptor(NormalFormat, mFrameResource.mNormalMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mNormalDescSrvIdx));
 	CreateSrvDescriptor(AlbedoFormat, mFrameResource.mAlbedoMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mAlbedoDescSrvIdx));
 	CreateSrvDescriptor(RoughnessFormat, mFrameResource.mRoughnessMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mRoughnessDescSrvIdx));
 	CreateSrvDescriptor(MetalicFormat, mFrameResource.mMetalicMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mMetalicDescSrvIdx));
 	CreateSrvDescriptor(DepthStencilSRVFormat, mFrameResource.mDepthStencilBuffer->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mDepthStencilSrvIdx));
+	CreateSrvDescriptor(AlbedoFormat, mFrameResource.mRenderTarget->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mRenderTargetSrvIdx));
 
 	CreateDsvDescriptor(DepthStencilDSVFormat, mFrameResource.mDepthStencilBuffer->GetResource(), mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
 }
@@ -259,16 +263,16 @@ void Demo::UpdateLightCB(const GameTimer& gt)
 	LightCB lightData;
 
 	lightData.directLight.Direction = XMFLOAT3(-0.5f, 0.5f, 0.5f);
-	lightData.directLight.Color = XMFLOAT3(0.1f, 0.1f, 0.1f);
+	lightData.directLight.Color = XMFLOAT3(10, 10, 10);
 
 	lightData.pointLight[0].Position = XMFLOAT3(2, 0, 0);
-	lightData.pointLight[0].Color = XMFLOAT3(1, 0, 0);
+	lightData.pointLight[0].Color = XMFLOAT3(10, 0, 0);
 
 	lightData.pointLight[1].Position = XMFLOAT3(0, 2, 0);
-	lightData.pointLight[1].Color = XMFLOAT3(0.0, 1, 0.0);
+	lightData.pointLight[1].Color = XMFLOAT3(0.0, 10, 0.0);
 
 	lightData.pointLight[2].Position = XMFLOAT3(0, 0, 2);
-	lightData.pointLight[2].Color = XMFLOAT3(0, 0, 1);
+	lightData.pointLight[2].Color = XMFLOAT3(0, 0, 10);
 
 	mLightAllocation.Copy(&lightData, sizeof(LightCB));
 }
@@ -283,7 +287,9 @@ void Demo::Update(const GameTimer& gt)
 void Demo::Draw(const GameTimer& gt)
 {
 	auto drawcmdList = mCommandQueue->GetCommandList();
-	DrawDefaultPass(*drawcmdList);
+	//DrawDefaultPass(*drawcmdList);
+	DrawGeometryPass(*drawcmdList);
+	DrawLightingPass(*drawcmdList);
 	mCommandQueue->ExecuteCommandList(drawcmdList);
 	Present(mFrameResource.mRenderTarget);
 	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
@@ -355,7 +361,7 @@ void Demo::DrawGeometryPass(CommandList& cmdList)
 	cmdList.SetScissorRect(mScissorRect);
 
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { positionRTV, normalRTV, albedoRTV, roughnessRTV, metalicRTV };
-	cmdList.SetRenderTargets(rtvArray, nullptr);
+	cmdList.SetRenderTargets(rtvArray, &mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
 
 	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -388,33 +394,31 @@ void Demo::DrawLightingPass(CommandList& cmdList)
 	cmdList.ClearTexture(renderTargetResource, renderTargetRTV, ClearColor);
 
 	//Set Pipeline & Root signature
-	mCommandList->SetPipelineState(mLightingPass->mPSO.Get());
-	mCommandList->SetGraphicsRootSignature(mLightingPass->mRootSig.Get());
+	cmdList.SetPipelineState(mLightingPass->mPSO.Get());
+	cmdList.SetGraphicsRootSignature(mLightingPass->mRootSig.Get());
 
 	D3D12_GPU_VIRTUAL_ADDRESS commonCBAddress = mCommonCBAllocation.GPU;
-	mCommandList->SetGraphicsRootConstantBufferView(0, commonCBAddress);
+	cmdList.SetConstantBufferView(0, commonCBAddress);
 
 	D3D12_GPU_VIRTUAL_ADDRESS lightCBAddress = mLightAllocation.GPU;
-	mCommandList->SetGraphicsRootConstantBufferView(1, lightCBAddress);
+	cmdList.SetConstantBufferView(1, lightCBAddress);
 
-	mCommandList->SetDescriptorHeaps(1, mCBVSRVUAVHeap->GetDescriptorHeap().GetAddressOf());
+	cmdList.SetDescriptorHeap(mCBVSRVUAVHeap->GetDescriptorHeap());
 
-	//Test descriptor heap accessing
-	mCommandList->SetGraphicsRootDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
+	cmdList.SetDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
 
-	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
-	mCommandList->RSSetViewports(1, &mScreenViewport);
-	mCommandList->RSSetScissorRects(1, &mScissorRect);
+	//// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
+	cmdList.SetViewport(mScreenViewport);
+	cmdList.SetScissorRect(mScissorRect);
 
-	std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> rtvArray = { CurrentBackBufferExtView() };
-	// Specify the buffers we are going to render to.
-	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, nullptr);
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { renderTargetRTV };
+	//// Specify the buffers we are going to render to.
+	cmdList.SetRenderTargets(rtvArray, nullptr);
+	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	mCommandList->IASetVertexBuffers(0, 0, nullptr);
-	mCommandList->IASetIndexBuffer(nullptr);
-	mCommandList->DrawInstanced(3, 1, 0, 0);
+	cmdList.SetEmptyVertexBuffer();
+	cmdList.SetEmptyIndexBuffer();
+	cmdList.Draw(3);
 }
 
 void Demo::OnMouseDown(WPARAM btnState, int x, int y)

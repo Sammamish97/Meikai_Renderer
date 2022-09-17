@@ -346,6 +346,16 @@ void CommandList::SetRenderTargets(const std::vector<D3D12_CPU_DESCRIPTOR_HANDLE
 	mCommandList->OMSetRenderTargets(rtvArray.size(), rtvArray.data(), true, dsvCPUHandle);
 }
 
+void CommandList::SetEmptyVertexBuffer()
+{
+	mCommandList->IASetVertexBuffers(0, 0, nullptr);
+}
+
+void CommandList::SetEmptyIndexBuffer()
+{
+	mCommandList->IASetIndexBuffer(nullptr);
+}
+
 void CommandList::SetVertexBuffer(uint32_t slot, const VertexBuffer& vertexBuffer)
 {
 	TransitionBarrier(vertexBuffer, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
