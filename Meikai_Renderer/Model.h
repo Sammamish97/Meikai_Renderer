@@ -31,7 +31,7 @@ public:
 
 	void LoadVertices(aiMesh* mesh, std::vector<Vertex>& vertices);
 	void LoadIndices(aiMesh* mesh, std::vector<WORD>& indices);
-	void LoadBones(aiMesh* mesh, std::vector<BoneData>& indices);
+	void LoadBones(aiMesh* mesh, std::vector<BoneData>& boneDatas, std::vector<Vertex>& vertices);
 
 public:
 	std::vector<Mesh> meshes;

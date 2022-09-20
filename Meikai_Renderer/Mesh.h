@@ -14,10 +14,9 @@ using namespace DirectX;
 class DXApp;
 struct BoneData
 {
+	UINT boneID;
 	std::string name;
 	XMFLOAT4X4 offsetMatrix;
-	XMINT4 jointIDs;
-	XMFLOAT4 weights;
 };
 
 struct Vertex
@@ -27,8 +26,12 @@ struct Vertex
 	XMFLOAT2 UV;
 	XMFLOAT3 tangent;
 	XMFLOAT3 biTangent;
-	XMFLOAT4 jointIDs;
-	XMFLOAT4 weights;
+	
+	UINT boneIDs[4];
+	float weights[4];
+	int weightNum = 0;
+
+	void AddBoneData(int boneID, float weight);
 };
 
 
@@ -47,8 +50,10 @@ private:
 
 	std::vector<Vertex> mVertices;
 	std::vector<WORD> mIndices;
+	std::vector<BoneData> mBoneData;
 
 	UINT mIndexCount;
+	UINT mBoneCount;
 
 private:
 	void Init(CommandList& commandList);

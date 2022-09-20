@@ -55,7 +55,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, CommandList& command
     }
     if (mesh->HasBones())
     {
-        LoadBones(mesh, bones);
+        LoadBones(mesh, bones, vertices);
     }
     
    
@@ -123,26 +123,25 @@ void Model::LoadIndices(aiMesh* mesh, std::vector<WORD>& indices)
     }
 }
 
-void Model::LoadBones(aiMesh* mesh, std::vector<BoneData>& indices)
+void Model::LoadBones(aiMesh* mesh, std::vector<BoneData>& boneDatas, std::vector<Vertex>& vertices)
 {
-    for(UINT i = 0; i < mesh->mNumBones; ++i)
+    int boneCount = 0;
+    for(UINT boneIdx = 0; boneIdx < mesh->mNumBones; ++boneIdx)
     {
         BoneData boneData;
-        aiBone* bone = mesh->mBones[i];
+        aiBone* bone = mesh->mBones[boneIdx];
         boneData.name = bone->mName.C_Str();
         boneData.offsetMatrix = MathHelper::AiMatToDxMat(bone->mOffsetMatrix);
+        boneData.boneID = boneCount++;
 
-        std::array<UINT, 4> jointIDs;
-        std::array<float, 4> weights;
-
-        for(UINT j = 0; j < bone->mNumWeights; ++j)
+        UINT weightNum = bone->mNumWeights;
+        for (UINT weightIdx = 0; weightIdx < weightNum; ++weightIdx)
         {
-            aiVertexWeight weight = bone->mWeights[j];
-            jointIDs[j] = weight.mVertexId;
-            weights[j] = weight.mWeight;
+            auto vertexBoneData = bone->mWeights[weightIdx];
+            UINT vertexID = vertexBoneData.mVertexId;
+            float weight = vertexBoneData.mWeight;
+            vertices[vertexID].AddBoneData(boneData.boneID, weight);
         }
-
-        boneData.jointIDs = XMINT4(jointIDs[0], jointIDs[1], jointIDs[2], jointIDs[3]);
-        boneData.weights = XMFLOAT4(weights[0], weights[1], weights[2], weights[3]);
+        boneDatas.push_back(boneData);
     }
 }

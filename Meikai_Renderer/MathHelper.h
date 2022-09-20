@@ -72,6 +72,9 @@ public:
 		return DirectX::XMMatrixTranspose(DirectX::XMMatrixInverse(&det, A));
 	}
 
+	//static void SetXMFloat4ByIndex(DirectX::XMFLOAT4& floatData, UINT index, float value);
+	//static void SetXMInt4ByIndex(DirectX::XMINT4& intData, UINT index, float value);
+
 	static DirectX::XMFLOAT4X4 AiMatToDxMat(aiMatrix4x4 aiMat);
 
 	static DirectX::XMFLOAT4X4 Identity4x4()
