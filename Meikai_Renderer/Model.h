@@ -29,6 +29,10 @@ public:
 	void ProcessNode(aiNode* node, const aiScene* scene, CommandList& commandList);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, CommandList& commandList);
 
+	void LoadVertices(aiMesh* mesh, std::vector<Vertex>& vertices);
+	void LoadIndices(aiMesh* mesh, std::vector<WORD>& indices);
+	void LoadBones(aiMesh* mesh, std::vector<BoneData>& indices);
+
 public:
 	std::vector<Mesh> meshes;
 };

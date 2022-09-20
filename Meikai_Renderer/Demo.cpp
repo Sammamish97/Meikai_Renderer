@@ -180,6 +180,7 @@ void Demo::CreateIBLDescriptors()
 
 void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 {
+	mModels["X_Bot"] = std::make_shared<Model>("../models/X_Bot.fbx", this, *cmdList);
 	mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, *cmdList);
 	mModels["Quad"] = std::make_shared<Model>("../models/Quad.obj", this, *cmdList);
 	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);
@@ -187,7 +188,7 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
 
 	objects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(10.f, 10.f, 10.f)));
-	objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(0.f, 0.f, 0.f)));
+	objects.push_back(std::make_unique<Object>(mModels["X_Bot"], XMFLOAT3(0.f, 0.f, 0.f)));
 
 	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
 	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(1.f, -1.f, 0.f)));

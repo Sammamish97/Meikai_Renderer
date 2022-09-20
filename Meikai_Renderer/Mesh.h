@@ -12,6 +12,13 @@ using namespace Microsoft::WRL;
 using namespace DirectX;
 
 class DXApp;
+struct BoneData
+{
+	std::string name;
+	XMFLOAT4X4 offsetMatrix;
+	XMINT4 jointIDs;
+	XMFLOAT4 weights;
+};
 
 struct Vertex
 {
@@ -20,7 +27,10 @@ struct Vertex
 	XMFLOAT2 UV;
 	XMFLOAT3 tangent;
 	XMFLOAT3 biTangent;
+	XMFLOAT4 jointIDs;
+	XMFLOAT4 weights;
 };
+
 
 struct Mesh
 {

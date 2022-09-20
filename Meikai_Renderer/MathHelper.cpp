@@ -76,3 +76,17 @@ XMVECTOR MathHelper::RandHemisphereUnitVec3(XMVECTOR n)
 		return XMVector3Normalize(v);
 	}
 }
+
+XMFLOAT4X4 MathHelper::AiMatToDxMat(aiMatrix4x4 aiMat)
+{
+	XMFLOAT4X4 result;
+	aiMat = aiMat.Transpose();
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			result.m[i][j] = aiMat[i][j];
+		}
+	}
+	return result;
+}

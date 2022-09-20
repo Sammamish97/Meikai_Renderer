@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <DirectXMath.h>
 #include <cstdint>
-
+#include <assimp/Importer.hpp>
 class MathHelper
 {
 public:
@@ -72,6 +72,8 @@ public:
 		return DirectX::XMMatrixTranspose(DirectX::XMMatrixInverse(&det, A));
 	}
 
+	static DirectX::XMFLOAT4X4 AiMatToDxMat(aiMatrix4x4 aiMat);
+
 	static DirectX::XMFLOAT4X4 Identity4x4()
 	{
 		static DirectX::XMFLOAT4X4 I(
@@ -88,6 +90,4 @@ public:
 
 	static const float Infinity;
 	static const float Pi;
-
-
 };

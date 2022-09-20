@@ -1,6 +1,7 @@
 #include "Model.h"
 #include "DXApp.h"
 #include "CommandList.h"
+#include "MathHelper.h"
 Model::Model(const std::string& file_path, DXApp* app, CommandList& commandList)
 	:mApp(app)
 {
@@ -44,9 +45,26 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, CommandList& command
 {
     std::vector<Vertex> vertices;
     std::vector<WORD> indices;
-    //std::vector<textures>
+    std::vector<BoneData> bones;
 
-    for(unsigned int i = 0; i < mesh->mNumVertices; ++i)
+    //std::vector<textures>
+    LoadVertices(mesh, vertices);
+    if(mesh->HasFaces())
+    {
+        LoadIndices(mesh, indices);
+    }
+    if (mesh->HasBones())
+    {
+        LoadBones(mesh, bones);
+    }
+    
+   
+    return Mesh(mApp, vertices, indices, commandList);
+}
+
+void Model::LoadVertices(aiMesh* mesh, std::vector<Vertex>& vertices)
+{
+    for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
     {
         Vertex vertex;
         XMFLOAT3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
@@ -89,6 +107,10 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, CommandList& command
         }
         vertices.push_back(vertex);
     }
+}
+
+void Model::LoadIndices(aiMesh* mesh, std::vector<WORD>& indices)
+{
     for (unsigned int i = 0; i < mesh->mNumFaces; i++)
     {
         aiFace face = mesh->mFaces[i];
@@ -99,5 +121,28 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, CommandList& command
             indices.push_back(face.mIndices[j]);
         }
     }
-    return Mesh(mApp, vertices, indices, commandList);
+}
+
+void Model::LoadBones(aiMesh* mesh, std::vector<BoneData>& indices)
+{
+    for(UINT i = 0; i < mesh->mNumBones; ++i)
+    {
+        BoneData boneData;
+        aiBone* bone = mesh->mBones[i];
+        boneData.name = bone->mName.C_Str();
+        boneData.offsetMatrix = MathHelper::AiMatToDxMat(bone->mOffsetMatrix);
+
+        std::array<UINT, 4> jointIDs;
+        std::array<float, 4> weights;
+
+        for(UINT j = 0; j < bone->mNumWeights; ++j)
+        {
+            aiVertexWeight weight = bone->mWeights[j];
+            jointIDs[j] = weight.mVertexId;
+            weights[j] = weight.mWeight;
+        }
+
+        boneData.jointIDs = XMINT4(jointIDs[0], jointIDs[1], jointIDs[2], jointIDs[3]);
+        boneData.weights = XMFLOAT4(weights[0], weights[1], weights[2], weights[3]);
+    }
 }

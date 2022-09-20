@@ -19,6 +19,7 @@
     <ClInclude Include="..\include\DirectXTex\DirectXTexP.h" />
     <ClInclude Include="..\include\DirectXTex\filters.h" />
     <ClInclude Include="..\include\DirectXTex\scoped.h" />
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="BufferFormat.h" />
     <ClInclude Include="Camera.h" />
@@ -72,6 +73,7 @@
     <ClCompile Include="..\include\DirectXTex\DirectXTexTGA.cpp" />
     <ClCompile Include="..\include\DirectXTex\DirectXTexUtil.cpp" />
     <ClCompile Include="..\include\DirectXTex\DirectXTexWIC.cpp" />
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CommandList.cpp" />
