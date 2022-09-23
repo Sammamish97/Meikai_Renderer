@@ -20,6 +20,7 @@
     <ClInclude Include="..\include\DirectXTex\filters.h" />
     <ClInclude Include="..\include\DirectXTex\scoped.h" />
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="BoneDebugPass.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="BufferFormat.h" />
     <ClInclude Include="Camera.h" />
@@ -35,6 +36,7 @@
     <ClInclude Include="GeometryPass.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="IPass.h" />
+    <ClInclude Include="JointDebugPass.h" />
     <ClInclude Include="LightingPass.h" />
     <ClInclude Include="FrameBufferResource.h" />
     <ClInclude Include="MathHelper.h" />
@@ -74,6 +76,7 @@
     <ClCompile Include="..\include\DirectXTex\DirectXTexUtil.cpp" />
     <ClCompile Include="..\include\DirectXTex\DirectXTexWIC.cpp" />
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="BoneDebugPass.cpp" />
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CommandList.cpp" />
@@ -87,6 +90,7 @@
     <ClCompile Include="GeometryPass.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="IPass.cpp" />
+    <ClCompile Include="JointDebugPass.cpp" />
     <ClCompile Include="LightingPass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathHelper.cpp" />

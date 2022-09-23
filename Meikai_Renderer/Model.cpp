@@ -10,17 +10,16 @@ Model::Model(const std::string& file_path, DXApp* app, CommandList& commandList)
 
 void Model::LoadModel(const std::string& file_path, CommandList& commandList)
 {
-    Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(file_path,
+    pScene = mimporter.ReadFile(file_path,
         aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    if (!pScene || pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !pScene->mRootNode)
     {
         assert("Fail to Load %s", file_path.c_str());
     }
 
     name = file_path.substr(0, file_path.find_last_of('/'));
-    ProcessNode(scene->mRootNode, scene, commandList);
+    ProcessNode(pScene->mRootNode, pScene, commandList);
 }
 
 
@@ -32,7 +31,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene, CommandList& command
         // the node object only contains indices to index the actual objects in the scene. 
         // the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(ProcessMesh(mesh, scene, commandList));
+        mMeshes.push_back(ProcessMesh(mesh, scene, commandList));
     }
     // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
     for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -45,9 +44,8 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, CommandList& command
 {
     std::vector<Vertex> vertices;
     std::vector<WORD> indices;
-    std::vector<BoneData> bones;
-
     //std::vector<textures>
+
     LoadVertices(mesh, vertices);
     if(mesh->HasFaces())
     {
@@ -55,9 +53,8 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, CommandList& command
     }
     if (mesh->HasBones())
     {
-        LoadBones(mesh, bones, vertices);
+        LoadBones(mesh, vertices);
     }
-    
    
     return Mesh(mApp, vertices, indices, commandList);
 }
@@ -123,25 +120,97 @@ void Model::LoadIndices(aiMesh* mesh, std::vector<WORD>& indices)
     }
 }
 
-void Model::LoadBones(aiMesh* mesh, std::vector<BoneData>& boneDatas, std::vector<Vertex>& vertices)
+void Model::LoadBones(aiMesh* mesh, std::vector<Vertex>& vertices)
 {
     int boneCount = 0;
-    for(UINT boneIdx = 0; boneIdx < mesh->mNumBones; ++boneIdx)
+    for (UINT boneIdx = 0; boneIdx < mesh->mNumBones; ++boneIdx)
     {
         BoneData boneData;
         aiBone* bone = mesh->mBones[boneIdx];
-        boneData.name = bone->mName.C_Str();
-        boneData.offsetMatrix = MathHelper::AiMatToDxMat(bone->mOffsetMatrix);
-        boneData.boneID = boneCount++;
+    	boneData.offsetMatrix = bone->mOffsetMatrix;
+        std::string boneName = mesh->mBones[boneIdx]->mName.C_Str();
 
         UINT weightNum = bone->mNumWeights;
         for (UINT weightIdx = 0; weightIdx < weightNum; ++weightIdx)
         {
             auto vertexBoneData = bone->mWeights[weightIdx];
-            UINT vertexID = vertexBoneData.mVertexId;
+            UINT vertexID = vertexBoneData.mVertexId;//TODO: Notify base index.
             float weight = vertexBoneData.mWeight;
-            vertices[vertexID].AddBoneData(boneData.boneID, weight);
+            vertices[vertexID].AddBoneData(boneCount, weight);
         }
-        boneDatas.push_back(boneData);
+        mBoneMap[boneName] = boneCount;
+        mBoneData.push_back(boneData);
+        boneCount++;
+    }
+
+    ExtractJoint();
+    ExtractBone();
+}
+
+void Model::GetBoneTransforms(std::vector<aiMatrix4x4>& Transforms)
+{
+    Transforms.resize(mBoneData.size());
+
+    aiMatrix4x4 identity;
+
+    ReadNodeHierarchy(pScene->mRootNode, identity);
+
+    UINT boneDataSIze = mBoneData.size();
+    for(UINT i = 0; i < boneDataSIze; ++i)
+    {
+        Transforms[i] = mBoneData[i].finalMatrix;
+    }
+}
+
+void Model::ReadNodeHierarchy(const aiNode* pNode, const aiMatrix4x4& parentTransform)
+{
+    std::string NodeName(pNode->mName.data);
+    aiMatrix4x4 NodeTransformation(pNode->mTransformation);
+    aiMatrix4x4 GlobalTransformation = parentTransform * NodeTransformation;
+
+    if(mBoneMap.find(NodeName) != mBoneMap.end())
+    {
+        UINT boneIndex = mBoneMap[NodeName];
+        mBoneData[boneIndex].finalMatrix = GlobalTransformation * mBoneData[boneIndex].offsetMatrix;
+    }
+    for(UINT i = 0; i < pNode->mNumChildren; ++i)
+    {
+        ReadNodeHierarchy(pNode->mChildren[i], GlobalTransformation);
+    }
+}
+
+void Model::ExtractJoint()
+{
+    mJointPositions.clear();
+    for(const auto& boneData : mBoneData)
+    {
+        aiQuaterniont<float> rotation;
+        aiVector3t<float> position;
+        boneData.offsetMatrix.DecomposeNoScaling(rotation, position);
+        mJointPositions.push_back(MathHelper::AiVecToDxVec(position));
+    }
+}
+
+void Model::ExtractBone()
+{
+    mBonePositions.clear();
+    aiVector3t<float> localOrigin{ 0, 0, 0 };
+    ExtractBoneRecursive(pScene->mRootNode, localOrigin);
+}
+
+void Model::ExtractBoneRecursive(const aiNode* pNode, aiVector3t<float> parentPos)
+{
+    std::string boneName = pNode->mName.data;
+    UINT boneIndex = mBoneMap[boneName];
+    aiMatrix4x4 offsetMatrix = mBoneData[boneIndex].offsetMatrix;
+    aiQuaterniont<float> rotation;//Don't use.
+    aiVector3t<float> position;
+    offsetMatrix.DecomposeNoScaling(rotation, position);
+
+    mBonePositions.push_back(MathHelper::AiVecToDxVec(parentPos));
+    mBonePositions.push_back(MathHelper::AiVecToDxVec(position));
+    for (UINT i = 0; i < pNode->mNumChildren; ++i)
+    {
+        ExtractBoneRecursive(pNode->mChildren[i], position);
     }
 }

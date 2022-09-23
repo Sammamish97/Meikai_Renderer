@@ -188,7 +188,11 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 	//mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
 
 	//objects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(10.f, 10.f, 10.f)));
-	objects.push_back(std::make_unique<Object>(mModels["X_Bot"], XMFLOAT3(0.f, 0.f, 0.f)));
+	objects.push_back(std::make_unique<Object>(mModels["X_Bot"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
+	objects.push_back(std::make_unique<Object>(mModels["X_Bot"], XMFLOAT3(150.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
+	objects.push_back(std::make_unique<Object>(mModels["X_Bot"], XMFLOAT3(-150.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
+	objects.push_back(std::make_unique<Object>(mModels["X_Bot"], XMFLOAT3(0.f, -100.f, 150.f), XMFLOAT3(0.01, 0.01, 0.01)));
+	objects.push_back(std::make_unique<Object>(mModels["X_Bot"], XMFLOAT3(0.f, -100.f, -150.f), XMFLOAT3(0.01, 0.01, 0.01)));
 
 	//mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
 	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(1.f, -1.f, 0.f)));
@@ -260,13 +264,13 @@ void Demo::UpdateLightCB(const GameTimer& gt)
 	lightData.directLight.Direction = XMFLOAT3(-0.5f, 0.5f, 0.5f);
 	lightData.directLight.Color = XMFLOAT3(10, 10, 10);
 
-	lightData.pointLight[0].Position = XMFLOAT3(2, 0, 0);
-	lightData.pointLight[0].Color = XMFLOAT3(10, 0, 0);
+	lightData.pointLight[0].Position = XMFLOAT3(1.5, 1.5, 1.5);
+	lightData.pointLight[0].Color = XMFLOAT3(70, 70, 70);
 
-	lightData.pointLight[1].Position = XMFLOAT3(0, 2, 0);
-	lightData.pointLight[1].Color = XMFLOAT3(0.0, 10, 0.0);
+	lightData.pointLight[1].Position = XMFLOAT3(-1.5, -1.5, -1.5);
+	lightData.pointLight[1].Color = XMFLOAT3(70, 10, 70);
 
-	lightData.pointLight[2].Position = XMFLOAT3(0, 0, 2);
+	lightData.pointLight[2].Position = XMFLOAT3(0, 0, 10);
 	lightData.pointLight[2].Color = XMFLOAT3(0, 0, 10);
 
 	mLightAllocation.Copy(&lightData, sizeof(LightCB));
@@ -282,9 +286,9 @@ void Demo::Update(const GameTimer& gt)
 void Demo::Draw(const GameTimer& gt)
 {
 	auto drawcmdList = mDirectCommandQueue->GetCommandList();
-	DrawDefaultPass(*drawcmdList);
-	//DrawGeometryPass(*drawcmdList);
-	//DrawLightingPass(*drawcmdList);
+	//DrawDefaultPass(*drawcmdList);
+	DrawGeometryPass(*drawcmdList);
+	DrawLightingPass(*drawcmdList);
 	mDirectCommandQueue->ExecuteCommandList(drawcmdList);
 	Present(mFrameResource.mRenderTarget);
 	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;

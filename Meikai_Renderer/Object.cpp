@@ -29,7 +29,7 @@ XMMATRIX Object::GetWorldMat() const
 
 void Object::Draw(CommandList& commandList)
 {
-	for (auto& mesh : mModel->meshes)
+	for (auto& mesh : mModel->mMeshes)
 	{
 		SetWorldMatrix(commandList);
 		mesh.Draw(commandList);
@@ -38,7 +38,7 @@ void Object::Draw(CommandList& commandList)
 
 void Object::DrawWithoutWorld(CommandList& commandList)
 {
-	for (auto& mesh : mModel->meshes)
+	for (auto& mesh : mModel->mMeshes)
 	{
 		mesh.Draw(commandList);
 	}

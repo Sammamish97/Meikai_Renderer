@@ -12,13 +12,6 @@ using namespace Microsoft::WRL;
 using namespace DirectX;
 
 class DXApp;
-struct BoneData
-{
-	UINT boneID;
-	std::string name;
-	XMFLOAT4X4 offsetMatrix;
-};
-
 struct Vertex
 {
 	XMFLOAT3 position;
@@ -50,7 +43,7 @@ private:
 
 	std::vector<Vertex> mVertices;
 	std::vector<WORD> mIndices;
-	std::vector<BoneData> mBoneData;
+
 
 	UINT mIndexCount;
 	UINT mBoneCount;

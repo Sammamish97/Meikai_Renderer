@@ -90,3 +90,8 @@ XMFLOAT4X4 MathHelper::AiMatToDxMat(aiMatrix4x4 aiMat)
 	}
 	return result;
 }
+
+DirectX::XMFLOAT3 MathHelper::AiVecToDxVec(aiVector3t<float> aiVec)
+{
+	return XMFLOAT3(aiVec.x, aiVec.y, aiVec.z);
+}

@@ -77,6 +77,9 @@ public:
 
 	static DirectX::XMFLOAT4X4 AiMatToDxMat(aiMatrix4x4 aiMat);
 
+	static DirectX::XMFLOAT3 AiVecToDxVec(aiVector3t<float> aiVec);
+
+
 	static DirectX::XMFLOAT4X4 Identity4x4()
 	{
 		static DirectX::XMFLOAT4X4 I(

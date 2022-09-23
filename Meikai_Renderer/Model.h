@@ -7,6 +7,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <map>
 
 #include "Mesh.h"
 
@@ -15,6 +16,17 @@ using namespace DirectX;
 
 struct DXApp;
 class CommandList;
+
+struct BoneData
+{
+	aiMatrix4x4 offsetMatrix;
+	aiMatrix4x4 finalMatrix;
+	BoneData() = default;
+	BoneData(const aiMatrix4x4& offset)
+	{
+		offsetMatrix = offset;
+	}
+};
 
 struct Model
 {
@@ -31,9 +43,23 @@ public:
 
 	void LoadVertices(aiMesh* mesh, std::vector<Vertex>& vertices);
 	void LoadIndices(aiMesh* mesh, std::vector<WORD>& indices);
-	void LoadBones(aiMesh* mesh, std::vector<BoneData>& boneDatas, std::vector<Vertex>& vertices);
+	void LoadBones(aiMesh* mesh, std::vector<Vertex>& vertices);
 
+	void ExtractJoint();
+	void ExtractBone();
+	void ExtractBoneRecursive(const aiNode* pNode, aiVector3t<float> parentPos);
+
+	void GetBoneTransforms(std::vector<aiMatrix4x4>& Transforms);
+	void ReadNodeHierarchy(const aiNode* pNode, const aiMatrix4x4& parentTransform);
 public:
-	std::vector<Mesh> meshes;
+
+	Assimp::Importer mimporter;
+	const aiScene* pScene = nullptr;
+	std::vector<Mesh> mMeshes;
+	std::vector<BoneData> mBoneData;
+	std::map<std::string, UINT> mBoneMap;
+
+	std::vector<XMFLOAT3> mJointPositions;
+	std::vector<XMFLOAT3> mBonePositions;
 };
 
