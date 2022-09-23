@@ -14,6 +14,8 @@ struct Object
 
 	void Update(float dt);
 	void Draw(CommandList& commandList);
+	void DrawJoint(CommandList& commandList);
+	void DrawBone(CommandList& commandList);
 	void DrawWithoutWorld(CommandList& commandList);
 	XMMATRIX GetWorldMat() const;
 private:

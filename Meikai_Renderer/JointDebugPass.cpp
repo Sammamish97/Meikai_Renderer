@@ -14,7 +14,7 @@ JointDebugPass::JointDebugPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPt
 void JointDebugPass::InitRootSignature()
 {
 	//Joint debug do not need any special input.
-	//Need only Common
+	//Need only matrices.
     auto device = mApp->GetDevice();
     D3D12_FEATURE_DATA_ROOT_SIGNATURE featureData = {};
     if (FAILED(device->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &featureData, sizeof(featureData))))
@@ -70,7 +70,7 @@ void JointDebugPass::InitPSO()
     jointDebugPSODesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
     jointDebugPSODesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
     jointDebugPSODesc.SampleMask = UINT_MAX;
-    jointDebugPSODesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+    jointDebugPSODesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
     jointDebugPSODesc.NumRenderTargets = 1;
     jointDebugPSODesc.RTVFormats[0] = BackBufferFormat;
     jointDebugPSODesc.DSVFormat = DepthStencilDSVFormat;

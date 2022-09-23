@@ -16,12 +16,7 @@ struct Allocation
 
 struct UploadAllocation : public Allocation
 {
-    void Copy(void* data, size_t size);
-};
-
-struct DefaultAllocation : public Allocation
-{
-    void Copy(void* data, size_t size, void* stagingCPU, D3D12_GPU_VIRTUAL_ADDRESS stagingGPU);
+    void Copy(const void* data, size_t size);
 };
 
 struct Page
@@ -57,12 +52,5 @@ protected:
 struct UploadPage : public Page
 {
     UploadPage(DXApp* appPtr, size_t sizeInBytes);
-    UploadAllocation Allocate(void* data, size_t sizeInBytes, size_t alignment);
+    UploadAllocation Allocate(const void* data, size_t sizeInBytes, size_t alignment);
 };
-
-struct DefaultPage : public Page
-{
-    DefaultPage(DXApp* appPtr, size_t sizeInBytes);
-    DefaultAllocation Allocate(void* data, size_t sizeInBytes, size_t alignment, void* stagingCPU, ComPtr<ID3D12Resource> stagingResource);
-};
-

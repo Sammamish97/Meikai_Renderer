@@ -63,7 +63,7 @@
     <ClInclude Include="MemDefine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceAllocator.h">
+    <ClInclude Include="UploadBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Page.h">
@@ -182,7 +182,7 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceAllocator.cpp">
+    <ClCompile Include="UploadBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Page.cpp">

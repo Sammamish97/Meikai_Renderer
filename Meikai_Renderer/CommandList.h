@@ -9,6 +9,7 @@
 class ResourceStateTracker;
 class DXApp;
 class Buffer;
+class UploadBuffer;
 class VertexBuffer;
 class IndexBuffer;
 using namespace Microsoft::WRL;
@@ -52,6 +53,13 @@ public:
 
 		DXGI_FORMAT indexFormat = (sizeof(T) == 2) ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
 		CopyIndexBuffer(indexBuffer, indexBufferData.size(), indexFormat, indexBufferData.data());
+	}
+
+	void SetGraphicsDynamicConstantBuffer(uint32_t rootParameterIndex, size_t sizeInBytes, const void* bufferData);
+	template<typename T>
+	void SetGraphicsDynamicConstantBuffer(uint32_t rootParameterIndex, const T& data)
+	{
+		SetGraphicsDynamicConstantBuffer(rootParameterIndex, sizeof(T), &data);
 	}
 
 	void SetRootConstant(int rootParameterIndex, D3D12_GPU_VIRTUAL_ADDRESS GPUAddress);
@@ -108,6 +116,7 @@ private:
 	std::vector<ComPtr<ID3D12Object>> mTrackedObjects;
 
 	std::unique_ptr<ResourceStateTracker> mResourceStateTracker;
+	std::unique_ptr<UploadBuffer> mUploadBuffer;
 
 	using TrackedObjects = std::vector < Microsoft::WRL::ComPtr<ID3D12Object> >;
 	TrackedObjects m_TrackedObjects;

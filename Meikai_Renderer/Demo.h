@@ -7,6 +7,7 @@
 #include "DXApp.h"
 #include "ConstantBuffers.h"
 #include "DescriptorHeap.h"
+#include "Page.h"
 
 #include "Texture.h"
 
@@ -17,6 +18,7 @@ class Camera;
 class DefaultPass;
 class GeometryPass;
 class LightingPass;
+class JointDebugPass;
 
 class Demo : public DXApp
 {
@@ -48,6 +50,7 @@ private:
 	void DrawDefaultPass(CommandList& commandList);
 	void DrawGeometryPass(CommandList& cmdList);
 	void DrawLightingPass(CommandList& cmdList);
+	void DrawJointDebug(CommandList& cmdList);
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
 
@@ -71,6 +74,9 @@ private://Passes
 	std::unique_ptr<GeometryPass> mGeometryPass;
 	std::unique_ptr<LightingPass> mLightingPass;
 
+private://Debug Passes
+	std::unique_ptr<JointDebugPass> mJointDebugPass;
+
 private://Descriptor heaps
 	std::unique_ptr<DescriptorHeap> mDSVHeap;
 	std::unique_ptr<DescriptorHeap> mRTVHeap;
@@ -85,12 +91,8 @@ private://RTV & DSV SRV Resource
 
 private://CBV resource & allocation
 	std::unique_ptr<CommonCB> mCommonCB;
-	UploadAllocation mCommonCBAllocation;
-
 	std::unique_ptr<LightCB> mLightCB;
-	UploadAllocation mLightAllocation;
 
-	DefaultAllocation mTestDeafult;
 
 private:
 	std::unordered_map<std::string, std::shared_ptr<Model>> mModels;

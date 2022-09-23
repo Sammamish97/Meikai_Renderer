@@ -15,13 +15,13 @@
 #include <memory>
 
 #include "GameTimer.h"
-#include "ResourceAllocator.h"
 
 
 using Microsoft::WRL::ComPtr;
 class CommandList;
 class CommandQueue;
 class Texture;
+class UploadBuffer;
 
 class DXApp
 {
@@ -107,8 +107,6 @@ protected:
     std::shared_ptr<CommandQueue> mDirectCommandQueue;
     std::shared_ptr<CommandQueue> mComputeCommandQueue;
     std::shared_ptr<CommandQueue> mCopyCommandQueue;
-
-    std::unique_ptr<ResourceAllocator> mResourceAllocator;
 
 protected:
     static DXApp* mApp;

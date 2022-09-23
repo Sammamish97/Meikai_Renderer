@@ -44,7 +44,6 @@ private:
 	std::vector<Vertex> mVertices;
 	std::vector<WORD> mIndices;
 
-
 	UINT mIndexCount;
 	UINT mBoneCount;
 

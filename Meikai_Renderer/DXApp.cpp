@@ -4,6 +4,7 @@
 
 #include "CommandList.h"
 #include "CommandQueue.h"
+#include "UploadBuffer.h"
 #include "Texture.h"
 
 #include <d3dx12.h>
@@ -342,7 +343,6 @@ bool DXApp::InitDirect3D()
 	CreateSwapChain();
 	CreateSwapChainRtvDescriptorHeap();
 	CacheSwapChainImage();
-	mResourceAllocator = std::make_unique<ResourceAllocator>(this);
 	return true;
 }
 

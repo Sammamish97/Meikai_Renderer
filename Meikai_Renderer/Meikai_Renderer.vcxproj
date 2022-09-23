@@ -46,7 +46,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="Page.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="ResourceAllocator.h" />
+    <ClInclude Include="UploadBuffer.h" />
     <ClInclude Include="ResourceStateTracker.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureUsage.h" />
@@ -99,7 +99,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Page.cpp" />
     <ClCompile Include="Resource.cpp" />
-    <ClCompile Include="ResourceAllocator.cpp" />
+    <ClCompile Include="UploadBuffer.cpp" />
     <ClCompile Include="ResourceStateTracker.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />

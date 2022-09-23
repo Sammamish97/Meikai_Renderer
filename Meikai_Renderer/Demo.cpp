@@ -15,6 +15,8 @@
 #include "CommandQueue.h"
 #include "GeometryPass.h"
 #include "LightingPass.h"
+#include "JointDebugPass.h"
+
 #include "ResourceStateTracker.h"
 
 using namespace DirectX;
@@ -58,6 +60,7 @@ bool Demo::Initialize()
 	mDefaultPass = std::make_unique<DefaultPass>(this, mShaders["DefaultForwardVS"], mShaders["DefaultForwardPS"]);
 	mGeometryPass = std::make_unique<GeometryPass>(this, mShaders["GeomVS"], mShaders["GeomPS"]);
 	mLightingPass = std::make_unique<LightingPass>(this, mShaders["ScreenQuadVS"], mShaders["LightingPS"]);
+	mJointDebugPass = std::make_unique<JointDebugPass>(this, mShaders["JointDebugVS"], mShaders["JointDebugPS"]);
 
 	auto fenceValue = mDirectCommandQueue->ExecuteCommandList(initList);
 	mDirectCommandQueue->WaitForFenceValue(fenceValue);
@@ -203,10 +206,7 @@ void Demo::BuildFrameResource()
 	const size_t ConstantBufferAlignment = 256;
 
 	mCommonCB = std::make_unique<CommonCB>();
-	mCommonCBAllocation = mResourceAllocator->AllocateToUploadHeap(&mCommonCB, sizeof(CommonCB), ConstantBufferAlignment);
-	
 	mLightCB = std::make_unique<LightCB>();
-	mLightAllocation = mResourceAllocator->AllocateToUploadHeap(&mLightCB, sizeof(LightCB), ConstantBufferAlignment);
 }
 
 void Demo::CreateShader()
@@ -254,26 +254,26 @@ void Demo::UpdatePassCB(const GameTimer& gt)
 	currentFrameCB.TotalTime = gt.TotalTime();
 	currentFrameCB.DeltaTime = gt.DeltaTime();
 
-	mCommonCBAllocation.Copy(&currentFrameCB, sizeof(CommonCB));
+	*mCommonCB = currentFrameCB;
 }
 
 void Demo::UpdateLightCB(const GameTimer& gt)
 {
-	LightCB lightData;
+	LightCB currentFramelightData;
 
-	lightData.directLight.Direction = XMFLOAT3(-0.5f, 0.5f, 0.5f);
-	lightData.directLight.Color = XMFLOAT3(10, 10, 10);
+	currentFramelightData.directLight.Direction = XMFLOAT3(-0.5f, 0.5f, 0.5f);
+	currentFramelightData.directLight.Color = XMFLOAT3(10, 10, 10);
 
-	lightData.pointLight[0].Position = XMFLOAT3(1.5, 1.5, 1.5);
-	lightData.pointLight[0].Color = XMFLOAT3(70, 70, 70);
+	currentFramelightData.pointLight[0].Position = XMFLOAT3(1.5, 1.5, 1.5);
+	currentFramelightData.pointLight[0].Color = XMFLOAT3(70, 70, 70);
 
-	lightData.pointLight[1].Position = XMFLOAT3(-1.5, -1.5, -1.5);
-	lightData.pointLight[1].Color = XMFLOAT3(70, 10, 70);
+	currentFramelightData.pointLight[1].Position = XMFLOAT3(-1.5, -1.5, -1.5);
+	currentFramelightData.pointLight[1].Color = XMFLOAT3(70, 10, 70);
 
-	lightData.pointLight[2].Position = XMFLOAT3(0, 0, 10);
-	lightData.pointLight[2].Color = XMFLOAT3(0, 0, 10);
+	currentFramelightData.pointLight[2].Position = XMFLOAT3(0, 0, 10);
+	currentFramelightData.pointLight[2].Color = XMFLOAT3(0, 0, 10);
 
-	mLightAllocation.Copy(&lightData, sizeof(LightCB));
+	*mLightCB = currentFramelightData;
 }
 
 void Demo::Update(const GameTimer& gt)
@@ -301,9 +301,7 @@ void Demo::DrawDefaultPass(CommandList& cmdList)
 	cmdList.SetPipelineState(mDefaultPass->mPSO.Get());
 	cmdList.SetGraphicsRootSignature(mDefaultPass->mRootSig.Get());
 
-	//Remove it with bindless later.
-	D3D12_GPU_VIRTUAL_ADDRESS commonCBAddress = mCommonCBAllocation.GPU;
-	cmdList.SetRootConstant(1, commonCBAddress);
+	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
 
 	cmdList.SetViewport(mScreenViewport);
 	cmdList.SetScissorRect(mScissorRect);
@@ -353,8 +351,7 @@ void Demo::DrawGeometryPass(CommandList& cmdList)
 	cmdList.SetPipelineState(mGeometryPass->mPSO.Get());
 	cmdList.SetGraphicsRootSignature(mGeometryPass->mRootSig.Get());
 
-	D3D12_GPU_VIRTUAL_ADDRESS commonCBAddress = mCommonCBAllocation.GPU;
-	cmdList.SetConstantBufferView(1, commonCBAddress);
+	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
 
 	cmdList.SetViewport(mScreenViewport);
 	cmdList.SetScissorRect(mScissorRect);
@@ -396,11 +393,8 @@ void Demo::DrawLightingPass(CommandList& cmdList)
 	cmdList.SetPipelineState(mLightingPass->mPSO.Get());
 	cmdList.SetGraphicsRootSignature(mLightingPass->mRootSig.Get());
 
-	D3D12_GPU_VIRTUAL_ADDRESS commonCBAddress = mCommonCBAllocation.GPU;
-	cmdList.SetConstantBufferView(0, commonCBAddress);
-
-	D3D12_GPU_VIRTUAL_ADDRESS lightCBAddress = mLightAllocation.GPU;
-	cmdList.SetConstantBufferView(1, lightCBAddress);
+	cmdList.SetGraphicsDynamicConstantBuffer(0, sizeof(CommonCB), mCommonCB.get());
+	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(LightCB), mLightCB.get());
 
 	cmdList.SetDescriptorHeap(mCBVSRVUAVHeap->GetDescriptorHeap());
 
@@ -418,6 +412,33 @@ void Demo::DrawLightingPass(CommandList& cmdList)
 	cmdList.SetEmptyVertexBuffer();
 	cmdList.SetEmptyIndexBuffer();
 	cmdList.Draw(3);
+}
+
+void Demo::DrawJointDebug(CommandList& cmdList)
+{
+	cmdList.SetPipelineState(mJointDebugPass->mPSO.Get());
+	cmdList.SetGraphicsRootSignature(mJointDebugPass->mRootSig.Get());
+
+	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
+
+	cmdList.SetViewport(mScreenViewport);
+	cmdList.SetScissorRect(mScissorRect);
+
+	cmdList.ClearDepthStencilTexture(mFrameResource.mDepthStencilBuffer, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL);
+
+	cmdList.SetDescriptorHeap(mCBVSRVUAVHeap->GetDescriptorHeap());
+
+	cmdList.SetDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
+
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx) };
+	cmdList.SetRenderTargets(rtvArray, &mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
+
+	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	for (auto& object : objects)
+	{
+		object->Draw(cmdList);
+	}
 }
 
 void Demo::OnMouseDown(WPARAM btnState, int x, int y)

@@ -2,6 +2,7 @@
 #include "DXApp.h"
 #include "DXUtil.h"
 #include "ResourceStateTracker.h"
+#include "UploadBuffer.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 
@@ -80,8 +81,18 @@ void CommandList::CopyIndexBuffer(IndexBuffer& indexBuffer, size_t numIndicies, 
 	CopyBuffer(indexBuffer, numIndicies, indexSizeInBytes, indexBufferData);
 }
 
+void CommandList::SetGraphicsDynamicConstantBuffer(uint32_t rootParameterIndex, size_t sizeInBytes,
+	const void* bufferData)
+{
+	// Constant buffers must be 256-byte aligned.
+	auto heapAllococation = mUploadBuffer->AllocateToUploadHeap(bufferData, sizeInBytes, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
+	memcpy(heapAllococation.CPU, bufferData, sizeInBytes);
+
+	mCommandList->SetGraphicsRootConstantBufferView(rootParameterIndex, heapAllococation.GPU);
+}
+
 void CommandList::CopyBuffer(Buffer& buffer, size_t numElements, size_t elementSize, const void* bufferData,
-	D3D12_RESOURCE_FLAGS flags)
+                             D3D12_RESOURCE_FLAGS flags)
 {
 	auto device = mApp->GetDevice();
 	size_t bufferSize = numElements * elementSize;
@@ -134,6 +145,11 @@ void CommandList::CopyBuffer(Buffer& buffer, size_t numElements, size_t elementS
 void CommandList::SetRootConstant(int rootParameterIndex, D3D12_GPU_VIRTUAL_ADDRESS GPUAddress)
 {
 	mCommandList->SetGraphicsRootConstantBufferView(rootParameterIndex, GPUAddress);
+}
+
+void CommandList::SetConstantBufferView(uint32_t rootParameterIndex, D3D12_GPU_VIRTUAL_ADDRESS dataGPUAddress)
+{
+	mCommandList->SetGraphicsRootConstantBufferView(rootParameterIndex, dataGPUAddress);
 }
 
 void CommandList::FlushResourceBarriers()
@@ -309,10 +325,6 @@ void CommandList::SetGraphics32BitConstants(uint32_t rootParameterIndex, uint32_
 	mCommandList->SetGraphicsRoot32BitConstants(rootParameterIndex, numConstants, constants, 0);
 }
 
-void CommandList::SetConstantBufferView(uint32_t rootParameterIndex, D3D12_GPU_VIRTUAL_ADDRESS dataGPUAddress)
-{
-	mCommandList->SetGraphicsRootConstantBufferView(rootParameterIndex, dataGPUAddress);
-}
 
 void CommandList::Close(void)
 {
@@ -333,7 +345,8 @@ void CommandList::Reset()
 {
 	ThrowIfFailed(mCommandAllocator->Reset())
 	ThrowIfFailed(mCommandList->Reset(mCommandAllocator.Get(), nullptr))
-
+	mResourceStateTracker->Reset();
+	
 	ReleaseTrackedObjects();
 }
 

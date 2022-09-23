@@ -3,7 +3,7 @@
 #include "CommandList.h"
 #include "MathHelper.h"
 Model::Model(const std::string& file_path, DXApp* app, CommandList& commandList)
-	:mApp(app)
+	:mApp(app), mJointBuffer(app), mBoneBuffer(app)
 {
     LoadModel(file_path, commandList);
 }
@@ -58,6 +58,32 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, CommandList& command
    
     return Mesh(mApp, vertices, indices, commandList);
 }
+
+void Model::InitJointVertexBuffer(CommandList& commandList)
+{
+    
+}
+
+void Model::InitBoneVertexBuffer(CommandList& commandList)
+{
+}
+
+void Model::UpdateGPUJointPosition(CommandList& commandList)
+{
+}
+
+void Model::UpdateGPUBonePosition(CommandList& commandList)
+{
+}
+
+void Model::DrawDebugJoints(CommandList& commandList)
+{
+}
+
+void Model::DrawDebugBones(CommandList& commandList)
+{
+}
+
 
 void Model::LoadVertices(aiMesh* mesh, std::vector<Vertex>& vertices)
 {
