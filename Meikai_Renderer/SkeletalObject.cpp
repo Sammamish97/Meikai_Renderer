@@ -38,3 +38,13 @@ void SkeletalObject::ReadNodeHierarchy(float timeInSeconds, const aiNode* pNode,
         ReadNodeHierarchy(timeInSeconds, pNode->mChildren[i], globalTransformation);
     }
 }
+
+void SkeletalObject::SetAnimation(std::shared_ptr<Animation> newAnimation)
+{
+    mAnimation = newAnimation;
+}
+
+void SkeletalObject::SetDynamicBoneMatrices(CommandList& commandList)
+{
+    //Update matrices on Constant buffer.
+}

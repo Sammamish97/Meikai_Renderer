@@ -14,7 +14,7 @@ public:
 	Object(std::shared_ptr<Model> model, XMFLOAT3 position, XMFLOAT3 scale = XMFLOAT3(1.f, 1.f, 1.f));
 
 public:
-	void Update(float dt);
+	virtual void Update(float dt);
 	void Draw(CommandList& commandList);
 	void DrawJoint(CommandList& commandList);
 	void DrawBone(CommandList& commandList);
