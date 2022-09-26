@@ -21,7 +21,7 @@ CommandList::CommandList(DXApp* appPtr, D3D12_COMMAND_LIST_TYPE type)
 
 	ThrowIfFailed(device->CreateCommandList(0, mCommandListType, mCommandAllocator.Get(),
 			nullptr, IID_PPV_ARGS(mCommandList.GetAddressOf())))
-
+	mUploadBuffer = std::make_unique<UploadBuffer>(appPtr);
 	mResourceStateTracker = std::make_unique<ResourceStateTracker>();
 }
 
@@ -345,7 +345,9 @@ void CommandList::Reset()
 {
 	ThrowIfFailed(mCommandAllocator->Reset())
 	ThrowIfFailed(mCommandList->Reset(mCommandAllocator.Get(), nullptr))
+
 	mResourceStateTracker->Reset();
+	mUploadBuffer->Reset();
 	
 	ReleaseTrackedObjects();
 }
@@ -378,12 +380,42 @@ void CommandList::SetVertexBuffer(uint32_t slot, const VertexBuffer& vertexBuffe
 	TrackResource(vertexBuffer);
 }
 
+void CommandList::SetDynamicVertexBuffer(uint32_t slot, size_t numVertices, size_t vertexSize,
+	const void* vertexBufferData)
+{
+	size_t bufferSize = numVertices * vertexSize;
+
+	auto heapAllocation = mUploadBuffer->AllocateToUploadHeap(vertexBufferData, bufferSize, vertexSize);
+
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView = {};
+	vertexBufferView.BufferLocation = heapAllocation.GPU;
+	vertexBufferView.SizeInBytes = static_cast<UINT>(bufferSize);
+	vertexBufferView.StrideInBytes = static_cast<UINT>(vertexSize);
+
+	mCommandList->IASetVertexBuffers(slot, 1, &vertexBufferView);
+}
+
 void CommandList::SetIndexBuffer(const IndexBuffer& indexBuffer)
 {
 	TransitionBarrier(indexBuffer, D3D12_RESOURCE_STATE_INDEX_BUFFER);
 	auto indexBufferView = indexBuffer.GetIndexBufferView();
 	mCommandList->IASetIndexBuffer(&indexBufferView);
 	TrackResource(indexBuffer);
+}
+
+void CommandList::SetDynamicIndexBuffer(size_t numIndicies, DXGI_FORMAT indexFormat, const void* indexBufferData)
+{
+	size_t indexSizeInBytes = indexFormat == DXGI_FORMAT_R16_UINT ? 2 : 4;
+	size_t bufferSize = numIndicies * indexSizeInBytes;
+
+	auto heapAllocation = mUploadBuffer->AllocateToUploadHeap(indexBufferData, bufferSize, indexSizeInBytes);
+
+	D3D12_INDEX_BUFFER_VIEW indexBufferView = {};
+	indexBufferView.BufferLocation = heapAllocation.GPU;
+	indexBufferView.SizeInBytes = static_cast<UINT>(bufferSize);
+	indexBufferView.Format = indexFormat;
+
+	mCommandList->IASetIndexBuffer(&indexBufferView);
 }
 
 void CommandList::Draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t startVertex, uint32_t startInstance)

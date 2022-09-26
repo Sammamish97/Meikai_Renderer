@@ -16,7 +16,7 @@ using namespace DirectX;
 
 struct DXApp;
 class CommandList;
-
+class Animation;
 struct BoneData
 {
 	aiMatrix4x4 offsetMatrix;
@@ -28,7 +28,7 @@ struct BoneData
 	}
 };
 
-struct Model
+class Model
 {
 private:
 	DXApp* mApp;
@@ -51,18 +51,15 @@ public:
 	void DrawDebugBones(CommandList& commandList);
 
 	void LoadVertices(aiMesh* mesh, std::vector<Vertex>& vertices);
-	void LoadIndices(aiMesh* mesh, std::vector<WORD>& indices);
+	void LoadIndices(aiMesh* mesh, std::vector<UINT>& indices);
 	void LoadBones(aiMesh* mesh, std::vector<Vertex>& vertices);
 
 	void ExtractJoint();
 	void ExtractBone();
 	void ExtractBoneRecursive(const aiNode* pNode, aiVector3t<float> parentPos);
 
-	void GetBoneTransforms(std::vector<aiMatrix4x4>& Transforms);
-	void ReadNodeHierarchy(const aiNode* pNode, const aiMatrix4x4& parentTransform);
 public:
-
-	Assimp::Importer mimporter;
+	Assimp::Importer mImporter;
 	const aiScene* pScene = nullptr;
 
 	std::vector<Mesh> mMeshes;
@@ -71,8 +68,5 @@ public:
 
 	std::vector<XMFLOAT3> mJointPositions;
 	std::vector<XMFLOAT3> mBonePositions;
-
-	VertexBuffer mJointBuffer;
-	VertexBuffer mBoneBuffer;
 };
 

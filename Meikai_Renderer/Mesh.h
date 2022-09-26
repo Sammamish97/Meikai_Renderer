@@ -34,7 +34,7 @@ private:
 	DXApp* mApp = nullptr;
 
 public:
-	Mesh(DXApp* dxApp, std::vector<Vertex> input_vertices, std::vector<WORD> input_indices, CommandList& commandList);
+	Mesh(DXApp* dxApp, std::vector<Vertex> input_vertices, std::vector<UINT> input_indices, CommandList& commandList);
 	void Draw(CommandList& commandList);
 
 private:
@@ -42,7 +42,7 @@ private:
 	IndexBuffer mIndexBuffer;
 
 	std::vector<Vertex> mVertices;
-	std::vector<WORD> mIndices;
+	std::vector<UINT> mIndices;
 
 	UINT mIndexCount;
 	UINT mBoneCount;

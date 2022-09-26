@@ -2,15 +2,17 @@
 #include "DXApp.h"
 #include "CommandList.h"
 #include "MathHelper.h"
+#include "Animation.h"
+
 Model::Model(const std::string& file_path, DXApp* app, CommandList& commandList)
-	:mApp(app), mJointBuffer(app), mBoneBuffer(app)
+	:mApp(app)
 {
     LoadModel(file_path, commandList);
 }
 
 void Model::LoadModel(const std::string& file_path, CommandList& commandList)
 {
-    pScene = mimporter.ReadFile(file_path,
+    pScene = mImporter.ReadFile(file_path,
         aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
     if (!pScene || pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !pScene->mRootNode)
@@ -43,7 +45,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene, CommandList& command
 Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, CommandList& commandList)
 {
     std::vector<Vertex> vertices;
-    std::vector<WORD> indices;
+    std::vector<UINT> indices;
     //std::vector<textures>
 
     LoadVertices(mesh, vertices);
@@ -78,12 +80,21 @@ void Model::UpdateGPUBonePosition(CommandList& commandList)
 
 void Model::DrawDebugJoints(CommandList& commandList)
 {
+    auto vertexCount = mJointPositions.size();
+    auto vertexSize = sizeof(mJointPositions[0]);
+    commandList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+    commandList.SetDynamicVertexBuffer(0, vertexCount, vertexSize, mJointPositions.data());
+    commandList.Draw(vertexCount);
 }
 
 void Model::DrawDebugBones(CommandList& commandList)
 {
+    auto vertexCount = mBonePositions.size();
+    auto vertexSize = sizeof(mBonePositions[0]);
+    commandList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+    commandList.SetDynamicVertexBuffer(0, vertexCount, vertexSize, mBonePositions.data());
+    commandList.Draw(vertexCount);
 }
-
 
 void Model::LoadVertices(aiMesh* mesh, std::vector<Vertex>& vertices)
 {
@@ -132,7 +143,7 @@ void Model::LoadVertices(aiMesh* mesh, std::vector<Vertex>& vertices)
     }
 }
 
-void Model::LoadIndices(aiMesh* mesh, std::vector<WORD>& indices)
+void Model::LoadIndices(aiMesh* mesh, std::vector<UINT>& indices)
 {
     for (unsigned int i = 0; i < mesh->mNumFaces; i++)
     {
@@ -153,8 +164,8 @@ void Model::LoadBones(aiMesh* mesh, std::vector<Vertex>& vertices)
     {
         BoneData boneData;
         aiBone* bone = mesh->mBones[boneIdx];
-    	boneData.offsetMatrix = bone->mOffsetMatrix;
-        std::string boneName = mesh->mBones[boneIdx]->mName.C_Str();
+        boneData.offsetMatrix = bone->mOffsetMatrix;//Offset set bone to mesh.
+        std::string boneName = mesh->mBones[boneIdx]->mName.data;
 
         UINT weightNum = bone->mNumWeights;
         for (UINT weightIdx = 0; weightIdx < weightNum; ++weightIdx)
@@ -173,38 +184,6 @@ void Model::LoadBones(aiMesh* mesh, std::vector<Vertex>& vertices)
     ExtractBone();
 }
 
-void Model::GetBoneTransforms(std::vector<aiMatrix4x4>& Transforms)
-{
-    Transforms.resize(mBoneData.size());
-
-    aiMatrix4x4 identity;
-
-    ReadNodeHierarchy(pScene->mRootNode, identity);
-
-    UINT boneDataSIze = mBoneData.size();
-    for(UINT i = 0; i < boneDataSIze; ++i)
-    {
-        Transforms[i] = mBoneData[i].finalMatrix;
-    }
-}
-
-void Model::ReadNodeHierarchy(const aiNode* pNode, const aiMatrix4x4& parentTransform)
-{
-    std::string NodeName(pNode->mName.data);
-    aiMatrix4x4 NodeTransformation(pNode->mTransformation);
-    aiMatrix4x4 GlobalTransformation = parentTransform * NodeTransformation;
-
-    if(mBoneMap.find(NodeName) != mBoneMap.end())
-    {
-        UINT boneIndex = mBoneMap[NodeName];
-        mBoneData[boneIndex].finalMatrix = GlobalTransformation * mBoneData[boneIndex].offsetMatrix;
-    }
-    for(UINT i = 0; i < pNode->mNumChildren; ++i)
-    {
-        ReadNodeHierarchy(pNode->mChildren[i], GlobalTransformation);
-    }
-}
-
 void Model::ExtractJoint()
 {
     mJointPositions.clear();
@@ -212,7 +191,8 @@ void Model::ExtractJoint()
     {
         aiQuaterniont<float> rotation;
         aiVector3t<float> position;
-        boneData.offsetMatrix.DecomposeNoScaling(rotation, position);
+        auto localToBone = boneData.offsetMatrix;
+        localToBone.Inverse().DecomposeNoScaling(rotation, position);
         mJointPositions.push_back(MathHelper::AiVecToDxVec(position));
     }
 }
@@ -226,17 +206,29 @@ void Model::ExtractBone()
 
 void Model::ExtractBoneRecursive(const aiNode* pNode, aiVector3t<float> parentPos)
 {
+    if(mBonePositions.size() == 14)
+    {
+        pNode = pNode;
+    }
+    
     std::string boneName = pNode->mName.data;
-    UINT boneIndex = mBoneMap[boneName];
-    aiMatrix4x4 offsetMatrix = mBoneData[boneIndex].offsetMatrix;
-    aiQuaterniont<float> rotation;//Don't use.
-    aiVector3t<float> position;
-    offsetMatrix.DecomposeNoScaling(rotation, position);
+    if(mBoneMap.find(boneName) != mBoneMap.end())
+    {
+        UINT boneIndex = mBoneMap.at(boneName);
+        aiMatrix4x4 offsetMatrix = mBoneData[boneIndex].offsetMatrix;
+        auto localToBone = offsetMatrix;
+        localToBone.Inverse();
+        aiQuaterniont<float> rotation;//Don't use.
+        aiVector3t<float> position;
+        localToBone.DecomposeNoScaling(rotation, position);
 
-    mBonePositions.push_back(MathHelper::AiVecToDxVec(parentPos));
-    mBonePositions.push_back(MathHelper::AiVecToDxVec(position));
+        mBonePositions.push_back(MathHelper::AiVecToDxVec(parentPos));
+        mBonePositions.push_back(MathHelper::AiVecToDxVec(position));
+
+        parentPos = position;
+    }
     for (UINT i = 0; i < pNode->mNumChildren; ++i)
     {
-        ExtractBoneRecursive(pNode->mChildren[i], position);
+        ExtractBoneRecursive(pNode->mChildren[i], parentPos);
     }
 }

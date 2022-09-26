@@ -60,7 +60,7 @@ bool Demo::Initialize()
 	mDefaultPass = std::make_unique<DefaultPass>(this, mShaders["DefaultForwardVS"], mShaders["DefaultForwardPS"]);
 	mGeometryPass = std::make_unique<GeometryPass>(this, mShaders["GeomVS"], mShaders["GeomPS"]);
 	mLightingPass = std::make_unique<LightingPass>(this, mShaders["ScreenQuadVS"], mShaders["LightingPS"]);
-	mJointDebugPass = std::make_unique<JointDebugPass>(this, mShaders["JointDebugVS"], mShaders["JointDebugPS"]);
+	mJointDebugPass = std::make_unique<JointDebugPass>(this, mShaders["DebugJointVS"], mShaders["DebugJointPS"]);
 
 	auto fenceValue = mDirectCommandQueue->ExecuteCommandList(initList);
 	mDirectCommandQueue->WaitForFenceValue(fenceValue);
@@ -183,7 +183,10 @@ void Demo::CreateIBLDescriptors()
 
 void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 {
-	mModels["X_Bot"] = std::make_shared<Model>("../models/X_Bot.fbx", this, *cmdList);
+	//mModels["Warrior"] = std::make_shared<Model>("../models/Warrior.fbx", this, *cmdList);
+	//mModels["Archer"] = std::make_shared<Model>("../models/Archer.fbx", this, *cmdList);
+	mModels["Y_Bot"] = std::make_shared<Model>("../models/Y_Bot.fbx", this, *cmdList);
+
 	//mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, *cmdList);
 	//mModels["Quad"] = std::make_shared<Model>("../models/Quad.obj", this, *cmdList);
 	//mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);
@@ -191,12 +194,8 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 	//mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
 
 	//objects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(10.f, 10.f, 10.f)));
-	objects.push_back(std::make_unique<Object>(mModels["X_Bot"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
-	objects.push_back(std::make_unique<Object>(mModels["X_Bot"], XMFLOAT3(150.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
-	objects.push_back(std::make_unique<Object>(mModels["X_Bot"], XMFLOAT3(-150.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
-	objects.push_back(std::make_unique<Object>(mModels["X_Bot"], XMFLOAT3(0.f, -100.f, 150.f), XMFLOAT3(0.01, 0.01, 0.01)));
-	objects.push_back(std::make_unique<Object>(mModels["X_Bot"], XMFLOAT3(0.f, -100.f, -150.f), XMFLOAT3(0.01, 0.01, 0.01)));
-
+	objects.push_back(std::make_unique<Object>(mModels["Y_Bot"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
+	//objects.push_back(std::make_unique<Object>(mModels["Warrior"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
 	//mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
 	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(1.f, -1.f, 0.f)));
 }
@@ -222,6 +221,8 @@ void Demo::CreateShader()
 	mShaders["VBlurCS"] = DxUtil::CompileShader(L"../shaders/Blur.hlsl", nullptr, "VertBlurCS", "cs_5_1");
 	mShaders["DefaultForwardVS"] = DxUtil::CompileShader(L"../shaders/DefaultForward.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["DefaultForwardPS"] = DxUtil::CompileShader(L"../shaders/DefaultForward.hlsl", nullptr, "PS", "ps_5_1");
+	mShaders["DebugJointVS"] = DxUtil::CompileShader(L"../shaders/DebugJoint.hlsl", nullptr, "VS", "vs_5_1");
+	mShaders["DebugJointPS"] = DxUtil::CompileShader(L"../shaders/DebugJoint.hlsl", nullptr, "PS", "ps_5_1");
 
 	mShaders["SkyboxVS"] = DxUtil::CompileShader(L"../shaders/SkyboxPass.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["SkyboxPS"] = DxUtil::CompileShader(L"../shaders/SkyboxPass.hlsl", nullptr, "PS", "ps_5_1");
@@ -286,9 +287,11 @@ void Demo::Update(const GameTimer& gt)
 void Demo::Draw(const GameTimer& gt)
 {
 	auto drawcmdList = mDirectCommandQueue->GetCommandList();
-	//DrawDefaultPass(*drawcmdList);
-	DrawGeometryPass(*drawcmdList);
-	DrawLightingPass(*drawcmdList);
+	DrawDefaultPass(*drawcmdList);
+	//DrawGeometryPass(*drawcmdList);
+	//DrawLightingPass(*drawcmdList);
+	DrawJointDebug(*drawcmdList);
+	DrawBoneDebug(*drawcmdList);
 	mDirectCommandQueue->ExecuteCommandList(drawcmdList);
 	Present(mFrameResource.mRenderTarget);
 	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
@@ -426,18 +429,33 @@ void Demo::DrawJointDebug(CommandList& cmdList)
 
 	cmdList.ClearDepthStencilTexture(mFrameResource.mDepthStencilBuffer, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL);
 
-	cmdList.SetDescriptorHeap(mCBVSRVUAVHeap->GetDescriptorHeap());
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx) };
+	cmdList.SetRenderTargets(rtvArray, &mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
 
-	cmdList.SetDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
+	for (auto& object : objects)
+	{
+		object->DrawJoint(cmdList);
+	}
+}
+
+void Demo::DrawBoneDebug(CommandList& cmdList)
+{
+	cmdList.SetPipelineState(mJointDebugPass->mPSO.Get());
+	cmdList.SetGraphicsRootSignature(mJointDebugPass->mRootSig.Get());
+
+	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
+
+	cmdList.SetViewport(mScreenViewport);
+	cmdList.SetScissorRect(mScissorRect);
+
+	cmdList.ClearDepthStencilTexture(mFrameResource.mDepthStencilBuffer, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL);
 
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx) };
 	cmdList.SetRenderTargets(rtvArray, &mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
 
-	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
 	for (auto& object : objects)
 	{
-		object->Draw(cmdList);
+		object->DrawBone(cmdList);
 	}
 }
 

@@ -7,18 +7,21 @@
 using namespace Microsoft::WRL;
 using namespace DirectX;
 class CommandList;
-struct Model;
-struct Object
+class Model;
+class Object
 {
+public:
 	Object(std::shared_ptr<Model> model, XMFLOAT3 position, XMFLOAT3 scale = XMFLOAT3(1.f, 1.f, 1.f));
 
+public:
 	void Update(float dt);
 	void Draw(CommandList& commandList);
 	void DrawJoint(CommandList& commandList);
 	void DrawBone(CommandList& commandList);
 	void DrawWithoutWorld(CommandList& commandList);
 	XMMATRIX GetWorldMat() const;
-private:
+
+protected:
 	void SetWorldMatrix(CommandList& commandList);
 
 	std::shared_ptr<Model> mModel = nullptr;

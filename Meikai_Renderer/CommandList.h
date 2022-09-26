@@ -80,8 +80,25 @@ public:
 
 	void SetEmptyVertexBuffer();
 	void SetEmptyIndexBuffer();
+
 	void SetVertexBuffer(uint32_t slot, const VertexBuffer& vertexBuffer);
+	void SetDynamicVertexBuffer(uint32_t slot, size_t numVertices, size_t vertexSize, const void* vertexBufferData);
+	template<typename T>
+	void SetDynamicVertexBuffer(uint32_t slot, const std::vector<T>& vertexBufferData)
+	{
+		SetDynamicVertexBuffer(slot, vertexBufferData.size(), sizeof(T), vertexBufferData.data());
+	}
+
 	void SetIndexBuffer(const IndexBuffer& indexBuffer);
+	void SetDynamicIndexBuffer(size_t numIndicies, DXGI_FORMAT indexFormat, const void* indexBufferData);
+	template<typename T>
+	void SetDynamicIndexBuffer(const std::vector<T>& indexBufferData)
+	{
+		static_assert(sizeof(T) == 2 || sizeof(T) == 4);
+
+		DXGI_FORMAT indexFormat = (sizeof(T) == 2) ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
+		SetDynamicIndexBuffer(indexBufferData.size(), indexFormat, indexBufferData.data());
+	}
 
 	void Draw(uint32_t vertexCount, uint32_t instanceCount = 1, uint32_t startVertex = 0, uint32_t startInstance = 0);
 	void DrawIndexed(uint32_t indexCount, uint32_t instanceCount = 1, uint32_t startIndex = 0, int32_t baseVertex = 0, uint32_t startInstance = 0);

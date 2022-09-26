@@ -45,5 +45,10 @@ std::shared_ptr<UploadPage> UploadBuffer::RequestUploadPage()
 
 void UploadBuffer::Reset()
 {
-
+	mCurrentUploadPage = nullptr;
+	mUploadAvailablePages = mUploadPagePool;
+	for(auto page : mUploadAvailablePages)
+	{
+		page->Reset();
+	}
 }

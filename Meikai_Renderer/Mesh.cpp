@@ -8,7 +8,7 @@ void Vertex::AddBoneData(int boneID, float weight)
 	++weightNum;
 }
 
-Mesh::Mesh(DXApp* dxApp, std::vector<Vertex> input_vertices, std::vector<WORD> input_indices, CommandList& commandList)
+Mesh::Mesh(DXApp* dxApp, std::vector<Vertex> input_vertices, std::vector<UINT> input_indices, CommandList& commandList)
 	:mApp(dxApp), mVertices(std::move(input_vertices)), mIndices(std::move(input_indices)), mVertexBuffer(dxApp), mIndexBuffer(dxApp),
 	mIndexCount(0), mBoneCount(0)
 {
@@ -17,7 +17,7 @@ Mesh::Mesh(DXApp* dxApp, std::vector<Vertex> input_vertices, std::vector<WORD> i
 
 void Mesh::Init(CommandList& commandList)
 {
-	if(mVertices.size() >= USHRT_MAX)
+	if(mVertices.size() >= UINT_MAX)
 	{
 		throw std::exception("Too many vertices for 16-bit index buffer");
 	}

@@ -11,8 +11,8 @@
 
 #include "Texture.h"
 
-struct Model;
-struct Object;
+class Model;
+class Object;
 class Camera;
 
 class DefaultPass;
@@ -51,6 +51,7 @@ private:
 	void DrawGeometryPass(CommandList& cmdList);
 	void DrawLightingPass(CommandList& cmdList);
 	void DrawJointDebug(CommandList& cmdList);
+	void DrawBoneDebug(CommandList& cmdList);
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
 
