@@ -23,6 +23,8 @@ SamplerState gsamPointClamp : register(s0);
 SamplerState gsamLinearClamp : register(s1);
 SamplerState gsamDepthMap : register(s2);
 SamplerState gsamLinearWrap : register(s3);
+SamplerState gsamLinearRepeat : register(s4);
+
 
 // 1 / PI
 static const float InvPI = 0.31830988618379067153776752674503f;
@@ -83,7 +85,7 @@ void EquiRectToCubemapCS(ComputeShaderInput IN)
     // Convert the world space direction into U,V texture coordinates in the panoramic texture.
     // Source: http://gl.ict.usc.edu/Data/HighResProbes/
     float2 panoUV = float2(atan2(-dir.x, -dir.z), acos(dir.y)) * InvAtan;
-    float3 HDRColor = gInputHDR.SampleLevel(gsamLinearClamp, panoUV, 0).xyz;
+    float3 HDRColor = gInputHDR.SampleLevel(gsamLinearRepeat, panoUV, 0).xyz;
 
     outputCubemap[texCoord] =  float4(ToneMapping(HDRColor), 1);
 }

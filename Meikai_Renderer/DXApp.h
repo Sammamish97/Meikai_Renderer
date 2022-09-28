@@ -49,7 +49,7 @@ public:
     UINT GetDsvDescSize();
     UINT GetCbvSrvUavDescSize();
 
-    std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
+    std::array<const CD3DX12_STATIC_SAMPLER_DESC, 8> GetStaticSamplers();
 
     int Run();
     void Present(std::shared_ptr<Texture>& texture);

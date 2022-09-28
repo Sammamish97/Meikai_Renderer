@@ -112,7 +112,7 @@ UINT DXApp::GetCbvSrvUavDescSize()
 	return mCbvSrvUavDescriptorSize;
 }
 
-std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> DXApp::GetStaticSamplers()
+std::array<const CD3DX12_STATIC_SAMPLER_DESC, 8> DXApp::GetStaticSamplers()
 {
 	// Applications usually only need a handful of samplers.  So just define them all up front
 	// and keep them available as part of the root signature.  
@@ -145,8 +145,11 @@ std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> DXApp::GetStaticSamplers()
 		D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressV
 		D3D12_TEXTURE_ADDRESS_MODE_CLAMP); // addressW
 
+	const CD3DX12_STATIC_SAMPLER_DESC linearRepeatSampler(
+		4, D3D12_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR);
+
 	const CD3DX12_STATIC_SAMPLER_DESC anisotropicWrap(
-		4, // shaderRegister
+		5, // shaderRegister
 		D3D12_FILTER_ANISOTROPIC, // filter
 		D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressU
 		D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressV
@@ -155,7 +158,7 @@ std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> DXApp::GetStaticSamplers()
 		8);                               // maxAnisotropy
 
 	const CD3DX12_STATIC_SAMPLER_DESC anisotropicClamp(
-		5, // shaderRegister
+		6, // shaderRegister
 		D3D12_FILTER_ANISOTROPIC, // filter
 		D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressU
 		D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressV
@@ -164,7 +167,7 @@ std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> DXApp::GetStaticSamplers()
 		8);                                // maxAnisotropy
 
 	const CD3DX12_STATIC_SAMPLER_DESC shadow(
-		6, // shaderRegister
+		7, // shaderRegister
 		D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT, // filter
 		D3D12_TEXTURE_ADDRESS_MODE_BORDER,  // addressU
 		D3D12_TEXTURE_ADDRESS_MODE_BORDER,  // addressV
@@ -176,7 +179,7 @@ std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> DXApp::GetStaticSamplers()
 
 	return {
 		pointWrap, pointClamp,
-		linearWrap, linearClamp,
+		linearWrap, linearClamp,linearRepeatSampler,
 		anisotropicWrap, anisotropicClamp,
 		shadow
 	};
