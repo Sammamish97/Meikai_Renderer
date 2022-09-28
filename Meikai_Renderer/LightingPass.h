@@ -1,6 +1,11 @@
 #pragma once
 #include "IPass.h"
 
+enum LightingRootIndex
+{
+
+};
+
 class LightingPass : public IPass
 {
 public:

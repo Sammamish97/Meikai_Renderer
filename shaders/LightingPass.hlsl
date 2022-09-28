@@ -5,7 +5,8 @@ Texture2D gRoughness  : register(t3);
 Texture2D gMetalic  : register(t4);
 Texture2D gDepthMap  : register(t5);
 Texture2D gSsaoMap : register(t6);
-Texture2D<float4> gTestTex : register(t7);
+Texture2D gTestTex : register(t7);
+TextureCube gCubeMap : register(t8);
 
 SamplerState gsamPointClamp : register(s0);
 SamplerState gsamLinearClamp : register(s1);
@@ -117,6 +118,7 @@ float4 PS(VertexOut pin) : SV_Target
 	float occluded = gSsaoMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
 	float metalic = gMetalic.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
 	float roughness = gRoughness.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
+	float3 test = gTestTex.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
 
 	float3 N = normal;
 	float3 V = normalize(gEyePosW - position);

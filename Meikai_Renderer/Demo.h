@@ -6,19 +6,18 @@
 #include "FrameBufferResource.h"
 #include "DXApp.h"
 #include "ConstantBuffers.h"
-#include "DescriptorHeap.h"
-#include "Page.h"
 
-#include "Texture.h"
 
 class Model;
 class Object;
 class Camera;
 
+class EquiRectToCubemapPass;
 class DefaultPass;
 class GeometryPass;
 class LightingPass;
 class JointDebugPass;
+class SkyboxPass;
 
 class Demo : public DXApp
 {
@@ -37,12 +36,11 @@ private:
 	void BuildFrameResource();
 	void CreateIBLResources(std::shared_ptr<CommandList>& commandList);
 	void CreateShader();
-
+	void EquiRectToCubemap();
 private:
 	void CreateDescriptorHeaps();
 
 	void CreateBufferResources();
-	
 
 	void CreateBufferDescriptors();
 	void CreateIBLDescriptors();
@@ -52,12 +50,14 @@ private:
 	void DrawLightingPass(CommandList& cmdList);
 	void DrawJointDebug(CommandList& cmdList);
 	void DrawBoneDebug(CommandList& cmdList);
+	void DrawSkyboxPass(CommandList& cmdList);
+
+	void DispatchEquiRectToCubemap(CommandList& cmdList);
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
 
 private:
 	void PreCalculateIBL();
-	void ImageToCubeMap();
 	void CalcDiffuseIrradiance();
 
 private:
@@ -69,19 +69,19 @@ protected:
 	void OnMouseUp(WPARAM btnState, int x, int y) override;
 	void OnMouseMove(WPARAM btnState, int x, int y) override;
 
+private://Non-Iterating Pass
+	std::unique_ptr<EquiRectToCubemapPass> mEquiRectToCubemapPass;
+
 private://Passes
 	std::unique_ptr<DefaultPass> mDefaultPass;
 
 	std::unique_ptr<GeometryPass> mGeometryPass;
 	std::unique_ptr<LightingPass> mLightingPass;
 
+	std::unique_ptr<SkyboxPass> mSkyboxPass;
+
 private://Debug Passes
 	std::unique_ptr<JointDebugPass> mJointDebugPass;
-
-private://Descriptor heaps
-	std::unique_ptr<DescriptorHeap> mDSVHeap;
-	std::unique_ptr<DescriptorHeap> mRTVHeap;
-	std::unique_ptr<DescriptorHeap> mCBVSRVUAVHeap;
 
 private://RTV & DSV SRV Resource
 	FrameBufferResource mFrameResource;
@@ -93,7 +93,6 @@ private://RTV & DSV SRV Resource
 private://CBV resource & allocation
 	std::unique_ptr<CommonCB> mCommonCB;
 	std::unique_ptr<LightCB> mLightCB;
-
 
 private:
 	std::unordered_map<std::string, std::shared_ptr<Model>> mModels;

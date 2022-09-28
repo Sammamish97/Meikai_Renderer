@@ -48,6 +48,48 @@ public:
 		return x < low ? low : (x > high ? high : x);
 	}
 
+	/***************************************************************************
+   * These functions were taken from the MiniEngine.
+   * Source code available here:
+   * https://github.com/Microsoft/DirectX-Graphics-Samples/blob/master/MiniEngine/Core/Math/Common.h
+   * Retrieved: January 13, 2016
+   **************************************************************************/
+	template <typename T>
+	static T AlignUpWithMask(T value, size_t mask)
+	{
+		return (T)(((size_t)value + mask) & ~mask);
+	}
+
+	template <typename T>
+	static T AlignDownWithMask(T value, size_t mask)
+	{
+		return (T)((size_t)value & ~mask);
+	}
+
+	template <typename T>
+	static T AlignUp(T value, size_t alignment)
+	{
+		return AlignUpWithMask(value, alignment - 1);
+	}
+
+	template <typename T>
+	static T AlignDown(T value, size_t alignment)
+	{
+		return AlignDownWithMask(value, alignment - 1);
+	}
+
+	template <typename T>
+	static bool IsAligned(T value, size_t alignment)
+	{
+		return 0 == ((size_t)value & (alignment - 1));
+	}
+
+	template <typename T>
+	static T DivideByMultiple(T value, size_t alignment)
+	{
+		return (T)((value + alignment - 1) / alignment);
+	}
+
 	// Returns the polar angle of the point (x,y) in [0, 2*PI).
 	static float AngleFromXY(float x, float y);
 

@@ -13,6 +13,7 @@ class UploadBuffer;
 class VertexBuffer;
 class IndexBuffer;
 using namespace Microsoft::WRL;
+
 class CommandList
 {
 	DXApp* mApp;
@@ -76,6 +77,7 @@ public:
 	void SetScissorRect(const D3D12_RECT& scissorRect);
 	void SetPipelineState(Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState);
 
+	void SetComputeRootSignature(ComPtr<ID3D12RootSignature> rootSignature);
 	void SetGraphicsRootSignature(ComPtr<ID3D12RootSignature> rootSignature);
 
 	void SetEmptyVertexBuffer();
@@ -102,14 +104,13 @@ public:
 
 	void Draw(uint32_t vertexCount, uint32_t instanceCount = 1, uint32_t startVertex = 0, uint32_t startInstance = 0);
 	void DrawIndexed(uint32_t indexCount, uint32_t instanceCount = 1, uint32_t startIndex = 0, int32_t baseVertex = 0, uint32_t startInstance = 0);
-
-	ComPtr<ID3D12GraphicsCommandList2> GetList();
-	ComPtr<ID3D12CommandAllocator> GetAllocator();
-	D3D12_COMMAND_LIST_TYPE GetCommandListType();
+	void Dispatch(uint32_t numGroupsX, uint32_t numGroupsY = 1, uint32_t numGroupsZ = 1);
 
 
 	void SetDescriptorHeap(ComPtr<ID3D12DescriptorHeap>& heap);
-	void SetDescriptorTable(UINT rootParamIndex, D3D12_GPU_DESCRIPTOR_HANDLE GPUHandle);
+	void SetGraphicsDescriptorTable(UINT rootParamIndex, D3D12_GPU_DESCRIPTOR_HANDLE GPUHandle);
+	void SetComputeDescriptorTable(UINT rootParamIndex, D3D12_GPU_DESCRIPTOR_HANDLE GPUHandle);
+
 	void SetGraphics32BitConstants(uint32_t rootParameterIndex, uint32_t numConstants, const void* constants);
 	template<typename T>
 	void SetGraphics32BitConstants(uint32_t rootParameterIndex, const T& constants)
@@ -117,9 +118,21 @@ public:
 		static_assert(sizeof(T) % sizeof(uint32_t) == 0, "Size of type must be a multiple of 4 bytes");
 		SetGraphics32BitConstants(rootParameterIndex, sizeof(T) / sizeof(uint32_t), &constants);
 	}
+
+	void SetCompute32BitConstants(uint32_t rootParameterIndex, uint32_t numConstants, const void* constants);
+	template<typename T>
+	void SetCompute32BitConstants(uint32_t rootParameterIndex, const T& constants)
+	{
+		static_assert(sizeof(T) % sizeof(uint32_t) == 0, "Size of type must be a multiple of 4 bytes");
+		SetCompute32BitConstants(rootParameterIndex, sizeof(T) / sizeof(uint32_t), &constants);
+	}
+
 	void SetConstantBufferView(uint32_t rootParameterIndex, D3D12_GPU_VIRTUAL_ADDRESS dataGPUAddress);
 	void ReleaseTrackedObjects();
 
+	ComPtr<ID3D12GraphicsCommandList2> GetList();
+	ComPtr<ID3D12CommandAllocator> GetAllocator();
+	D3D12_COMMAND_LIST_TYPE GetCommandListType();
 private:
 	void CopyBuffer(Buffer& buffer, size_t numElements, size_t elementSize, const void* bufferData, D3D12_RESOURCE_FLAGS flags = D3D12_RESOURCE_FLAG_NONE);
 

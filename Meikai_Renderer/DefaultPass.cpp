@@ -30,21 +30,14 @@ void DefaultPass::InitRootSignature()
         //1. World matrix for each object.
         //2. test texture
 
-    UINT descriptorNumber = 8;//Pos + Normal + Albedo + Roughness + Metalic + SSAO + Depth + test
-
-    CD3DX12_DESCRIPTOR_RANGE srvRange = {};
-    srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, descriptorNumber, 0, 0);
-
-    CD3DX12_ROOT_PARAMETER rootParameters[3];
+    CD3DX12_ROOT_PARAMETER rootParameters[2];
     rootParameters[0].InitAsConstants(sizeof(DirectX::XMMATRIX) / 4, 0, 0, D3D12_SHADER_VISIBILITY_VERTEX);
     rootParameters[1].InitAsConstantBufferView(1);
-    rootParameters[2].InitAsDescriptorTable(1, &srvRange, D3D12_SHADER_VISIBILITY_PIXEL);
 
-    auto staticSamplers = mApp->GetStaticSamplers();
 
     CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDescription;
     rootSignatureDescription.Init_1_0(_countof(rootParameters), rootParameters, 
-        (UINT)staticSamplers.size(), staticSamplers.data(), rootSignatureFlags);
+        0, nullptr, rootSignatureFlags);
 
     ComPtr<ID3DBlob> rootSignatureBlob;
     ComPtr<ID3DBlob> errorBlob;

@@ -6,16 +6,19 @@
 #include "BufferFormat.h"
 #include "MathHelper.h"
 #include "DefaultPass.h"
-//#include "Texture.h"
+#include "DescriptorHeap.h"
 
 #include <d3dcompiler.h>
 #include <d3dx12.h>
 
 #include "CommandList.h"
 #include "CommandQueue.h"
+
+#include "EquiRectToCubemapPass.h"
 #include "GeometryPass.h"
 #include "LightingPass.h"
 #include "JointDebugPass.h"
+#include "SkyboxPass.h"
 
 #include "ResourceStateTracker.h"
 
@@ -61,11 +64,25 @@ bool Demo::Initialize()
 	mGeometryPass = std::make_unique<GeometryPass>(this, mShaders["GeomVS"], mShaders["GeomPS"]);
 	mLightingPass = std::make_unique<LightingPass>(this, mShaders["ScreenQuadVS"], mShaders["LightingPS"]);
 	mJointDebugPass = std::make_unique<JointDebugPass>(this, mShaders["DebugJointVS"], mShaders["DebugJointPS"]);
+	mSkyboxPass = std::make_unique<SkyboxPass>(this, mShaders["SkyboxVS"], mShaders["SkyboxPS"]);
+
+	mEquiRectToCubemapPass = std::make_unique<EquiRectToCubemapPass>(this, mShaders["EquiRectToCubemapCS"]);
 
 	auto fenceValue = mDirectCommandQueue->ExecuteCommandList(initList);
 	mDirectCommandQueue->WaitForFenceValue(fenceValue);
 	m_ContentLoaded = true;
+
+	EquiRectToCubemap();
+
 	return true;
+}
+
+void Demo::EquiRectToCubemap()
+{
+	auto initList = mDirectCommandQueue->GetCommandList();
+	DispatchEquiRectToCubemap(*initList);
+	auto fenceValue = mDirectCommandQueue->ExecuteCommandList(initList);
+	mDirectCommandQueue->WaitForFenceValue(fenceValue);
 }
 
 void Demo::CreateDescriptorHeaps()
@@ -105,7 +122,6 @@ void Demo::CreateBufferResources()
 	clearColorDepth.Format = DepthStencilDSVFormat;
 	clearColorDepth.DepthStencil = { 1.f, 0 };
 
-	mFrameResource.mRenderTarget = std::make_shared<Texture>(this, colorDesc, &clearAlbedo, TextureUsage::RenderTarget, L"RenderTarget");
 	mFrameResource.mPositionMap = std::make_shared<Texture>(this, posDesc, &clearPos, TextureUsage::Position,L"Pos");
 	mFrameResource.mNormalMap = std::make_shared<Texture>(this, normalDesc, &clearNormal, TextureUsage::Normalmap, L"Normal");
 	mFrameResource.mAlbedoMap = std::make_shared<Texture>(this, colorDesc, &clearAlbedo, TextureUsage::Albedo, L"Albedo");
@@ -113,6 +129,7 @@ void Demo::CreateBufferResources()
 	mFrameResource.mRoughnessMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO, TextureUsage::Roughness, L"Roughness");
 	mFrameResource.mSsaoMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO, TextureUsage::SSAO, L"SSAO");
 	mFrameResource.mDepthStencilBuffer = std::make_shared<Texture>(this, depthDesc, &clearColorDepth, TextureUsage::Depth, L"DepthStencil");
+	mFrameResource.mRenderTarget = std::make_shared<Texture>(this, colorDesc, &clearAlbedo, TextureUsage::RenderTarget, L"RenderTarget");
 
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mPositionMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mNormalMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
@@ -135,7 +152,6 @@ void Demo::CreateBufferDescriptors()
 	mDescIndex.mSsaoDescRtvIdx = mRTVHeap->GetNextAvailableIndex();
 	mDescIndex.mRenderTargetRtvIdx = mRTVHeap->GetNextAvailableIndex();
 
-
 	mDescIndex.mPositionDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
 	mDescIndex.mNormalDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
 	mDescIndex.mAlbedoDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
@@ -145,7 +161,6 @@ void Demo::CreateBufferDescriptors()
 	mDescIndex.mSsaoDescSrvIdx = mCBVSRVUAVHeap->GetNextAvailableIndex();
 
 	mDescIndex.mDepthStencilDsvIdx = mDSVHeap->GetNextAvailableIndex();
-
 	
 	CreateRtvDescriptor(PositionFormat, mFrameResource.mPositionMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mPositionDescRtvIdx));
 	CreateRtvDescriptor(NormalFormat, mFrameResource.mNormalMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mNormalDescRtvIdx));
@@ -155,13 +170,13 @@ void Demo::CreateBufferDescriptors()
 	CreateRtvDescriptor(SSAOFormat, mFrameResource.mSsaoMap->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mSsaoDescRtvIdx));
 	CreateRtvDescriptor(AlbedoFormat, mFrameResource.mRenderTarget->GetResource(), mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx));
 
-	CreateSrvDescriptor(PositionFormat, mFrameResource.mPositionMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mPositionDescSrvIdx));
-	CreateSrvDescriptor(NormalFormat, mFrameResource.mNormalMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mNormalDescSrvIdx));
-	CreateSrvDescriptor(AlbedoFormat, mFrameResource.mAlbedoMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mAlbedoDescSrvIdx));
-	CreateSrvDescriptor(RoughnessFormat, mFrameResource.mRoughnessMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mRoughnessDescSrvIdx));
-	CreateSrvDescriptor(MetalicFormat, mFrameResource.mMetalicMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mMetalicDescSrvIdx));
-	CreateSrvDescriptor(DepthStencilSRVFormat, mFrameResource.mDepthStencilBuffer->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mDepthStencilSrvIdx));
-	CreateSrvDescriptor(SSAOFormat, mFrameResource.mSsaoMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mSsaoDescSrvIdx));
+	CreateSrvDescriptor(PositionFormat, D3D12_SRV_DIMENSION_TEXTURE2D, mFrameResource.mPositionMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mPositionDescSrvIdx));
+	CreateSrvDescriptor(NormalFormat, D3D12_SRV_DIMENSION_TEXTURE2D, mFrameResource.mNormalMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mNormalDescSrvIdx));
+	CreateSrvDescriptor(AlbedoFormat, D3D12_SRV_DIMENSION_TEXTURE2D, mFrameResource.mAlbedoMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mAlbedoDescSrvIdx));
+	CreateSrvDescriptor(RoughnessFormat, D3D12_SRV_DIMENSION_TEXTURE2D, mFrameResource.mRoughnessMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mRoughnessDescSrvIdx));
+	CreateSrvDescriptor(MetalicFormat, D3D12_SRV_DIMENSION_TEXTURE2D, mFrameResource.mMetalicMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mMetalicDescSrvIdx));
+	CreateSrvDescriptor(DepthStencilSRVFormat, D3D12_SRV_DIMENSION_TEXTURE2D, mFrameResource.mDepthStencilBuffer->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mDepthStencilSrvIdx));
+	CreateSrvDescriptor(SSAOFormat, D3D12_SRV_DIMENSION_TEXTURE2D, mFrameResource.mSsaoMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mDescIndex.mSsaoDescSrvIdx));
 
 	CreateDsvDescriptor(DepthStencilDSVFormat, mFrameResource.mDepthStencilBuffer->GetResource(), mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
 }
@@ -170,7 +185,16 @@ void Demo::CreateIBLResources(std::shared_ptr<CommandList>& commandList)
 {
 	mIBLResource.mHDRImage = std::make_shared<Texture>(this);
 	commandList->LoadTextureFromFile(*mIBLResource.mHDRImage, L"../textures/Alexs_Apt_2k.hdr", TextureUsage::HDR);
-	//mIBLResource.mCubeMap;
+
+	auto cubemapDesc = mIBLResource.mHDRImage->GetD3D12ResourceDesc();
+
+	cubemapDesc.Format = AlbedoFormat;
+	cubemapDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+	cubemapDesc.Width = cubemapDesc.Height = 1024;
+	cubemapDesc.DepthOrArraySize = 6;
+	cubemapDesc.MipLevels = 0;
+	mIBLResource.mCubeMap = std::make_shared<Texture>(this, cubemapDesc, nullptr, TextureUsage::Albedo, L"SkyboxCubemap");
+
 	//mIBLResource.mDIffuseCubeMap;
 	//mIBLResource.mSpecularCubeMap;
 }
@@ -178,7 +202,20 @@ void Demo::CreateIBLResources(std::shared_ptr<CommandList>& commandList)
 void Demo::CreateIBLDescriptors()
 {
 	mIBLIndex.mHDRImageSrvIndex = mCBVSRVUAVHeap->GetNextAvailableIndex();
-	CreateSrvDescriptor(HDRFormat, mIBLResource.mHDRImage->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mIBLIndex.mHDRImageSrvIndex));
+	CreateSrvDescriptor(HDRFormat, D3D12_SRV_DIMENSION_TEXTURE2D, mIBLResource.mHDRImage->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mIBLIndex.mHDRImageSrvIndex));
+
+	mIBLIndex.mCubemapSrvIndex = mCBVSRVUAVHeap->GetNextAvailableIndex();
+	CreateSrvDescriptor(AlbedoFormat, D3D12_SRV_DIMENSION_TEXTURECUBE, mIBLResource.mCubeMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mIBLIndex.mCubemapSrvIndex));
+
+	auto cubeMapDesc = mIBLResource.mCubeMap->GetD3D12ResourceDesc();
+	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
+	uavDesc.Format = Texture::GetUAVCompatableFormat(cubeMapDesc.Format);
+	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2DARRAY;
+	uavDesc.Texture2DArray.FirstArraySlice = 0;
+	uavDesc.Texture2DArray.ArraySize = 6;
+
+	mIBLIndex.mCubemapUavIndex = mCBVSRVUAVHeap->GetNextAvailableIndex();
+	CreateUavDescriptor(uavDesc, mIBLResource.mCubeMap->GetResource(), mCBVSRVUAVHeap->GetCpuHandle(mIBLIndex.mCubemapUavIndex));
 }
 
 void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
@@ -191,12 +228,12 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 	//mModels["Quad"] = std::make_shared<Model>("../models/Quad.obj", this, *cmdList);
 	//mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);
 	//mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
-	//mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
+	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
 
 	//objects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(10.f, 10.f, 10.f)));
 	objects.push_back(std::make_unique<Object>(mModels["Y_Bot"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
 	//objects.push_back(std::make_unique<Object>(mModels["Warrior"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
-	//mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
+	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
 	//objects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(1.f, -1.f, 0.f)));
 }
 
@@ -223,6 +260,8 @@ void Demo::CreateShader()
 	mShaders["DefaultForwardPS"] = DxUtil::CompileShader(L"../shaders/DefaultForward.hlsl", nullptr, "PS", "ps_5_1");
 	mShaders["DebugJointVS"] = DxUtil::CompileShader(L"../shaders/DebugJoint.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["DebugJointPS"] = DxUtil::CompileShader(L"../shaders/DebugJoint.hlsl", nullptr, "PS", "ps_5_1");
+	mShaders["EquiRectToCubemapCS"] = DxUtil::CompileShader(L"../shaders/EquiRectToCubemap.hlsl", nullptr, "EquiRectToCubemapCS", "cs_5_1");
+
 
 	mShaders["SkyboxVS"] = DxUtil::CompileShader(L"../shaders/SkyboxPass.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["SkyboxPS"] = DxUtil::CompileShader(L"../shaders/SkyboxPass.hlsl", nullptr, "PS", "ps_5_1");
@@ -287,11 +326,12 @@ void Demo::Update(const GameTimer& gt)
 void Demo::Draw(const GameTimer& gt)
 {
 	auto drawcmdList = mDirectCommandQueue->GetCommandList();
-	DrawDefaultPass(*drawcmdList);
-	//DrawGeometryPass(*drawcmdList);
-	//DrawLightingPass(*drawcmdList);
-	DrawJointDebug(*drawcmdList);
-	DrawBoneDebug(*drawcmdList);
+	//DrawDefaultPass(*drawcmdList);
+	DrawGeometryPass(*drawcmdList);
+	DrawLightingPass(*drawcmdList);
+	DrawSkyboxPass(*drawcmdList); 
+	//DrawJointDebug(*drawcmdList);
+	//DrawBoneDebug(*drawcmdList);
 	mDirectCommandQueue->ExecuteCommandList(drawcmdList);
 	Present(mFrameResource.mRenderTarget);
 	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
@@ -311,10 +351,6 @@ void Demo::DrawDefaultPass(CommandList& cmdList)
 
 	cmdList.ClearTexture(mFrameResource.mRenderTarget, mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx),colorClearValue);
 	cmdList.ClearDepthStencilTexture(mFrameResource.mDepthStencilBuffer, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL);
-
-	cmdList.SetDescriptorHeap(mCBVSRVUAVHeap->GetDescriptorHeap());
-
-	cmdList.SetDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
 
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx) };
 	cmdList.SetRenderTargets(rtvArray, &mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
@@ -400,8 +436,7 @@ void Demo::DrawLightingPass(CommandList& cmdList)
 	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(LightCB), mLightCB.get());
 
 	cmdList.SetDescriptorHeap(mCBVSRVUAVHeap->GetDescriptorHeap());
-
-	cmdList.SetDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
+	cmdList.SetGraphicsDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(0));
 
 	//// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
 	cmdList.SetViewport(mScreenViewport);
@@ -417,6 +452,24 @@ void Demo::DrawLightingPass(CommandList& cmdList)
 	cmdList.Draw(3);
 }
 
+void Demo::DrawSkyboxPass(CommandList& cmdList)
+{
+	cmdList.SetPipelineState(mSkyboxPass->mPSO.Get());
+	cmdList.SetGraphicsRootSignature(mSkyboxPass->mRootSig.Get());
+
+	cmdList.SetViewport(mScreenViewport);
+	cmdList.SetScissorRect(mScissorRect);
+
+	cmdList.SetDescriptorHeap(mCBVSRVUAVHeap->GetDescriptorHeap());
+	cmdList.SetGraphicsDescriptorTable(1, mCBVSRVUAVHeap->GetGpuHandle(0));
+
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx) };
+	cmdList.SetRenderTargets(rtvArray, &mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
+
+	mSkybox->DrawWithoutWorld(cmdList);
+}
+
+
 void Demo::DrawJointDebug(CommandList& cmdList)
 {
 	cmdList.SetPipelineState(mJointDebugPass->mPSO.Get());
@@ -426,8 +479,6 @@ void Demo::DrawJointDebug(CommandList& cmdList)
 
 	cmdList.SetViewport(mScreenViewport);
 	cmdList.SetScissorRect(mScissorRect);
-
-	cmdList.ClearDepthStencilTexture(mFrameResource.mDepthStencilBuffer, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL);
 
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx) };
 	cmdList.SetRenderTargets(rtvArray, &mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
@@ -448,8 +499,6 @@ void Demo::DrawBoneDebug(CommandList& cmdList)
 	cmdList.SetViewport(mScreenViewport);
 	cmdList.SetScissorRect(mScissorRect);
 
-	cmdList.ClearDepthStencilTexture(mFrameResource.mDepthStencilBuffer, mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL);
-
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { mRTVHeap->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx) };
 	cmdList.SetRenderTargets(rtvArray, &mDSVHeap->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx));
 
@@ -457,6 +506,64 @@ void Demo::DrawBoneDebug(CommandList& cmdList)
 	{
 		object->DrawBone(cmdList);
 	}
+}
+
+void Demo::DispatchEquiRectToCubemap(CommandList& cmdList)
+{
+	auto device = mApp->GetDevice();
+
+	auto cubemapResource = mIBLResource.mCubeMap->GetResource();
+	CD3DX12_RESOURCE_DESC cubemapDesc(cubemapResource->GetDesc());
+
+	/*auto stagingResource = cubemapResource;
+	Texture stagingTexture(mApp, stagingResource, TextureUsage::Albedo);*/
+
+	/*if ((cubemapDesc.Flags & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS) == 0)
+	{
+		auto stagingDesc = cubemapDesc;
+		stagingDesc.Format = Texture::GetUAVCompatableFormat(cubemapDesc.Format);
+		stagingDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+
+		ThrowIfFailed(device->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAG_NONE,
+			&stagingDesc,
+			D3D12_RESOURCE_STATE_COPY_DEST,
+			nullptr,
+			IID_PPV_ARGS(stagingResource.GetAddressOf())))
+
+			ResourceStateTracker::AddGlobalResourceState(stagingResource.Get(), D3D12_RESOURCE_STATE_COPY_DEST);
+
+		stagingTexture.SetD3D12Resource(stagingResource);
+		stagingTexture.SetName(L"EquiRect to Cubemap Staging Texture");
+
+		cmdList.CopyResource(stagingTexture, *mIBLResource.mCubeMap);
+	}*/
+	//cmdList.TransitionBarrier(stagingTexture, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+	cmdList.SetPipelineState(mEquiRectToCubemapPass->mPSO.Get());
+	cmdList.SetComputeRootSignature(mEquiRectToCubemapPass->mRootSig.Get());
+
+	EquiRectToCubemapCB equiRectToCubemapCB;
+	equiRectToCubemapCB.CubemapSize = std::max<uint32_t>(cubemapDesc.Width, cubemapDesc.Height);
+
+	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
+	uavDesc.Format = Texture::GetUAVCompatableFormat(cubemapDesc.Format);
+	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2DARRAY;
+	uavDesc.Texture2DArray.FirstArraySlice = 0;
+	uavDesc.Texture2DArray.ArraySize = 6;
+
+	cmdList.SetCompute32BitConstants(0, equiRectToCubemapCB);
+	cmdList.SetDescriptorHeap(mCBVSRVUAVHeap->GetDescriptorHeap());
+	cmdList.SetComputeDescriptorTable(1, mCBVSRVUAVHeap->GetGpuHandle(0));
+	cmdList.SetComputeDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(mIBLIndex.mCubemapUavIndex));
+
+	cmdList.Dispatch(MathHelper::DivideByMultiple(equiRectToCubemapCB.CubemapSize, 16), MathHelper::DivideByMultiple(equiRectToCubemapCB.CubemapSize, 16), 6);
+
+	/*if (stagingResource != cubemapResource)
+	{
+		cmdList.CopyResource(*mIBLResource.mCubeMap, stagingTexture);
+	}*/
 }
 
 void Demo::OnMouseDown(WPARAM btnState, int x, int y)

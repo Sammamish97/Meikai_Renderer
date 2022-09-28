@@ -1,6 +1,11 @@
 #pragma once
 #include "IPass.h"
 
+enum GeometryRootIndex
+{
+	
+};
+
 class GeometryPass : public IPass
 {
 public:

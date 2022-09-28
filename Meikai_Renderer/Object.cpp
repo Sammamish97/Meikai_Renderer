@@ -36,6 +36,14 @@ void Object::Draw(CommandList& commandList)
 	}
 }
 
+void Object::DrawWithoutWorld(CommandList& commandList)
+{
+	for (auto& mesh : mModel->mMeshes)
+	{
+		mesh.Draw(commandList);
+	}
+}
+
 void Object::DrawJoint(CommandList& commandList)
 {
 	SetWorldMatrix(commandList);
@@ -48,10 +56,3 @@ void Object::DrawBone(CommandList& commandList)
 	mModel->DrawDebugBones(commandList);
 }
 
-void Object::DrawWithoutWorld(CommandList& commandList)
-{
-	for (auto& mesh : mModel->mMeshes)
-	{
-		mesh.Draw(commandList);
-	}
-}

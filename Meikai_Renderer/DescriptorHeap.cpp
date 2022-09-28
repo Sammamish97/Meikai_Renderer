@@ -15,6 +15,11 @@ DescriptorHeap::DescriptorHeap(DXApp* appPtr, D3D12_DESCRIPTOR_HEAP_TYPE heapTyp
 	mApp->GetDevice()->CreateDescriptorHeap(&HeapDesc, IID_PPV_ARGS(mDescriptorHeap.GetAddressOf()));
 }
 
+UINT DescriptorHeap::GetDescriptorNum()
+{
+	return mOffset;
+}
+
 //Allocate and return offset of descriptor.
 UINT DescriptorHeap::GetNextAvailableIndex()
 {
@@ -35,4 +40,3 @@ ComPtr<ID3D12DescriptorHeap>& DescriptorHeap::GetDescriptorHeap()
 {
 	return mDescriptorHeap;
 }
-

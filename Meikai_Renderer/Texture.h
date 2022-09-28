@@ -31,6 +31,8 @@ public:
 	Texture& operator=(const Texture& other);
 	Texture& operator=(Texture&& other);
 
+	D3D12_UNORDERED_ACCESS_VIEW_DESC GetUAVDesc(const D3D12_RESOURCE_DESC& resDesc, UINT mipSlice, UINT arraySlice = 0, UINT planeSlice = 0);
+
 	virtual ~Texture();
 
 	TextureUsage GetTextureUsage() const;
@@ -42,6 +44,8 @@ public:
 	void AllocateSRVDesc(UINT SRVdescIndex);
 	void AllocateDSVDesc(UINT DSVdescIndex);
 	void AllocateUAVDesc(UINT UAVDescIndex);
+
+	static DXGI_FORMAT GetUAVCompatableFormat(DXGI_FORMAT format);
 
 private:
 	std::optional<UINT> mRTVDescIDX;

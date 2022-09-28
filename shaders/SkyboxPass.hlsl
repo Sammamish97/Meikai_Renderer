@@ -22,7 +22,7 @@ SamplerState gsamLinearClamp : register(s1);
 SamplerState gsamDepthMap : register(s2);
 SamplerState gsamLinearWrap : register(s3);
 
-TextureCube gCubeMap : register(t0);
+TextureCube gCubeMap : register(t8);
 
 struct VertexIn
 {

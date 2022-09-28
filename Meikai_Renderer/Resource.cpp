@@ -33,6 +33,7 @@ Resource::Resource(DXApp* appPtr, const D3D12_RESOURCE_DESC& resourceDesc,
 	CheckFeatureSupport();
 	SetName(name);
 }
+
 Resource::Resource(DXApp* appPtr, ComPtr<ID3D12Resource> resource, const std::wstring& name)
 	: mApp(appPtr), mResource(resource), mFormatSupport({})
 {

@@ -6,6 +6,8 @@
 #include "CommandQueue.h"
 #include "UploadBuffer.h"
 #include "Texture.h"
+#include "DescriptorHeap.h"
+
 
 #include <d3dx12.h>
 #include <cassert>
@@ -621,17 +623,42 @@ void DXApp::CreateCbvDescriptor(D3D12_GPU_VIRTUAL_ADDRESS gpuLocation, size_t bu
 	mdxDevice->CreateConstantBufferView(&cbvDesc, heapPos);
 }
 
-void DXApp::CreateSrvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos)
+void DXApp::CreateSrvDescriptor(DXGI_FORMAT format, D3D12_SRV_DIMENSION dimension, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos)
 {
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Format = format;
+	srvDesc.ViewDimension = dimension;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+	switch (dimension)
+	{
+	case D3D12_SRV_DIMENSION_TEXTURE2D:
+		srvDesc.Texture2D.MipLevels = 1;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		srvDesc.Texture2D.PlaneSlice = 0;
+		break;
+
+	case D3D12_SRV_DIMENSION_TEXTURECUBE:
+		srvDesc.Texture2DArray.MipLevels = 1;
+		srvDesc.Texture2DArray.MostDetailedMip = 0;
+		srvDesc.Texture2DArray.PlaneSlice = 0;
+		srvDesc.Texture2DArray.FirstArraySlice = 0;
+		srvDesc.Texture2DArray.ArraySize = 6;
+		break;
+	}
 	
-	srvDesc.Texture2D.MipLevels = 1;
-	srvDesc.Texture2D.MostDetailedMip = 0;
-	srvDesc.Texture2D.PlaneSlice = 0;
 	mdxDevice->CreateShaderResourceView(resource.Get(), &srvDesc, heapPos);
+}
+
+void DXApp::CreateUavDescriptor(D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc, ComPtr<ID3D12Resource>& resource,
+	D3D12_CPU_DESCRIPTOR_HANDLE heapPos)
+{
+	mdxDevice->CreateUnorderedAccessView(resource.Get(), nullptr, &uavDesc, heapPos);
+}
+
+UINT DXApp::GetCBVSRVUAVDescriptorNum()
+{
+	return mCBVSRVUAVHeap->GetDescriptorNum();
 }
 
 LRESULT DXApp::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)

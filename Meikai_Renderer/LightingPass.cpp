@@ -29,7 +29,7 @@ void LightingPass::InitRootSignature()
         D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
         D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
 
-    UINT descriptorNumber = 8;//Pos + Normal + Albedo + Roughness + Metalic + SSAO + Depth + test
+    UINT descriptorNumber = mApp->GetCBVSRVUAVDescriptorNum();//Pos + Normal + Albedo + Roughness + Metalic + SSAO + Depth + test
 
     CD3DX12_DESCRIPTOR_RANGE srvRange = {};
     srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, descriptorNumber, 0, 0);

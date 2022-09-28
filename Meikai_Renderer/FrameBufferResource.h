@@ -58,4 +58,5 @@ struct IBLDescriptorIndex
 	UINT mHDRImageSrvIndex;
 
 	UINT mCubemapSrvIndex;
+	UINT mCubemapUavIndex;
 };

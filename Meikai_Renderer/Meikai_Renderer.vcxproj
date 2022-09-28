@@ -32,6 +32,7 @@
     <ClInclude Include="DescriptorHeap.h" />
     <ClInclude Include="DXApp.h" />
     <ClInclude Include="DXUtil.h" />
+    <ClInclude Include="EquiRectToCubemapPass.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GeometryPass.h" />
     <ClInclude Include="IndexBuffer.h" />
@@ -47,6 +48,7 @@
     <ClInclude Include="Page.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SkeletalObject.h" />
+    <ClInclude Include="SkyboxPass.h" />
     <ClInclude Include="UploadBuffer.h" />
     <ClInclude Include="ResourceStateTracker.h" />
     <ClInclude Include="Texture.h" />
@@ -87,6 +89,7 @@
     <ClCompile Include="DescriptorHeap.cpp" />
     <ClCompile Include="DXApp.cpp" />
     <ClCompile Include="DXUtil.cpp" />
+    <ClCompile Include="EquiRectToCubemapPass.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GeometryPass.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
@@ -101,6 +104,7 @@
     <ClCompile Include="Page.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="SkeletalObject.cpp" />
+    <ClCompile Include="SkyboxPass.cpp" />
     <ClCompile Include="UploadBuffer.cpp" />
     <ClCompile Include="ResourceStateTracker.cpp" />
     <ClCompile Include="Texture.cpp" />

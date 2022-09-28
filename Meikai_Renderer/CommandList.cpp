@@ -5,6 +5,7 @@
 #include "UploadBuffer.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "MathHelper.h"
 
 #include <DirectXTex.h>
 #include <filesystem>
@@ -315,9 +316,14 @@ void CommandList::SetDescriptorHeap(ComPtr<ID3D12DescriptorHeap>& heap)
 	mCommandList->SetDescriptorHeaps(1, heap.GetAddressOf());
 }
 
-void CommandList::SetDescriptorTable(UINT rootParamIndex, D3D12_GPU_DESCRIPTOR_HANDLE GPUHandle)
+void CommandList::SetGraphicsDescriptorTable(UINT rootParamIndex, D3D12_GPU_DESCRIPTOR_HANDLE GPUHandle)
 {
 	mCommandList->SetGraphicsRootDescriptorTable(rootParamIndex, GPUHandle);
+}
+
+void CommandList::SetComputeDescriptorTable(UINT rootParamIndex, D3D12_GPU_DESCRIPTOR_HANDLE GPUHandle)
+{
+	mCommandList->SetComputeRootDescriptorTable(rootParamIndex, GPUHandle);
 }
 
 void CommandList::SetGraphics32BitConstants(uint32_t rootParameterIndex, uint32_t numConstants, const void* constants)
@@ -325,6 +331,10 @@ void CommandList::SetGraphics32BitConstants(uint32_t rootParameterIndex, uint32_
 	mCommandList->SetGraphicsRoot32BitConstants(rootParameterIndex, numConstants, constants, 0);
 }
 
+void CommandList::SetCompute32BitConstants(uint32_t rootParameterIndex, uint32_t numConstants, const void* constants)
+{
+	mCommandList->SetComputeRoot32BitConstants(rootParameterIndex, numConstants, constants, 0);
+}
 
 void CommandList::Close(void)
 {
@@ -428,6 +438,12 @@ void CommandList::DrawIndexed(uint32_t indexCount, uint32_t instanceCount, uint3
 	mCommandList->DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, startInstance);
 }
 
+void CommandList::Dispatch(uint32_t numGroupsX, uint32_t numGroupsY, uint32_t numGroupsZ)
+{
+	FlushResourceBarriers();
+	mCommandList->Dispatch(numGroupsX, numGroupsY, numGroupsZ);
+}
+
 void CommandList::SetViewport(const D3D12_VIEWPORT& viewport)
 {
 	mCommandList->RSSetViewports(1, &viewport);
@@ -442,6 +458,11 @@ void CommandList::SetPipelineState(ComPtr<ID3D12PipelineState> pipelineState)
 {
 	mCommandList->SetPipelineState(pipelineState.Get());
 	TrackResource(pipelineState);
+}
+
+void CommandList::SetComputeRootSignature(ComPtr<ID3D12RootSignature> rootSignature)
+{
+	mCommandList->SetComputeRootSignature(rootSignature.Get());
 }
 
 void CommandList::SetGraphicsRootSignature(ComPtr<ID3D12RootSignature> rootSignature)
