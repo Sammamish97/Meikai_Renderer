@@ -3,6 +3,7 @@
 #include "DXUtil.h"
 #include "DXApp.h"
 #include "BufferFormat.h"
+#include "DescriptorHeap.h"
 #include <DirectXMath.h>
 
 SkyboxPass::SkyboxPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader)
@@ -27,7 +28,7 @@ void SkyboxPass::InitRootSignature()
         D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
         D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
 
-    UINT descriptorNumber = mApp->GetCBVSRVUAVDescriptorNum();//Pos + Normal + Albedo + Roughness + Metalic + SSAO + Depth + test
+    UINT descriptorNumber = mApp->GetDescriptorHeap(SRV_CUBE)->GetDescriptorNum();
 
     CD3DX12_DESCRIPTOR_RANGE srvRange = {};
     srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, descriptorNumber, 0, 0);

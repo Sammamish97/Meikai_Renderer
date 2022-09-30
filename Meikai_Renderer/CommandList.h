@@ -64,7 +64,8 @@ public:
 	}
 
 	void SetRootConstant(int rootParameterIndex, D3D12_GPU_VIRTUAL_ADDRESS GPUAddress);
-	void LoadTextureFromFile(Texture& texture, const std::wstring& fileName, TextureUsage textureUsage = TextureUsage::Albedo);
+	void LoadTextureFromFile(Texture& texture, const std::wstring& fileName, TextureUsage textureUsage = TextureUsage::Albedo, 
+		D3D12_SRV_DIMENSION srvDim = D3D12_SRV_DIMENSION_UNKNOWN, D3D12_UAV_DIMENSION uavDim = D3D12_UAV_DIMENSION_UNKNOWN);
 	void CopyTextureSubresource(Texture& texture, uint32_t firstSubresource, uint32_t numSubresources, D3D12_SUBRESOURCE_DATA* subresourceData);
 
 	void ClearTexture(std::shared_ptr<Texture> texture, D3D12_CPU_DESCRIPTOR_HANDLE rtvCPUHandle, const float clearColor[4]);

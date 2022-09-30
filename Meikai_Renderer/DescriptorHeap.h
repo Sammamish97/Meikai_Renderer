@@ -1,7 +1,6 @@
 #pragma once
 #include <wrl.h>
 #include <d3dx12.h>
-#include <map>
 using namespace Microsoft::WRL;
 class DXApp;
 class DescriptorHeap

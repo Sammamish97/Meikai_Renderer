@@ -550,6 +550,26 @@ void DXApp::Present(std::shared_ptr<Texture>& texture)
 	mDirectCommandQueue->WaitForFenceValue(mFenceValues[mCurrBackBuffer]);
 }
 
+UINT DXApp::GetHeapDescriptorNum(HeapType type)
+{
+	return mDescriptorHeaps[type]->GetDescriptorNum();
+}
+
+std::shared_ptr<DescriptorHeap> DXApp::GetDescriptorHeap(HeapType type)
+{
+	return mDescriptorHeaps[type];
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE DXApp::GetHeapCPUHandle(HeapType type, UINT idx)
+{
+	return mDescriptorHeaps[type]->GetCpuHandle(idx);
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE DXApp::GetHeapGPUHandle(HeapType type, UINT idx)
+{
+	return mDescriptorHeaps[type]->GetGpuHandle(idx);
+}
+
 void DXApp::TransitionResource(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2> commandList,
                                Microsoft::WRL::ComPtr<ID3D12Resource> resource, D3D12_RESOURCE_STATES beforeState,
                                D3D12_RESOURCE_STATES afterState)
@@ -571,31 +591,6 @@ void DXApp::ClearDepth(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2> comman
 	FLOAT depth)
 {
 	commandList->ClearDepthStencilView(dsv, D3D12_CLEAR_FLAG_DEPTH, depth, 0, 0, nullptr);
-}
-
-void DXApp::CreateCubemapTextureResource(ComPtr<ID3D12Resource>& destination, int width, int height, DXGI_FORMAT format)
-{
-	D3D12_RESOURCE_DESC texDesc = {};
-	ZeroMemory(&texDesc, sizeof(D3D12_RESOURCE_DESC));
-	texDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	texDesc.Alignment = 0;
-	texDesc.Width = width;
-	texDesc.Height = height;
-	texDesc.DepthOrArraySize = 6;//6 becuase it is cubemap
-	texDesc.MipLevels = 1;
-	texDesc.Format = format;
-	texDesc.SampleDesc.Count = 1;
-	texDesc.SampleDesc.Quality = 0;
-	texDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
-	texDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
-
-	ThrowIfFailed(mdxDevice->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-		D3D12_HEAP_FLAG_NONE,
-		&texDesc,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(destination.GetAddressOf())))
 }
 
 void DXApp::CreateRtvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos)
@@ -626,42 +621,16 @@ void DXApp::CreateCbvDescriptor(D3D12_GPU_VIRTUAL_ADDRESS gpuLocation, size_t bu
 	mdxDevice->CreateConstantBufferView(&cbvDesc, heapPos);
 }
 
-void DXApp::CreateSrvDescriptor(DXGI_FORMAT format, D3D12_SRV_DIMENSION dimension, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos)
+void DXApp::CreateSrvDescriptor(D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc, ComPtr<ID3D12Resource>& resource,
+	D3D12_CPU_DESCRIPTOR_HANDLE heapPos)
 {
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc;
-	srvDesc.Format = format;
-	srvDesc.ViewDimension = dimension;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-
-	switch (dimension)
-	{
-	case D3D12_SRV_DIMENSION_TEXTURE2D:
-		srvDesc.Texture2D.MipLevels = 1;
-		srvDesc.Texture2D.MostDetailedMip = 0;
-		srvDesc.Texture2D.PlaneSlice = 0;
-		break;
-
-	case D3D12_SRV_DIMENSION_TEXTURECUBE:
-		srvDesc.Texture2DArray.MipLevels = 1;
-		srvDesc.Texture2DArray.MostDetailedMip = 0;
-		srvDesc.Texture2DArray.PlaneSlice = 0;
-		srvDesc.Texture2DArray.FirstArraySlice = 0;
-		srvDesc.Texture2DArray.ArraySize = 6;
-		break;
-	}
-	
 	mdxDevice->CreateShaderResourceView(resource.Get(), &srvDesc, heapPos);
 }
 
 void DXApp::CreateUavDescriptor(D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc, ComPtr<ID3D12Resource>& resource,
-	D3D12_CPU_DESCRIPTOR_HANDLE heapPos)
+                                D3D12_CPU_DESCRIPTOR_HANDLE heapPos)
 {
 	mdxDevice->CreateUnorderedAccessView(resource.Get(), nullptr, &uavDesc, heapPos);
-}
-
-UINT DXApp::GetCBVSRVUAVDescriptorNum()
-{
-	return mCBVSRVUAVHeap->GetDescriptorNum();
 }
 
 LRESULT DXApp::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)

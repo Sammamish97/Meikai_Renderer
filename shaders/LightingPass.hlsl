@@ -1,12 +1,4 @@
-Texture2D gPositionMap : register(t0);
-Texture2D gNormalMap  : register(t1);
-Texture2D gAlbedoMap  : register(t2);
-Texture2D gRoughness  : register(t3);
-Texture2D gMetalic  : register(t4);
-Texture2D gDepthMap  : register(t5);
-Texture2D gSsaoMap : register(t6);
-Texture2D gTestTex : register(t7);
-TextureCube gCubeMap : register(t8);
+Texture2D<float4> gTable[] : register(t0, space0);
 
 SamplerState gsamPointClamp : register(s0);
 SamplerState gsamLinearClamp : register(s1);
@@ -105,20 +97,18 @@ float3 fresnelSchlick(float cosTheta, float3 F0)
 }
 // ----------------------------------------------------------------------------
 
-
-
 float4 PS(VertexOut pin) : SV_Target
 {
 	float2 fliped_UV = pin.UV;
 	fliped_UV.y = 1 - fliped_UV.y;
 
-	float3 position = gPositionMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
-	float3 normal = normalize(gNormalMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz);
-	float3 albedo = gAlbedoMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
-	float occluded = gSsaoMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
-	float metalic = gMetalic.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
-	float roughness = gRoughness.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
-	float3 test = gTestTex.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
+	float3 position = gTable[0].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
+	float3 normal = normalize(gTable[1].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz);
+	float3 albedo = gTable[2].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
+	float roughness = gTable[3].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
+	float metalic = gTable[4].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
+	float occluded = gTable[5].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
+	float3 test = gTable[7].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
 
 	float3 N = normal;
 	float3 V = normalize(gEyePosW - position);

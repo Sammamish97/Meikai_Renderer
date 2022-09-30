@@ -1,9 +1,11 @@
 #include "LightingPass.h"
 #include "DXUtil.h"
 #include "DXApp.h"
+#include "DescriptorHeap.h"
+#include "BufferFormat.h"
+
 #include <DirectXMath.h>
 
-#include "BufferFormat.h"
 
 LightingPass::LightingPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader)
 	:IPass(appPtr, vertShader, pixelShader)
@@ -29,7 +31,7 @@ void LightingPass::InitRootSignature()
         D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
         D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
 
-    UINT descriptorNumber = mApp->GetCBVSRVUAVDescriptorNum();//Pos + Normal + Albedo + Roughness + Metalic + SSAO + Depth + test
+    UINT descriptorNumber = mApp->GetDescriptorHeap(SRV_2D)->GetDescriptorNum();
 
     CD3DX12_DESCRIPTOR_RANGE srvRange = {};
     srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, descriptorNumber, 0, 0);

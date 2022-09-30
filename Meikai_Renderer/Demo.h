@@ -11,6 +11,7 @@
 class Model;
 class Object;
 class Camera;
+class Texture;
 
 class EquiRectToCubemapPass;
 class DefaultPass;
@@ -31,19 +32,18 @@ protected:
 	void Update(const GameTimer& gt) override;
 	void Draw(const GameTimer& gt) override;
 
+
 private:
 	void BuildModels(std::shared_ptr<CommandList>& cmdList);
 	void BuildFrameResource();
 	void CreateIBLResources(std::shared_ptr<CommandList>& commandList);
 	void CreateShader();
 	void EquiRectToCubemap();
+
 private:
 	void CreateDescriptorHeaps();
-
 	void CreateBufferResources();
-
-	void CreateBufferDescriptors();
-	void CreateIBLDescriptors();
+	void CacheTextureIndices();
 
 	void DrawDefaultPass(CommandList& commandList);
 	void DrawGeometryPass(CommandList& cmdList);
@@ -52,7 +52,7 @@ private:
 	void DrawBoneDebug(CommandList& cmdList);
 	void DrawSkyboxPass(CommandList& cmdList);
 
-	void DispatchEquiRectToCubemap(CommandList& cmdList);
+	//void DispatchEquiRectToCubemap(CommandList& cmdList);
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
 
@@ -98,8 +98,10 @@ private:
 	std::unordered_map<std::string, std::shared_ptr<Model>> mModels;
 	std::unordered_map<std::string, ComPtr<ID3DBlob>> mShaders;
 
+	std::unordered_map<std::string, std::shared_ptr<Texture>> mTextures;
+
 	std::vector<D3D12_INPUT_ELEMENT_DESC> mInputLayout;
-	std::vector<std::unique_ptr<Object>> objects;
+	std::vector<std::unique_ptr<Object>> mObjects;
 	std::unique_ptr<Object> mSkybox;
 
 	std::unique_ptr<Camera> mCamera;

@@ -2,6 +2,7 @@
 
 #include <DirectXMath.h>
 
+#include "DescriptorHeap.h"
 #include "DXApp.h"
 #include "DXUtil.h"
 
@@ -35,8 +36,8 @@ void EquiRectToCubemapPass::InitRootSignature()
         D3D12_ROOT_SIGNATURE_FLAG_DENY_VERTEX_SHADER_ROOT_ACCESS |
         D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
 
-    UINT descriptorNumber = mApp->GetCBVSRVUAVDescriptorNum();//Pos + Normal + Albedo + Roughness + Metalic + SSAO + Depth + test
-
+    UINT descriptorNumber = mApp->GetDescriptorHeap(SRV_2D)->GetDescriptorNum();//Pos + Normal + Albedo + Roughness + Metalic + SSAO + Depth + test
+    //TODO: UAV heap은 이제 따로 존재하기에, 따로 관리해야 한다!
     //CD3DX12_DESCRIPTOR_RANGE srvRange = {};
     //srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 7, 0);//TODO: need fix!
 

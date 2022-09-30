@@ -13,9 +13,9 @@
 #include <d3dx12.h>
 #include <array>
 #include <memory>
+#include <map>
 
 #include "GameTimer.h"
-
 
 using Microsoft::WRL::ComPtr;
 class CommandList;
@@ -23,6 +23,16 @@ class CommandQueue;
 class Texture;
 class UploadBuffer;
 class DescriptorHeap;
+enum HeapType
+{
+    RTV,
+    DSV,
+    SRV_1D,
+    SRV_2D,
+    SRV_CUBE,
+    UAV_2D,
+    UAV_2D_ARRAY
+};
 
 class DXApp
 {
@@ -91,22 +101,23 @@ protected:
     void ClearDepth(ComPtr<ID3D12GraphicsCommandList2> commandList,
         D3D12_CPU_DESCRIPTOR_HANDLE dsv, FLOAT depth = 1.0f);
 
-    void CreateCubemapTextureResource(ComPtr<ID3D12Resource>& destination, int width, int height, DXGI_FORMAT format);
-
+public:
     void CreateRtvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
     void CreateDsvDescriptor(DXGI_FORMAT format, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
     void CreateCbvDescriptor(D3D12_GPU_VIRTUAL_ADDRESS gpuLocation, size_t bufferSize, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
-    void CreateSrvDescriptor(DXGI_FORMAT format, D3D12_SRV_DIMENSION dimension, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
+    void CreateSrvDescriptor(D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc, ComPtr<ID3D12Resource>& resource, D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
     void CreateUavDescriptor(D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc, ComPtr<ID3D12Resource>& resource,  D3D12_CPU_DESCRIPTOR_HANDLE heapPos);
 
 private:
     void LogAdapters();
     void LogAdapterOutputs(IDXGIAdapter* adapter);
     void LogOutputDisplayModes(IDXGIOutput* output, DXGI_FORMAT format);
-    ComPtr<ID3D12Resource> stagingResource;
 
 public:
-    UINT GetCBVSRVUAVDescriptorNum();
+    UINT GetHeapDescriptorNum(HeapType type);
+    std::shared_ptr<DescriptorHeap> GetDescriptorHeap(HeapType type);
+    D3D12_CPU_DESCRIPTOR_HANDLE GetHeapCPUHandle(HeapType type, UINT idx);
+    D3D12_GPU_DESCRIPTOR_HANDLE GetHeapGPUHandle(HeapType type, UINT idx);
 
 protected:
     std::shared_ptr<CommandQueue> mDirectCommandQueue;
@@ -114,9 +125,8 @@ protected:
     std::shared_ptr<CommandQueue> mCopyCommandQueue;
 
 protected://Descriptor heaps
-    std::unique_ptr<DescriptorHeap> mDSVHeap;
-    std::unique_ptr<DescriptorHeap> mRTVHeap;
-    std::unique_ptr<DescriptorHeap> mCBVSRVUAVHeap;
+    std::map<HeapType, std::shared_ptr<DescriptorHeap>> mDescriptorHeaps;
+
 
 protected:
     static DXApp* mApp;

@@ -1,46 +1,8 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  Animation.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Animation.cpp(15,9): warning C4002: too many arguments for function-like macro invocation 'assert'
-  Buffer.cpp
-  CommandList.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\CommandList.cpp(372,87): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
-  CommandQueue.cpp
-  DefaultPass.cpp
   Demo.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Model.h(17,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(14): message : see declaration of 'DXApp'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(234,117): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(548,66): warning C4244: 'argument': conversion from 'UINT64' to 'const _Ty', possible loss of data
-          with
-          [
-              _Ty=uint32_t
-          ]
-  DescriptorHeap.cpp
-  DXApp.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\DXApp.cpp(625,34): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
-  EquiRectToCubemapPass.cpp
-  GeometryPass.cpp
-  IndexBuffer.cpp
-  IPass.cpp
-  JointDebugPass.cpp
-  LightingPass.cpp
-  main.cpp
-  Mesh.cpp
-  Model.cpp
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Model.h(17,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(14): message : see declaration of 'DXApp'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Model.cpp(20,9): warning C4002: too many arguments for function-like macro invocation 'assert'
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Model.cpp(87,33): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
-C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Model.cpp(96,33): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
-  Page.cpp
-  Resource.cpp
-  SkyboxPass.cpp
-  Generating Code...
-  Compiling...
-  UploadBuffer.cpp
-  Texture.cpp
-  VertexBuffer.cpp
-  Generating Code...
-  Meikai_Renderer.vcxproj -> C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\bin\Meikai_Renderer_debug.exe
+C:\Data\Meikai_Renderer\Meikai_Renderer\Model.h(17,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(14): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(200,118): warning C4305: 'argument': truncation from 'double' to 'float'
+  Meikai_Renderer.vcxproj -> C:\Data\Meikai_Renderer\bin\Meikai_Renderer_debug.exe

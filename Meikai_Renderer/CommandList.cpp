@@ -158,7 +158,8 @@ void CommandList::FlushResourceBarriers()
 	mResourceStateTracker->FlushResourceBarriers(*this);
 }
 
-void CommandList::LoadTextureFromFile(Texture& texture, const std::wstring& fileName, TextureUsage textureUsage)
+void CommandList::LoadTextureFromFile(Texture& texture, const std::wstring& fileName, TextureUsage textureUsage
+	, D3D12_SRV_DIMENSION srvDim , D3D12_UAV_DIMENSION uavDim)
 {
 	std::filesystem::path filePath(fileName);
 	//std::file system's directory is different with this file. Therefore, remove it temporarly.
@@ -242,7 +243,6 @@ void CommandList::LoadTextureFromFile(Texture& texture, const std::wstring& file
 		nullptr,
 		IID_PPV_ARGS(&textureResource)))
 
-	texture.SetTextureUsage(textureUsage);
 	texture.SetD3D12Resource(textureResource);
 	texture.SetName(fileName);
 
@@ -263,6 +263,8 @@ void CommandList::LoadTextureFromFile(Texture& texture, const std::wstring& file
 		0,
 		static_cast<uint32_t>(subresources.size()),
 		subresources.data());
+
+	texture.CreateViews(srvDim, uavDim);
 }
 
 void CommandList::CopyTextureSubresource(Texture& texture, uint32_t firstSubresource, uint32_t numSubresources, D3D12_SUBRESOURCE_DATA* subresourceData)
