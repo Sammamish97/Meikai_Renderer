@@ -16,8 +16,16 @@ struct PanoToCubemap
 };
 ConstantBuffer<PanoToCubemap> PanoToCubemapCB : register(b0);
 
-Texture2D gInputHDR : register(t7);
-RWTexture2DArray<float4> outputCubemap : register(u0);
+struct DescIndices
+{
+	uint TexNum;
+	uint HDR2D_SRV;
+	uint Cube_UAV;
+};
+ConstantBuffer<DescIndices> descIndices : register(b1);
+
+Texture2D gSRV2DTable[] : register(t0, space0);
+RWTexture2DArray<float4> gUAV2DArrayTable[] : register(u0, space0);
 
 SamplerState gsamPointClamp : register(s0);
 SamplerState gsamLinearClamp : register(s1);
@@ -85,7 +93,7 @@ void EquiRectToCubemapCS(ComputeShaderInput IN)
     // Convert the world space direction into U,V texture coordinates in the panoramic texture.
     // Source: http://gl.ict.usc.edu/Data/HighResProbes/
     float2 panoUV = float2(atan2(-dir.x, -dir.z), acos(dir.y)) * InvAtan;
-    float3 HDRColor = gInputHDR.SampleLevel(gsamLinearRepeat, panoUV, 0).xyz;
+    float3 HDRColor = gSRV2DTable[descIndices.HDR2D_SRV].SampleLevel(gsamLinearRepeat, panoUV, 0).xyz;
 
-    outputCubemap[texCoord] =  float4(ToneMapping(HDRColor), 1);
+    gUAV2DArrayTable[descIndices.Cube_UAV][texCoord] =  float4(ToneMapping(HDRColor), 1);
 }

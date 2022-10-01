@@ -20,6 +20,11 @@ UINT DescriptorHeap::GetDescriptorNum()
 	return mOffset;
 }
 
+UINT DescriptorHeap::GetMaxDescriptors()
+{
+	return mMaxDescriptor;
+}
+
 //Allocate and return offset of descriptor.
 UINT DescriptorHeap::GetNextAvailableIndex()
 {

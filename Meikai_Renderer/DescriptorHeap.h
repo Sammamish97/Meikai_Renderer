@@ -15,6 +15,7 @@ public:
 	ComPtr<ID3D12DescriptorHeap>& GetDescriptorHeap();
 
 	UINT GetDescriptorNum();
+	UINT GetMaxDescriptors();
 
 private:
 	ComPtr<ID3D12DescriptorHeap> mDescriptorHeap;

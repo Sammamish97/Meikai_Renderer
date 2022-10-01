@@ -5,9 +5,11 @@ using namespace Microsoft::WRL;
 class DXApp;
 class Shader;
 
-enum EquiPassRootIndex
+struct EquiRectDescIndices
 {
-
+	const UINT TexNum = 2;
+	UINT HDR_SRV_2D;
+	UINT Cubemap_UAV_2DARRAY;
 };
 
 struct EquiRectToCubemapCB
@@ -20,8 +22,11 @@ struct EquiRectToCubemapCB
 class EquiRectToCubemapPass : public IPass
 {
 public:
-	EquiRectToCubemapPass(DXApp* appPtr, ComPtr<ID3DBlob> computeShader);
+	EquiRectToCubemapPass(DXApp* appPtr, ComPtr<ID3DBlob> computeShader, UINT hdrSrvIdx, UINT cubemapUrvIdx);
 	void InitRootSignature() override;
 	void InitPSO() override;
+
+public:
+	EquiRectDescIndices mEquiRectDescIndices;
 };
 

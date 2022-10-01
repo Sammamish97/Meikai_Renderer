@@ -46,7 +46,7 @@ private:
 	void DrawBoneDebug(CommandList& cmdList);
 	void DrawSkyboxPass(CommandList& cmdList);
 
-	//void DispatchEquiRectToCubemap(CommandList& cmdList);
+	void DispatchEquiRectToCubemap(CommandList& cmdList);
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
 

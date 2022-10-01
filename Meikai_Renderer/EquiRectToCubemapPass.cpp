@@ -6,11 +6,13 @@
 #include "DXApp.h"
 #include "DXUtil.h"
 
-EquiRectToCubemapPass::EquiRectToCubemapPass(DXApp* appPtr, ComPtr<ID3DBlob> computeShader)
+EquiRectToCubemapPass::EquiRectToCubemapPass(DXApp* appPtr, ComPtr<ID3DBlob> computeShader, UINT hdrSrvIdx, UINT cubemapUrvIdx)
 	:IPass(appPtr, computeShader)
 {
 	InitRootSignature();
 	InitPSO();
+    mEquiRectDescIndices.HDR_SRV_2D = hdrSrvIdx;
+    mEquiRectDescIndices.Cubemap_UAV_2DARRAY = cubemapUrvIdx;
 }
 
 void EquiRectToCubemapPass::InitRootSignature()
@@ -36,21 +38,20 @@ void EquiRectToCubemapPass::InitRootSignature()
         D3D12_ROOT_SIGNATURE_FLAG_DENY_VERTEX_SHADER_ROOT_ACCESS |
         D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
 
-    UINT descriptorNumber = mApp->GetDescriptorHeap(SRV_2D)->GetDescriptorNum();//Pos + Normal + Albedo + Roughness + Metalic + SSAO + Depth + test
-    //TODO: UAV heap은 이제 따로 존재하기에, 따로 관리해야 한다!
-    //CD3DX12_DESCRIPTOR_RANGE srvRange = {};
-    //srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 7, 0);//TODO: need fix!
+    UINT srvDescriptorNumber = mApp->GetDescriptorHeap(SRV_2D)->GetMaxDescriptors();
+    UINT uavDescriptorNumber = mApp->GetDescriptorHeap(UAV_2D_ARRAY)->GetMaxDescriptors();
 
     CD3DX12_DESCRIPTOR_RANGE srvRange = {};
-    srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, descriptorNumber, 0, 0);
+    srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, srvDescriptorNumber, 0, 0);
 
     CD3DX12_DESCRIPTOR_RANGE uavRange = {};
-    uavRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0, 0);//TODO: need fix!
+    uavRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, uavDescriptorNumber, 0, 0);//TODO: need fix!
 
-    CD3DX12_ROOT_PARAMETER rootParameters[3];
+    CD3DX12_ROOT_PARAMETER rootParameters[4];
     rootParameters[0].InitAsConstants(1, 0);
     rootParameters[1].InitAsDescriptorTable(1, &srvRange, D3D12_SHADER_VISIBILITY_ALL);
     rootParameters[2].InitAsDescriptorTable(1, &uavRange, D3D12_SHADER_VISIBILITY_ALL);
+    rootParameters[3].InitAsConstants(mEquiRectDescIndices.TexNum + 1, 1);
 
     auto staticSamplers = mApp->GetStaticSamplers();
 

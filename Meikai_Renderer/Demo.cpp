@@ -58,15 +58,16 @@ bool Demo::Initialize()
 	mGeometryPass = std::make_unique<GeometryPass>(this, mShaders["GeomVS"], mShaders["GeomPS"]);
 	mLightingPass = std::make_unique<LightingPass>(this, mShaders["ScreenQuadVS"], mShaders["LightingPS"]);
 	mJointDebugPass = std::make_unique<JointDebugPass>(this, mShaders["DebugJointVS"], mShaders["DebugJointPS"]);
-	//mSkyboxPass = std::make_unique<SkyboxPass>(this, mShaders["SkyboxVS"], mShaders["SkyboxPS"]);
+	mSkyboxPass = std::make_unique<SkyboxPass>(this, mShaders["SkyboxVS"], mShaders["SkyboxPS"], mIBLResource.mCubeMap->mSRVDescIDX.value());
 
-	mEquiRectToCubemapPass = std::make_unique<EquiRectToCubemapPass>(this, mShaders["EquiRectToCubemapCS"]);
+	mEquiRectToCubemapPass = std::make_unique<EquiRectToCubemapPass>(this, mShaders["EquiRectToCubemapCS"], 
+		mIBLResource.mHDRImage->mSRVDescIDX.value(), mIBLResource.mCubeMap->mUAVDescIDX.value());
 
 	auto fenceValue = mDirectCommandQueue->ExecuteCommandList(initList);
 	mDirectCommandQueue->WaitForFenceValue(fenceValue);
 	m_ContentLoaded = true;
 
-	//EquiRectToCubemap();
+	EquiRectToCubemap();
 
 	return true;
 }
@@ -74,7 +75,7 @@ bool Demo::Initialize()
 void Demo::EquiRectToCubemap()
 {
 	auto initList = mDirectCommandQueue->GetCommandList();
-	//DispatchEquiRectToCubemap(*initList);
+	DispatchEquiRectToCubemap(*initList);
 	auto fenceValue = mDirectCommandQueue->ExecuteCommandList(initList);
 	mDirectCommandQueue->WaitForFenceValue(fenceValue);
 }
@@ -109,7 +110,7 @@ void Demo::BuildFrameResource()
 void Demo::CreateIBLResources(std::shared_ptr<CommandList>& commandList)
 {
 	mIBLResource.mHDRImage = std::make_shared<Texture>(this);
-	commandList->LoadTextureFromFile(*mIBLResource.mHDRImage, L"../textures/Alexs_Apt_2k.hdr", TextureUsage::HDR);
+	commandList->LoadTextureFromFile(*mIBLResource.mHDRImage, L"../textures/Alexs_Apt_2k.hdr", TextureUsage::HDR, D3D12_SRV_DIMENSION_TEXTURE2D);
 
 	auto cubemapDesc = mIBLResource.mHDRImage->GetD3D12ResourceDesc();
 
@@ -208,7 +209,7 @@ void Demo::Draw(const GameTimer& gt)
 	//DrawDefaultPass(*drawcmdList);
 	DrawGeometryPass(*drawcmdList);
 	DrawLightingPass(*drawcmdList);
-	//DrawSkyboxPass(*drawcmdList); 
+	DrawSkyboxPass(*drawcmdList); 
 	//DrawJointDebug(*drawcmdList);
 	//DrawBoneDebug(*drawcmdList);
 	mDirectCommandQueue->ExecuteCommandList(drawcmdList);
@@ -250,7 +251,6 @@ void Demo::DrawGeometryPass(CommandList& cmdList)
 {
 	auto rtvHeap = mDescriptorHeaps[RTV];
 	auto dsvHeapCPUHandle = mDescriptorHeaps[DSV]->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx);
-
 
 	auto positionRTV = rtvHeap->GetCpuHandle(mDescIndex.mPositionDescRtvIdx);
 	auto normalRTV = rtvHeap->GetCpuHandle(mDescIndex.mNormalDescRtvIdx);
@@ -358,8 +358,10 @@ void Demo::DrawSkyboxPass(CommandList& cmdList)
 	cmdList.SetViewport(mScreenViewport);
 	cmdList.SetScissorRect(mScissorRect);
 
+	cmdList.SetGraphicsDynamicConstantBuffer(0, sizeof(CommonCB), mCommonCB.get());
 	cmdList.SetDescriptorHeap(srvCubeHeap->GetDescriptorHeap());
 	cmdList.SetGraphicsDescriptorTable(1, srvCubeHeap->GetGpuHandle(0));
+	cmdList.SetGraphics32BitConstants(2, mSkyboxPass->mSkyboxDescIndices.TexNum + 1, &(mSkyboxPass->mSkyboxDescIndices));
 
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { rtvHeapCPUHandle };
 	cmdList.SetRenderTargets(rtvArray, &dsvHeapCPUHandle);
@@ -412,32 +414,33 @@ void Demo::DrawBoneDebug(CommandList& cmdList)
 	}
 }
 
-//void Demo::DispatchEquiRectToCubemap(CommandList& cmdList)
-//{
-//	auto device = mApp->GetDevice();
-//
-//	auto cubemapResource = mIBLResource.mCubeMap->GetResource();
-//	CD3DX12_RESOURCE_DESC cubemapDesc(cubemapResource->GetDesc());
-//
-//	cmdList.SetPipelineState(mEquiRectToCubemapPass->mPSO.Get());
-//	cmdList.SetComputeRootSignature(mEquiRectToCubemapPass->mRootSig.Get());
-//
-//	EquiRectToCubemapCB equiRectToCubemapCB;
-//	equiRectToCubemapCB.CubemapSize = std::max<uint32_t>(cubemapDesc.Width, cubemapDesc.Height);
-//
-//	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
-//	uavDesc.Format = Texture::GetUAVCompatableFormat(cubemapDesc.Format);
-//	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2DARRAY;
-//	uavDesc.Texture2DArray.FirstArraySlice = 0;
-//	uavDesc.Texture2DArray.ArraySize = 6;
-//
-//	cmdList.SetCompute32BitConstants(0, equiRectToCubemapCB);
-//	cmdList.SetDescriptorHeap(mCBVSRVUAVHeap->GetDescriptorHeap());
-//	cmdList.SetComputeDescriptorTable(1, mCBVSRVUAVHeap->GetGpuHandle(0));
-//	cmdList.SetComputeDescriptorTable(2, mCBVSRVUAVHeap->GetGpuHandle(mIBLIndex.mCubemapUavIndex));
-//
-//	cmdList.Dispatch(MathHelper::DivideByMultiple(equiRectToCubemapCB.CubemapSize, 16), MathHelper::DivideByMultiple(equiRectToCubemapCB.CubemapSize, 16), 6);
-//}
+void Demo::DispatchEquiRectToCubemap(CommandList& cmdList)
+{
+	auto device = mApp->GetDevice();
+
+	auto cubemapResource = mIBLResource.mCubeMap->GetResource();
+	CD3DX12_RESOURCE_DESC cubemapDesc(cubemapResource->GetDesc());
+
+	cmdList.SetPipelineState(mEquiRectToCubemapPass->mPSO.Get());
+	cmdList.SetComputeRootSignature(mEquiRectToCubemapPass->mRootSig.Get());
+
+	EquiRectToCubemapCB equiRectToCubemapCB;
+	equiRectToCubemapCB.CubemapSize = std::max<uint32_t>(cubemapDesc.Width, cubemapDesc.Height);
+
+	auto srvHeap = mApp->GetDescriptorHeap(SRV_2D);
+	auto uavHeap = mApp->GetDescriptorHeap(UAV_2D_ARRAY);
+
+	cmdList.SetCompute32BitConstants(0, equiRectToCubemapCB);
+	cmdList.SetDescriptorHeap(srvHeap->GetDescriptorHeap());
+	cmdList.SetComputeDescriptorTable(1, srvHeap->GetGpuHandle(0));
+
+	cmdList.SetDescriptorHeap(uavHeap->GetDescriptorHeap());
+	cmdList.SetComputeDescriptorTable(2, uavHeap->GetGpuHandle(0));
+
+	cmdList.SetCompute32BitConstants(3, mEquiRectToCubemapPass->mEquiRectDescIndices.TexNum + 1, &(mEquiRectToCubemapPass->mEquiRectDescIndices));
+
+	cmdList.Dispatch(MathHelper::DivideByMultiple(equiRectToCubemapCB.CubemapSize, 16), MathHelper::DivideByMultiple(equiRectToCubemapCB.CubemapSize, 16), 6);
+}
 
 void Demo::OnMouseDown(WPARAM btnState, int x, int y)
 {

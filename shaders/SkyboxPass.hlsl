@@ -17,12 +17,20 @@ cbuffer cbPass : register(b0)
     float gDeltaTime;
 };
 
+struct DescIndices
+{
+	uint TexNum;
+	uint Skybox;
+};
+
+ConstantBuffer<DescIndices> srvIndices : register(b1);
+
 SamplerState gsamPointClamp : register(s0);
 SamplerState gsamLinearClamp : register(s1);
 SamplerState gsamDepthMap : register(s2);
 SamplerState gsamLinearWrap : register(s3);
 
-TextureCube gCubeMap : register(t8);
+TextureCube gTable[] : register(t0, space0);
 
 struct VertexIn
 {
@@ -57,5 +65,5 @@ VertexOut VS(VertexIn vin)
 
 float4 PS(VertexOut pin) : SV_Target
 {
-    return gCubeMap.Sample(gsamLinearWrap, pin.CubemapUV);
+    return gTable[srvIndices.Skybox].Sample(gsamLinearWrap, pin.CubemapUV);
 }

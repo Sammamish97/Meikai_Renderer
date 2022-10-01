@@ -6,11 +6,12 @@
 #include "DescriptorHeap.h"
 #include <DirectXMath.h>
 
-SkyboxPass::SkyboxPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader)
+SkyboxPass::SkyboxPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader, UINT skyboxSrvIdx)
 	:IPass(appPtr, vertShader, pixelShader)
 {
 	InitRootSignature();
 	InitPSO();
+    mSkyboxDescIndices.Skybox = skyboxSrvIdx;
 }
 
 void SkyboxPass::InitRootSignature()
@@ -33,9 +34,10 @@ void SkyboxPass::InitRootSignature()
     CD3DX12_DESCRIPTOR_RANGE srvRange = {};
     srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, descriptorNumber, 0, 0);
 
-    CD3DX12_ROOT_PARAMETER rootParameters[2];
+    CD3DX12_ROOT_PARAMETER rootParameters[3];
 	rootParameters[0].InitAsConstantBufferView(0);
     rootParameters[1].InitAsDescriptorTable(1, &srvRange, D3D12_SHADER_VISIBILITY_ALL);
+    rootParameters[2].InitAsConstants(mSkyboxDescIndices.TexNum + 1, 1);
 
     auto staticSamplers = mApp->GetStaticSamplers();
 
