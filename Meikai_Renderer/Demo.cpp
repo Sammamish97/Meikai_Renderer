@@ -2,11 +2,13 @@
 #include "DXUtil.h"
 #include "Model.h"
 #include "Object.h"
+#include "SkeletalObject.h"
 #include "Camera.h"
 #include "BufferFormat.h"
 #include "MathHelper.h"
 #include "DefaultPass.h"
 #include "DescriptorHeap.h"
+#include "Animation.h"
 
 #include <d3dcompiler.h>
 #include <d3dx12.h>
@@ -16,6 +18,7 @@
 
 #include "EquiRectToCubemapPass.h"
 #include "GeometryPass.h"
+#include "SkeletalGeometryPass.h"
 #include "LightingPass.h"
 #include "JointDebugPass.h"
 #include "SkyboxPass.h"
@@ -44,7 +47,9 @@ bool Demo::Initialize()
 	}
 	auto initList = mDirectCommandQueue->GetCommandList();
 	CreateIBLResources(initList);
+	LoadAnimations();
 	BuildModels(initList);
+	BuildObjects();
 
 	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
 	mCamera = std::make_unique<Camera>(aspectRatio);
@@ -53,12 +58,12 @@ bool Demo::Initialize()
 
 	mScissorRect = { 0, 0, mClientWidth, mClientHeight };
 	mScreenViewport = {0, 0, (float)mClientWidth, (float)mClientHeight,0, 1};
-
 	mDefaultPass = std::make_unique<DefaultPass>(this, mShaders["DefaultForwardVS"], mShaders["DefaultForwardPS"]);
 	mGeometryPass = std::make_unique<GeometryPass>(this, mShaders["GeomVS"], mShaders["GeomPS"]);
 	mLightingPass = std::make_unique<LightingPass>(this, mShaders["ScreenQuadVS"], mShaders["LightingPS"]);
 	mJointDebugPass = std::make_unique<JointDebugPass>(this, mShaders["DebugJointVS"], mShaders["DebugJointPS"]);
 	mSkyboxPass = std::make_unique<SkyboxPass>(this, mShaders["SkyboxVS"], mShaders["SkyboxPS"], mIBLResource.mCubeMap->mSRVDescIDX.value());
+	mSkeletalGeometryPass = std::make_unique<SkeletalGeometryPass>(this, mShaders["SkeletalGeomVS"], mShaders["SkeletalGeomPS"]);
 
 	mEquiRectToCubemapPass = std::make_unique<EquiRectToCubemapPass>(this, mShaders["EquiRectToCubemapCS"], 
 		mIBLResource.mHDRImage->mSRVDescIDX.value(), mIBLResource.mCubeMap->mUAVDescIDX.value());
@@ -71,6 +76,28 @@ bool Demo::Initialize()
 
 	return true;
 }
+
+void Demo::Update(const GameTimer& gt)
+{
+	mCamera->Update(gt);
+	UpdatePassCB(gt);
+	UpdateLightCB(gt);
+}
+
+void Demo::Draw(const GameTimer& gt)
+{
+	auto drawcmdList = mDirectCommandQueue->GetCommandList();
+	//DrawDefaultPass(*drawcmdList);
+	DrawGeometryPasses(*drawcmdList);
+	DrawLightingPass(*drawcmdList);
+	DrawSkyboxPass(*drawcmdList);
+	//DrawJointDebug(*drawcmdList);
+	DrawBoneDebug(*drawcmdList);
+	mDirectCommandQueue->ExecuteCommandList(drawcmdList);
+	Present(mFrameResource.mRenderTarget);
+	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
+}
+
 
 void Demo::EquiRectToCubemap()
 {
@@ -92,8 +119,18 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 	//mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
 	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
 
+}
+
+void Demo::LoadAnimations()
+{
+	mAnimations["walking"] = std::make_shared<Animation>(this, "../animations/Walking.fbx");
+}
+
+void Demo::BuildObjects()
+{
 	//mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(10.f, 10.f, 10.f)));
 	mObjects.push_back(std::make_unique<Object>(mModels["Y_Bot"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
+	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(mModels["Y_Bot"], mAnimations["walk"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
 	//mObjects.push_back(std::make_unique<Object>(mModels["Warrior"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
 	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
 	//mObjects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(1.f, -1.f, 0.f)));
@@ -110,7 +147,7 @@ void Demo::BuildFrameResource()
 void Demo::CreateIBLResources(std::shared_ptr<CommandList>& commandList)
 {
 	mIBLResource.mHDRImage = std::make_shared<Texture>(this);
-	commandList->LoadTextureFromFile(*mIBLResource.mHDRImage, L"../textures/Alexs_Apt_2k.hdr", TextureUsage::HDR, D3D12_SRV_DIMENSION_TEXTURE2D);
+	commandList->LoadTextureFromFile(*mIBLResource.mHDRImage, L"../textures/Alexs_Apt_2k.hdr", D3D12_SRV_DIMENSION_TEXTURE2D);
 
 	auto cubemapDesc = mIBLResource.mHDRImage->GetD3D12ResourceDesc();
 
@@ -119,7 +156,7 @@ void Demo::CreateIBLResources(std::shared_ptr<CommandList>& commandList)
 	cubemapDesc.Width = cubemapDesc.Height = 1024;
 	cubemapDesc.DepthOrArraySize = 6;
 	cubemapDesc.MipLevels = 0;
-	mIBLResource.mCubeMap = std::make_shared<Texture>(this, cubemapDesc, nullptr, TextureUsage::Albedo, D3D12_SRV_DIMENSION_TEXTURECUBE, D3D12_UAV_DIMENSION_TEXTURE2DARRAY, L"SkyboxCubemap");
+	mIBLResource.mCubeMap = std::make_shared<Texture>(this, cubemapDesc, nullptr, D3D12_SRV_DIMENSION_TEXTURECUBE, D3D12_UAV_DIMENSION_TEXTURE2DARRAY, L"SkyboxCubemap");
 
 	//mIBLResource.mDIffuseCubeMap;
 	//mIBLResource.mSpecularCubeMap;
@@ -141,7 +178,8 @@ void Demo::CreateShader()
 	mShaders["DebugJointVS"] = DxUtil::CompileShader(L"../shaders/DebugJoint.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["DebugJointPS"] = DxUtil::CompileShader(L"../shaders/DebugJoint.hlsl", nullptr, "PS", "ps_5_1");
 	mShaders["EquiRectToCubemapCS"] = DxUtil::CompileShader(L"../shaders/EquiRectToCubemap.hlsl", nullptr, "EquiRectToCubemapCS", "cs_5_1");
-
+	mShaders["SkeletalGeomVS"] = DxUtil::CompileShader(L"../shaders/SkeletalGeometryPass.hlsl", nullptr, "VS", "vs_5_1");
+	mShaders["SkeletalGeomPS"] = DxUtil::CompileShader(L"../shaders/SkeletalGeometryPass.hlsl", nullptr, "PS", "ps_5_1");
 
 	mShaders["SkyboxVS"] = DxUtil::CompileShader(L"../shaders/SkyboxPass.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["SkyboxPS"] = DxUtil::CompileShader(L"../shaders/SkyboxPass.hlsl", nullptr, "PS", "ps_5_1");
@@ -196,27 +234,6 @@ void Demo::UpdateLightCB(const GameTimer& gt)
 	*mLightCB = currentFramelightData;
 }
 
-void Demo::Update(const GameTimer& gt)
-{
-	mCamera->Update(gt);
-	UpdatePassCB(gt);
-	UpdateLightCB(gt);
-}
-
-void Demo::Draw(const GameTimer& gt)
-{
-	auto drawcmdList = mDirectCommandQueue->GetCommandList();
-	//DrawDefaultPass(*drawcmdList);
-	DrawGeometryPass(*drawcmdList);
-	DrawLightingPass(*drawcmdList);
-	DrawSkyboxPass(*drawcmdList); 
-	//DrawJointDebug(*drawcmdList);
-	//DrawBoneDebug(*drawcmdList);
-	mDirectCommandQueue->ExecuteCommandList(drawcmdList);
-	Present(mFrameResource.mRenderTarget);
-	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
-}
-
 void Demo::DrawDefaultPass(CommandList& cmdList)
 {
 	float colorClearValue[] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -247,7 +264,7 @@ void Demo::DrawDefaultPass(CommandList& cmdList)
 	}
 }
 
-void Demo::DrawGeometryPass(CommandList& cmdList)
+void Demo::DrawGeometryPasses(CommandList& cmdList)
 {
 	auto rtvHeap = mDescriptorHeaps[RTV];
 	auto dsvHeapCPUHandle = mDescriptorHeaps[DSV]->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx);
@@ -290,6 +307,13 @@ void Demo::DrawGeometryPass(CommandList& cmdList)
 	for (const auto& object : mObjects)
 	{
 		object->Draw(cmdList);
+	}
+
+	cmdList.SetPipelineState(mGeometryPass->mPSO.Get());
+	cmdList.SetGraphicsRootSignature(mGeometryPass->mRootSig.Get());
+	for (const auto& skeletalObject : mSkeletalObjects)
+	{
+		skeletalObject->Draw(cmdList);
 	}
 }
 
@@ -386,7 +410,7 @@ void Demo::DrawJointDebug(CommandList& cmdList)
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { rtvHeapCPUHandle };
 	cmdList.SetRenderTargets(rtvArray, &dsvHeapCPUHandle);
 
-	for (auto& object : mObjects)
+	for (auto& object : mSkeletalObjects)
 	{
 		object->DrawJoint(cmdList);
 	}
@@ -395,7 +419,7 @@ void Demo::DrawJointDebug(CommandList& cmdList)
 void Demo::DrawBoneDebug(CommandList& cmdList)
 {
 	auto rtvHeapCPUHandle = mDescriptorHeaps[RTV]->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx);
-	auto dsvHeapCPUHandle = mDescriptorHeaps[DSV]->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx);
+	//auto dsvHeapCPUHandle = mDescriptorHeaps[DSV]->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx);
 
 	cmdList.SetPipelineState(mJointDebugPass->mPSO.Get());
 	cmdList.SetGraphicsRootSignature(mJointDebugPass->mRootSig.Get());
@@ -406,9 +430,10 @@ void Demo::DrawBoneDebug(CommandList& cmdList)
 	cmdList.SetScissorRect(mScissorRect);
 
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { rtvHeapCPUHandle };
-	cmdList.SetRenderTargets(rtvArray, &dsvHeapCPUHandle);
+	cmdList.SetRenderTargets(rtvArray, nullptr);
+	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST); 
 
-	for (auto& object : mObjects)
+	for (auto& object : mSkeletalObjects)
 	{
 		object->DrawBone(cmdList);
 	}

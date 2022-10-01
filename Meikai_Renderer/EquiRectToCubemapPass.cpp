@@ -45,7 +45,7 @@ void EquiRectToCubemapPass::InitRootSignature()
     srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, srvDescriptorNumber, 0, 0);
 
     CD3DX12_DESCRIPTOR_RANGE uavRange = {};
-    uavRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, uavDescriptorNumber, 0, 0);//TODO: need fix!
+    uavRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, uavDescriptorNumber, 0, 0);
 
     CD3DX12_ROOT_PARAMETER rootParameters[4];
     rootParameters[0].InitAsConstants(1, 0);

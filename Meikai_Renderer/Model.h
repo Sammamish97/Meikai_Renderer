@@ -16,17 +16,6 @@ using namespace DirectX;
 
 struct DXApp;
 class CommandList;
-class Animation;
-struct BoneData
-{
-	aiMatrix4x4 offsetMatrix;
-	aiMatrix4x4 finalMatrix;
-	BoneData() = default;
-	BoneData(const aiMatrix4x4& offset)
-	{
-		offsetMatrix = offset;
-	}
-};
 
 class Model
 {
@@ -41,32 +30,14 @@ public:
 	void ProcessNode(aiNode* node, const aiScene* scene, CommandList& commandList);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, CommandList& commandList);
 
-	void InitJointVertexBuffer(CommandList& commandList);
-	void InitBoneVertexBuffer(CommandList& commandList);
-
-	void UpdateGPUJointPosition(CommandList& commandList);
-	void UpdateGPUBonePosition(CommandList& commandList);
-
-	void DrawDebugJoints(CommandList& commandList);
-	void DrawDebugBones(CommandList& commandList);
-
 	void LoadVertices(aiMesh* mesh, std::vector<Vertex>& vertices);
 	void LoadIndices(aiMesh* mesh, std::vector<UINT>& indices);
-	void LoadBones(aiMesh* mesh, std::vector<Vertex>& vertices);
 
-	void ExtractJoint();
-	void ExtractBone();
-	void ExtractBoneRecursive(const aiNode* pNode, aiVector3t<float> parentPos);
-
-public:
+private:
 	Assimp::Importer mImporter;
 	const aiScene* pScene = nullptr;
 
+public:
 	std::vector<Mesh> mMeshes;
-	std::vector<BoneData> mBoneData;
-	std::map<std::string, UINT> mBoneMap;
-
-	std::vector<XMFLOAT3> mJointPositions;
-	std::vector<XMFLOAT3> mBonePositions;
 };
 

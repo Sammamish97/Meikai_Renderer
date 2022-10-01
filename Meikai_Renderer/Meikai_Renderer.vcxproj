@@ -48,6 +48,9 @@
     <ClInclude Include="Page.h" />
     <ClInclude Include="PassDescStruct.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SkeletalGeometryPass.h" />
+    <ClInclude Include="SkeletalMesh.h" />
+    <ClInclude Include="SkeletalModel.h" />
     <ClInclude Include="SkeletalObject.h" />
     <ClInclude Include="SkyboxPass.h" />
     <ClInclude Include="UploadBuffer.h" />
@@ -104,6 +107,9 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Page.cpp" />
     <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="SkeletalGeometryPass.cpp" />
+    <ClCompile Include="SkeletalMesh.cpp" />
+    <ClCompile Include="SkeletalModel.cpp" />
     <ClCompile Include="SkeletalObject.cpp" />
     <ClCompile Include="SkyboxPass.cpp" />
     <ClCompile Include="UploadBuffer.cpp" />

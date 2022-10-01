@@ -21,6 +21,8 @@ Animation::Animation(DXApp* appPtr, const std::string& file_path)
     }
     //Animation instance only care one animation.
     mAnimation = pScene->mAnimations[0];
+    mDuration = mAnimation->mDuration;
+    mTickPerSec = mAnimation->mTicksPerSecond;
 }
 
 aiNodeAnim* Animation::FindNodeAnim(const std::string& nodeName)

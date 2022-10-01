@@ -4,22 +4,22 @@
 #include "DXApp.h"
 #include "DXUtil.h"
 
-Texture::Texture(DXApp* mApp, TextureUsage textureUsage,
+Texture::Texture(DXApp* mApp,
 	const std::wstring& name)
-	:Resource(mApp, name), mTextureUsage(textureUsage)
+	:Resource(mApp, name)
 {
 }
 
-Texture::Texture(DXApp* mApp, ComPtr<ID3D12Resource> resource, TextureUsage textureUsage, D3D12_SRV_DIMENSION srvDim,
+Texture::Texture(DXApp* mApp, ComPtr<ID3D12Resource> resource,  D3D12_SRV_DIMENSION srvDim,
 	D3D12_UAV_DIMENSION uavDim, const std::wstring& name)
-	:Resource(mApp, resource, name), mTextureUsage(textureUsage)
+	:Resource(mApp, resource, name)
 {
 	CreateViews(srvDim, uavDim);
 }
 
 Texture::Texture(DXApp* mApp, const D3D12_RESOURCE_DESC& resourceDesc, const D3D12_CLEAR_VALUE* clearValue,
-	TextureUsage textureUsage, D3D12_SRV_DIMENSION srvDim, D3D12_UAV_DIMENSION uavDim, const std::wstring& name)
-		:Resource(mApp, resourceDesc, clearValue, name), mTextureUsage(textureUsage)
+	D3D12_SRV_DIMENSION srvDim, D3D12_UAV_DIMENSION uavDim, const std::wstring& name)
+		:Resource(mApp, resourceDesc, clearValue, name)
 {
 	CreateViews(srvDim, uavDim);
 }
@@ -187,16 +187,6 @@ void Texture::Resize(uint32_t width, uint32_t height, uint32_t depthOrArraySize)
 	{
 
 	}
-}
-
-TextureUsage Texture::GetTextureUsage() const
-{
-	return mTextureUsage;
-}
-
-void Texture::SetTextureUsage(TextureUsage textureUsage)
-{
-	mTextureUsage = textureUsage;
 }
 
 DXGI_FORMAT Texture::GetUAVCompatableFormat(DXGI_FORMAT format)

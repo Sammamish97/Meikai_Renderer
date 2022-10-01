@@ -7,11 +7,12 @@
 #include "DXApp.h"
 #include "ConstantBuffers.h"
 
-
 class Model;
 class Object;
+class SkeletalObject;
 class Camera;
 class Texture;
+class SkeletalGeometryPass;
 
 class EquiRectToCubemapPass;
 class DefaultPass;
@@ -19,6 +20,8 @@ class GeometryPass;
 class LightingPass;
 class JointDebugPass;
 class SkyboxPass;
+
+class Animation;
 
 class Demo : public DXApp
 {
@@ -34,13 +37,16 @@ protected:
 
 private:
 	void BuildModels(std::shared_ptr<CommandList>& cmdList);
+	void LoadAnimations();
+	void BuildObjects();
+
 	void BuildFrameResource();
 	void CreateIBLResources(std::shared_ptr<CommandList>& commandList);
 	void CreateShader();
 	void EquiRectToCubemap();
 
 	void DrawDefaultPass(CommandList& commandList);
-	void DrawGeometryPass(CommandList& cmdList);
+	void DrawGeometryPasses(CommandList& cmdList);
 	void DrawLightingPass(CommandList& cmdList);
 	void DrawJointDebug(CommandList& cmdList);
 	void DrawBoneDebug(CommandList& cmdList);
@@ -68,7 +74,9 @@ private://Non-Iterating Pass
 
 private://Passes
 	std::unique_ptr<DefaultPass> mDefaultPass;
+
 	std::unique_ptr<GeometryPass> mGeometryPass;
+	std::unique_ptr<SkeletalGeometryPass> mSkeletalGeometryPass;
 	std::unique_ptr<LightingPass> mLightingPass;
 	std::unique_ptr<SkyboxPass> mSkyboxPass;
 
@@ -88,9 +96,12 @@ private:
 	std::unordered_map<std::string, ComPtr<ID3DBlob>> mShaders;
 
 	std::unordered_map<std::string, std::shared_ptr<Texture>> mTextures;
+	std::unordered_map<std::string, std::shared_ptr<Animation>> mAnimations;
 
 	std::vector<D3D12_INPUT_ELEMENT_DESC> mInputLayout;
 	std::vector<std::unique_ptr<Object>> mObjects;
+	std::vector<std::unique_ptr<SkeletalObject>> mSkeletalObjects;
+
 	std::unique_ptr<Object> mSkybox;
 
 	std::unique_ptr<Camera> mCamera;

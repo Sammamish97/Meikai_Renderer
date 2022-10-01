@@ -17,6 +17,8 @@ private:
 
 	Assimp::Importer mImporter;
 	const aiScene* pScene;
+	double mDuration;
+	double mTickPerSec;
 
 public:
 	Animation(DXApp* appPtr, const std::string& file_path);

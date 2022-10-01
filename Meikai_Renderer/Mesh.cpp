@@ -1,13 +1,6 @@
 #include "Mesh.h"
 #include "DXApp.h"
 
-void Vertex::AddBoneData(int boneID, float weight)
-{
-	boneIDs[weightNum] = boneID;
-	weights[weightNum] = weight;
-	++weightNum;
-}
-
 Mesh::Mesh(DXApp* dxApp, std::vector<Vertex> input_vertices, std::vector<UINT> input_indices, CommandList& commandList)
 	:mApp(dxApp), mVertices(std::move(input_vertices)), mIndices(std::move(input_indices)), mVertexBuffer(dxApp), mIndexBuffer(dxApp),
 	mIndexCount(0), mBoneCount(0)

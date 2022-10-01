@@ -19,14 +19,7 @@ struct Vertex
 	XMFLOAT2 UV;
 	XMFLOAT3 tangent;
 	XMFLOAT3 biTangent;
-	
-	UINT boneIDs[4];
-	float weights[4];
-	int weightNum = 0;
-
-	void AddBoneData(int boneID, float weight);
 };
-
 
 struct Mesh
 {

@@ -29,9 +29,9 @@ XMMATRIX Object::GetWorldMat() const
 
 void Object::Draw(CommandList& commandList)
 {
+	SetWorldMatrix(commandList);
 	for (auto& mesh : mModel->mMeshes)
 	{
-		SetWorldMatrix(commandList);
 		mesh.Draw(commandList);
 	}
 }
@@ -43,16 +43,3 @@ void Object::DrawWithoutWorld(CommandList& commandList)
 		mesh.Draw(commandList);
 	}
 }
-
-void Object::DrawJoint(CommandList& commandList)
-{
-	SetWorldMatrix(commandList);
-	mModel->DrawDebugJoints(commandList);
-}
-
-void Object::DrawBone(CommandList& commandList)
-{
-	SetWorldMatrix(commandList);
-	mModel->DrawDebugBones(commandList);
-}
-

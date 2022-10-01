@@ -8,6 +8,7 @@ using namespace Microsoft::WRL;
 using namespace DirectX;
 class CommandList;
 class Model;
+
 class Object
 {
 public:
@@ -15,9 +16,7 @@ public:
 
 public:
 	virtual void Update(float dt);
-	void Draw(CommandList& commandList);
-	void DrawJoint(CommandList& commandList);
-	void DrawBone(CommandList& commandList);
+	virtual void Draw(CommandList& commandList);
 	void DrawWithoutWorld(CommandList& commandList);
 	XMMATRIX GetWorldMat() const;
 

@@ -158,11 +158,11 @@ void CommandList::FlushResourceBarriers()
 	mResourceStateTracker->FlushResourceBarriers(*this);
 }
 
-void CommandList::LoadTextureFromFile(Texture& texture, const std::wstring& fileName, TextureUsage textureUsage
+void CommandList::LoadTextureFromFile(Texture& texture, const std::wstring& fileName
 	, D3D12_SRV_DIMENSION srvDim , D3D12_UAV_DIMENSION uavDim)
 {
 	std::filesystem::path filePath(fileName);
-	//std::file system's directory is different with this file. Therefore, remove it temporarly.
+	//std::file system's directory is different with this file. Therefore, remove it temporarily.
 	/*if (std::filesystem::exists(filePath))
 	{
 		throw std::exception("File not found.");

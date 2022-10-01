@@ -68,12 +68,10 @@ void JointDebugPass::InitPSO()
     };
     jointDebugPSODesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
     jointDebugPSODesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-    jointDebugPSODesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
     jointDebugPSODesc.SampleMask = UINT_MAX;
-    jointDebugPSODesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+    jointDebugPSODesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;
     jointDebugPSODesc.NumRenderTargets = 1;
     jointDebugPSODesc.RTVFormats[0] = BackBufferFormat;
-    jointDebugPSODesc.DSVFormat = DepthStencilDSVFormat;
     jointDebugPSODesc.SampleDesc.Count = mApp->Get4xMsaaState() ? 4 : 1;
     jointDebugPSODesc.SampleDesc.Quality = mApp->Get4xMsaaState() ? (mApp->Get4xMsaaQuality() - 1) : 0;
 

@@ -1,5 +1,4 @@
 #pragma once
-#include "TextureUsage.h"
 #include <wrl.h>
 #include <d3dx12.h>
 #include <string>
@@ -13,17 +12,17 @@ class DXApp;
 class Texture : public Resource
 {
 public:
-	explicit Texture(DXApp* mApp, TextureUsage textureUsage = TextureUsage::Albedo,
+	explicit Texture(DXApp* mApp,
 		const std::wstring& name = L"");
 
 	explicit Texture(DXApp* mApp, const D3D12_RESOURCE_DESC& resourceDesc,
 		const D3D12_CLEAR_VALUE* clearValue = nullptr,
-		TextureUsage textureUsage = TextureUsage::Albedo,
+		
 		D3D12_SRV_DIMENSION srvDim = D3D12_SRV_DIMENSION_UNKNOWN, D3D12_UAV_DIMENSION uavDim = D3D12_UAV_DIMENSION_UNKNOWN,
 		const std::wstring& name = L"");
 
 	explicit Texture(DXApp* mApp, ComPtr<ID3D12Resource> resource,
-		TextureUsage textureUsage = TextureUsage::Albedo, 
+		
 		D3D12_SRV_DIMENSION srvDim = D3D12_SRV_DIMENSION_UNKNOWN, D3D12_UAV_DIMENSION uavDim = D3D12_UAV_DIMENSION_UNKNOWN,
 		const std::wstring& name = L"");
 
@@ -39,9 +38,6 @@ public:
 
 	void CreateViews(D3D12_SRV_DIMENSION srvDim, D3D12_UAV_DIMENSION uavDim);
 
-	TextureUsage GetTextureUsage() const;
-	void SetTextureUsage(TextureUsage textureUsage);
-
 	void Resize(uint32_t width, uint32_t height, uint32_t depthOrArraySize = 1);
 
 	static DXGI_FORMAT GetUAVCompatableFormat(DXGI_FORMAT format);
@@ -54,7 +50,5 @@ public:
 	std::optional<UINT> mSRVDescIDX;
 	std::optional<UINT> mDSVDescIDX;
 	std::optional<UINT> mUAVDescIDX;
-	
-	TextureUsage mTextureUsage;
 };
 
