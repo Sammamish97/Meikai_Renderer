@@ -68,7 +68,7 @@ void Texture::CreateViews(D3D12_SRV_DIMENSION srvDim, D3D12_UAV_DIMENSION uavDim
 			{
 				case D3D12_UAV_DIMENSION_TEXTURE2D:
 					uavDesc.Texture2D.PlaneSlice = 0;
-					uavDesc.Texture2D.MipSlice = 1;
+					uavDesc.Texture2D.MipSlice = 0;
 					uavHeap = mApp->GetDescriptorHeap(UAV_2D);
 					mUAVDescIDX = uavHeap->GetNextAvailableIndex();
 					break;
@@ -105,7 +105,8 @@ void Texture::CreateViews(D3D12_SRV_DIMENSION srvDim, D3D12_UAV_DIMENSION uavDim
 				break;
 
 			case D3D12_SRV_DIMENSION_TEXTURECUBE:
-				srvDesc.Texture2DArray.MipLevels = desc.MipLevels;//Maybe 1
+				srvDesc.Texture2DArray.MipLevels = 1;
+				//Current sky box has only 1 mip. And if set more than 1 MipLevel, Level 0 mip is blended with Level 1 mip which is (0, 0, 0) because it doesn't exist, and looks like occulusion.
 				srvDesc.Texture2DArray.MostDetailedMip = 0;
 				srvDesc.Texture2DArray.PlaneSlice = 0;
 				srvDesc.Texture2DArray.FirstArraySlice = 0;

@@ -29,7 +29,7 @@ void SkyboxPass::InitRootSignature()
         D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
         D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
 
-    UINT descriptorNumber = mApp->GetDescriptorHeap(SRV_CUBE)->GetDescriptorNum();
+    UINT descriptorNumber = mApp->GetDescriptorHeap(SRV_CUBE)->GetMaxDescriptors();
 
     CD3DX12_DESCRIPTOR_RANGE srvRange = {};
     srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, descriptorNumber, 0, 0);

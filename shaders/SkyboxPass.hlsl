@@ -25,10 +25,13 @@ struct DescIndices
 
 ConstantBuffer<DescIndices> srvIndices : register(b1);
 
+SamplerState gsamPointWrap : register(s0);
 SamplerState gsamPointClamp : register(s0);
-SamplerState gsamLinearClamp : register(s1);
-SamplerState gsamDepthMap : register(s2);
-SamplerState gsamLinearWrap : register(s3);
+
+SamplerState gsamLinearWrap : register(s2);
+SamplerState gsamLinearClamp : register(s3);
+
+SamplerState gsamLinearRepeat : register(s4);
 
 TextureCube gTable[] : register(t0, space0);
 
@@ -65,5 +68,5 @@ VertexOut VS(VertexIn vin)
 
 float4 PS(VertexOut pin) : SV_Target
 {
-    return gTable[srvIndices.Skybox].Sample(gsamLinearWrap, pin.CubemapUV);
+    return gTable[srvIndices.Skybox].Sample(gsamLinearClamp, pin.CubemapUV);
 }
