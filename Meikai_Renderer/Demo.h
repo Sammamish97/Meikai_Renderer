@@ -32,18 +32,12 @@ protected:
 	void Update(const GameTimer& gt) override;
 	void Draw(const GameTimer& gt) override;
 
-
 private:
 	void BuildModels(std::shared_ptr<CommandList>& cmdList);
 	void BuildFrameResource();
 	void CreateIBLResources(std::shared_ptr<CommandList>& commandList);
 	void CreateShader();
 	void EquiRectToCubemap();
-
-private:
-	void CreateDescriptorHeaps();
-	void CreateBufferResources();
-	void CacheTextureIndices();
 
 	void DrawDefaultPass(CommandList& commandList);
 	void DrawGeometryPass(CommandList& cmdList);
@@ -74,25 +68,20 @@ private://Non-Iterating Pass
 
 private://Passes
 	std::unique_ptr<DefaultPass> mDefaultPass;
-
 	std::unique_ptr<GeometryPass> mGeometryPass;
 	std::unique_ptr<LightingPass> mLightingPass;
-
 	std::unique_ptr<SkyboxPass> mSkyboxPass;
 
 private://Debug Passes
 	std::unique_ptr<JointDebugPass> mJointDebugPass;
 
-private://RTV & DSV SRV Resource
-	FrameBufferResource mFrameResource;
-	IBLResource mIBLResource;
-
-	FrameBufferDescriptorIndex mDescIndex;
-	IBLDescriptorIndex mIBLIndex;
-
 private://CBV resource & allocation
 	std::unique_ptr<CommonCB> mCommonCB;
 	std::unique_ptr<LightCB> mLightCB;
+
+private:
+	IBLResource mIBLResource;
+	IBLDescriptorIndex mIBLIndex;
 
 private:
 	std::unordered_map<std::string, std::shared_ptr<Model>> mModels;

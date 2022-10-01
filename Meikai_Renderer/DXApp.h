@@ -15,6 +15,7 @@
 #include <memory>
 #include <map>
 
+#include "FrameBufferResource.h"
 #include "GameTimer.h"
 
 using Microsoft::WRL::ComPtr;
@@ -119,6 +120,12 @@ public:
     D3D12_CPU_DESCRIPTOR_HANDLE GetHeapCPUHandle(HeapType type, UINT idx);
     D3D12_GPU_DESCRIPTOR_HANDLE GetHeapGPUHandle(HeapType type, UINT idx);
 
+private:
+    void InitCommonTextures();
+    void CreateDescriptorHeaps();
+    void CreateBufferResources();
+    void CacheTextureIndices();
+
 protected:
     std::shared_ptr<CommandQueue> mDirectCommandQueue;
     std::shared_ptr<CommandQueue> mComputeCommandQueue;
@@ -127,6 +134,11 @@ protected:
 protected://Descriptor heaps
     std::map<HeapType, std::shared_ptr<DescriptorHeap>> mDescriptorHeaps;
 
+protected://RTV & DSV SRV Resource
+    FrameBufferResource mFrameResource;
+
+public:
+    FrameBufferDescriptorIndex mDescIndex;
 
 protected:
     static DXApp* mApp;

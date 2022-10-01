@@ -46,6 +46,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Page.h" />
+    <ClInclude Include="PassDescStruct.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SkeletalObject.h" />
     <ClInclude Include="SkyboxPass.h" />

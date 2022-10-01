@@ -1,19 +1,15 @@
 #pragma once
 #include "IPass.h"
 
-enum LightingRootIndex
+struct LightDescIndices
 {
-	
-};
-
-struct LightingTextureIndices
-{
-	UINT posIdx = 0;
-	UINT normalIdx = 0;
-	UINT albedoIdx = 0;
-	UINT roughnessIDX = 0;
-	UINT metalicIDX = 0;
-	UINT aoIdx = 0;
+	const UINT TexNum = 6;
+	UINT Pos;
+	UINT Normal;
+	UINT Albedo;
+	UINT Roughness;
+	UINT Metalic;
+	UINT SSAO;
 };
 
 class LightingPass : public IPass
@@ -22,8 +18,9 @@ public:
 	LightingPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader);
 	void InitRootSignature() override;
 	void InitPSO() override;
+	void InitDescIndices();
 
 public:
-	LightingTextureIndices mTexIndices;
+	LightDescIndices mLightDescIndices;
 };
 

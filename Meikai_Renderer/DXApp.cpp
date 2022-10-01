@@ -7,6 +7,7 @@
 #include "UploadBuffer.h"
 #include "Texture.h"
 #include "DescriptorHeap.h"
+#include "ResourceStateTracker.h"
 
 
 #include <d3dx12.h>
@@ -239,7 +240,14 @@ bool DXApp::Initialize()
 	if (!InitDirect3D())
 		return false;
 
+	InitCommonTextures();
 	return true;
+}
+
+void DXApp::InitCommonTextures()
+{
+	CreateBufferResources();
+	CacheTextureIndices();
 }
 
 void DXApp::CreateSwapChainRtvDescriptorHeap()
@@ -348,6 +356,7 @@ bool DXApp::InitDirect3D()
 	CreateSwapChain();
 	CreateSwapChainRtvDescriptorHeap();
 	CacheSwapChainImage();
+	CreateDescriptorHeaps();
 	return true;
 }
 
@@ -631,6 +640,87 @@ void DXApp::CreateUavDescriptor(D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc, ComPtr
                                 D3D12_CPU_DESCRIPTOR_HANDLE heapPos)
 {
 	mdxDevice->CreateUnorderedAccessView(resource.Get(), nullptr, &uavDesc, heapPos);
+}
+
+void DXApp::CreateDescriptorHeaps()
+{
+	mDescriptorHeaps[HeapType::RTV] = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, mRtvDescriptorSize, 128);
+	mDescriptorHeaps[HeapType::DSV] = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, mDsvDescriptorSize, 128);
+	mDescriptorHeaps[HeapType::SRV_1D] = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, mCbvSrvUavDescriptorSize, 128);
+	mDescriptorHeaps[HeapType::SRV_2D] = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, mCbvSrvUavDescriptorSize, 1024);
+	mDescriptorHeaps[HeapType::SRV_CUBE] = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, mCbvSrvUavDescriptorSize, 128);
+	mDescriptorHeaps[HeapType::UAV_2D] = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, mCbvSrvUavDescriptorSize, 128);
+	mDescriptorHeaps[HeapType::UAV_2D_ARRAY] = std::make_unique<DescriptorHeap>(this, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, mCbvSrvUavDescriptorSize, 128);
+}
+
+void DXApp::CreateBufferResources()
+{
+	auto colorDesc = CD3DX12_RESOURCE_DESC::Tex2D(AlbedoFormat, mClientWidth, mClientHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+	auto posDesc = CD3DX12_RESOURCE_DESC::Tex2D(PositionFormat, mClientWidth, mClientHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+	auto normalDesc = CD3DX12_RESOURCE_DESC::Tex2D(NormalFormat, mClientWidth, mClientHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+	auto monoDesc = CD3DX12_RESOURCE_DESC::Tex2D(MonoFormat, mClientWidth, mClientHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+	auto depthDesc = CD3DX12_RESOURCE_DESC::Tex2D(DepthStencilDSVFormat, mClientWidth, mClientHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+
+	CD3DX12_CLEAR_VALUE clearColorBlack;
+	clearColorBlack.Color[0] = 0.f;
+	clearColorBlack.Color[1] = 0.f;
+	clearColorBlack.Color[2] = 0.f;
+	clearColorBlack.Color[3] = 0.f;
+
+	CD3DX12_CLEAR_VALUE clearAlbedo = clearColorBlack;
+	clearAlbedo.Format = AlbedoFormat;
+
+	CD3DX12_CLEAR_VALUE clearPos = clearColorBlack;
+	clearPos.Format = PositionFormat;
+
+	CD3DX12_CLEAR_VALUE clearNormal = clearColorBlack;
+	clearNormal.Format = NormalFormat;
+
+	CD3DX12_CLEAR_VALUE clearMetalicRoughnessSSAO = clearColorBlack;
+	clearMetalicRoughnessSSAO.Format = MonoFormat;
+
+	CD3DX12_CLEAR_VALUE clearColorDepth;
+	clearColorDepth.Format = DepthStencilDSVFormat;
+	clearColorDepth.DepthStencil = { 1.f, 0 };
+
+	mFrameResource.mPositionMap = std::make_shared<Texture>(this, posDesc, &clearPos, TextureUsage::Position, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"Pos");
+	mFrameResource.mNormalMap = std::make_shared<Texture>(this, normalDesc, &clearNormal, TextureUsage::Normalmap, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"Normal");
+	mFrameResource.mAlbedoMap = std::make_shared<Texture>(this, colorDesc, &clearAlbedo, TextureUsage::Albedo, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"Albedo");
+	mFrameResource.mRoughnessMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO, TextureUsage::Roughness, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"Roughness");
+	mFrameResource.mMetalicMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO, TextureUsage::Metalic, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"Metalic");
+	mFrameResource.mSsaoMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO, TextureUsage::SSAO, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"SSAO");
+	mFrameResource.mDepthStencilBuffer = std::make_shared<Texture>(this, depthDesc, &clearColorDepth, TextureUsage::Depth, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"DepthStencil");
+	mFrameResource.mRenderTarget = std::make_shared<Texture>(this, colorDesc, &clearAlbedo, TextureUsage::RenderTarget, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"RenderTarget");
+
+	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mPositionMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
+	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mNormalMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
+	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mAlbedoMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
+	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mMetalicMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
+	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mRoughnessMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
+	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mSsaoMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
+	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mDepthStencilBuffer->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
+	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mRenderTarget->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
+}
+
+void DXApp::CacheTextureIndices()
+{
+	mDescIndex.mPositionDescRtvIdx = mFrameResource.mPositionMap->mRTVDescIDX.value();
+	mDescIndex.mNormalDescRtvIdx = mFrameResource.mNormalMap->mRTVDescIDX.value();
+	mDescIndex.mAlbedoDescRtvIdx = mFrameResource.mAlbedoMap->mRTVDescIDX.value();
+	mDescIndex.mRoughnessDescRtvIdx = mFrameResource.mRoughnessMap->mRTVDescIDX.value();
+	mDescIndex.mMetalicDescRtvIdx = mFrameResource.mMetalicMap->mRTVDescIDX.value();
+	mDescIndex.mSsaoDescRtvIdx = mFrameResource.mSsaoMap->mRTVDescIDX.value();
+	mDescIndex.mRenderTargetRtvIdx = mFrameResource.mRenderTarget->mRTVDescIDX.value();
+
+	mDescIndex.mPositionDescSrvIdx = mFrameResource.mPositionMap->mSRVDescIDX.value();
+	mDescIndex.mNormalDescSrvIdx = mFrameResource.mNormalMap->mSRVDescIDX.value();
+	mDescIndex.mAlbedoDescSrvIdx = mFrameResource.mAlbedoMap->mSRVDescIDX.value();
+	mDescIndex.mRoughnessDescSrvIdx = mFrameResource.mRoughnessMap->mSRVDescIDX.value();
+	mDescIndex.mMetalicDescSrvIdx = mFrameResource.mMetalicMap->mSRVDescIDX.value();
+	mDescIndex.mSsaoDescSrvIdx = mFrameResource.mSsaoMap->mSRVDescIDX.value();
+	mDescIndex.mDepthStencilSrvIdx = mFrameResource.mDepthStencilBuffer->mSRVDescIDX.value();
+
+	mDescIndex.mDepthStencilDsvIdx = mFrameResource.mDepthStencilBuffer->mDSVDescIDX.value();
 }
 
 LRESULT DXApp::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)

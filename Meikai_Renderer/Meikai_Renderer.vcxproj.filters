@@ -156,6 +156,9 @@
     <ClInclude Include="SkyboxPass.h">
       <Filter>Passes</Filter>
     </ClInclude>
+    <ClInclude Include="PassDescStruct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXApp.cpp">

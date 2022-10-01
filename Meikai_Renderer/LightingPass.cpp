@@ -12,6 +12,17 @@ LightingPass::LightingPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID
 {
 	InitRootSignature();
 	InitPSO();
+    InitDescIndices();
+}
+
+void LightingPass::InitDescIndices()
+{
+    mLightDescIndices.Pos = mApp->mDescIndex.mPositionDescSrvIdx;
+    mLightDescIndices.Normal = mApp->mDescIndex.mNormalDescSrvIdx;
+    mLightDescIndices.Albedo = mApp->mDescIndex.mAlbedoDescSrvIdx;
+    mLightDescIndices.Roughness = mApp->mDescIndex.mRoughnessDescSrvIdx;
+    mLightDescIndices.Metalic = mApp->mDescIndex.mMetalicDescSrvIdx;
+    mLightDescIndices.SSAO = mApp->mDescIndex.mSsaoDescSrvIdx;
 }
 
 void LightingPass::InitRootSignature()
@@ -36,10 +47,11 @@ void LightingPass::InitRootSignature()
     CD3DX12_DESCRIPTOR_RANGE srvRange = {};
     srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, descriptorNumber, 0, 0);
     
-    CD3DX12_ROOT_PARAMETER rootParameters[3];
+    CD3DX12_ROOT_PARAMETER rootParameters[4];
 	rootParameters[0].InitAsConstantBufferView(0);
     rootParameters[1].InitAsConstantBufferView(1);
     rootParameters[2].InitAsDescriptorTable(1, &srvRange, D3D12_SHADER_VISIBILITY_PIXEL);
+    rootParameters[3].InitAsConstants(mLightDescIndices.TexNum + 1, 2);
 
     auto staticSamplers = mApp->GetStaticSamplers();
 

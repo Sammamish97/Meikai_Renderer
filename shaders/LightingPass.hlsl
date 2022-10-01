@@ -1,10 +1,3 @@
-Texture2D<float4> gTable[] : register(t0, space0);
-
-SamplerState gsamPointClamp : register(s0);
-SamplerState gsamLinearClamp : register(s1);
-SamplerState gsamDepthMap : register(s2);
-SamplerState gsamLinearWrap : register(s3);
-
 struct DirectLight
 {
 	float3 direct;
@@ -47,6 +40,26 @@ cbuffer lightData : register(b1)
 	DirectLight dirLight;
 	PointLight pointLights[3];
 };
+
+struct DescIndices
+{
+	uint TexNum;
+	uint Pos;
+	uint Normal;
+	uint Albedo;
+	uint Roughness;
+	uint Metalic;
+	uint SSAO;
+};
+
+ConstantBuffer<DescIndices> srvIndices : register(b2);
+
+Texture2D<float4> gTable[] : register(t0, space0);
+
+SamplerState gsamPointClamp : register(s0);
+SamplerState gsamLinearClamp : register(s1);
+SamplerState gsamDepthMap : register(s2);
+SamplerState gsamLinearWrap : register(s3);
 
 struct VertexOut
 {
@@ -102,13 +115,12 @@ float4 PS(VertexOut pin) : SV_Target
 	float2 fliped_UV = pin.UV;
 	fliped_UV.y = 1 - fliped_UV.y;
 
-	float3 position = gTable[0].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
-	float3 normal = normalize(gTable[1].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz);
-	float3 albedo = gTable[2].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
-	float roughness = gTable[3].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
-	float metalic = gTable[4].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
-	float occluded = gTable[5].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
-	float3 test = gTable[7].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
+	float3 position = gTable[srvIndices.Pos].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
+	float3 normal = normalize(gTable[srvIndices.Normal].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz);
+	float3 albedo = gTable[srvIndices.Albedo].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
+	float roughness = gTable[srvIndices.Roughness].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
+	float metalic = gTable[srvIndices.Metalic].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
+	float occluded = gTable[srvIndices.SSAO].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
 
 	float3 N = normal;
 	float3 V = normalize(gEyePosW - position);
