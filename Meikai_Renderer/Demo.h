@@ -8,20 +8,23 @@
 #include "ConstantBuffers.h"
 
 class Model;
+class SkeletalModel;
+
 class Object;
 class SkeletalObject;
+
+class Animation;
+
 class Camera;
 class Texture;
-class SkeletalGeometryPass;
 
+class SkeletalGeometryPass;
 class EquiRectToCubemapPass;
 class DefaultPass;
 class GeometryPass;
 class LightingPass;
 class JointDebugPass;
 class SkyboxPass;
-
-class Animation;
 
 class Demo : public DXApp
 {
@@ -93,6 +96,8 @@ private:
 
 private:
 	std::unordered_map<std::string, std::shared_ptr<Model>> mModels;
+	std::unordered_map<std::string, std::shared_ptr<SkeletalModel>> mSkeletalModels;
+
 	std::unordered_map<std::string, ComPtr<ID3DBlob>> mShaders;
 
 	std::unordered_map<std::string, std::shared_ptr<Texture>> mTextures;

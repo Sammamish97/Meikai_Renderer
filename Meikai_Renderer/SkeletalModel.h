@@ -36,7 +36,6 @@ private:
 
 public:
 	SkeletalModel(const std::string& file_path, DXApp* app, CommandList& commandList);
-	std::string name;
 
 	void LoadModel(const std::string& file_path, CommandList& commandList);
 	void ProcessNode(aiNode* node, const aiScene* scene, CommandList& commandList);
@@ -54,6 +53,7 @@ public:
 	void ExtractBoneRecursive(const aiNode* pNode, aiVector3t<float> parentPos);
 
 public:
+	std::string name;
 	Assimp::Importer mImporter;
 	const aiScene* pScene = nullptr;
 	aiMatrix4x4 mGlobalInverseTransform;

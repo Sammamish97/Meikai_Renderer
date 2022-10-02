@@ -23,12 +23,11 @@ cbuffer cbPass : register(b1)
     float gDeltaTime;
 };
 #define MAX_BONE 100
-struct BoneDatas
-{
-    float4x4 data[MAX_BONE];
-};
 
-ConstantBuffer<BoneDatas> boneTable : register(b2); 
+cbuffer BoneDatas : register(b2)
+{
+    float4x4 cBoneTable[MAX_BONE];
+};
 
 struct VertexIn
 {
@@ -38,7 +37,8 @@ struct VertexIn
 	float3 TangentU : TANGENT;
     float3 BiTangentU : BITANGENT;
     uint4 Bone_Indices : BONE_IDS;
-    float3 Weights : WEIGHTS;
+    float4 Weights : WEIGHTS;
+    uint Weight_num : WEIGHT_NUM;
 };
 
 struct VertexOut

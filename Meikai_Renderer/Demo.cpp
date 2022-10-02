@@ -25,6 +25,7 @@
 #include "Texture.h"
 
 #include "ResourceStateTracker.h"
+#include "SkeletalModel.h"
 
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
@@ -111,13 +112,15 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 {
 	//mModels["Warrior"] = std::make_shared<Model>("../models/Warrior.fbx", this, *cmdList);
 	//mModels["Archer"] = std::make_shared<Model>("../models/Archer.fbx", this, *cmdList);
-	mModels["Y_Bot"] = std::make_shared<Model>("../models/Y_Bot.fbx", this, *cmdList);
 
 	//mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, *cmdList);
 	//mModels["Quad"] = std::make_shared<Model>("../models/Quad.obj", this, *cmdList);
 	//mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);
 	//mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
+	
 	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
+	mModels["Y_Bot"] = std::make_shared<Model>("../models/Y_Bot.fbx", this, *cmdList);
+	mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.fbx", this, *cmdList);
 
 }
 
@@ -129,7 +132,8 @@ void Demo::LoadAnimations()
 void Demo::BuildObjects()
 {
 	//mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(10.f, 10.f, 10.f)));
-	mObjects.push_back(std::make_unique<Object>(mModels["Y_Bot"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
+	//mObjects.push_back(std::make_unique<Object>(mModels["Y_Bot"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
+	mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
 	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(mModels["Y_Bot"], mAnimations["walk"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
 	//mObjects.push_back(std::make_unique<Object>(mModels["Warrior"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
 	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
@@ -309,8 +313,11 @@ void Demo::DrawGeometryPasses(CommandList& cmdList)
 		object->Draw(cmdList);
 	}
 
-	cmdList.SetPipelineState(mGeometryPass->mPSO.Get());
-	cmdList.SetGraphicsRootSignature(mGeometryPass->mRootSig.Get());
+	cmdList.SetPipelineState(mSkeletalGeometryPass->mPSO.Get());
+	cmdList.SetGraphicsRootSignature(mSkeletalGeometryPass->mRootSig.Get());
+
+	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
+
 	for (const auto& skeletalObject : mSkeletalObjects)
 	{
 		skeletalObject->Draw(cmdList);

@@ -19,7 +19,7 @@ void SkeletalObject::Draw(CommandList& commandList)
 {
     std::vector<aiMatrix4x4> finalTransforms;
     GetBoneTransforms(1.f, finalTransforms);
-    commandList.SetGraphicsDynamicConstantBuffer(2, finalTransforms.data());
+    commandList.SetGraphicsDynamicConstantBuffer(2, finalTransforms.size() * sizeof(aiMatrix4x4), finalTransforms.data());
     SetWorldMatrix(commandList);
     for (auto& mesh : mModel->mMeshes)
     {
