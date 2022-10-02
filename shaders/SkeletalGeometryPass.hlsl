@@ -64,13 +64,21 @@ VertexOut VS(VertexIn vin)
 	VertexOut vout = (VertexOut)0.0f;
 
     // Assumes nonuniform scaling; otherwise, need to use inverse-transpose of world matrix.
-    vout.NormalW = mul(vin.NormalL, (float3x3)objectWorld.mat);
-	vout.TangentW = mul(vin.TangentU, (float3x3)objectWorld.mat);
-
+    
+	
+    float4x4 BoneTransform = cBoneTable[vin.Bone_Indices[0]] * vin.Weights[0];
+    for(uint i = 1; i < vin.Weight_num; ++i)
+    {
+        BoneTransform += cBoneTable[vin.Bone_Indices[i]] * vin.Weights[i];
+    }
+    
     // Transform to homogeneous clip space.
-    float4 posW = mul(float4(vin.PosL, 1.0f), objectWorld.mat);
+    float4 posL = mul(float4(vin.PosL, 1.f), BoneTransform);
+    float4 posW = mul(posL, objectWorld.mat);
     vout.PosW = posW;
     vout.PosH = mul(posW, gViewProj);
+    vout.NormalW = mul(vin.NormalL, (float3x3)objectWorld.mat);
+    vout.TangentW = mul(vin.TangentU, (float3x3)objectWorld.mat);
 
     return vout;
 }

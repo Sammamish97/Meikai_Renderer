@@ -17,9 +17,8 @@ void SkeletalModel::LoadModel(const std::string& file_path, CommandList& command
     {
         assert("Fail to Load %s", file_path.c_str());
     }
-
     mGlobalInverseTransform = pScene->mRootNode->mTransformation.Inverse();
-    name = file_path.substr(0, file_path.find_last_of('/'));
+	name = file_path.substr(0, file_path.find_last_of('/'));
     ProcessNode(pScene->mRootNode, pScene, commandList);
 }
 
@@ -44,7 +43,8 @@ SkeletalMesh SkeletalModel::ProcessMesh(aiMesh* mesh, const aiScene* scene, Comm
 {
     std::vector<SkeletalVertex> vertices;
     std::vector<UINT> indices;
-    //std::vector<textures>
+    std::vector<BoneData> boneData;
+    std::map<std::string, UINT> boneMap;
 
     LoadVertices(mesh, vertices);
     if (mesh->HasFaces())
@@ -53,28 +53,10 @@ SkeletalMesh SkeletalModel::ProcessMesh(aiMesh* mesh, const aiScene* scene, Comm
     }
     if (mesh->HasBones())
     {
-        LoadBones(mesh, vertices);
+        LoadBones(mesh, vertices, boneData, boneMap);
     }
 
-    return SkeletalMesh(mApp, vertices, indices, commandList);
-}
-
-void SkeletalModel::DrawDebugJoints(CommandList& commandList)
-{
-    auto vertexCount = mJointPositions.size();
-    auto vertexSize = sizeof(mJointPositions[0]);
-    commandList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
-    commandList.SetDynamicVertexBuffer(0, vertexCount, vertexSize, mJointPositions.data());
-    commandList.Draw(vertexCount);
-}
-
-void SkeletalModel::DrawDebugBones(CommandList& commandList)
-{
-    auto vertexCount = mBonePositions.size();
-    auto vertexSize = sizeof(mBonePositions[0]);
-    commandList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
-    commandList.SetDynamicVertexBuffer(0, vertexCount, vertexSize, mBonePositions.data());
-    commandList.Draw(vertexCount);
+    return SkeletalMesh(mApp, scene, vertices, indices, boneData, boneMap, commandList);
 }
 
 void SkeletalModel::LoadVertices(aiMesh* mesh, std::vector<SkeletalVertex>& vertices)
@@ -138,7 +120,8 @@ void SkeletalModel::LoadIndices(aiMesh* mesh, std::vector<UINT>& indices)
     }
 }
 
-void SkeletalModel::LoadBones(aiMesh* mesh, std::vector<SkeletalVertex>& vertices)
+void SkeletalModel::LoadBones(aiMesh* mesh, std::vector<SkeletalVertex>& vertices, std::vector<BoneData>& boneVec,
+	std::map<std::string, UINT>& boneMap)
 {
     int boneCount = 0;
     for (UINT boneIdx = 0; boneIdx < mesh->mNumBones; ++boneIdx)
@@ -156,55 +139,8 @@ void SkeletalModel::LoadBones(aiMesh* mesh, std::vector<SkeletalVertex>& vertice
             float weight = vertexBoneData.mWeight;
             vertices[vertexID].AddBoneData(boneCount, weight);
         }
-        mBoneMap[boneName] = boneCount;
-        mBoneData.push_back(boneData);
+        boneMap[boneName] = boneCount;
+        boneVec.push_back(boneData);
         boneCount++;
-    }
-
-    ExtractJoint();
-    ExtractBone();
-}
-
-void SkeletalModel::ExtractJoint()
-{
-    mJointPositions.clear();
-    for (const auto& boneData : mBoneData)
-    {
-        aiQuaterniont<float> rotation;
-        aiVector3t<float> position;
-        auto localToBone = boneData.offsetMatrix;
-        localToBone.Inverse().DecomposeNoScaling(rotation, position);
-        mJointPositions.push_back(MathHelper::AiVecToDxVec(position));
-    }
-}
-
-void SkeletalModel::ExtractBone()
-{
-    mBonePositions.clear();
-    aiVector3t<float> localOrigin{ 0, 0, 0 };
-    ExtractBoneRecursive(pScene->mRootNode, localOrigin);
-}
-
-void SkeletalModel::ExtractBoneRecursive(const aiNode* pNode, aiVector3t<float> parentPos)
-{
-    std::string boneName = pNode->mName.data;
-    if (mBoneMap.find(boneName) != mBoneMap.end())
-    {
-        UINT boneIndex = mBoneMap.at(boneName);
-        aiMatrix4x4 offsetMatrix = mBoneData[boneIndex].offsetMatrix;
-        auto localToBone = offsetMatrix;
-        localToBone.Inverse();
-        aiQuaterniont<float> rotation;//Don't use.
-        aiVector3t<float> position;
-        localToBone.DecomposeNoScaling(rotation, position);
-
-        mBonePositions.push_back(MathHelper::AiVecToDxVec(parentPos));
-        mBonePositions.push_back(MathHelper::AiVecToDxVec(position));
-
-        parentPos = position;
-    }
-    for (UINT i = 0; i < pNode->mNumChildren; ++i)
-    {
-        ExtractBoneRecursive(pNode->mChildren[i], parentPos);
     }
 }

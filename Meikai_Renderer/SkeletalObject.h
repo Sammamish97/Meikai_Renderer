@@ -29,15 +29,12 @@ public:
 	void SetWorldMatrix(CommandList& commandList);
 
 	void SetAnimation(std::shared_ptr<Animation> newAnimation);
-	void GetBoneTransforms(float timeInSeconds, std::vector<aiMatrix4x4>& Transforms);
-	void ReadNodeHierarchy(float timeInSeconds, const aiNode* pNode, const aiMatrix4x4& parentTransform);
-
 	void PlayAnimation();
 
 	void SetDynamicBoneMatrices(CommandList& commandList);
 
 private:
-	std::shared_ptr<Animation> mAnimation = nullptr;
+	std::shared_ptr<Animation> mCurrentAnimation = nullptr;
 	double mPlayTime;
 
 	std::shared_ptr<SkeletalModel> mModel = nullptr;
