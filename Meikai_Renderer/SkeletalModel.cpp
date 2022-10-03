@@ -22,37 +22,6 @@ void SkeletalModel::LoadModel(const std::string& file_path, CommandList& command
     mGlobalInverseTransform = pScene->mRootNode->mTransformation.Inverse();
 	name = file_path.substr(0, file_path.find_last_of('/'));
     ProcessNode(pScene->mRootNode, pScene, commandList);
-
-    auto test1 = pScene->mNumSkeletons;
-    auto test2 = pScene->mNumMeshes;
-    auto skeleton1 = pScene->mSkeletons[0];
-    auto skeleton2 = pScene->mSkeletons[1];
-    auto mesh1 = pScene->mMeshes[0];
-    auto mesh2 = pScene->mMeshes[1];
-    auto bone = mesh1->mBones;
-    std::vector<std::string> boneName1;
-    std::vector<std::string> boneName2;
-
-    for(int i = 0; i < mesh1->mNumBones; ++i)
-    {
-        boneName1.push_back(mesh1->mBones[i]->mName.data);
-    }
-    for (int i = 0; i < mesh2->mNumBones; ++i)
-    {
-        boneName2.push_back(mesh2->mBones[i]->mName.data);
-    }
-
-    for(int i = 0; i < mesh1->mNumBones; ++i)
-    {
-        if(boneName1[i] != boneName2[i])
-        {
-            int j = 0;
-            ++j;
-        }
-    }
-
-    mBoneMap;
-    mBoneData;
 }
 
 void SkeletalModel::ProcessNode(aiNode* node, const aiScene* scene, CommandList& commandList)
@@ -183,11 +152,27 @@ void SkeletalModel::LoadBones(aiMesh* mesh, std::vector<SkeletalVertex>& vertice
     }
 }
 
+void SkeletalModel::GetBoneTransforms(float timeInSeconds, std::shared_ptr<Animation> animation,
+    std::vector<aiMatrix4x4>& Transforms)
+{
+    ReadNodeHierarchy(timeInSeconds, pScene->mRootNode, animation, aiMatrix4x4(), aiMatrix4x4(), aiVector3t(0.f));
+
+    UINT boneDataSize = mBoneData.size();
+    Transforms.resize(mBoneData.size());
+    for (UINT i = 0; i < boneDataSize; ++i)
+    {
+        Transforms[i] = mBoneData[i].finalMatrix;
+    }
+}
+
 void SkeletalModel::ReadNodeHierarchy(float timeInSeconds, const aiNode* pNode, std::shared_ptr<Animation> animation,
-	aiMatrix4x4& parentTransform, aiVector3t<float> parentPos)
+    aiMatrix4x4 lastToTerminal, aiMatrix4x4 lastToRoot, aiVector3t<float> parentPos)
 {
     std::string nodeName(pNode->mName.data);
-    aiMatrix4x4 nodeTransformation(pNode->mTransformation);//Parent -> child matrix
+
+    aiMatrix4x4 toTerminal(pNode->mTransformation);//Parent -> Child
+    aiMatrix4x4 toRoot(pNode->mTransformation);
+    toRoot = toRoot.Inverse();//Child -> Parent
 
     aiNodeAnim* pNodeAnim = animation->FindNodeAnim(nodeName);
     if (pNodeAnim)
@@ -195,18 +180,19 @@ void SkeletalModel::ReadNodeHierarchy(float timeInSeconds, const aiNode* pNode, 
         //nodeTransformation = animation->CalcNodeTransformation(pNodeAnim, timeInSeconds);
     }
 
-    aiMatrix4x4 globalTransformation = parentTransform * nodeTransformation;
+    aiMatrix4x4 globalToRoot = toRoot * lastToRoot;//왜 순서가 다를까?
+    aiMatrix4x4 globalToTerminal = lastToTerminal * toTerminal;
 
     if (mBoneMap.find(nodeName) != mBoneMap.end())
     {
         UINT boneIndex = mBoneMap[nodeName];
-        aiMatrix4x4 finalMat = globalTransformation * mBoneData[boneIndex].offsetMatrix;
+        aiMatrix4x4 finalMat = globalToRoot * mBoneData[boneIndex].offsetMatrix;
         mBoneData[boneIndex].finalMatrix = finalMat;
 
         aiQuaterniont<float> rotation;
         aiVector3t<float> position;
 
-        globalTransformation.DecomposeNoScaling(rotation, position);
+        globalToTerminal.DecomposeNoScaling(rotation, position);
         mJointPositions.push_back(MathHelper::AiVecToDxVec(position));
         mBonePositions.push_back(MathHelper::AiVecToDxVec(parentPos));
         mBonePositions.push_back(MathHelper::AiVecToDxVec(position));
@@ -215,20 +201,7 @@ void SkeletalModel::ReadNodeHierarchy(float timeInSeconds, const aiNode* pNode, 
     }
     for (UINT i = 0; i < pNode->mNumChildren; ++i)
     {
-        ReadNodeHierarchy(timeInSeconds, pNode->mChildren[i], animation, globalTransformation, parentPos);
-    }
-}
-
-void SkeletalModel::GetBoneTransforms(float timeInSeconds, std::shared_ptr<Animation> animation,
-	std::vector<aiMatrix4x4>& Transforms)
-{
-    ReadNodeHierarchy(timeInSeconds, pScene->mRootNode, animation, aiMatrix4x4(), aiVector3t(0.f));
-
-    UINT boneDataSize = mBoneData.size();
-    Transforms.resize(mBoneData.size());
-    for (UINT i = 0; i < boneDataSize; ++i)
-    {
-        Transforms[i] = mBoneData[i].finalMatrix;
+        ReadNodeHierarchy(timeInSeconds, pNode->mChildren[i], animation, globalToTerminal, globalToRoot, parentPos);
     }
 }
 
