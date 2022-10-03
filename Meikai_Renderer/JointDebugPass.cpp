@@ -69,7 +69,7 @@ void JointDebugPass::InitPSO()
     jointDebugPSODesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
     jointDebugPSODesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
     jointDebugPSODesc.SampleMask = UINT_MAX;
-    jointDebugPSODesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;
+    jointDebugPSODesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
     jointDebugPSODesc.NumRenderTargets = 1;
     jointDebugPSODesc.RTVFormats[0] = BackBufferFormat;
     jointDebugPSODesc.SampleDesc.Count = mApp->Get4xMsaaState() ? 4 : 1;

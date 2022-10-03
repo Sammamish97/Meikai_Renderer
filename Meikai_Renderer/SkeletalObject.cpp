@@ -18,28 +18,19 @@ void SkeletalObject::Update(float dt)
 void SkeletalObject::Draw(CommandList& commandList)
 {
     SetWorldMatrix(commandList);
-    for (auto& mesh : mModel->mMeshes)
-    {
-        mesh.Draw(commandList, 1.f, mCurrentAnimation);
-    }
+    mModel->Draw(commandList, 1.f, mCurrentAnimation);
 }
 
 void SkeletalObject::DrawJoint(CommandList& commandList)
 {
     SetWorldMatrix(commandList);
-    for (auto& mesh : mModel->mMeshes)
-    {
-        mesh.DrawDebugJoints(commandList);
-    }
+    mModel->DrawDebugJoints(commandList);
 }
 
 void SkeletalObject::DrawBone(CommandList& commandList)
 {
     SetWorldMatrix(commandList);
-    for (auto& mesh : mModel->mMeshes)
-    {
-        mesh.DrawDebugBones(commandList);
-    }
+    mModel->DrawDebugBones(commandList);
 }
 
 XMMATRIX SkeletalObject::GetWorldMat() const

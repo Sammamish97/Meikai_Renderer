@@ -21,6 +21,7 @@
 #include "SkeletalGeometryPass.h"
 #include "LightingPass.h"
 #include "JointDebugPass.h"
+#include "BoneDebugPass.h"
 #include "SkyboxPass.h"
 #include "Texture.h"
 
@@ -63,6 +64,7 @@ bool Demo::Initialize()
 	mGeometryPass = std::make_unique<GeometryPass>(this, mShaders["GeomVS"], mShaders["GeomPS"]);
 	mLightingPass = std::make_unique<LightingPass>(this, mShaders["ScreenQuadVS"], mShaders["LightingPS"]);
 	mJointDebugPass = std::make_unique<JointDebugPass>(this, mShaders["DebugJointVS"], mShaders["DebugJointPS"]);
+	mBoneDebugPass = std::make_unique<BoneDebugPass>(this, mShaders["DebugJointVS"], mShaders["DebugJointPS"]);
 	mSkyboxPass = std::make_unique<SkyboxPass>(this, mShaders["SkyboxVS"], mShaders["SkyboxPS"], mIBLResource.mCubeMap->mSRVDescIDX.value());
 	mSkeletalGeometryPass = std::make_unique<SkeletalGeometryPass>(this, mShaders["SkeletalGeomVS"], mShaders["SkeletalGeomPS"]);
 
@@ -92,8 +94,8 @@ void Demo::Draw(const GameTimer& gt)
 	DrawGeometryPasses(*drawcmdList);
 	DrawLightingPass(*drawcmdList);
 	DrawSkyboxPass(*drawcmdList);
-	//DrawJointDebug(*drawcmdList);
-	DrawBoneDebug(*drawcmdList);
+	DrawJointDebug(*drawcmdList);
+	//DrawBoneDebug(*drawcmdList);
 	mDirectCommandQueue->ExecuteCommandList(drawcmdList);
 	Present(mFrameResource.mRenderTarget);
 	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
@@ -110,8 +112,7 @@ void Demo::EquiRectToCubemap()
 
 void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 {
-	//mModels["Warrior"] = std::make_shared<Model>("../models/Warrior.fbx", this, *cmdList);
-	//mModels["Archer"] = std::make_shared<Model>("../models/Archer.fbx", this, *cmdList);
+	
 
 	//mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, *cmdList);
 	//mModels["Quad"] = std::make_shared<Model>("../models/Quad.obj", this, *cmdList);
@@ -119,8 +120,10 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 	//mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
 	
 	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
-	mModels["Y_Bot"] = std::make_shared<Model>("../models/Y_Bot.fbx", this, *cmdList);
+	//mModels["Y_Bot"] = std::make_shared<Model>("../models/Y_Bot.fbx", this, *cmdList);
 	mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.fbx", this, *cmdList);
+	//mSkeletalModels["Warrior"] = std::make_shared<SkeletalModel>("../models/Warrior.fbx", this, *cmdList);
+	//mSkeletalModels["Archer"] = std::make_shared<SkeletalModel>("../models/Archer.fbx", this, *cmdList);
 
 }
 
@@ -400,7 +403,6 @@ void Demo::DrawSkyboxPass(CommandList& cmdList)
 	mSkybox->DrawWithoutWorld(cmdList);
 }
 
-
 void Demo::DrawJointDebug(CommandList& cmdList)
 {
 	auto rtvHeapCPUHandle = mDescriptorHeaps[RTV]->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx);
@@ -416,6 +418,7 @@ void Demo::DrawJointDebug(CommandList& cmdList)
 
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { rtvHeapCPUHandle };
 	cmdList.SetRenderTargets(rtvArray, &dsvHeapCPUHandle);
+	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 
 	for (auto& object : mSkeletalObjects)
 	{
@@ -428,8 +431,8 @@ void Demo::DrawBoneDebug(CommandList& cmdList)
 	auto rtvHeapCPUHandle = mDescriptorHeaps[RTV]->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx);
 	//auto dsvHeapCPUHandle = mDescriptorHeaps[DSV]->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx);
 
-	cmdList.SetPipelineState(mJointDebugPass->mPSO.Get());
-	cmdList.SetGraphicsRootSignature(mJointDebugPass->mRootSig.Get());
+	cmdList.SetPipelineState(mBoneDebugPass->mPSO.Get());
+	cmdList.SetGraphicsRootSignature(mBoneDebugPass->mRootSig.Get());
 
 	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
 

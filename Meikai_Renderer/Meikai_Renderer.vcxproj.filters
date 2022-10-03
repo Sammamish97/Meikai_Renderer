@@ -168,6 +168,9 @@
     <ClInclude Include="SkeletalModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BoneDebugPass.h">
+      <Filter>Passes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXApp.cpp">
@@ -334,6 +337,9 @@
     </ClCompile>
     <ClCompile Include="SkeletalModel.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BoneDebugPass.cpp">
+      <Filter>Passes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -5,12 +5,6 @@ using namespace Microsoft::WRL;
 class DXApp;
 class Shader;
 
-enum JointRootIndex
-{
-
-};
-
-
 class JointDebugPass : public IPass
 {
 public:

@@ -24,6 +24,7 @@ class DefaultPass;
 class GeometryPass;
 class LightingPass;
 class JointDebugPass;
+class BoneDebugPass;
 class SkyboxPass;
 
 class Demo : public DXApp
@@ -85,6 +86,8 @@ private://Passes
 
 private://Debug Passes
 	std::unique_ptr<JointDebugPass> mJointDebugPass;
+	std::unique_ptr<BoneDebugPass> mBoneDebugPass;
+
 
 private://CBV resource & allocation
 	std::unique_ptr<CommonCB> mCommonCB;

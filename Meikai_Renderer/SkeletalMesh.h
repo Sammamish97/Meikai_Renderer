@@ -19,18 +19,6 @@ using namespace DirectX;
 
 class DXApp;
 
-struct BoneData
-{
-	//Boen Data vector's Index == boneID
-	aiMatrix4x4 offsetMatrix;
-	aiMatrix4x4 finalMatrix;
-	BoneData() = default;
-	BoneData(const aiMatrix4x4& offset)
-	{
-		offsetMatrix = offset;
-	}
-};
-
 struct SkeletalVertex
 {
 	XMFLOAT3 position;
@@ -41,7 +29,7 @@ struct SkeletalVertex
 
 	UINT boneIDs[4];
 	float weights[4];
-	int weightNum = 0;
+	UINT weightNum = 0;
 
 	void AddBoneData(int boneID, float weight);
 };
@@ -52,17 +40,9 @@ private:
 	DXApp* mApp = nullptr;
 
 public:
-	SkeletalMesh(DXApp* dxApp, const aiScene* aiPtr, std::vector<SkeletalVertex> input_vertices, std::vector<UINT> input_indices,
-		std::vector<BoneData> boneData, std::map<std::string, UINT> boneMap, CommandList& commandList);
+	SkeletalMesh(DXApp* dxApp, const aiScene* aiPtr, std::vector<SkeletalVertex> input_vertices, std::vector<UINT> input_indices, CommandList& commandList);
+
 	void Draw(CommandList& commandList, float time, std::shared_ptr<Animation> animation);
-
-	void DrawDebugJoints(CommandList& commandList);
-	void DrawDebugBones(CommandList& commandList);
-
-	void ReadNodeHierarchy(float timeInSeconds, const aiNode* pNode, std::shared_ptr<Animation> animation, aiMatrix4x4& parentTransform);
-	void GetBoneTransforms(float timeInSeconds, std::shared_ptr<Animation> animation, std::vector<aiMatrix4x4>& Transforms);
-
-
 private:
 	const aiScene* mScenePtr;
 
@@ -71,14 +51,6 @@ private:
 
 	std::vector<SkeletalVertex> mSkeletalVertices;
 	std::vector<UINT> mIndices;
-
-	std::vector<BoneData> mBoneData;
-	std::map<std::string, UINT> mBoneMap;
-
-	std::vector<XMFLOAT3> mJointPositions;
-	std::vector<XMFLOAT3> mBonePositions;
-
-	aiMatrix4x4 mGlobalInverseTransform;
 
 	UINT mIndexCount;
 
