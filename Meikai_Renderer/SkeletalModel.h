@@ -40,12 +40,9 @@ public:
 	void ProcessNode(aiNode* node, const aiScene* scene, CommandList& commandList);
 	SkeletalMesh ProcessMesh(aiMesh* mesh, const aiScene* scene, CommandList& commandList);
 
-
 	void LoadVertices(aiMesh* mesh, std::vector<SkeletalVertex>& vertices);
 	void LoadIndices(aiMesh* mesh, std::vector<UINT>& indices);
-	void LoadBones(aiMesh* mesh, std::vector<SkeletalVertex>& vertices
-		, std::vector<BoneData>& boneVec, std::map<std::string, UINT>& boneMap);
-
+	void LoadBones(aiMesh* mesh, std::vector<SkeletalVertex>& vertices);
 
 	void ReadNodeHierarchy(float timeInSeconds, const aiNode* pNode, std::shared_ptr<Animation> animation, aiMatrix4x4& parentTransform, aiVector3t<float> parentPos);
 	void GetBoneTransforms(float timeInSeconds, std::shared_ptr<Animation> animation, std::vector<aiMatrix4x4>& Transforms);

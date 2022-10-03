@@ -84,7 +84,7 @@ SkeletalMesh SkeletalModel::ProcessMesh(aiMesh* mesh, const aiScene* scene, Comm
     }
     if (mesh->HasBones())
     {
-        LoadBones(mesh, vertices, mBoneData, mBoneMap);
+        LoadBones(mesh, vertices);
     }
 
     return SkeletalMesh(mApp, scene, vertices, indices, commandList);
@@ -151,28 +151,28 @@ void SkeletalModel::LoadIndices(aiMesh* mesh, std::vector<UINT>& indices)
     }
 }
 
-void SkeletalModel::LoadBones(aiMesh* mesh, std::vector<SkeletalVertex>& vertices, std::vector<BoneData>& boneVec,
-	std::map<std::string, UINT>& boneMap)
+void SkeletalModel::LoadBones(aiMesh* mesh, std::vector<SkeletalVertex>& vertices)
 {
     for(int i = 0; i < mesh->mNumBones; ++i)
     {
         UINT boneIndex = 0;
         std::string boneName(mesh->mBones[i]->mName.data);
 
-        if(boneMap.find(boneName) == boneMap.end())
+        if(mBoneMap.find(boneName) == mBoneMap.end())
         {
             boneIndex = mTotalNumBones;
             mTotalNumBones++;
             BoneData bi;
-            boneVec.push_back(bi);
+            mBoneData.push_back(bi);
         }
         else
         {
-            boneIndex = boneMap[boneName];
+            boneIndex = mBoneMap[boneName];
         }
 
-        boneMap[boneName] = boneIndex;
-        boneVec[boneIndex].offsetMatrix = mesh->mBones[i]->mOffsetMatrix;
+        mBoneMap[boneName] = boneIndex;
+        mBoneData[boneIndex].offsetMatrix = mesh->mBones[i]->mOffsetMatrix.Inverse();
+        //Currently, mOffset is bone -> local. Therefore, inverse it.
 
         for(int j = 0; j < mesh->mBones[i]->mNumWeights; ++j)
         {
@@ -195,14 +195,13 @@ void SkeletalModel::ReadNodeHierarchy(float timeInSeconds, const aiNode* pNode, 
         nodeTransformation = animation->CalcNodeTransformation(pNodeAnim, timeInSeconds);
     }
 
-    //aiMatrix4x4 globalTransformation = parentTransform * nodeTransformation;
-    aiMatrix4x4 globalTransformation = parentTransform;
-
+    aiMatrix4x4 toParent = pNode->mTransformation;
+    aiMatrix4x4 globalTransformation = toParent.Inverse() * parentTransform;
 
     if (mBoneMap.find(nodeName) != mBoneMap.end())
     {
         UINT boneIndex = mBoneMap[nodeName];
-        aiMatrix4x4 finalMat = mGlobalInverseTransform * globalTransformation * mBoneData[boneIndex].offsetMatrix.Inverse();
+        aiMatrix4x4 finalMat = globalTransformation * mBoneData[boneIndex].offsetMatrix;
         mBoneData[boneIndex].finalMatrix = finalMat;
 
         aiQuaterniont<float> rotation;
@@ -224,7 +223,7 @@ void SkeletalModel::ReadNodeHierarchy(float timeInSeconds, const aiNode* pNode, 
 void SkeletalModel::GetBoneTransforms(float timeInSeconds, std::shared_ptr<Animation> animation,
 	std::vector<aiMatrix4x4>& Transforms)
 {
-    ReadNodeHierarchy(timeInSeconds, pScene->mRootNode, animation, aiMatrix4x4(), aiVector3t<float>(0.f));
+    ReadNodeHierarchy(timeInSeconds, pScene->mRootNode, animation, aiMatrix4x4(), aiVector3t(0.f));
 
     UINT boneDataSize = mBoneData.size();
     Transforms.resize(mBoneData.size());
@@ -275,8 +274,7 @@ void SkeletalModel::ExtractJoint()
     {
         aiQuaterniont<float> rotation;
         aiVector3t<float> position;
-        auto localToBone = boneData.offsetMatrix;
-        localToBone.DecomposeNoScaling(rotation, position);
+    	boneData.offsetMatrix.DecomposeNoScaling(rotation, position);
         mJointPositions.push_back(MathHelper::AiVecToDxVec(position));
     }
 }
@@ -294,12 +292,9 @@ void SkeletalModel::ExtractBoneRecursive(const aiNode* pNode, aiVector3t<float> 
     if (mBoneMap.find(boneName) != mBoneMap.end())
     {
         UINT boneIndex = mBoneMap.at(boneName);
-        aiMatrix4x4 offsetMatrix = mBoneData[boneIndex].offsetMatrix;
-        auto localToBone = offsetMatrix;
-        localToBone.Inverse();
         aiQuaterniont<float> rotation;//Don't use.
         aiVector3t<float> position;
-        localToBone.DecomposeNoScaling(rotation, position);
+        mBoneData[boneIndex].offsetMatrix.DecomposeNoScaling(rotation, position);
 
         mBonePositions.push_back(MathHelper::AiVecToDxVec(parentPos));
         mBonePositions.push_back(MathHelper::AiVecToDxVec(position));

@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Data\Meikai_Renderer\bin\Meikai_Renderer_debug.exe</FullPath>
+      <FullPath>C:\Data\Meikai_Renderer\Meikai_Renderer\bin\Meikai_Renderer_debug.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

@@ -95,7 +95,7 @@ void Demo::Draw(const GameTimer& gt)
 	DrawLightingPass(*drawcmdList);
 	DrawSkyboxPass(*drawcmdList);
 	DrawJointDebug(*drawcmdList);
-	//DrawBoneDebug(*drawcmdList);
+	DrawBoneDebug(*drawcmdList);
 	mDirectCommandQueue->ExecuteCommandList(drawcmdList);
 	Present(mFrameResource.mRenderTarget);
 	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
