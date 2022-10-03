@@ -406,7 +406,6 @@ void Demo::DrawSkyboxPass(CommandList& cmdList)
 void Demo::DrawJointDebug(CommandList& cmdList)
 {
 	auto rtvHeapCPUHandle = mDescriptorHeaps[RTV]->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx);
-	auto dsvHeapCPUHandle = mDescriptorHeaps[DSV]->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx);
 
 	cmdList.SetPipelineState(mJointDebugPass->mPSO.Get());
 	cmdList.SetGraphicsRootSignature(mJointDebugPass->mRootSig.Get());
@@ -417,7 +416,7 @@ void Demo::DrawJointDebug(CommandList& cmdList)
 	cmdList.SetScissorRect(mScissorRect);
 
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { rtvHeapCPUHandle };
-	cmdList.SetRenderTargets(rtvArray, &dsvHeapCPUHandle);
+	cmdList.SetRenderTargets(rtvArray, nullptr);
 	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 
 	for (auto& object : mSkeletalObjects)
@@ -429,7 +428,6 @@ void Demo::DrawJointDebug(CommandList& cmdList)
 void Demo::DrawBoneDebug(CommandList& cmdList)
 {
 	auto rtvHeapCPUHandle = mDescriptorHeaps[RTV]->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx);
-	//auto dsvHeapCPUHandle = mDescriptorHeaps[DSV]->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx);
 
 	cmdList.SetPipelineState(mBoneDebugPass->mPSO.Get());
 	cmdList.SetGraphicsRootSignature(mBoneDebugPass->mRootSig.Get());

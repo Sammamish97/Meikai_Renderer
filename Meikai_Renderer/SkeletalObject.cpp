@@ -1,6 +1,7 @@
 #include "SkeletalObject.h"
 #include "SkeletalModel.h"
 #include "Animation.h"
+#include <cmath>
 
 #include "SkeletalModel.h"
 
@@ -17,8 +18,9 @@ void SkeletalObject::Update(float dt)
 
 void SkeletalObject::Draw(CommandList& commandList)
 {
+    mPlayTime += 0.016;
     SetWorldMatrix(commandList);
-    mModel->Draw(commandList, 1.f, mCurrentAnimation);
+    mModel->Draw(commandList, std::fmod(mPlayTime,mCurrentAnimation->mDuration), mCurrentAnimation);
 }
 
 void SkeletalObject::DrawJoint(CommandList& commandList)

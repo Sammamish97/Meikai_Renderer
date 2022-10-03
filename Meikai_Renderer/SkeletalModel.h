@@ -50,10 +50,6 @@ public:
 	void DrawDebugJoints(CommandList& commandList);
 	void DrawDebugBones(CommandList& commandList);
 
-	void ExtractJoint();
-	void ExtractBone();
-	void ExtractBoneRecursive(const aiNode* pNode, aiVector3t<float> parentPos);
-
 private:
 	std::vector<BoneData> mBoneData;
 	std::map<std::string, UINT> mBoneMap;

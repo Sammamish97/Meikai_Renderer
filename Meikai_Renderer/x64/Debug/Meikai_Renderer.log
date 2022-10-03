@@ -8,7 +8,7 @@ C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(40,23)
 C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(45,22): warning C4018: '<': signed/unsigned mismatch
 C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(156,22): warning C4018: '<': signed/unsigned mismatch
 C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(177,26): warning C4018: '<': signed/unsigned mismatch
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(228,41): warning C4267: 'initializing': conversion from 'size_t' to 'UINT', possible loss of data
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(257,33): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(267,33): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(227,41): warning C4267: 'initializing': conversion from 'size_t' to 'UINT', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(255,33): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(264,33): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
   Meikai_Renderer.vcxproj -> C:\Data\Meikai_Renderer\Meikai_Renderer\bin\Meikai_Renderer_debug.exe

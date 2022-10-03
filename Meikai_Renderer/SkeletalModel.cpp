@@ -187,16 +187,15 @@ void SkeletalModel::ReadNodeHierarchy(float timeInSeconds, const aiNode* pNode, 
 	aiMatrix4x4& parentTransform, aiVector3t<float> parentPos)
 {
     std::string nodeName(pNode->mName.data);
-    aiMatrix4x4 nodeTransformation(pNode->mTransformation);
+    aiMatrix4x4 nodeTransformation(pNode->mTransformation);//Parent -> child matrix
 
     aiNodeAnim* pNodeAnim = animation->FindNodeAnim(nodeName);
     if (pNodeAnim)
     {
-        nodeTransformation = animation->CalcNodeTransformation(pNodeAnim, timeInSeconds);
+        //nodeTransformation = animation->CalcNodeTransformation(pNodeAnim, timeInSeconds);
     }
 
-    aiMatrix4x4 toParent = pNode->mTransformation;
-    aiMatrix4x4 globalTransformation = toParent.Inverse() * parentTransform;
+    aiMatrix4x4 globalTransformation = parentTransform * nodeTransformation;
 
     if (mBoneMap.find(nodeName) != mBoneMap.end())
     {
@@ -207,10 +206,10 @@ void SkeletalModel::ReadNodeHierarchy(float timeInSeconds, const aiNode* pNode, 
         aiQuaterniont<float> rotation;
         aiVector3t<float> position;
 
-        finalMat.DecomposeNoScaling(rotation, position);
-        //mJointPositions.push_back(MathHelper::AiVecToDxVec(position));
-        //mBonePositions.push_back(MathHelper::AiVecToDxVec(parentPos));
-        //mBonePositions.push_back(MathHelper::AiVecToDxVec(position));
+        globalTransformation.DecomposeNoScaling(rotation, position);
+        mJointPositions.push_back(MathHelper::AiVecToDxVec(position));
+        mBonePositions.push_back(MathHelper::AiVecToDxVec(parentPos));
+        mBonePositions.push_back(MathHelper::AiVecToDxVec(position));
 
         parentPos = position;
     }
@@ -236,8 +235,8 @@ void SkeletalModel::GetBoneTransforms(float timeInSeconds, std::shared_ptr<Anima
 void SkeletalModel::Draw(CommandList& commandList, float time, std::shared_ptr<Animation> animation)
 {
     mFinalTransforms.clear();
-    //mJointPositions.clear();
-    //mBonePositions.clear();
+    mJointPositions.clear();
+    mBonePositions.clear();
 
     GetBoneTransforms(time, animation, mFinalTransforms);
     commandList.SetGraphicsDynamicConstantBuffer(2, mFinalTransforms.size() * sizeof(aiMatrix4x4), mFinalTransforms.data());
@@ -249,7 +248,6 @@ void SkeletalModel::Draw(CommandList& commandList, float time, std::shared_ptr<A
 
 void SkeletalModel::DrawDebugJoints(CommandList& commandList)
 {
-    ExtractJoint();
     auto vertexCount = mJointPositions.size();
     auto vertexSize = sizeof(mJointPositions[0]);
     commandList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
@@ -259,50 +257,9 @@ void SkeletalModel::DrawDebugJoints(CommandList& commandList)
 
 void SkeletalModel::DrawDebugBones(CommandList& commandList)
 {
-    ExtractBone();
     auto vertexCount = mBonePositions.size();
     auto vertexSize = sizeof(mBonePositions[0]);
     commandList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
     commandList.SetDynamicVertexBuffer(0, vertexCount, vertexSize, mBonePositions.data());
     commandList.Draw(vertexCount);
-}
-
-void SkeletalModel::ExtractJoint()
-{
-    mJointPositions.clear();
-    for (const auto& boneData : mBoneData)
-    {
-        aiQuaterniont<float> rotation;
-        aiVector3t<float> position;
-    	boneData.offsetMatrix.DecomposeNoScaling(rotation, position);
-        mJointPositions.push_back(MathHelper::AiVecToDxVec(position));
-    }
-}
-
-void SkeletalModel::ExtractBone()
-{
-    mBonePositions.clear();
-    aiVector3t<float> localOrigin{ 0, 0, 0 };
-    ExtractBoneRecursive(pScene->mRootNode, localOrigin);
-}
-
-void SkeletalModel::ExtractBoneRecursive(const aiNode* pNode, aiVector3t<float> parentPos)
-{
-    std::string boneName = pNode->mName.data;
-    if (mBoneMap.find(boneName) != mBoneMap.end())
-    {
-        UINT boneIndex = mBoneMap.at(boneName);
-        aiQuaterniont<float> rotation;//Don't use.
-        aiVector3t<float> position;
-        mBoneData[boneIndex].offsetMatrix.DecomposeNoScaling(rotation, position);
-
-        mBonePositions.push_back(MathHelper::AiVecToDxVec(parentPos));
-        mBonePositions.push_back(MathHelper::AiVecToDxVec(position));
-
-        parentPos = position;
-    }
-    for (UINT i = 0; i < pNode->mNumChildren; ++i)
-    {
-        ExtractBoneRecursive(pNode->mChildren[i], parentPos);
-    }
 }
