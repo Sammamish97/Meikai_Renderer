@@ -1,40 +1,54 @@
 #pragma once
+#include <map>
 #include <vector>
 #include <string>
+#include <memory>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-class DXApp;
+#include "Bone.h"
+#include "AnimData.h"
+#include "SkeletalModel.h"
+
+class SkeletalModel;
+
+struct AssimpNodeData
+{
+	aiMatrix4x4 transformation;
+	std::string name;
+	int childrenCount;
+	std::vector<AssimpNodeData> children;
+};
 
 //Each animation instance have only one aiAnimation
 class Animation
 {
 private:
-	DXApp* mApp;
-	aiAnimation* mAnimation;
+	std::vector<Bone> mBones;
+	std::map<std::string, BoneInfo> m_BoneInfoMap;
 
-	Assimp::Importer mImporter;
-	const aiScene* pScene;
-	double mTickPerSec;
-
-public:
-	double mDuration;
+	float mTickPerSec;
+	float mDuration;
+	AssimpNodeData mRootNode;
 
 public:
-	Animation(DXApp* appPtr, const std::string& file_path);
-	aiNodeAnim* FindNodeAnim(const std::string& nodeName);
-	aiMatrix4x4 CalcNodeTransformation(aiNodeAnim* pNodeAnim, float AnimationTimeTicks);
+
+	inline float GetTicksPerSecond() { return mTickPerSec; }
+	inline float GetDuration() { return mDuration; }
+	inline const AssimpNodeData& GetRootNode() { return mRootNode; }
+	inline const std::map<std::string, BoneInfo>& GetBoneIDMap()
+	{
+		return m_BoneInfoMap;
+	}
+
+	Animation(const std::string& animationPath, std::shared_ptr<SkeletalModel> model);
+	~Animation();
+	Bone* FindBone(const std::string& name);
 
 private:
-	void CalcInterpolatedPosition(aiVector3D& Out, float AnimationTimeTicks, const aiNodeAnim* pNodeAnim);
-	unsigned FindPosition(float animationTimeTicks, const aiNodeAnim* pNodeAnim);
-
-	void CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTimeTicks, const aiNodeAnim* pNodeAnim);
-	unsigned FindRotation(float animationTimeTicks, const aiNodeAnim* pNodeAnim);
-	
-	void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTimeTicks, const aiNodeAnim* pNodeAnim);
-	unsigned FindScaling(float animationTimeTicks, const aiNodeAnim* pNodeAnim);
+	void ReadMissingBones(const aiAnimation* animation, std::shared_ptr<SkeletalModel> model);
+	void ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src);
 };
 

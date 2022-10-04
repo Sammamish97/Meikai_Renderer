@@ -1,414 +1,420 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\CCompilerTest.c">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\CCompilerTest.c">
       <Filter>UnitTests\Compiler</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\Main.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\Version.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\Version.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\Base64.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\Base64.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utSimd.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utSimd.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utIOSystem.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utIOSystem.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utIOStreamBuffer.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utIOStreamBuffer.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utIssues.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utIssues.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utAnim.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utAnim.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\AssimpAPITest.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\AssimpAPITest.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\AssimpAPITest_aiMatrix3x3.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\AssimpAPITest_aiMatrix3x3.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\AssimpAPITest_aiMatrix4x4.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\AssimpAPITest_aiMatrix4x4.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\AssimpAPITest_aiQuaternion.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\AssimpAPITest_aiQuaternion.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\AssimpAPITest_aiVector2D.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\AssimpAPITest_aiVector2D.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\AssimpAPITest_aiVector3D.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\AssimpAPITest_aiVector3D.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\Common\utHash.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\MathTest.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\MathTest.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utBatchLoader.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utBatchLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utDefaultIOStream.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utDefaultIOStream.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utFastAtof.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utFastAtof.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utMetadata.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utMetadata.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\SceneDiffer.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\SceneDiffer.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\AbstractImportExportBase.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\AbstractImportExportBase.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utTypes.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utTypes.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utVersion.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utVersion.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utProfiler.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utProfiler.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utSharedPPData.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utSharedPPData.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utStringUtils.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utStringUtils.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\Common\utMaybe.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\Common\utMesh.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\Common\utMesh.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\Common\utStandardShapes.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\Common\utStandardShapes.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\Common\uiScene.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\Common\uiScene.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\Common\utLineSplitter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\Common\utLineSplitter.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\Common\utSpatialSort.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\Common\utSpatialSort.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\Common\utAssertHandler.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\Common\utAssertHandler.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\Common\utXmlParser.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\Common\utXmlParser.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\Common\utBase64.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\Common\utBase64.cpp">
       <Filter>UnitTests\Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\Assxml\utAssxmlImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\Common\utHash.cpp">
+      <Filter>UnitTests\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\Common\utBaseProcess.cpp">
+      <Filter>UnitTests\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\Assxml\utAssxmlImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utLWSImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utLWSImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utLWOImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utLWOImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utSMDImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utSMDImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utglTFImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utglTFImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utglTF2ImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utglTF2ImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utHMPImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utHMPImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utIFCImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utIFCImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utFBXImporterExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utFBXImporterExporter.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utImporter.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\utExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\utExporter.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ut3DImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ut3DImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ut3DSImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ut3DSImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utACImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utACImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utAMFImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utAMFImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utASEImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utASEImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utD3MFImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utD3MFImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utQ3DImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utQ3DImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utSTLImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utSTLImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utXImporterExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utXImporterExporter.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utX3DImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utX3DImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utDXFImporterExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utDXFImporterExporter.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utPMXImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utPMXImporter.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utPLYImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utPLYImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utObjImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utObjImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utObjTools.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utObjTools.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utOpenGEXImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utOpenGEXImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utSIBImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utSIBImporter.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utBlenderIntermediate.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utBlenderIntermediate.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utBlendImportAreaLight.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utBlendImportAreaLight.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utBlenderImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utBlenderImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utBlendImportMaterials.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utBlendImportMaterials.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utBlenderWork.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utBlenderWork.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utBVHImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utBVHImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utColladaExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utColladaExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utColladaImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utColladaImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utCSMImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utCSMImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utB3DImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utB3DImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utMDCImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utMDCImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utAssbinImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utAssbinImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\utAssjsonImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\utAssjsonImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\utCOBImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\utCOBImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\utOgreImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\utOgreImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\utQ3BSPFileImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\utQ3BSPFileImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\utOFFImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\utOFFImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\utNFFImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\utNFFImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\utXGLImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\utXGLImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\utMD2Importer.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\utMD2Importer.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\utMD5Importer.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\utMD5Importer.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\utMDLImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\utMDLImporter.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\MDL\utMDLImporter_HL1_ImportSettings.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\MDL\utMDLImporter_HL1_ImportSettings.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\MDL\utMDLImporter_HL1_Materials.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\MDL\utMDLImporter_HL1_Materials.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\MDL\utMDLImporter_HL1_Nodes.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\MDL\utMDLImporter_HL1_Nodes.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\RAW\utRAWImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\RAW\utRAWImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\Terragen\utTerragenImportExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\Terragen\utTerragenImportExport.cpp">
       <Filter>UnitTests\ImportExport</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utMaterialSystem.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utMaterialSystem.cpp">
       <Filter>UnitTests\Material</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utMatrix3x3.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utMatrix3x3.cpp">
       <Filter>UnitTests\Math</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utMatrix4x4.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utMatrix4x4.cpp">
       <Filter>UnitTests\Math</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utVector3.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utVector3.cpp">
       <Filter>UnitTests\Math</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utImproveCacheLocality.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utImproveCacheLocality.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utFixInfacingNormals.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utFixInfacingNormals.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utGenNormals.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utGenNormals.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utTriangulate.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utTriangulate.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utTextureTransform.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utTextureTransform.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utRemoveRedundantMaterials.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utRemoveRedundantMaterials.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utRemoveVCProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utRemoveVCProcess.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utScaleProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utScaleProcess.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utArmaturePopulate.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utArmaturePopulate.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utJoinVertices.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utJoinVertices.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utRemoveComments.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utRemoveComments.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utRemoveComponent.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utRemoveComponent.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utVertexTriangleAdjacency.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utVertexTriangleAdjacency.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utSplitLargeMeshes.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utSplitLargeMeshes.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utFindDegenerates.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utFindDegenerates.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utFindInvalidData.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utFindInvalidData.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utLimitBoneWeights.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utLimitBoneWeights.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utPretransformVertices.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utPretransformVertices.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utScenePreprocessor.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utScenePreprocessor.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utTargetAnimation.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utTargetAnimation.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utSortByPType.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utSortByPType.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utSceneCombiner.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utSceneCombiner.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\utGenBoundingBoxesProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\test\unit\utGenBoundingBoxesProcess.cpp">
       <Filter>UnitTests\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\gtest\src\gtest-all.cc">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\gtest\src\gtest-all.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\MathTest.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\test\unit\MathTest.h">
       <Filter>UnitTests\Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\RandomNumberGeneration.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\test\unit\RandomNumberGeneration.h">
       <Filter>UnitTests\Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\SceneDiffer.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\test\unit\SceneDiffer.h">
       <Filter>UnitTests\Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\UTLogStream.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\test\unit\UTLogStream.h">
       <Filter>UnitTests\Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\TestIOSystem.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\test\unit\TestIOSystem.h">
       <Filter>UnitTests\Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\TestModelFactory.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\test\unit\TestModelFactory.h">
       <Filter>UnitTests\Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\test\unit\ImportExport\MDL\MDLHL1TestFiles.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\test\unit\ImportExport\MDL\MDLHL1TestFiles.h">
       <Filter>UnitTests\ImportExport</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Data\Meikai_Renderer\include\assimp-master\test\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\Mook\Desktop\assimp-master\test\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{B8E60852-80F3-30B8-858E-57CCC5548961}</UniqueIdentifier>
+      <UniqueIdentifier>{48005FF9-BEC3-3DF5-B568-7F447979B953}</UniqueIdentifier>
     </Filter>
     <Filter Include="UnitTests">
-      <UniqueIdentifier>{877066BA-6F1E-3104-AD3B-E27BB2803DA0}</UniqueIdentifier>
+      <UniqueIdentifier>{3B6D3E5F-E107-33AA-9E33-EF287BE71030}</UniqueIdentifier>
     </Filter>
     <Filter Include="UnitTests\Common">
-      <UniqueIdentifier>{D2369612-B4EC-3054-AA3B-3ADE29058298}</UniqueIdentifier>
+      <UniqueIdentifier>{2C4FBCD6-75C4-34F1-95BC-B935D1FCCBD9}</UniqueIdentifier>
     </Filter>
     <Filter Include="UnitTests\Compiler">
-      <UniqueIdentifier>{C82F6D5A-7A13-32EE-8FA1-1347883AE8BC}</UniqueIdentifier>
+      <UniqueIdentifier>{7F04DC38-71BD-3B54-9A4D-AEFDF234A4D3}</UniqueIdentifier>
     </Filter>
     <Filter Include="UnitTests\ImportExport">
-      <UniqueIdentifier>{22DD55C3-C5DF-3DB8-93EC-1CECC330BB09}</UniqueIdentifier>
+      <UniqueIdentifier>{2154BE75-84C7-3EDB-84C4-385091BE9E11}</UniqueIdentifier>
     </Filter>
     <Filter Include="UnitTests\Material">
-      <UniqueIdentifier>{D9F3F51A-1BC6-3C4F-8073-C74502585D6C}</UniqueIdentifier>
+      <UniqueIdentifier>{81DAABC6-77F9-31C2-A009-D0A0F0E0B918}</UniqueIdentifier>
     </Filter>
     <Filter Include="UnitTests\Math">
-      <UniqueIdentifier>{F89AADB8-64B5-3088-8EFF-93B9912B2572}</UniqueIdentifier>
+      <UniqueIdentifier>{A79DD530-0E2E-3655-B20F-86BC8AA805E8}</UniqueIdentifier>
     </Filter>
     <Filter Include="UnitTests\PostProcess">
-      <UniqueIdentifier>{D7FD20E2-974B-310A-9662-FB4A2E5DF27E}</UniqueIdentifier>
+      <UniqueIdentifier>{40892B93-7DC4-361C-A23C-61B4B96572CA}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

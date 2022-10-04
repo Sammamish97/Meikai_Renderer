@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\26761a8cd51f64a6f0ca88f92d0cdb9e\INSTALL_force.rule">
+    <CustomBuild Include="C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\b9eb4f9d2c594305d4c3c84f94d9b18a\INSTALL_force.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{68104B66-588E-3D39-B6A8-170B978B3DB9}</UniqueIdentifier>
+      <UniqueIdentifier>{8D7E8B28-BA6B-3650-A604-F2F3C46A5ACF}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

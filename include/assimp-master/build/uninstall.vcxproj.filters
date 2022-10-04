@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\545750be0e9689de6092144bc2b2fb8a\uninstall.rule">
+    <CustomBuild Include="C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\adcf47868dff29719651f7794e472849\uninstall.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Data\Meikai_Renderer\include\assimp-master\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\Mook\Desktop\assimp-master\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\uninstall" />
+    <None Include="C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\uninstall" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{68104B66-588E-3D39-B6A8-170B978B3DB9}</UniqueIdentifier>
+      <UniqueIdentifier>{8D7E8B28-BA6B-3650-A604-F2F3C46A5ACF}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

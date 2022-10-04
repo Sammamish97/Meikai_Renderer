@@ -171,6 +171,12 @@
     <ClInclude Include="BoneDebugPass.h">
       <Filter>Passes</Filter>
     </ClInclude>
+    <ClInclude Include="Bone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXApp.cpp">
@@ -340,6 +346,9 @@
     </ClCompile>
     <ClCompile Include="BoneDebugPass.cpp">
       <Filter>Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Bone.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -9,8 +9,8 @@ The output was:
 .NET Framework용 Microsoft (R) Build Engine 버전 17.2.1+52cd2da31
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-빌드 시작: 2022-07-06 오전 10:55:32
-1 노드의 "C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\3.23.1\CompilerIdC\CompilerIdC.vcxproj" 프로젝트(기본 대상)입니다.
+빌드 시작: 2022-10-04 오후 1:24:19
+1 노드의 "C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\3.23.1\CompilerIdC\CompilerIdC.vcxproj" 프로젝트(기본 대상)입니다.
 PrepareForBuild:
   "Debug\" 디렉터리를 만들고 있습니다.
   "Debug\CompilerIdC.tlog\" 디렉터리를 만들고 있습니다.
@@ -21,7 +21,7 @@ ClCompile:
   CMakeCCompilerId.c
 Link:
   C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.32.31326\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:".\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CompilerIdC.lib" /MACHINE:X64 Debug\CMakeCCompilerId.obj
-  CompilerIdC.vcxproj -> C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\3.23.1\CompilerIdC\CompilerIdC.exe
+  CompilerIdC.vcxproj -> C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\3.23.1\CompilerIdC\CompilerIdC.exe
 PostBuildEvent:
   for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
   :VCEnd
@@ -29,20 +29,20 @@ PostBuildEvent:
 FinalizeBuildStatus:
   "Debug\CompilerIdC.tlog\unsuccessfulbuild" 파일을 삭제하고 있습니다.
   "Debug\CompilerIdC.tlog\CompilerIdC.lastbuildstate"에 연결(touching)하고 있습니다.
-"C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\3.23.1\CompilerIdC\CompilerIdC.vcxproj" 프로젝트를 빌드했습니다(기본 대상).
+"C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\3.23.1\CompilerIdC\CompilerIdC.vcxproj" 프로젝트를 빌드했습니다(기본 대상).
 
 빌드했습니다.
     경고 0개
     오류 0개
 
-경과 시간: 00:00:00.73
+경과 시간: 00:00:00.60
 
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
 
-The C compiler identification is MSVC, found in "C:/Data/Meikai_Renderer/include/assimp-master/build/CMakeFiles/3.23.1/CompilerIdC/CompilerIdC.exe"
+The C compiler identification is MSVC, found in "C:/Users/Mook/Desktop/assimp-master/build/CMakeFiles/3.23.1/CompilerIdC/CompilerIdC.exe"
 
 Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
 Compiler:  
@@ -54,8 +54,8 @@ The output was:
 .NET Framework용 Microsoft (R) Build Engine 버전 17.2.1+52cd2da31
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-빌드 시작: 2022-07-06 오전 10:55:33
-1 노드의 "C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\3.23.1\CompilerIdCXX\CompilerIdCXX.vcxproj" 프로젝트(기본 대상)입니다.
+빌드 시작: 2022-10-04 오후 1:24:20
+1 노드의 "C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\3.23.1\CompilerIdCXX\CompilerIdCXX.vcxproj" 프로젝트(기본 대상)입니다.
 PrepareForBuild:
   "Debug\" 디렉터리를 만들고 있습니다.
   "Debug\CompilerIdCXX.tlog\" 디렉터리를 만들고 있습니다.
@@ -66,7 +66,7 @@ ClCompile:
   CMakeCXXCompilerId.cpp
 Link:
   C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.32.31326\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:".\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CompilerIdCXX.lib" /MACHINE:X64 Debug\CMakeCXXCompilerId.obj
-  CompilerIdCXX.vcxproj -> C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\3.23.1\CompilerIdCXX\CompilerIdCXX.exe
+  CompilerIdCXX.vcxproj -> C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\3.23.1\CompilerIdCXX\CompilerIdCXX.exe
 PostBuildEvent:
   for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
   :VCEnd
@@ -74,88 +74,88 @@ PostBuildEvent:
 FinalizeBuildStatus:
   "Debug\CompilerIdCXX.tlog\unsuccessfulbuild" 파일을 삭제하고 있습니다.
   "Debug\CompilerIdCXX.tlog\CompilerIdCXX.lastbuildstate"에 연결(touching)하고 있습니다.
-"C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\3.23.1\CompilerIdCXX\CompilerIdCXX.vcxproj" 프로젝트를 빌드했습니다(기본 대상).
+"C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\3.23.1\CompilerIdCXX\CompilerIdCXX.vcxproj" 프로젝트를 빌드했습니다(기본 대상).
 
 빌드했습니다.
     경고 0개
     오류 0개
 
-경과 시간: 00:00:00.46
+경과 시간: 00:00:00.47
 
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
 
-The CXX compiler identification is MSVC, found in "C:/Data/Meikai_Renderer/include/assimp-master/build/CMakeFiles/3.23.1/CompilerIdCXX/CompilerIdCXX.exe"
+The CXX compiler identification is MSVC, found in "C:/Users/Mook/Desktop/assimp-master/build/CMakeFiles/3.23.1/CompilerIdCXX/CompilerIdCXX.exe"
 
 Detecting C compiler ABI info compiled with the following output:
-Change Dir: C:/Data/Meikai_Renderer/include/assimp-master/build/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/Mook/Desktop/assimp-master/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_9bc26.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && .NET Framework용 Microsoft (R) Build Engine 버전 17.2.1+52cd2da31
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_0f32b.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && .NET Framework용 Microsoft (R) Build Engine 버전 17.2.1+52cd2da31
 Copyright (C) Microsoft Corporation. All rights reserved.
 
   Microsoft (R) C/C++ Optimizing Compiler Version 19.32.31332 for x64
   CMakeCCompilerABI.c
   Copyright (C) Microsoft Corporation.  All rights reserved.
-  cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_9bc26.dir\Debug\\" /Fd"cmTC_9bc26.dir\Debug\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\Program Files\CMake\share\cmake-3.23\Modules\CMakeCCompilerABI.c"
-  cmTC_9bc26.vcxproj -> C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\CMakeTmp\Debug\cmTC_9bc26.exe
+  cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_0f32b.dir\Debug\\" /Fd"cmTC_0f32b.dir\Debug\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\Program Files\CMake\share\cmake-3.23\Modules\CMakeCCompilerABI.c"
+  cmTC_0f32b.vcxproj -> C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\CMakeTmp\Debug\cmTC_0f32b.exe
 
 
 
 Detecting CXX compiler ABI info compiled with the following output:
-Change Dir: C:/Data/Meikai_Renderer/include/assimp-master/build/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/Mook/Desktop/assimp-master/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_ba619.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && .NET Framework용 Microsoft (R) Build Engine 버전 17.2.1+52cd2da31
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_20a54.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && .NET Framework용 Microsoft (R) Build Engine 버전 17.2.1+52cd2da31
 Copyright (C) Microsoft Corporation. All rights reserved.
 
   Microsoft (R) C/C++ Optimizing Compiler Version 19.32.31332 for x64
   CMakeCXXCompilerABI.cpp
   Copyright (C) Microsoft Corporation.  All rights reserved.
-  cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_ba619.dir\Debug\\" /Fd"cmTC_ba619.dir\Debug\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\Program Files\CMake\share\cmake-3.23\Modules\CMakeCXXCompilerABI.cpp"
-  cmTC_ba619.vcxproj -> C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\CMakeTmp\Debug\cmTC_ba619.exe
+  cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_20a54.dir\Debug\\" /Fd"cmTC_20a54.dir\Debug\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\Program Files\CMake\share\cmake-3.23\Modules\CMakeCXXCompilerABI.cpp"
+  cmTC_20a54.vcxproj -> C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\CMakeTmp\Debug\cmTC_20a54.exe
 
 
 
 Determining if the include file sys/types.h exists passed with the following output:
-Change Dir: C:/Data/Meikai_Renderer/include/assimp-master/build/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/Mook/Desktop/assimp-master/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_86b89.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && .NET Framework용 Microsoft (R) Build Engine 버전 17.2.1+52cd2da31
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_fd56a.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && .NET Framework용 Microsoft (R) Build Engine 버전 17.2.1+52cd2da31
 Copyright (C) Microsoft Corporation. All rights reserved.
 
   Microsoft (R) C/C++ Optimizing Compiler Version 19.32.31332 for x64
   CheckIncludeFile.c
   Copyright (C) Microsoft Corporation.  All rights reserved.
-  cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_86b89.dir\Debug\\" /Fd"cmTC_86b89.dir\Debug\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\CMakeTmp\CheckIncludeFile.c"
-  cmTC_86b89.vcxproj -> C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\CMakeTmp\Debug\cmTC_86b89.exe
+  cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_fd56a.dir\Debug\\" /Fd"cmTC_fd56a.dir\Debug\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\CMakeTmp\CheckIncludeFile.c"
+  cmTC_fd56a.vcxproj -> C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\CMakeTmp\Debug\cmTC_fd56a.exe
 
 
 
 Determining if the include file stdint.h exists passed with the following output:
-Change Dir: C:/Data/Meikai_Renderer/include/assimp-master/build/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/Mook/Desktop/assimp-master/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_78d42.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && .NET Framework용 Microsoft (R) Build Engine 버전 17.2.1+52cd2da31
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_33797.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && .NET Framework용 Microsoft (R) Build Engine 버전 17.2.1+52cd2da31
 Copyright (C) Microsoft Corporation. All rights reserved.
 
   Microsoft (R) C/C++ Optimizing Compiler Version 19.32.31332 for x64
   CheckIncludeFile.c
   Copyright (C) Microsoft Corporation.  All rights reserved.
-  cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_78d42.dir\Debug\\" /Fd"cmTC_78d42.dir\Debug\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\CMakeTmp\CheckIncludeFile.c"
-  cmTC_78d42.vcxproj -> C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\CMakeTmp\Debug\cmTC_78d42.exe
+  cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_33797.dir\Debug\\" /Fd"cmTC_33797.dir\Debug\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\CMakeTmp\CheckIncludeFile.c"
+  cmTC_33797.vcxproj -> C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\CMakeTmp\Debug\cmTC_33797.exe
 
 
 
 Determining if the include file stddef.h exists passed with the following output:
-Change Dir: C:/Data/Meikai_Renderer/include/assimp-master/build/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/Mook/Desktop/assimp-master/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_78feb.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && .NET Framework용 Microsoft (R) Build Engine 버전 17.2.1+52cd2da31
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_920f7.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && .NET Framework용 Microsoft (R) Build Engine 버전 17.2.1+52cd2da31
 Copyright (C) Microsoft Corporation. All rights reserved.
 
   Microsoft (R) C/C++ Optimizing Compiler Version 19.32.31332 for x64
   CheckIncludeFile.c
   Copyright (C) Microsoft Corporation.  All rights reserved.
-  cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_78feb.dir\Debug\\" /Fd"cmTC_78feb.dir\Debug\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\CMakeTmp\CheckIncludeFile.c"
-  cmTC_78feb.vcxproj -> C:\Data\Meikai_Renderer\include\assimp-master\build\CMakeFiles\CMakeTmp\Debug\cmTC_78feb.exe
+  cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_920f7.dir\Debug\\" /Fd"cmTC_920f7.dir\Debug\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\CMakeTmp\CheckIncludeFile.c"
+  cmTC_920f7.vcxproj -> C:\Users\Mook\Desktop\assimp-master\build\CMakeFiles\CMakeTmp\Debug\cmTC_920f7.exe
 
 
 

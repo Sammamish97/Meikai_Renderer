@@ -1,4 +1,4 @@
-﻿  Building Custom Rule C:/Data/Meikai_Renderer/include/assimp-master/contrib/zlib/CMakeLists.txt
+﻿  Building Custom Rule C:/Users/Mook/Desktop/assimp-master/contrib/zlib/CMakeLists.txt
   adler32.c
   compress.c
   crc32.c
@@ -14,4 +14,4 @@
   trees.c
   uncompr.c
   zutil.c
-  zlibstatic.vcxproj -> C:\Data\Meikai_Renderer\include\assimp-master\build\contrib\zlib\Debug\zlibstaticd.lib
+  zlibstatic.vcxproj -> C:\Users\Mook\Desktop\assimp-master\build\contrib\zlib\Debug\zlibstaticd.lib

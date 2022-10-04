@@ -1,11 +1,11 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  SkeletalModel.cpp
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.h(14,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+  Animator.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Bone.h(39,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Bone.h(50,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Bone.h(61,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.h(15,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
 C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalMesh.h(20): message : see declaration of 'DXApp'
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(20,9): warning C4002: too many arguments for function-like macro invocation 'assert'
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(125,22): warning C4018: '<': signed/unsigned mismatch
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(146,26): warning C4018: '<': signed/unsigned mismatch
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(160,41): warning C4267: 'initializing': conversion from 'size_t' to 'UINT', possible loss of data
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(228,33): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.cpp(237,33): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Bone.h(90): warning C4715: 'Bone::GetPositionIndex': not all control paths return a value
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Bone.h(110): warning C4715: 'Bone::GetScaleIndex': not all control paths return a value
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Bone.h(100): warning C4715: 'Bone::GetRotationIndex': not all control paths return a value
   Meikai_Renderer.vcxproj -> C:\Data\Meikai_Renderer\Meikai_Renderer\bin\Meikai_Renderer_debug.exe

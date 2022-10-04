@@ -13,13 +13,12 @@ void SkeletalModel::LoadModel(const std::string& file_path, CommandList& command
     mImporter.SetPropertyBool(AI_CONFIG_FBX_USE_SKELETON_BONE_CONTAINER, true);
 
     pScene = mImporter.ReadFile(file_path,
-        aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace );
+        aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace | aiProcess_ConvertToLeftHanded);
 
     if (!pScene || pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !pScene->mRootNode)
     {
         assert("Fail to Load %s", file_path.c_str());
     }
-    mGlobalInverseTransform = pScene->mRootNode->mTransformation.Inverse();
 	name = file_path.substr(0, file_path.find_last_of('/'));
     ProcessNode(pScene->mRootNode, pScene, commandList);
 }
@@ -53,7 +52,7 @@ SkeletalMesh SkeletalModel::ProcessMesh(aiMesh* mesh, const aiScene* scene, Comm
     }
     if (mesh->HasBones())
     {
-        LoadBones(mesh, vertices);
+        ExtractBoneWeightForVertices(vertices, mesh, scene);
     }
 
     return SkeletalMesh(mApp, scene, vertices, indices, commandList);
@@ -120,119 +119,45 @@ void SkeletalModel::LoadIndices(aiMesh* mesh, std::vector<UINT>& indices)
     }
 }
 
-void SkeletalModel::LoadBones(aiMesh* mesh, std::vector<SkeletalVertex>& vertices)
+void SkeletalModel::ExtractBoneWeightForVertices(std::vector<SkeletalVertex>& vertices, aiMesh* mesh,
+	const aiScene* scene)
 {
-    for(int i = 0; i < mesh->mNumBones; ++i)
+    for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex)
     {
-        UINT boneIndex = 0;
-        std::string boneName(mesh->mBones[i]->mName.data);
-
-        if(mBoneMap.find(boneName) == mBoneMap.end())
+        int boneID = -1;
+        std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
+        if (mBoneInfoMap.find(boneName) == mBoneInfoMap.end())
         {
-            boneIndex = mTotalNumBones;
-            mTotalNumBones++;
-            BoneData bi;
-            mBoneData.push_back(bi);
+            BoneInfo newBoneInfo;
+            newBoneInfo.id = mBoneCounter;
+            newBoneInfo.offset = mesh->mBones[boneIndex]->mOffsetMatrix;
+            mBoneInfoMap[boneName] = newBoneInfo;
+            boneID = mBoneCounter;
+            mBoneCounter++;
         }
         else
         {
-            boneIndex = mBoneMap[boneName];
+            boneID = mBoneInfoMap[boneName].id;
         }
+        assert(boneID != -1);
+        auto weights = mesh->mBones[boneIndex]->mWeights;
+        int numWeights = mesh->mBones[boneIndex]->mNumWeights;
 
-        mBoneMap[boneName] = boneIndex;
-        mBoneData[boneIndex].offsetMatrix = mesh->mBones[i]->mOffsetMatrix.Inverse();
-        //Currently, mOffset is bone -> local. Therefore, inverse it.
-
-        for(int j = 0; j < mesh->mBones[i]->mNumWeights; ++j)
+        for (int weightIndex = 0; weightIndex < numWeights; ++weightIndex)
         {
-            UINT vertexID = mesh->mBones[i]->mWeights[j].mVertexId;
-            float weight = mesh->mBones[i]->mWeights[j].mWeight;
-            vertices[vertexID].AddBoneData(boneIndex, weight);
+            int vertexId = weights[weightIndex].mVertexId;
+            float weight = weights[weightIndex].mWeight;
+            assert(vertexId <= vertices.size());
+            vertices[vertexId].AddBoneData(boneID, weight);
         }
     }
+    
 }
 
-void SkeletalModel::GetBoneTransforms(float timeInSeconds, std::shared_ptr<Animation> animation,
-    std::vector<aiMatrix4x4>& Transforms)
+void SkeletalModel::Draw(CommandList& commandList)
 {
-    ReadNodeHierarchy(timeInSeconds, pScene->mRootNode, animation, aiMatrix4x4(), aiMatrix4x4(), aiVector3t(0.f));
-
-    UINT boneDataSize = mBoneData.size();
-    Transforms.resize(mBoneData.size());
-    for (UINT i = 0; i < boneDataSize; ++i)
-    {
-        Transforms[i] = mBoneData[i].finalMatrix;
-    }
-}
-
-void SkeletalModel::ReadNodeHierarchy(float timeInSeconds, const aiNode* pNode, std::shared_ptr<Animation> animation,
-    aiMatrix4x4 lastToTerminal, aiMatrix4x4 lastToRoot, aiVector3t<float> parentPos)
-{
-    std::string nodeName(pNode->mName.data);
-
-    aiMatrix4x4 toTerminal(pNode->mTransformation);//Parent -> Child
-    aiMatrix4x4 toRoot(pNode->mTransformation);
-    toRoot = toRoot.Inverse();//Child -> Parent
-
-    aiNodeAnim* pNodeAnim = animation->FindNodeAnim(nodeName);
-    if (pNodeAnim)
-    {
-        //nodeTransformation = animation->CalcNodeTransformation(pNodeAnim, timeInSeconds);
-    }
-
-    aiMatrix4x4 globalToRoot = toRoot * lastToRoot;//왜 순서가 다를까?
-    aiMatrix4x4 globalToTerminal = lastToTerminal * toTerminal;
-
-    if (mBoneMap.find(nodeName) != mBoneMap.end())
-    {
-        UINT boneIndex = mBoneMap[nodeName];
-        aiMatrix4x4 finalMat = globalToRoot * mBoneData[boneIndex].offsetMatrix;
-        mBoneData[boneIndex].finalMatrix = finalMat;
-
-        aiQuaterniont<float> rotation;
-        aiVector3t<float> position;
-
-        globalToTerminal.DecomposeNoScaling(rotation, position);
-        mJointPositions.push_back(MathHelper::AiVecToDxVec(position));
-        mBonePositions.push_back(MathHelper::AiVecToDxVec(parentPos));
-        mBonePositions.push_back(MathHelper::AiVecToDxVec(position));
-
-        parentPos = position;
-    }
-    for (UINT i = 0; i < pNode->mNumChildren; ++i)
-    {
-        ReadNodeHierarchy(timeInSeconds, pNode->mChildren[i], animation, globalToTerminal, globalToRoot, parentPos);
-    }
-}
-
-void SkeletalModel::Draw(CommandList& commandList, float time, std::shared_ptr<Animation> animation)
-{
-    mFinalTransforms.clear();
-    mJointPositions.clear();
-    mBonePositions.clear();
-
-    GetBoneTransforms(time, animation, mFinalTransforms);
-    commandList.SetGraphicsDynamicConstantBuffer(2, mFinalTransforms.size() * sizeof(aiMatrix4x4), mFinalTransforms.data());
     for (auto& mesh : mMeshes)
     {
-        mesh.Draw(commandList, 1.f, animation);
+        mesh.Draw(commandList);
     }
-}
-
-void SkeletalModel::DrawDebugJoints(CommandList& commandList)
-{
-    auto vertexCount = mJointPositions.size();
-    auto vertexSize = sizeof(mJointPositions[0]);
-    commandList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
-    commandList.SetDynamicVertexBuffer(0, vertexCount, vertexSize, mJointPositions.data());
-    commandList.Draw(vertexCount);
-}
-
-void SkeletalModel::DrawDebugBones(CommandList& commandList)
-{
-    auto vertexCount = mBonePositions.size();
-    auto vertexSize = sizeof(mBonePositions[0]);
-    commandList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
-    commandList.SetDynamicVertexBuffer(0, vertexCount, vertexSize, mBonePositions.data());
-    commandList.Draw(vertexCount);
 }

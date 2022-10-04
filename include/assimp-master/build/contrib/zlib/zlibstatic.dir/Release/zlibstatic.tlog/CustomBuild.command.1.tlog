@@ -1,6 +1,6 @@
-^C:\DATA\MEIKAI_RENDERER\INCLUDE\ASSIMP-MASTER\CONTRIB\ZLIB\CMAKELISTS.TXT
+^C:\USERS\MOOK\DESKTOP\ASSIMP-MASTER\CONTRIB\ZLIB\CMAKELISTS.TXT
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Data/Meikai_Renderer/include/assimp-master -BC:/Data/Meikai_Renderer/include/assimp-master/build --check-stamp-file C:/Data/Meikai_Renderer/include/assimp-master/build/contrib/zlib/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Mook/Desktop/assimp-master -BC:/Users/Mook/Desktop/assimp-master/build --check-stamp-file C:/Users/Mook/Desktop/assimp-master/build/contrib/zlib/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

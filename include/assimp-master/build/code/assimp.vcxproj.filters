@@ -1,1967 +1,1967 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\Assimp.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\Assimp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\CApi\CInterfaceIOWrapper.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\CApi\CInterfaceIOWrapper.cpp">
       <Filter>CApi</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\Compression.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\Compression.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\BaseImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\BaseImporter.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\BaseProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\BaseProcess.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\PostStepRegistry.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\PostStepRegistry.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\ImporterRegistry.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\ImporterRegistry.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\DefaultIOStream.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\DefaultIOStream.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\IOSystem.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\IOSystem.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\DefaultIOSystem.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\DefaultIOSystem.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\ZipArchiveIOSystem.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\ZipArchiveIOSystem.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\Importer.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\Importer.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\SGSpatialSort.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\SGSpatialSort.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\VertexTriangleAdjacency.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\VertexTriangleAdjacency.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\SpatialSort.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\SpatialSort.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\SceneCombiner.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\SceneCombiner.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\ScenePreprocessor.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\ScenePreprocessor.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\SkeletonMeshBuilder.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\SkeletonMeshBuilder.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\StandardShapes.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\StandardShapes.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\TargetAnimation.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\TargetAnimation.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\RemoveComments.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\RemoveComments.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\Subdivision.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\Subdivision.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\scene.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\scene.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\Bitmap.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\Bitmap.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\Version.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\Version.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\CreateAnimMesh.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\CreateAnimMesh.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\simd.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\simd.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\material.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\material.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\AssertHandler.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\AssertHandler.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\Exceptional.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\Exceptional.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\Base64.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\Base64.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\DefaultLogger.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\DefaultLogger.cpp">
       <Filter>Logging</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\Exporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Common\Exporter.cpp">
       <Filter>Exporter</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\CApi\AssimpCExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\CApi\AssimpCExport.cpp">
       <Filter>Exporter</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\CalcTangentsProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\CalcTangentsProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\ComputeUVMappingProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\ComputeUVMappingProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\ConvertToLHProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\ConvertToLHProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\EmbedTexturesProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\EmbedTexturesProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\FindDegenerates.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\FindDegenerates.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\FindInstancesProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\FindInstancesProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\FindInvalidDataProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\FindInvalidDataProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\FixNormalsStep.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\FixNormalsStep.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\DropFaceNormalsProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\DropFaceNormalsProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\GenFaceNormalsProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\GenFaceNormalsProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\GenVertexNormalsProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\GenVertexNormalsProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\PretransformVertices.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\PretransformVertices.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\ImproveCacheLocality.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\ImproveCacheLocality.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\JoinVerticesProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\JoinVerticesProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\LimitBoneWeightsProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\LimitBoneWeightsProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\RemoveRedundantMaterials.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\RemoveRedundantMaterials.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\RemoveVCProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\RemoveVCProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\SortByPTypeProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\SortByPTypeProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\SplitLargeMeshes.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\SplitLargeMeshes.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\TextureTransform.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\TextureTransform.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\TriangulateProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\TriangulateProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\ValidateDataStructure.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\ValidateDataStructure.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\OptimizeGraph.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\OptimizeGraph.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\OptimizeMeshes.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\OptimizeMeshes.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\DeboneProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\DeboneProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\ProcessHelper.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\ProcessHelper.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\MakeVerboseFormat.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\MakeVerboseFormat.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\ScaleProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\ScaleProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\ArmaturePopulate.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\ArmaturePopulate.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\GenBoundingBoxesProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\GenBoundingBoxesProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\SplitByBoneCountProcess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\SplitByBoneCountProcess.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Material\MaterialSystem.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Material\MaterialSystem.cpp">
       <Filter>MaterialSystem</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\STEPParser\STEPFileReader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\STEPParser\STEPFileReader.cpp">
       <Filter>STEPParser</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\STEPParser\STEPFileEncoding.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\STEPParser\STEPFileEncoding.cpp">
       <Filter>STEPParser</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\AMF\AMFImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\AMF\AMFImporter.cpp">
       <Filter>AssetLib\AMF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\AMF\AMFImporter_Geometry.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\AMF\AMFImporter_Geometry.cpp">
       <Filter>AssetLib\AMF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\AMF\AMFImporter_Material.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\AMF\AMFImporter_Material.cpp">
       <Filter>AssetLib\AMF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\AMF\AMFImporter_Postprocess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\AMF\AMFImporter_Postprocess.cpp">
       <Filter>AssetLib\AMF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3DS\3DSConverter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3DS\3DSConverter.cpp">
       <Filter>AssetLib\3DS</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3DS\3DSLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3DS\3DSLoader.cpp">
       <Filter>AssetLib\3DS</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\AC\ACLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\AC\ACLoader.cpp">
       <Filter>AssetLib\AC</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\ASE\ASELoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\ASE\ASELoader.cpp">
       <Filter>AssetLib\ASE</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\ASE\ASEParser.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\ASE\ASEParser.cpp">
       <Filter>AssetLib\ASE</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Assbin\AssbinLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Assbin\AssbinLoader.cpp">
       <Filter>AssetLib\ASSBIN</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\B3D\B3DImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\B3D\B3DImporter.cpp">
       <Filter>AssetLib\B3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\BVH\BVHLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\BVH\BVHLoader.cpp">
       <Filter>AssetLib\BVH</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Collada\ColladaHelper.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Collada\ColladaHelper.cpp">
       <Filter>AssetLib\COLLADA</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Collada\ColladaLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Collada\ColladaLoader.cpp">
       <Filter>AssetLib\COLLADA</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Collada\ColladaParser.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Collada\ColladaParser.cpp">
       <Filter>AssetLib\COLLADA</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\DXF\DXFLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\DXF\DXFLoader.cpp">
       <Filter>AssetLib\DXF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\CSM\CSMLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\CSM\CSMLoader.cpp">
       <Filter>AssetLib\CSM</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\HMP\HMPLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\HMP\HMPLoader.cpp">
       <Filter>AssetLib\HMP</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Irr\IRRMeshLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Irr\IRRMeshLoader.cpp">
       <Filter>AssetLib\IRRMESH</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Irr\IRRShared.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Irr\IRRShared.cpp">
       <Filter>AssetLib\IRRMESH</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IQM\IQMImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IQM\IQMImporter.cpp">
       <Filter>AssetLib\IQM</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Irr\IRRLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Irr\IRRLoader.cpp">
       <Filter>AssetLib\IRR</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\LWO\LWOAnimation.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\LWO\LWOAnimation.cpp">
       <Filter>AssetLib\LWO</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\LWO\LWOBLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\LWO\LWOBLoader.cpp">
       <Filter>AssetLib\LWO</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\LWO\LWOLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\LWO\LWOLoader.cpp">
       <Filter>AssetLib\LWO</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\LWO\LWOMaterial.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\LWO\LWOMaterial.cpp">
       <Filter>AssetLib\LWO</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\LWS\LWSLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\LWS\LWSLoader.cpp">
       <Filter>AssetLib\LWS</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\M3D\M3DImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\M3D\M3DImporter.cpp">
       <Filter>AssetLib\M3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\M3D\M3DWrapper.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\M3D\M3DWrapper.cpp">
       <Filter>AssetLib\M3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MD2\MD2Loader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MD2\MD2Loader.cpp">
       <Filter>AssetLib\MD2</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MD3\MD3Loader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MD3\MD3Loader.cpp">
       <Filter>AssetLib\MD3</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MD5\MD5Loader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MD5\MD5Loader.cpp">
       <Filter>AssetLib\MD5</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MD5\MD5Parser.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MD5\MD5Parser.cpp">
       <Filter>AssetLib\MD5</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDC\MDCLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDC\MDCLoader.cpp">
       <Filter>AssetLib\MDC</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDL\MDLLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDL\MDLLoader.cpp">
       <Filter>AssetLib\MDL</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDL\MDLMaterialLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDL\MDLMaterialLoader.cpp">
       <Filter>AssetLib\MDL</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDL\HalfLife\HL1MDLLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDL\HalfLife\HL1MDLLoader.cpp">
       <Filter>AssetLib\MDL</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDL\HalfLife\UniqueNameGenerator.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDL\HalfLife\UniqueNameGenerator.cpp">
       <Filter>AssetLib\MDL</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\NFF\NFFLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\NFF\NFFLoader.cpp">
       <Filter>AssetLib\NFF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\NDO\NDOLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\NDO\NDOLoader.cpp">
       <Filter>AssetLib\NDO</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\OFF\OFFLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\OFF\OFFLoader.cpp">
       <Filter>AssetLib\OFF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Obj\ObjFileImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Obj\ObjFileImporter.cpp">
       <Filter>AssetLib\OBJ</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Obj\ObjFileMtlImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Obj\ObjFileMtlImporter.cpp">
       <Filter>AssetLib\OBJ</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Obj\ObjFileParser.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Obj\ObjFileParser.cpp">
       <Filter>AssetLib\OBJ</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ogre\OgreImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ogre\OgreImporter.cpp">
       <Filter>AssetLib\OGRE</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ogre\OgreStructs.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ogre\OgreStructs.cpp">
       <Filter>AssetLib\OGRE</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ogre\OgreBinarySerializer.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ogre\OgreBinarySerializer.cpp">
       <Filter>AssetLib\OGRE</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ogre\OgreXmlSerializer.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ogre\OgreXmlSerializer.cpp">
       <Filter>AssetLib\OGRE</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ogre\OgreMaterial.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ogre\OgreMaterial.cpp">
       <Filter>AssetLib\OGRE</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\OpenGEX\OpenGEXImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\OpenGEX\OpenGEXImporter.cpp">
       <Filter>AssetLib\OPENGEX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ply\PlyLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ply\PlyLoader.cpp">
       <Filter>AssetLib\PLY</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ply\PlyParser.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ply\PlyParser.cpp">
       <Filter>AssetLib\PLY</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MS3D\MS3DLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MS3D\MS3DLoader.cpp">
       <Filter>AssetLib\MS3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\COB\COBLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\COB\COBLoader.cpp">
       <Filter>AssetLib\COB</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderLoader.cpp">
       <Filter>AssetLib\BLEND</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderDNA.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderDNA.cpp">
       <Filter>AssetLib\BLEND</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderScene.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderScene.cpp">
       <Filter>AssetLib\BLEND</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderModifier.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderModifier.cpp">
       <Filter>AssetLib\BLEND</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderBMesh.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderBMesh.cpp">
       <Filter>AssetLib\BLEND</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderTessellator.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderTessellator.cpp">
       <Filter>AssetLib\BLEND</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderCustomData.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderCustomData.cpp">
       <Filter>AssetLib\BLEND</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IFC\IFCLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IFC\IFCLoader.cpp">
       <Filter>AssetLib\IFC</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IFC\IFCReaderGen1_2x3.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IFC\IFCReaderGen1_2x3.cpp">
       <Filter>AssetLib\IFC</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IFC\IFCReaderGen2_2x3.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IFC\IFCReaderGen2_2x3.cpp">
       <Filter>AssetLib\IFC</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IFC\IFCUtil.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IFC\IFCUtil.cpp">
       <Filter>AssetLib\IFC</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IFC\IFCGeometry.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IFC\IFCGeometry.cpp">
       <Filter>AssetLib\IFC</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IFC\IFCMaterial.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IFC\IFCMaterial.cpp">
       <Filter>AssetLib\IFC</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IFC\IFCProfile.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IFC\IFCProfile.cpp">
       <Filter>AssetLib\IFC</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IFC\IFCCurve.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IFC\IFCCurve.cpp">
       <Filter>AssetLib\IFC</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IFC\IFCBoolean.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IFC\IFCBoolean.cpp">
       <Filter>AssetLib\IFC</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IFC\IFCOpenings.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IFC\IFCOpenings.cpp">
       <Filter>AssetLib\IFC</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\XGL\XGLLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\XGL\XGLLoader.cpp">
       <Filter>AssetLib\XGL</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXImporter.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXParser.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXParser.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXTokenizer.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXTokenizer.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXConverter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXConverter.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXUtil.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXUtil.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXDocument.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXDocument.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXProperties.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXProperties.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXMeshGeometry.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXMeshGeometry.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXMaterial.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXMaterial.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXModel.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXModel.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXAnimation.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXAnimation.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXNodeAttribute.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXNodeAttribute.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXDeformer.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXDeformer.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXBinaryTokenizer.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXBinaryTokenizer.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXDocumentUtil.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXDocumentUtil.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Q3D\Q3DLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Q3D\Q3DLoader.cpp">
       <Filter>AssetLib\Q3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Q3BSP\Q3BSPFileParser.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Q3BSP\Q3BSPFileParser.cpp">
       <Filter>AssetLib\Q3BSP</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Q3BSP\Q3BSPFileImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Q3BSP\Q3BSPFileImporter.cpp">
       <Filter>AssetLib\Q3BSP</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Raw\RawLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Raw\RawLoader.cpp">
       <Filter>AssetLib\RAW</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\SIB\SIBImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\SIB\SIBImporter.cpp">
       <Filter>AssetLib\SIB</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\SMD\SMDLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\SMD\SMDLoader.cpp">
       <Filter>AssetLib\SMD</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\STL\STLLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\STL\STLLoader.cpp">
       <Filter>AssetLib\STL</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Terragen\TerragenLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Terragen\TerragenLoader.cpp">
       <Filter>AssetLib\TERRAGEN</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Unreal\UnrealLoader.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Unreal\UnrealLoader.cpp">
       <Filter>AssetLib\3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X\XFileImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X\XFileImporter.cpp">
       <Filter>AssetLib\X</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X\XFileParser.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X\XFileParser.cpp">
       <Filter>AssetLib\X</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DImporter.cpp">
       <Filter>AssetLib\X3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DImporter_Geometry2D.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DImporter_Geometry2D.cpp">
       <Filter>AssetLib\X3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DImporter_Geometry3D.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DImporter_Geometry3D.cpp">
       <Filter>AssetLib\X3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DImporter_Group.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DImporter_Group.cpp">
       <Filter>AssetLib\X3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DImporter_Light.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DImporter_Light.cpp">
       <Filter>AssetLib\X3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DImporter_Metadata.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DImporter_Metadata.cpp">
       <Filter>AssetLib\X3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DImporter_Networking.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DImporter_Networking.cpp">
       <Filter>AssetLib\X3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DImporter_Postprocess.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DImporter_Postprocess.cpp">
       <Filter>AssetLib\X3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DImporter_Rendering.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DImporter_Rendering.cpp">
       <Filter>AssetLib\X3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DImporter_Shape.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DImporter_Shape.cpp">
       <Filter>AssetLib\X3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DImporter_Texturing.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DImporter_Texturing.cpp">
       <Filter>AssetLib\X3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DGeoHelper.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DGeoHelper.cpp">
       <Filter>AssetLib\X3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DXmlHelper.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DXmlHelper.cpp">
       <Filter>AssetLib\X3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF\glTFCommon.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF\glTFCommon.cpp">
       <Filter>AssetLib\GLTF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF\glTFImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF\glTFImporter.cpp">
       <Filter>AssetLib\GLTF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF2\glTF2Importer.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF2\glTF2Importer.cpp">
       <Filter>AssetLib\GLTF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3MF\XmlSerializer.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3MF\XmlSerializer.cpp">
       <Filter>AssetLib\3MF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3MF\D3MFImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3MF\D3MFImporter.cpp">
       <Filter>AssetLib\3MF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3MF\D3MFOpcPackage.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3MF\D3MFOpcPackage.cpp">
       <Filter>AssetLib\3MF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MMD\MMDImporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MMD\MMDImporter.cpp">
       <Filter>AssetLib\MMD</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MMD\MMDPmxParser.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MMD\MMDPmxParser.cpp">
       <Filter>AssetLib\MMD</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Obj\ObjExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Obj\ObjExporter.cpp">
       <Filter>AssetLib\OBJ</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\OpenGEX\OpenGEXExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\OpenGEX\OpenGEXExporter.cpp">
       <Filter>AssetLib\OPENGEX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ply\PlyExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ply\PlyExporter.cpp">
       <Filter>AssetLib\PLY</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3DS\3DSExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3DS\3DSExporter.cpp">
       <Filter>AssetLib\3DS</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Assbin\AssbinExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Assbin\AssbinExporter.cpp">
       <Filter>AssetLib\ASSBIN</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Assbin\AssbinFileWriter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Assbin\AssbinFileWriter.cpp">
       <Filter>AssetLib\ASSBIN</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Assxml\AssxmlExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Assxml\AssxmlExporter.cpp">
       <Filter>AssetLib\ASSXML</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Assxml\AssxmlFileWriter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Assxml\AssxmlFileWriter.cpp">
       <Filter>AssetLib\ASSXML</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\M3D\M3DExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\M3D\M3DExporter.cpp">
       <Filter>AssetLib\M3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Collada\ColladaExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Collada\ColladaExporter.cpp">
       <Filter>AssetLib\COLLADA</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXExporter.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXExportNode.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXExportNode.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXExportProperty.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXExportProperty.cpp">
       <Filter>AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\STL\STLExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\STL\STLExporter.cpp">
       <Filter>AssetLib\STL</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X\XFileExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X\XFileExporter.cpp">
       <Filter>AssetLib\X</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DExporter.cpp">
       <Filter>AssetLib\X3D</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF\glTFExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF\glTFExporter.cpp">
       <Filter>AssetLib\GLTF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF2\glTF2Exporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF2\glTF2Exporter.cpp">
       <Filter>AssetLib\GLTF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3MF\D3MFExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3MF\D3MFExporter.cpp">
       <Filter>AssetLib\3MF</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Pbrt\PbrtExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\Pbrt\PbrtExporter.cpp">
       <Filter>AssetLib\PBRT</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Assjson\cencode.c">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Assjson\cencode.c">
       <Filter>AssetLib\ASSJSON</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Assjson\json_exporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Assjson\json_exporter.cpp">
       <Filter>AssetLib\ASSJSON</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Assjson\mesh_splitter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Assjson\mesh_splitter.cpp">
       <Filter>AssetLib\ASSJSON</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Step\StepExporter.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Step\StepExporter.cpp">
       <Filter>AssetLib\STEP</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\unzip\crypt.c">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\unzip\crypt.c">
       <Filter>Contrib\unzip</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\unzip\ioapi.c">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\unzip\ioapi.c">
       <Filter>Contrib\unzip</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\unzip\unzip.c">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\unzip\unzip.c">
       <Filter>Contrib\unzip</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\poly2tri\poly2tri\common\shapes.cc">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\poly2tri\poly2tri\common\shapes.cc">
       <Filter>Contrib\Poly2Tri</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\poly2tri\poly2tri\sweep\advancing_front.cc">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\poly2tri\poly2tri\sweep\advancing_front.cc">
       <Filter>Contrib\Poly2Tri</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\poly2tri\poly2tri\sweep\cdt.cc">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\poly2tri\poly2tri\sweep\cdt.cc">
       <Filter>Contrib\Poly2Tri</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\poly2tri\poly2tri\sweep\sweep.cc">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\poly2tri\poly2tri\sweep\sweep.cc">
       <Filter>Contrib\Poly2Tri</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\poly2tri\poly2tri\sweep\sweep_context.cc">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\poly2tri\poly2tri\sweep\sweep_context.cc">
       <Filter>Contrib\Poly2Tri</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\clipper\clipper.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\clipper\clipper.cpp">
       <Filter>Contrib\Clipper</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\openddlparser\code\OpenDDLParser.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\openddlparser\code\OpenDDLParser.cpp">
       <Filter>Contrib\openddl_parser</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\openddlparser\code\DDLNode.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\openddlparser\code\DDLNode.cpp">
       <Filter>Contrib\openddl_parser</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\openddlparser\code\OpenDDLCommon.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\openddlparser\code\OpenDDLCommon.cpp">
       <Filter>Contrib\openddl_parser</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\openddlparser\code\OpenDDLExport.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\openddlparser\code\OpenDDLExport.cpp">
       <Filter>Contrib\openddl_parser</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\openddlparser\code\Value.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\openddlparser\code\Value.cpp">
       <Filter>Contrib\openddl_parser</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\openddlparser\code\OpenDDLStream.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\openddlparser\code\OpenDDLStream.cpp">
       <Filter>Contrib\openddl_parser</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcArithmeticCodec.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcArithmeticCodec.cpp">
       <Filter>Contrib\open3dgc</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcDynamicVectorDecoder.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcDynamicVectorDecoder.cpp">
       <Filter>Contrib\open3dgc</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcDynamicVectorEncoder.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcDynamicVectorEncoder.cpp">
       <Filter>Contrib\open3dgc</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcTools.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcTools.cpp">
       <Filter>Contrib\open3dgc</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcTriangleFans.cpp">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcTriangleFans.cpp">
       <Filter>Contrib\open3dgc</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\zip\src\zip.c">
+    <ClCompile Include="C:\Users\Mook\Desktop\assimp-master\contrib\zip\src\zip.c">
       <Filter>ziplib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\CApi\CInterfaceIOWrapper.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\CApi\CInterfaceIOWrapper.h">
       <Filter>CApi</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\StbCommon.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\StbCommon.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\Compression.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\Compression.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\BaseProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\BaseProcess.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\Importer.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\Importer.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\ScenePrivate.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\ScenePrivate.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\DefaultProgressHandler.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\DefaultProgressHandler.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\PolyTools.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\PolyTools.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\Maybe.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\Maybe.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\IFF.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\IFF.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\VertexTriangleAdjacency.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\VertexTriangleAdjacency.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\ScenePreprocessor.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\ScenePreprocessor.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\TargetAnimation.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\TargetAnimation.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\simd.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\simd.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\DefaultLogger.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\DefaultLogger.hpp">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\LogStream.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\LogStream.hpp">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\Logger.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\Logger.hpp">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\NullLogger.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\NullLogger.hpp">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\Win32DebugLogStream.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\Win32DebugLogStream.h">
       <Filter>Logging</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\FileLogStream.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\FileLogStream.h">
       <Filter>Logging</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Common\StdOStreamLogStream.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Common\StdOStreamLogStream.h">
       <Filter>Logging</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\BlobIOSystem.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\BlobIOSystem.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\CalcTangentsProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\CalcTangentsProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\ComputeUVMappingProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\ComputeUVMappingProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\ConvertToLHProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\ConvertToLHProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\EmbedTexturesProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\EmbedTexturesProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\FindDegenerates.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\FindDegenerates.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\FindInstancesProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\FindInstancesProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\FindInvalidDataProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\FindInvalidDataProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\FixNormalsStep.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\FixNormalsStep.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\DropFaceNormalsProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\DropFaceNormalsProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\GenFaceNormalsProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\GenFaceNormalsProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\GenVertexNormalsProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\GenVertexNormalsProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\PretransformVertices.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\PretransformVertices.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\ImproveCacheLocality.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\ImproveCacheLocality.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\JoinVerticesProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\JoinVerticesProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\LimitBoneWeightsProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\LimitBoneWeightsProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\RemoveRedundantMaterials.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\RemoveRedundantMaterials.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\RemoveVCProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\RemoveVCProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\SortByPTypeProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\SortByPTypeProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\SplitLargeMeshes.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\SplitLargeMeshes.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\TextureTransform.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\TextureTransform.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\TriangulateProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\TriangulateProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\ValidateDataStructure.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\ValidateDataStructure.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\OptimizeGraph.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\OptimizeGraph.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\OptimizeMeshes.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\OptimizeMeshes.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\DeboneProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\DeboneProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\ProcessHelper.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\ProcessHelper.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\MakeVerboseFormat.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\MakeVerboseFormat.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\ScaleProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\ScaleProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\ArmaturePopulate.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\ArmaturePopulate.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\GenBoundingBoxesProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\GenBoundingBoxesProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\PostProcessing\SplitByBoneCountProcess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\PostProcessing\SplitByBoneCountProcess.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Material\MaterialSystem.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Material\MaterialSystem.h">
       <Filter>MaterialSystem</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\STEPParser\STEPFileReader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\STEPParser\STEPFileReader.h">
       <Filter>STEPParser</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\STEPParser\STEPFileEncoding.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\STEPParser\STEPFileEncoding.h">
       <Filter>STEPParser</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\AMF\AMFImporter.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\AMF\AMFImporter.hpp">
       <Filter>AssetLib\AMF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\AMF\AMFImporter_Node.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\AMF\AMFImporter_Node.hpp">
       <Filter>AssetLib\AMF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3DS\3DSHelper.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3DS\3DSHelper.h">
       <Filter>AssetLib\3DS</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3DS\3DSLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3DS\3DSLoader.h">
       <Filter>AssetLib\3DS</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\AC\ACLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\AC\ACLoader.h">
       <Filter>AssetLib\AC</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\ASE\ASELoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\ASE\ASELoader.h">
       <Filter>AssetLib\ASE</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\ASE\ASEParser.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\ASE\ASEParser.h">
       <Filter>AssetLib\ASE</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Assbin\AssbinLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Assbin\AssbinLoader.h">
       <Filter>AssetLib\ASSBIN</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\B3D\B3DImporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\B3D\B3DImporter.h">
       <Filter>AssetLib\B3D</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\BVH\BVHLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\BVH\BVHLoader.h">
       <Filter>AssetLib\BVH</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Collada\ColladaHelper.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Collada\ColladaHelper.h">
       <Filter>AssetLib\COLLADA</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Collada\ColladaLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Collada\ColladaLoader.h">
       <Filter>AssetLib\COLLADA</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Collada\ColladaParser.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Collada\ColladaParser.h">
       <Filter>AssetLib\COLLADA</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\DXF\DXFLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\DXF\DXFLoader.h">
       <Filter>AssetLib\DXF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\DXF\DXFHelper.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\DXF\DXFHelper.h">
       <Filter>AssetLib\DXF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\CSM\CSMLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\CSM\CSMLoader.h">
       <Filter>AssetLib\CSM</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\HMP\HMPFileData.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\HMP\HMPFileData.h">
       <Filter>AssetLib\HMP</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\HMP\HMPLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\HMP\HMPLoader.h">
       <Filter>AssetLib\HMP</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\HMP\HalfLifeFileData.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\HMP\HalfLifeFileData.h">
       <Filter>AssetLib\HMP</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Irr\IRRMeshLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Irr\IRRMeshLoader.h">
       <Filter>AssetLib\IRRMESH</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Irr\IRRShared.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Irr\IRRShared.h">
       <Filter>AssetLib\IRRMESH</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IQM\iqm.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IQM\iqm.h">
       <Filter>AssetLib\IQM</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IQM\IQMImporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IQM\IQMImporter.h">
       <Filter>AssetLib\IQM</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Irr\IRRLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Irr\IRRLoader.h">
       <Filter>AssetLib\IRR</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\LWO\LWOAnimation.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\LWO\LWOAnimation.h">
       <Filter>AssetLib\LWO</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\LWO\LWOFileData.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\LWO\LWOFileData.h">
       <Filter>AssetLib\LWO</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\LWO\LWOLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\LWO\LWOLoader.h">
       <Filter>AssetLib\LWO</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\LWS\LWSLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\LWS\LWSLoader.h">
       <Filter>AssetLib\LWS</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\M3D\M3DMaterials.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\M3D\M3DMaterials.h">
       <Filter>AssetLib\M3D</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\M3D\M3DImporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\M3D\M3DImporter.h">
       <Filter>AssetLib\M3D</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\M3D\M3DWrapper.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\M3D\M3DWrapper.h">
       <Filter>AssetLib\M3D</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\M3D\m3d.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\M3D\m3d.h">
       <Filter>AssetLib\M3D</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MD2\MD2FileData.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MD2\MD2FileData.h">
       <Filter>AssetLib\MD2</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MD2\MD2Loader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MD2\MD2Loader.h">
       <Filter>AssetLib\MD2</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MD2\MD2NormalTable.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MD2\MD2NormalTable.h">
       <Filter>AssetLib\MD2</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MD3\MD3FileData.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MD3\MD3FileData.h">
       <Filter>AssetLib\MD3</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MD3\MD3Loader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MD3\MD3Loader.h">
       <Filter>AssetLib\MD3</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MD5\MD5Loader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MD5\MD5Loader.h">
       <Filter>AssetLib\MD5</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MD5\MD5Parser.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MD5\MD5Parser.h">
       <Filter>AssetLib\MD5</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDC\MDCFileData.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDC\MDCFileData.h">
       <Filter>AssetLib\MDC</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDC\MDCLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDC\MDCLoader.h">
       <Filter>AssetLib\MDC</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDC\MDCNormalTable.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDC\MDCNormalTable.h">
       <Filter>AssetLib\MDC</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDL\MDLDefaultColorMap.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDL\MDLDefaultColorMap.h">
       <Filter>AssetLib\MDL</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDL\MDLFileData.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDL\MDLFileData.h">
       <Filter>AssetLib\MDL</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDL\MDLLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDL\MDLLoader.h">
       <Filter>AssetLib\MDL</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDL\HalfLife\HalfLifeMDLBaseHeader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDL\HalfLife\HalfLifeMDLBaseHeader.h">
       <Filter>AssetLib\MDL</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDL\HalfLife\HL1FileData.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDL\HalfLife\HL1FileData.h">
       <Filter>AssetLib\MDL</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDL\HalfLife\HL1MDLLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDL\HalfLife\HL1MDLLoader.h">
       <Filter>AssetLib\MDL</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDL\HalfLife\HL1ImportDefinitions.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDL\HalfLife\HL1ImportDefinitions.h">
       <Filter>AssetLib\MDL</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDL\HalfLife\HL1ImportSettings.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDL\HalfLife\HL1ImportSettings.h">
       <Filter>AssetLib\MDL</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDL\HalfLife\HL1MeshTrivert.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDL\HalfLife\HL1MeshTrivert.h">
       <Filter>AssetLib\MDL</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDL\HalfLife\LogFunctions.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDL\HalfLife\LogFunctions.h">
       <Filter>AssetLib\MDL</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MDL\HalfLife\UniqueNameGenerator.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MDL\HalfLife\UniqueNameGenerator.h">
       <Filter>AssetLib\MDL</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\NFF\NFFLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\NFF\NFFLoader.h">
       <Filter>AssetLib\NFF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\NDO\NDOLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\NDO\NDOLoader.h">
       <Filter>AssetLib\NDO</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\OFF\OFFLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\OFF\OFFLoader.h">
       <Filter>AssetLib\OFF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Obj\ObjFileData.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Obj\ObjFileData.h">
       <Filter>AssetLib\OBJ</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Obj\ObjFileImporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Obj\ObjFileImporter.h">
       <Filter>AssetLib\OBJ</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Obj\ObjFileMtlImporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Obj\ObjFileMtlImporter.h">
       <Filter>AssetLib\OBJ</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Obj\ObjFileParser.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Obj\ObjFileParser.h">
       <Filter>AssetLib\OBJ</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Obj\ObjTools.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Obj\ObjTools.h">
       <Filter>AssetLib\OBJ</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ogre\OgreImporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ogre\OgreImporter.h">
       <Filter>AssetLib\OGRE</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ogre\OgreStructs.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ogre\OgreStructs.h">
       <Filter>AssetLib\OGRE</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ogre\OgreParsingUtils.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ogre\OgreParsingUtils.h">
       <Filter>AssetLib\OGRE</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ogre\OgreBinarySerializer.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ogre\OgreBinarySerializer.h">
       <Filter>AssetLib\OGRE</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ogre\OgreXmlSerializer.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ogre\OgreXmlSerializer.h">
       <Filter>AssetLib\OGRE</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\OpenGEX\OpenGEXImporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\OpenGEX\OpenGEXImporter.h">
       <Filter>AssetLib\OPENGEX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\OpenGEX\OpenGEXStructs.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\OpenGEX\OpenGEXStructs.h">
       <Filter>AssetLib\OPENGEX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ply\PlyLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ply\PlyLoader.h">
       <Filter>AssetLib\PLY</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ply\PlyParser.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ply\PlyParser.h">
       <Filter>AssetLib\PLY</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MS3D\MS3DLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MS3D\MS3DLoader.h">
       <Filter>AssetLib\MS3D</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\COB\COBLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\COB\COBLoader.h">
       <Filter>AssetLib\COB</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\COB\COBScene.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\COB\COBScene.h">
       <Filter>AssetLib\COB</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderLoader.h">
       <Filter>AssetLib\BLEND</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderDNA.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderDNA.h">
       <Filter>AssetLib\BLEND</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderDNA.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderDNA.inl">
       <Filter>AssetLib\BLEND</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderScene.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderScene.h">
       <Filter>AssetLib\BLEND</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderSceneGen.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderSceneGen.h">
       <Filter>AssetLib\BLEND</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderIntermediate.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderIntermediate.h">
       <Filter>AssetLib\BLEND</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderModifier.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderModifier.h">
       <Filter>AssetLib\BLEND</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderBMesh.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderBMesh.h">
       <Filter>AssetLib\BLEND</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderTessellator.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderTessellator.h">
       <Filter>AssetLib\BLEND</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Blender\BlenderCustomData.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Blender\BlenderCustomData.h">
       <Filter>AssetLib\BLEND</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IFC\IFCLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IFC\IFCLoader.h">
       <Filter>AssetLib\IFC</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IFC\IFCReaderGen_2x3.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IFC\IFCReaderGen_2x3.h">
       <Filter>AssetLib\IFC</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\IFC\IFCUtil.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\IFC\IFCUtil.h">
       <Filter>AssetLib\IFC</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\XGL\XGLLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\XGL\XGLLoader.h">
       <Filter>AssetLib\XGL</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXCompileConfig.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXCompileConfig.h">
       <Filter>AssetLib\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXImporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXImporter.h">
       <Filter>AssetLib\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXParser.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXParser.h">
       <Filter>AssetLib\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXTokenizer.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXTokenizer.h">
       <Filter>AssetLib\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXImportSettings.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXImportSettings.h">
       <Filter>AssetLib\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXConverter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXConverter.h">
       <Filter>AssetLib\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXUtil.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXUtil.h">
       <Filter>AssetLib\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXDocument.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXDocument.h">
       <Filter>AssetLib\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXProperties.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXProperties.h">
       <Filter>AssetLib\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXMeshGeometry.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXMeshGeometry.h">
       <Filter>AssetLib\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXCommon.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXCommon.h">
       <Filter>AssetLib\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Q3D\Q3DLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Q3D\Q3DLoader.h">
       <Filter>AssetLib\Q3D</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Q3BSP\Q3BSPFileData.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Q3BSP\Q3BSPFileData.h">
       <Filter>AssetLib\Q3BSP</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Q3BSP\Q3BSPFileParser.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Q3BSP\Q3BSPFileParser.h">
       <Filter>AssetLib\Q3BSP</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Q3BSP\Q3BSPFileImporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Q3BSP\Q3BSPFileImporter.h">
       <Filter>AssetLib\Q3BSP</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Raw\RawLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Raw\RawLoader.h">
       <Filter>AssetLib\RAW</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\SIB\SIBImporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\SIB\SIBImporter.h">
       <Filter>AssetLib\SIB</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\SMD\SMDLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\SMD\SMDLoader.h">
       <Filter>AssetLib\SMD</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\STL\STLLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\STL\STLLoader.h">
       <Filter>AssetLib\STL</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Terragen\TerragenLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Terragen\TerragenLoader.h">
       <Filter>AssetLib\TERRAGEN</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Unreal\UnrealLoader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Unreal\UnrealLoader.h">
       <Filter>AssetLib\3D</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X\XFileHelper.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X\XFileHelper.h">
       <Filter>AssetLib\X</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X\XFileImporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X\XFileImporter.h">
       <Filter>AssetLib\X</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X\XFileParser.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X\XFileParser.h">
       <Filter>AssetLib\X</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DImporter.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DImporter.hpp">
       <Filter>AssetLib\X3D</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DImporter_Macro.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DImporter_Macro.hpp">
       <Filter>AssetLib\X3D</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DImporter_Node.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DImporter_Node.hpp">
       <Filter>AssetLib\X3D</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DGeoHelper.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DGeoHelper.h">
       <Filter>AssetLib\X3D</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DXmlHelper.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DXmlHelper.h">
       <Filter>AssetLib\X3D</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF\glTFCommon.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF\glTFCommon.h">
       <Filter>AssetLib\GLTF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF\glTFAsset.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF\glTFAsset.h">
       <Filter>AssetLib\GLTF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF\glTFAsset.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF\glTFAsset.inl">
       <Filter>AssetLib\GLTF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF\glTFAssetWriter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF\glTFAssetWriter.h">
       <Filter>AssetLib\GLTF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF\glTFAssetWriter.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF\glTFAssetWriter.inl">
       <Filter>AssetLib\GLTF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF\glTFImporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF\glTFImporter.h">
       <Filter>AssetLib\GLTF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF2\glTF2Asset.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF2\glTF2Asset.h">
       <Filter>AssetLib\GLTF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF2\glTF2Asset.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF2\glTF2Asset.inl">
       <Filter>AssetLib\GLTF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF2\glTF2AssetWriter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF2\glTF2AssetWriter.h">
       <Filter>AssetLib\GLTF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF2\glTF2AssetWriter.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF2\glTF2AssetWriter.inl">
       <Filter>AssetLib\GLTF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF2\glTF2Importer.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF2\glTF2Importer.h">
       <Filter>AssetLib\GLTF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3MF\3MFTypes.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3MF\3MFTypes.h">
       <Filter>AssetLib\3MF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3MF\XmlSerializer.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3MF\XmlSerializer.h">
       <Filter>AssetLib\3MF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3MF\D3MFImporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3MF\D3MFImporter.h">
       <Filter>AssetLib\3MF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3MF\D3MFOpcPackage.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3MF\D3MFOpcPackage.h">
       <Filter>AssetLib\3MF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3MF\3MFXmlTags.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3MF\3MFXmlTags.h">
       <Filter>AssetLib\3MF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MMD\MMDCpp14.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MMD\MMDCpp14.h">
       <Filter>AssetLib\MMD</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MMD\MMDImporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MMD\MMDImporter.h">
       <Filter>AssetLib\MMD</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MMD\MMDPmdParser.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MMD\MMDPmdParser.h">
       <Filter>AssetLib\MMD</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MMD\MMDPmxParser.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MMD\MMDPmxParser.h">
       <Filter>AssetLib\MMD</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\MMD\MMDVmdParser.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\MMD\MMDVmdParser.h">
       <Filter>AssetLib\MMD</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Obj\ObjExporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Obj\ObjExporter.h">
       <Filter>AssetLib\OBJ</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\OpenGEX\OpenGEXExporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\OpenGEX\OpenGEXExporter.h">
       <Filter>AssetLib\OPENGEX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Ply\PlyExporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Ply\PlyExporter.h">
       <Filter>AssetLib\PLY</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3DS\3DSExporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3DS\3DSExporter.h">
       <Filter>AssetLib\3DS</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Assbin\AssbinExporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Assbin\AssbinExporter.h">
       <Filter>AssetLib\ASSBIN</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Assbin\AssbinFileWriter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Assbin\AssbinFileWriter.h">
       <Filter>AssetLib\ASSBIN</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Assxml\AssxmlExporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Assxml\AssxmlExporter.h">
       <Filter>AssetLib\ASSXML</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Assxml\AssxmlFileWriter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Assxml\AssxmlFileWriter.h">
       <Filter>AssetLib\ASSXML</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\M3D\M3DExporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\M3D\M3DExporter.h">
       <Filter>AssetLib\M3D</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Collada\ColladaExporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Collada\ColladaExporter.h">
       <Filter>AssetLib\COLLADA</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXExporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXExporter.h">
       <Filter>AssetLib\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXExportNode.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXExportNode.h">
       <Filter>AssetLib\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\FBX\FBXExportProperty.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\FBX\FBXExportProperty.h">
       <Filter>AssetLib\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\STL\STLExporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\STL\STLExporter.h">
       <Filter>AssetLib\STL</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X\XFileExporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X\XFileExporter.h">
       <Filter>AssetLib\X</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\X3D\X3DExporter.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\X3D\X3DExporter.hpp">
       <Filter>AssetLib\X3D</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF\glTFExporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF\glTFExporter.h">
       <Filter>AssetLib\GLTF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\glTF2\glTF2Exporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\glTF2\glTF2Exporter.h">
       <Filter>AssetLib\GLTF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\3MF\D3MFExporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\3MF\D3MFExporter.h">
       <Filter>AssetLib\3MF</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\Pbrt\PbrtExporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\Pbrt\PbrtExporter.h">
       <Filter>AssetLib\PBRT</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Assjson\cencode.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Assjson\cencode.h">
       <Filter>AssetLib\ASSJSON</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Assjson\mesh_splitter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Assjson\mesh_splitter.h">
       <Filter>AssetLib\ASSJSON</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\code\AssetLib\Step\StepExporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\code\AssetLib\Step\StepExporter.h">
       <Filter>AssetLib\STEP</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\unzip\crypt.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\unzip\crypt.h">
       <Filter>Contrib\unzip</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\unzip\ioapi.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\unzip\ioapi.h">
       <Filter>Contrib\unzip</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\unzip\unzip.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\unzip\unzip.h">
       <Filter>Contrib\unzip</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\poly2tri\poly2tri\common\shapes.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\poly2tri\poly2tri\common\shapes.h">
       <Filter>Contrib\Poly2Tri</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\poly2tri\poly2tri\common\utils.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\poly2tri\poly2tri\common\utils.h">
       <Filter>Contrib\Poly2Tri</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\poly2tri\poly2tri\sweep\advancing_front.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\poly2tri\poly2tri\sweep\advancing_front.h">
       <Filter>Contrib\Poly2Tri</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\poly2tri\poly2tri\sweep\cdt.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\poly2tri\poly2tri\sweep\cdt.h">
       <Filter>Contrib\Poly2Tri</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\poly2tri\poly2tri\sweep\sweep.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\poly2tri\poly2tri\sweep\sweep.h">
       <Filter>Contrib\Poly2Tri</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\poly2tri\poly2tri\sweep\sweep_context.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\poly2tri\poly2tri\sweep\sweep_context.h">
       <Filter>Contrib\Poly2Tri</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\clipper\clipper.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\clipper\clipper.hpp">
       <Filter>Contrib\Clipper</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\openddlparser\include\openddlparser\OpenDDLParser.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\openddlparser\include\openddlparser\OpenDDLParser.h">
       <Filter>Contrib\openddl_parser</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\openddlparser\include\openddlparser\OpenDDLParserUtils.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\openddlparser\include\openddlparser\OpenDDLParserUtils.h">
       <Filter>Contrib\openddl_parser</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\openddlparser\include\openddlparser\OpenDDLCommon.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\openddlparser\include\openddlparser\OpenDDLCommon.h">
       <Filter>Contrib\openddl_parser</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\openddlparser\include\openddlparser\OpenDDLExport.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\openddlparser\include\openddlparser\OpenDDLExport.h">
       <Filter>Contrib\openddl_parser</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\openddlparser\include\openddlparser\OpenDDLStream.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\openddlparser\include\openddlparser\OpenDDLStream.h">
       <Filter>Contrib\openddl_parser</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\openddlparser\include\openddlparser\DDLNode.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\openddlparser\include\openddlparser\DDLNode.h">
       <Filter>Contrib\openddl_parser</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\openddlparser\include\openddlparser\Value.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\openddlparser\include\openddlparser\Value.h">
       <Filter>Contrib\openddl_parser</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcAdjacencyInfo.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcAdjacencyInfo.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcArithmeticCodec.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcArithmeticCodec.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcBinaryStream.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcBinaryStream.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcCommon.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcCommon.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcDVEncodeParams.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcDVEncodeParams.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcDynamicVectorDecoder.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcDynamicVectorDecoder.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcDynamicVectorEncoder.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcDynamicVectorEncoder.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcDynamicVector.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcDynamicVector.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcFIFO.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcFIFO.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcIndexedFaceSet.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcIndexedFaceSet.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcIndexedFaceSet.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcIndexedFaceSet.inl">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcSC3DMCDecoder.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcSC3DMCDecoder.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcSC3DMCDecoder.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcSC3DMCDecoder.inl">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcSC3DMCEncodeParams.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcSC3DMCEncodeParams.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcSC3DMCEncoder.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcSC3DMCEncoder.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcSC3DMCEncoder.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcSC3DMCEncoder.inl">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcTimer.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcTimer.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcTriangleFans.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcTriangleFans.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcTriangleListDecoder.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcTriangleListDecoder.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcTriangleListDecoder.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcTriangleListDecoder.inl">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcTriangleListEncoder.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcTriangleListEncoder.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcTriangleListEncoder.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcTriangleListEncoder.inl">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcVector.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcVector.h">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\Open3DGC\o3dgcVector.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\Open3DGC\o3dgcVector.inl">
       <Filter>Contrib\open3dgc</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\zip\src\miniz.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\zip\src\miniz.h">
       <Filter>ziplib</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\zip\src\zip.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\zip\src\zip.h">
       <Filter>ziplib</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\pugixml\src\pugiconfig.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\pugixml\src\pugiconfig.hpp">
       <Filter>Contrib\Pugixml</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\pugixml\src\pugixml.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\pugixml\src\pugixml.hpp">
       <Filter>Contrib\Pugixml</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\contrib\stb\stb_image.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\contrib\stb\stb_image.h">
       <Filter>Contrib\stb</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\anim.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\anim.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\aabb.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\aabb.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\ai_assert.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\ai_assert.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\camera.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\camera.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\color4.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\color4.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\color4.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\color4.inl">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\build\include\assimp\config.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\build\include\assimp\config.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\ColladaMetaData.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\ColladaMetaData.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\commonMetaData.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\commonMetaData.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\defs.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\defs.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\cfileio.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\cfileio.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\light.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\light.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\material.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\material.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\material.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\material.inl">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\matrix3x3.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\matrix3x3.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\matrix3x3.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\matrix3x3.inl">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\matrix4x4.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\matrix4x4.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\matrix4x4.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\matrix4x4.inl">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\mesh.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\mesh.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\ObjMaterial.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\ObjMaterial.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\pbrmaterial.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\pbrmaterial.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\GltfMaterial.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\GltfMaterial.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\postprocess.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\postprocess.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\quaternion.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\quaternion.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\quaternion.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\quaternion.inl">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\scene.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\scene.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\metadata.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\metadata.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\texture.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\texture.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\types.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\types.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\vector2.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\vector2.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\vector2.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\vector2.inl">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\vector3.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\vector3.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\vector3.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\vector3.inl">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\version.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\version.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\cimport.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\cimport.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\importerdesc.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\importerdesc.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\Importer.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\Importer.hpp">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\ProgressHandler.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\ProgressHandler.hpp">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\IOStream.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\IOStream.hpp">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\IOSystem.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\IOSystem.hpp">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\cexport.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\cexport.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\Exporter.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\Exporter.hpp">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\DefaultIOStream.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\DefaultIOStream.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\DefaultIOSystem.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\DefaultIOSystem.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\ZipArchiveIOSystem.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\ZipArchiveIOSystem.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\SceneCombiner.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\SceneCombiner.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\fast_atof.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\fast_atof.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\qnan.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\qnan.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\BaseImporter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\BaseImporter.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\Hash.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\Hash.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\MemoryIOWrapper.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\MemoryIOWrapper.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\ParsingUtils.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\ParsingUtils.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\StreamReader.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\StreamReader.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\StreamWriter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\StreamWriter.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\StringComparison.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\StringComparison.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\StringUtils.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\StringUtils.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\SGSpatialSort.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\SGSpatialSort.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\GenericProperty.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\GenericProperty.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\SpatialSort.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\SpatialSort.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\SkeletonMeshBuilder.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\SkeletonMeshBuilder.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\SmallVector.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\SmallVector.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\SmoothingGroups.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\SmoothingGroups.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\SmoothingGroups.inl">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\SmoothingGroups.inl">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\StandardShapes.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\StandardShapes.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\RemoveComments.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\RemoveComments.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\Subdivision.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\Subdivision.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\Vertex.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\Vertex.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\LineSplitter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\LineSplitter.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\TinyFormatter.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\TinyFormatter.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\Profiler.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\Profiler.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\LogAux.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\LogAux.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\Bitmap.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\Bitmap.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\XMLTools.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\XMLTools.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\IOStreamBuffer.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\IOStreamBuffer.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\CreateAnimMesh.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\CreateAnimMesh.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\XmlParser.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\XmlParser.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\MathFunctions.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\MathFunctions.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\Exceptional.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\Exceptional.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\ByteSwapper.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\ByteSwapper.h">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\Base64.hpp">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\Base64.hpp">
       <Filter>include\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\Compiler\pushpack1.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\Compiler\pushpack1.h">
       <Filter>Compiler</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\Compiler\poppack1.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\Compiler\poppack1.h">
       <Filter>Compiler</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Data\Meikai_Renderer\include\assimp-master\include\assimp\Compiler\pstdint.h">
+    <ClInclude Include="C:\Users\Mook\Desktop\assimp-master\include\assimp\Compiler\pstdint.h">
       <Filter>Compiler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Data\Meikai_Renderer\include\assimp-master\code\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\Mook\Desktop\assimp-master\code\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="C:\Data\Meikai_Renderer\include\assimp-master\code\res\assimp.rc">
+    <ResourceCompile Include="C:\Users\Mook\Desktop\assimp-master\code\res\assimp.rc">
       <Filter>Source Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AssetLib">
-      <UniqueIdentifier>{718A1166-E73A-3325-B77D-9D2B5BBA31AB}</UniqueIdentifier>
+      <UniqueIdentifier>{45AFC560-043C-31DB-954E-78E5B069050E}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\3D">
-      <UniqueIdentifier>{B609FE71-C8F9-3F3D-9928-AF22FE06D999}</UniqueIdentifier>
+      <UniqueIdentifier>{BBF852E4-9379-318C-9B28-F0D465CCB29D}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\3DS">
-      <UniqueIdentifier>{94718F04-5406-3028-B6BD-96DAA240FAD2}</UniqueIdentifier>
+      <UniqueIdentifier>{9ED7CC2C-CF3B-3DC0-A847-AAABDA368769}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\3MF">
-      <UniqueIdentifier>{4F049F4E-764F-39C4-8D38-6765899EBDF8}</UniqueIdentifier>
+      <UniqueIdentifier>{F01983D0-D7EE-35E2-8517-4ECFC68C4906}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\AC">
-      <UniqueIdentifier>{EA5DE34F-6813-3A04-B796-BEACCD51679D}</UniqueIdentifier>
+      <UniqueIdentifier>{73C36D7E-A027-3740-AC1A-EBFCD519D484}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\AMF">
-      <UniqueIdentifier>{07D17CB3-D415-3AC1-A9DC-D928AD862A9B}</UniqueIdentifier>
+      <UniqueIdentifier>{47F09AC2-F3D8-32E2-BAC7-ED52FF8E9A8A}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\ASE">
-      <UniqueIdentifier>{F5717C22-B9FC-3023-9B5C-93F1A3B79D9E}</UniqueIdentifier>
+      <UniqueIdentifier>{FD4034AC-7CED-3222-AB23-F4F25337CF91}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\ASSBIN">
-      <UniqueIdentifier>{86BF5003-C010-395E-9557-9E6EE8F226ED}</UniqueIdentifier>
+      <UniqueIdentifier>{03724C90-9B0B-3551-BD18-622B1AC4EE73}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\ASSJSON">
-      <UniqueIdentifier>{84235CDC-41B4-3FCC-8ADD-E650DD418802}</UniqueIdentifier>
+      <UniqueIdentifier>{F65B1B5F-DB4B-3978-A4D0-E45CEF0DD0C6}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\ASSXML">
-      <UniqueIdentifier>{718BB056-6E6A-35EC-ACFA-DA2246772311}</UniqueIdentifier>
+      <UniqueIdentifier>{C7572172-45B5-3CEB-BCDC-8487F841C0DA}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\B3D">
-      <UniqueIdentifier>{FBA51B3F-3FC6-3609-A7FF-D4DCE0062747}</UniqueIdentifier>
+      <UniqueIdentifier>{F32976AD-951F-3A29-8101-1BC2A3622CD7}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\BLEND">
-      <UniqueIdentifier>{CFEF4B6D-9A36-3A03-BDC9-A190224AE7BF}</UniqueIdentifier>
+      <UniqueIdentifier>{DF1BE151-42AC-3A22-AFCA-5F5DE3C8D0F4}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\BVH">
-      <UniqueIdentifier>{0D8B5739-E571-3FA5-AE40-89820FD213B7}</UniqueIdentifier>
+      <UniqueIdentifier>{FF070976-5A5B-3F07-B048-C751600D575A}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\COB">
-      <UniqueIdentifier>{5A04FA9C-2861-34E5-B4F4-34445A7EB4B8}</UniqueIdentifier>
+      <UniqueIdentifier>{5E6ECAD9-D3FC-3AF4-80A9-0A7D12C0E9F9}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\COLLADA">
-      <UniqueIdentifier>{D07890B9-8F73-375B-AAB9-86F1BA0642E3}</UniqueIdentifier>
+      <UniqueIdentifier>{57D53085-B247-33D1-97C4-C23A082505ED}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\CSM">
-      <UniqueIdentifier>{8F087C8B-1FF6-3FA8-B0E7-150C22FC5B9C}</UniqueIdentifier>
+      <UniqueIdentifier>{ADB0D04F-DF21-39F9-87B6-8565F973DF93}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\DXF">
-      <UniqueIdentifier>{C86F2B78-B0B2-329C-851E-95ED2D7AF4EF}</UniqueIdentifier>
+      <UniqueIdentifier>{A8695D14-66D1-30A3-A21A-A70954B5B39B}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\FBX">
-      <UniqueIdentifier>{8E4CA4CA-DD87-3C01-95DC-063D2DBD4426}</UniqueIdentifier>
+      <UniqueIdentifier>{F3816055-B604-3FE9-BDE2-05FA934905A2}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\GLTF">
-      <UniqueIdentifier>{88794862-FA04-3F5F-A557-07E7FE6D075D}</UniqueIdentifier>
+      <UniqueIdentifier>{80ACAFB3-41DD-3C9F-9598-B779117738EC}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\HMP">
-      <UniqueIdentifier>{A622AA99-574D-3640-BF13-7F7699DFD756}</UniqueIdentifier>
+      <UniqueIdentifier>{654E2DAD-B04B-3543-AC2B-CB5CB3BEBACD}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\IFC">
-      <UniqueIdentifier>{5BFAA3A3-95CC-3F16-9B1C-6C24E72211F3}</UniqueIdentifier>
+      <UniqueIdentifier>{118C4DA8-50A6-3403-B962-EA66C77424F0}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\IQM">
-      <UniqueIdentifier>{5177FC1A-06E9-353C-9138-A276A1A39FEB}</UniqueIdentifier>
+      <UniqueIdentifier>{D6D62078-0BC9-374C-90DE-2C19E32C25A5}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\IRR">
-      <UniqueIdentifier>{6B6249BA-5B1E-380B-8356-35D61FF3EF24}</UniqueIdentifier>
+      <UniqueIdentifier>{C36CDCC4-E352-3B7D-85F8-861E11D5964A}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\IRRMESH">
-      <UniqueIdentifier>{B5880785-0AA5-36DD-BB61-78ED5BBF1123}</UniqueIdentifier>
+      <UniqueIdentifier>{5473362D-3EAE-310C-AD20-2DA83447C631}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\LWO">
-      <UniqueIdentifier>{2F12D3BC-66C1-3873-BD88-689C3DBCF778}</UniqueIdentifier>
+      <UniqueIdentifier>{E95E0214-36C8-3301-B01C-4E38D58BE95B}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\LWS">
-      <UniqueIdentifier>{D40AF006-E2FB-3E21-ABBA-FE6A4BE49FBF}</UniqueIdentifier>
+      <UniqueIdentifier>{3A0E5A9D-7984-32C3-977F-1E34D607CC0A}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\M3D">
-      <UniqueIdentifier>{BF59F33F-E22D-3967-99AC-AA05A50FBE28}</UniqueIdentifier>
+      <UniqueIdentifier>{7BB83619-A286-3AC0-8597-FB48D870DDD9}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\MD2">
-      <UniqueIdentifier>{358F96F0-BB95-3CBA-8DE3-D04D56D39F65}</UniqueIdentifier>
+      <UniqueIdentifier>{B9B1034E-F570-30BF-8876-3DE60FAAD8E9}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\MD3">
-      <UniqueIdentifier>{5BA65ED3-B81F-3CAF-8A7A-D47BA8D776A3}</UniqueIdentifier>
+      <UniqueIdentifier>{E4237B18-6019-3D6E-9612-3ACD11416E80}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\MD5">
-      <UniqueIdentifier>{15ED8EB0-42E0-3AAD-9A58-446140F444A1}</UniqueIdentifier>
+      <UniqueIdentifier>{8D676CA6-024F-35BA-9FF9-4E6C5146CFA0}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\MDC">
-      <UniqueIdentifier>{18674322-9671-3E9B-A0B3-C7679AE78CF4}</UniqueIdentifier>
+      <UniqueIdentifier>{AEEB5C90-D1D6-37C8-AA7C-3408B8EF73A9}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\MDL">
-      <UniqueIdentifier>{603B996A-1FB0-355B-BD24-56E748C16309}</UniqueIdentifier>
+      <UniqueIdentifier>{5B5A07F2-58B2-3271-ADF1-ECA3348904E3}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\MMD">
-      <UniqueIdentifier>{8B325654-2A89-37AA-9D0E-6490C94B8C68}</UniqueIdentifier>
+      <UniqueIdentifier>{DE5A3983-D236-39FD-A2BB-8A17A4FF6FCA}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\MS3D">
-      <UniqueIdentifier>{99056740-B13B-364E-ADD2-01B55B52EC9B}</UniqueIdentifier>
+      <UniqueIdentifier>{B0B47C02-C782-348C-8060-BEC2399100DA}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\NDO">
-      <UniqueIdentifier>{B5D3024F-488E-3B0A-98C7-5BBC2FC57669}</UniqueIdentifier>
+      <UniqueIdentifier>{E61E758A-B3ED-3522-8F77-FA41A3D04E5A}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\NFF">
-      <UniqueIdentifier>{A3F06562-9752-37EC-9594-1E93404767DC}</UniqueIdentifier>
+      <UniqueIdentifier>{FB1F393F-A3D9-3F64-BC23-BFD728CB41E3}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\OBJ">
-      <UniqueIdentifier>{A6EE11D1-A0DE-38DA-9C27-7A9CCA9B555B}</UniqueIdentifier>
+      <UniqueIdentifier>{D582B333-3FF8-303F-AF65-C55635892890}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\OFF">
-      <UniqueIdentifier>{3765F431-CC13-3B4F-94E2-D58F5B51DC1E}</UniqueIdentifier>
+      <UniqueIdentifier>{926106B8-6A14-3774-971E-1ACA50CA1B1C}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\OGRE">
-      <UniqueIdentifier>{48B84895-4777-3423-A1D5-8BBE5B0EC1B9}</UniqueIdentifier>
+      <UniqueIdentifier>{293A0CFA-E21B-3C7B-B5F8-A0C2DC2DB51C}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\OPENGEX">
-      <UniqueIdentifier>{96C56FF2-8D14-312D-81C6-1F49CA863FE6}</UniqueIdentifier>
+      <UniqueIdentifier>{4C4DAE5D-D1A5-32C4-973C-B7E04C2E56BF}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\PBRT">
-      <UniqueIdentifier>{DD525C04-AF58-334F-9BB6-94C61CDFF38E}</UniqueIdentifier>
+      <UniqueIdentifier>{E3548D1C-7B2E-3A2F-B634-15F19DE5D31E}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\PLY">
-      <UniqueIdentifier>{F5F53AB2-498C-305F-A1F6-41F30C255FE7}</UniqueIdentifier>
+      <UniqueIdentifier>{B32D4EDA-4B0F-3126-B1AA-C4C8D569AB67}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\Q3BSP">
-      <UniqueIdentifier>{10511C77-ACDA-3A24-BDCD-834C3F7AB8D3}</UniqueIdentifier>
+      <UniqueIdentifier>{3E938391-025E-3B8A-82B2-7572ACDF53E1}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\Q3D">
-      <UniqueIdentifier>{8B025B14-F956-3145-BA39-68AC2ABB744E}</UniqueIdentifier>
+      <UniqueIdentifier>{30E4CE35-EEEA-3C9D-B9DA-2942CA12B16E}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\RAW">
-      <UniqueIdentifier>{1FED81B6-BC0C-3F7A-A6F7-3EF786163DFD}</UniqueIdentifier>
+      <UniqueIdentifier>{A44FCC52-4903-3AC4-8782-508671CAED5E}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\SIB">
-      <UniqueIdentifier>{327A4F1B-A3DC-3EE3-9DB5-ED13C946AA4B}</UniqueIdentifier>
+      <UniqueIdentifier>{857DFBAC-1E28-3006-A852-4EDA17E1DA04}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\SMD">
-      <UniqueIdentifier>{92CCD2A4-5327-3449-9FA7-977BF7525662}</UniqueIdentifier>
+      <UniqueIdentifier>{60FB5D60-621B-347A-B9AE-B1A063215E59}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\STEP">
-      <UniqueIdentifier>{D2F38180-B8B3-3709-B4E2-7206E87F9935}</UniqueIdentifier>
+      <UniqueIdentifier>{74744EDF-132F-39C7-9AB3-F22F3BDCB54A}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\STL">
-      <UniqueIdentifier>{EF79A7B6-5478-3E1A-BE8B-20E7BB541782}</UniqueIdentifier>
+      <UniqueIdentifier>{9E7AC96F-FC87-368A-8475-C04BB193B6A2}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\TERRAGEN">
-      <UniqueIdentifier>{BEF6B58A-6F2D-3BF1-A5FF-E000DDF1EC19}</UniqueIdentifier>
+      <UniqueIdentifier>{263E8C4F-99B4-3CFE-9396-336763CC80C6}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\X">
-      <UniqueIdentifier>{1BD6AD43-83E6-3BDE-9D71-C7874E91DF20}</UniqueIdentifier>
+      <UniqueIdentifier>{22B6403B-C938-33A7-AEE4-106B14563FE5}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\X3D">
-      <UniqueIdentifier>{89E9F017-7BDE-38DF-BDF3-EAB1F59DD9F3}</UniqueIdentifier>
+      <UniqueIdentifier>{8EF8D79E-5389-3428-B99D-0533F4C9D0D4}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetLib\XGL">
-      <UniqueIdentifier>{76386031-7AFF-3CB4-9AE8-A094BFC07362}</UniqueIdentifier>
+      <UniqueIdentifier>{6FFB4905-450B-3C2A-BD0E-2489C9314B76}</UniqueIdentifier>
     </Filter>
     <Filter Include="CApi">
-      <UniqueIdentifier>{B43A1BFB-D434-395E-BB5D-BFEEF3A2C731}</UniqueIdentifier>
+      <UniqueIdentifier>{7CB71714-99FA-3059-AD13-0D4E7ECA430C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Common">
-      <UniqueIdentifier>{A46BD1AD-08ED-3080-BA90-EC024F57C91C}</UniqueIdentifier>
+      <UniqueIdentifier>{E9F63C9F-8631-31BC-B78D-BB6CE2EF85E4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Compiler">
-      <UniqueIdentifier>{B1FF2B1C-8EA1-35FC-BACE-ABF57346E578}</UniqueIdentifier>
+      <UniqueIdentifier>{5577B3F9-0922-3B3E-BE98-D437D3D3D294}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contrib">
-      <UniqueIdentifier>{EAA02635-EFCE-3C93-A299-4C6B3CD23896}</UniqueIdentifier>
+      <UniqueIdentifier>{821A833D-077A-3FB9-8AF2-C6CE42128A4C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contrib\Clipper">
-      <UniqueIdentifier>{56D8E448-A27B-3FFE-998A-E8266EEFC667}</UniqueIdentifier>
+      <UniqueIdentifier>{39E14D6C-DDEA-31AD-94BA-668545D2ED5F}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contrib\Poly2Tri">
-      <UniqueIdentifier>{D021BA5D-A032-3945-9C9A-C4DEF2900A01}</UniqueIdentifier>
+      <UniqueIdentifier>{B6012E54-2F85-3993-AAC8-CDED6BD65D8B}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contrib\Pugixml">
-      <UniqueIdentifier>{E81C3A9E-DA53-3D07-BBBB-D944C18847AC}</UniqueIdentifier>
+      <UniqueIdentifier>{2FC7A22A-3D91-30A4-907A-028979C62DFA}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contrib\open3dgc">
-      <UniqueIdentifier>{5CAD26AF-BAF1-3A10-A240-2254B9139BFA}</UniqueIdentifier>
+      <UniqueIdentifier>{02F17066-7DDB-3D04-AAB5-E4B52779C51B}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contrib\openddl_parser">
-      <UniqueIdentifier>{D97EFA8A-6028-3F60-8C3C-2A80F6A5749A}</UniqueIdentifier>
+      <UniqueIdentifier>{63F77E43-8F31-3574-83A8-7F13C7400D53}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contrib\stb">
-      <UniqueIdentifier>{FDA38FB1-CA0A-364A-B498-79DD7CA4807C}</UniqueIdentifier>
+      <UniqueIdentifier>{08B37AE8-9C2B-397D-A736-025C3ABA1DD8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contrib\unzip">
-      <UniqueIdentifier>{FF92DC5F-9B7E-3011-83AB-2CF9AF34FE94}</UniqueIdentifier>
+      <UniqueIdentifier>{EAD7B977-BAB6-364C-AC88-8DC5DF71DD56}</UniqueIdentifier>
     </Filter>
     <Filter Include="Exporter">
-      <UniqueIdentifier>{4AB18A54-3F8D-3E61-A8D2-0DB34BE7CEDA}</UniqueIdentifier>
+      <UniqueIdentifier>{154A9936-CC63-3936-B50F-96F9003A9486}</UniqueIdentifier>
     </Filter>
     <Filter Include="Logging">
-      <UniqueIdentifier>{547BAE70-1848-3FE7-8188-E9FC5E931F3A}</UniqueIdentifier>
+      <UniqueIdentifier>{560D06F2-2EAA-3EEC-9A27-0655486FAB0C}</UniqueIdentifier>
     </Filter>
     <Filter Include="MaterialSystem">
-      <UniqueIdentifier>{5B9B0FE0-3B37-309C-88DC-E99DD17E60DF}</UniqueIdentifier>
+      <UniqueIdentifier>{FABD55C7-3453-3EED-B58D-454F99F9D648}</UniqueIdentifier>
     </Filter>
     <Filter Include="PostProcessing">
-      <UniqueIdentifier>{3FBC6510-6907-31FA-A8B2-7A57C751188D}</UniqueIdentifier>
+      <UniqueIdentifier>{DB967739-471E-3DB2-8F8D-933B4055AB1A}</UniqueIdentifier>
     </Filter>
     <Filter Include="STEPParser">
-      <UniqueIdentifier>{DC71F92F-D2D6-3177-A99E-C9A0305092C1}</UniqueIdentifier>
+      <UniqueIdentifier>{45F466F9-A5DA-374B-937C-5B391110035B}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{B8E60852-80F3-30B8-858E-57CCC5548961}</UniqueIdentifier>
+      <UniqueIdentifier>{48005FF9-BEC3-3DF5-B568-7F447979B953}</UniqueIdentifier>
     </Filter>
     <Filter Include="include">
-      <UniqueIdentifier>{AC9E9F47-5E47-3299-9D0A-89453799E57E}</UniqueIdentifier>
+      <UniqueIdentifier>{40FD6087-BF4D-3F72-B756-A64551552838}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\assimp">
-      <UniqueIdentifier>{665EFC63-6792-3528-84D5-AE8867360BFD}</UniqueIdentifier>
+      <UniqueIdentifier>{A78AB6E4-3A4B-31D1-9A32-FF7D5A804C8E}</UniqueIdentifier>
     </Filter>
     <Filter Include="ziplib">
-      <UniqueIdentifier>{956107F5-91D6-3518-BA53-722C6483CE14}</UniqueIdentifier>
+      <UniqueIdentifier>{F1727708-2C14-3FC7-B01F-824293F5AB83}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

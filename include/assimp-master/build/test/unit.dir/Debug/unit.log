@@ -1,4 +1,4 @@
-﻿  Building Custom Rule C:/Data/Meikai_Renderer/include/assimp-master/test/CMakeLists.txt
+﻿  Building Custom Rule C:/Users/Mook/Desktop/assimp-master/test/CMakeLists.txt
   CCompilerTest.c
   Main.cpp
   Version.cpp
@@ -14,7 +14,6 @@
   AssimpAPITest_aiQuaternion.cpp
   AssimpAPITest_aiVector2D.cpp
   AssimpAPITest_aiVector3D.cpp
-  utHash.cpp
   MathTest.cpp
   utBatchLoader.cpp
   utDefaultIOStream.cpp
@@ -27,6 +26,7 @@
   utProfiler.cpp
   utSharedPPData.cpp
   utStringUtils.cpp
+  utMaybe.cpp
   utMesh.cpp
   utStandardShapes.cpp
   uiScene.cpp
@@ -35,6 +35,8 @@
   utAssertHandler.cpp
   utXmlParser.cpp
   utBase64.cpp
+  utHash.cpp
+  utBaseProcess.cpp
   utAssxmlImportExport.cpp
   utLWSImportExport.cpp
   utLWOImportExport.cpp
@@ -118,4 +120,4 @@
   utSceneCombiner.cpp
   utGenBoundingBoxesProcess.cpp
   gtest-all.cc
-  unit.vcxproj -> C:\Data\Meikai_Renderer\include\assimp-master\build\bin\Debug\unit.exe
+  unit.vcxproj -> C:\Users\Mook\Desktop\assimp-master\build\bin\Debug\unit.exe

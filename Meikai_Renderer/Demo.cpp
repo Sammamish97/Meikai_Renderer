@@ -9,6 +9,7 @@
 #include "DefaultPass.h"
 #include "DescriptorHeap.h"
 #include "Animation.h"
+#include "Animator.h"
 
 #include <d3dcompiler.h>
 #include <d3dx12.h>
@@ -49,8 +50,8 @@ bool Demo::Initialize()
 	}
 	auto initList = mDirectCommandQueue->GetCommandList();
 	CreateIBLResources(initList);
-	LoadAnimations();
 	BuildModels(initList);
+	LoadAnimations();
 	BuildObjects();
 
 	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
@@ -85,6 +86,10 @@ void Demo::Update(const GameTimer& gt)
 	mCamera->Update(gt);
 	UpdatePassCB(gt);
 	UpdateLightCB(gt);
+	for(auto& skeletalObject : mSkeletalObjects)
+	{
+		skeletalObject->Update(gt.DeltaTime());
+	}
 }
 
 void Demo::Draw(const GameTimer& gt)
@@ -121,7 +126,9 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 	
 	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
 	//mModels["Y_Bot"] = std::make_shared<Model>("../models/Y_Bot.fbx", this, *cmdList);
-	mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.fbx", this, *cmdList);
+	mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.dae", this, *cmdList);
+	//mSkeletalModels["OGL"] = std::make_shared<SkeletalModel>("../models/boblampclean.md5mesh", this, *cmdList);
+
 	//mSkeletalModels["Warrior"] = std::make_shared<SkeletalModel>("../models/Warrior.fbx", this, *cmdList);
 	//mSkeletalModels["Archer"] = std::make_shared<SkeletalModel>("../models/Archer.fbx", this, *cmdList);
 
@@ -129,15 +136,18 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 
 void Demo::LoadAnimations()
 {
-	mAnimations["walking"] = std::make_shared<Animation>(this, "../animations/Walking.fbx");
+	mAnimations["walking"] = std::make_shared<Animation>("../animations/Walking.dae", mSkeletalModels["Y_Bot"]);
+	//mAnimations["Idle"] = std::make_shared<Animation>(this, "../animations/Idle.fbx");
+	//mAnimations["OGL"] = std::make_shared<Animation>(this, "../animations/boblampclean.md5anim");
+
 }
 
 void Demo::BuildObjects()
 {
 	//mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(10.f, 10.f, 10.f)));
 	//mObjects.push_back(std::make_unique<Object>(mModels["Y_Bot"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
-	mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
-	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(mModels["Y_Bot"], mAnimations["walk"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
+	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["OGL"], mAnimations["OGL"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(0.1, 0.1, 0.1)));
+	mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, 0.f, 0.f)));
 	//mObjects.push_back(std::make_unique<Object>(mModels["Warrior"], XMFLOAT3(0.f, -100.f, 0.f), XMFLOAT3(0.01, 0.01, 0.01)));
 	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
 	//mObjects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(1.f, -1.f, 0.f)));

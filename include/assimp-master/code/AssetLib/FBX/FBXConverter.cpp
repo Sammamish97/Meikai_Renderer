@@ -242,7 +242,7 @@ void FBXConverter::ConvertNodes(uint64_t id, aiNode *parent, aiNode *root_node) 
             ai_assert(nodes_chain.size());
 
             if (need_additional_node) {
-                nodes_chain.emplace_back(PotentialNode(node_name));
+                nodes_chain.emplace_back(node_name);
             }
 
             //setup metadata on newest node
@@ -305,18 +305,15 @@ void FBXConverter::ConvertNodes(uint64_t id, aiNode *parent, aiNode *root_node) 
         }
     }
 
-    if (nodes.size()) {
-        parent->mChildren = new aiNode *[nodes.size()]();
-        parent->mNumChildren = static_cast<unsigned int>(nodes.size());
-
-        for (unsigned int i = 0; i < nodes.size(); ++i)
-        {
-            parent->mChildren[i] = nodes[i].mOwnership.release();
-        }
-        nodes.clear();
-    } else {
+    if (nodes.empty()) {
         parent->mNumChildren = 0;
         parent->mChildren = nullptr;
+    }
+
+    parent->mChildren = new aiNode *[nodes.size()]();
+    parent->mNumChildren = static_cast<unsigned int>(nodes.size());
+    for (unsigned int i = 0; i < nodes.size(); ++i) {
+        parent->mChildren[i] = nodes[i].mOwnership.release();
     }
 }
 
@@ -3319,7 +3316,7 @@ FBXConverter::KeyFrameListList FBXConverter::GetKeyframeList(const std::vector<c
                 }
             }
 
-            inputs.push_back(std::make_tuple(Keys, Values, mapto));
+            inputs.emplace_back(Keys, Values, mapto);
         }
     }
     return inputs; // pray for NRVO :-)
@@ -3396,7 +3393,7 @@ FBXConverter::KeyFrameListList FBXConverter::GetRotationKeyframeList(const std::
                     }
                 }
             }
-            inputs.push_back(std::make_tuple(Keys, Values, mapto));
+            inputs.emplace_back(Keys, Values, mapto);
         }
     }
     return inputs;

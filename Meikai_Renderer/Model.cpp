@@ -13,7 +13,7 @@ Model::Model(const std::string& file_path, DXApp* app, CommandList& commandList)
 void Model::LoadModel(const std::string& file_path, CommandList& commandList)
 {
     pScene = mImporter.ReadFile(file_path,
-        aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+        aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace | aiProcess_ConvertToLeftHanded);
 
     if (!pScene || pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !pScene->mRootNode)
     {

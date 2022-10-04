@@ -26,7 +26,7 @@ void SkeletalMesh::Init(CommandList& commandList)
 	mIndexCount = static_cast<UINT>(mIndices.size());
 }
 
-void SkeletalMesh::Draw(CommandList& commandList, float time ,std::shared_ptr<Animation> animation)
+void SkeletalMesh::Draw(CommandList& commandList)
 {
 	commandList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	commandList.SetVertexBuffer(0, mVertexBuffer);

@@ -1,8 +1,8 @@
-# Install script for directory: C:/Data/Meikai_Renderer/include/assimp-master/test/headercheck
+# Install script for directory: C:/Users/Mook/Desktop/assimp-master/test/headercheck
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/Assimp")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files/Assimp")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

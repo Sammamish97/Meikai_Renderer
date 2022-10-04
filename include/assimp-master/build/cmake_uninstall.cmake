@@ -1,8 +1,8 @@
-IF(NOT EXISTS "C:/Data/Meikai_Renderer/include/assimp-master/build/install_manifest.txt")
-  MESSAGE(FATAL_ERROR "Cannot find install manifest: \"C:/Data/Meikai_Renderer/include/assimp-master/build/install_manifest.txt\"")
-ENDIF(NOT EXISTS "C:/Data/Meikai_Renderer/include/assimp-master/build/install_manifest.txt")
+IF(NOT EXISTS "C:/Users/Mook/Desktop/assimp-master/build/install_manifest.txt")
+  MESSAGE(FATAL_ERROR "Cannot find install manifest: \"C:/Users/Mook/Desktop/assimp-master/build/install_manifest.txt\"")
+ENDIF(NOT EXISTS "C:/Users/Mook/Desktop/assimp-master/build/install_manifest.txt")
 
-FILE(READ "C:/Data/Meikai_Renderer/include/assimp-master/build/install_manifest.txt" files)
+FILE(READ "C:/Users/Mook/Desktop/assimp-master/build/install_manifest.txt" files)
 STRING(REGEX REPLACE "\n" ";" files "${files}")
 FOREACH(file ${files})
   MESSAGE(STATUS "Uninstalling \"$ENV{DESTDIR}${file}\"")

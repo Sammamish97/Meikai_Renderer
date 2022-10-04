@@ -42,7 +42,7 @@ private:
 public:
 	SkeletalMesh(DXApp* dxApp, const aiScene* aiPtr, std::vector<SkeletalVertex> input_vertices, std::vector<UINT> input_indices, CommandList& commandList);
 
-	void Draw(CommandList& commandList, float time, std::shared_ptr<Animation> animation);
+	void Draw(CommandList& commandList);
 private:
 	const aiScene* mScenePtr;
 

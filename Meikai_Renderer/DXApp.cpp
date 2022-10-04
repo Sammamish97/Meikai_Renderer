@@ -98,6 +98,11 @@ std::pair<int, int> DXApp::GetWindowSize()
 	return std::make_pair(mClientWidth, mClientHeight);
 }
 
+GameTimer DXApp::GetTimer()
+{
+	return mTimer;
+}
+
 UINT DXApp::GetRtvDescSize()
 {
 	return mRtvDescriptorSize;

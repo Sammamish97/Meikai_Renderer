@@ -14,6 +14,7 @@ class Object;
 class SkeletalObject;
 
 class Animation;
+class Animator;
 
 class Camera;
 class Texture;
@@ -105,6 +106,7 @@ private:
 
 	std::unordered_map<std::string, std::shared_ptr<Texture>> mTextures;
 	std::unordered_map<std::string, std::shared_ptr<Animation>> mAnimations;
+	std::shared_ptr<Animator> testAnimator;
 
 	std::vector<D3D12_INPUT_ELEMENT_DESC> mInputLayout;
 	std::vector<std::unique_ptr<Object>> mObjects;
