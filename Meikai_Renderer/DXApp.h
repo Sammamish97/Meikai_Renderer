@@ -180,7 +180,7 @@ protected:
     std::wstring mMainWndCaption = L"dx App";
     D3D_DRIVER_TYPE md3dDriverType = D3D_DRIVER_TYPE_HARDWARE;
 
-    int mClientWidth = 800;
-    int mClientHeight = 600;
+    int mClientWidth = 1920;
+    int mClientHeight = 1080;
 };
 

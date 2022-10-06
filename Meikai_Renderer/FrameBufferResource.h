@@ -22,7 +22,8 @@ struct IBLResource
 {
 	std::shared_ptr<Texture> mHDRImage;
 	std::shared_ptr<Texture> mCubeMap;
-	std::shared_ptr<Texture> mDIffuseCubeMap;
+	std::shared_ptr<Texture> mSkyboxCubeMap;
+	std::shared_ptr<Texture> mDiffuseCubeMap;
 	std::shared_ptr<Texture> mSpecularCubeMap;
 };
 
@@ -59,4 +60,10 @@ struct IBLDescriptorIndex
 
 	UINT mCubemapSrvIndex;
 	UINT mCubemapUavIndex;
+
+	UINT mSkyboxCubemapSrvIndex;
+	UINT mSkyboxCubemapUavIndex;
+
+	UINT mDiffuseCubemapSrvIndex;
+	UINT mDiffuseCubemapUavIndex;
 };

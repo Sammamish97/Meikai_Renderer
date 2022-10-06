@@ -14,6 +14,9 @@
 
 class SkeletalModel;
 
+/**
+ * @brief Class for cache assimp hierarchy structure.
+ */
 struct AssimpNodeData
 {
 	aiMatrix4x4 transformation;
@@ -22,7 +25,10 @@ struct AssimpNodeData
 	std::vector<AssimpNodeData> children;
 };
 
-//Each animation instance have only one aiAnimation
+/**
+ * @brief Class for represent animation.
+ * @detail For construct animation, model require because bone set between animation and model can be different.
+ */
 class Animation
 {
 private:
@@ -48,7 +54,15 @@ public:
 	Bone* FindBone(const std::string& name);
 
 private:
+	/**
+	* @brief Function for match bone set between animation and model.
+	* @detail If there are bone which exist on model but don't exist on animation, put that bone in the animation's bone set.
+	*/
 	void ReadMissingBones(const aiAnimation* animation, std::shared_ptr<SkeletalModel> model);
+
+	/**
+	* @brief Cache whole assimp structure recursively.
+	*/
 	void ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src);
 };
 

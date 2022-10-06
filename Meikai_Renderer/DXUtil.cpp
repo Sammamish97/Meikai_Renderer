@@ -24,9 +24,9 @@ std::wstring DxException::ToString()const
 ComPtr<ID3DBlob> DxUtil::CompileShader(const std::wstring& filename, const D3D_SHADER_MACRO* defines,
 	const std::string& entrypoint, const std::string& target)
 {
-	UINT compileFlags = 0;
+	UINT compileFlags = D3DCOMPILE_ENABLE_UNBOUNDED_DESCRIPTOR_TABLES;
 #if defined(DEBUG) || defined(_DEBUG)  
-	compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION | D3DCOMPILE_ENABLE_UNBOUNDED_DESCRIPTOR_TABLES;
+	compileFlags |= D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 
 	HRESULT hr = S_OK;

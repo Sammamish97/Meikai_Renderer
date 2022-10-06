@@ -26,6 +26,7 @@
     <ClInclude Include="BoneDebugPass.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="BufferFormat.h" />
+    <ClInclude Include="CalcIBLDiffusePass.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommandList.h" />
     <ClInclude Include="CommandQueue.h" />
@@ -90,6 +91,7 @@
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="BoneDebugPass.cpp" />
     <ClCompile Include="Buffer.cpp" />
+    <ClCompile Include="CalcIBLDiffusePass.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CommandList.cpp" />
     <ClCompile Include="CommandQueue.cpp" />

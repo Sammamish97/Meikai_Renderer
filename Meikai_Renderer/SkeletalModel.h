@@ -16,6 +16,10 @@ struct DXApp;
 class CommandList;
 class Animation;
 
+/**
+ * @brief Class for manage model with bone data.
+ * @detail Cache meshes which have bone data.
+ */
 class SkeletalModel
 {
 	friend Animation;

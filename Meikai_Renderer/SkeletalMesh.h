@@ -34,6 +34,10 @@ struct SkeletalVertex
 	void AddBoneData(int boneID, float weight);
 };
 
+/**
+ * @brief Class for manage mesh with bone data.
+ * @detail Skeletal mesh have boneID, weights and weight num for animating on shader.
+ */
 class SkeletalMesh
 {
 private:

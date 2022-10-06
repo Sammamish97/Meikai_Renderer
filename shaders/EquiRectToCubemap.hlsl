@@ -20,7 +20,8 @@ struct DescIndices
 {
 	uint TexNum;
 	uint HDR2D_SRV;
-	uint Cube_UAV;
+	uint Cubemap_UAV_Skybox;
+    uint Cubemap_UAV_HDR;
 };
 ConstantBuffer<DescIndices> descIndices : register(b1);
 
@@ -95,5 +96,6 @@ void EquiRectToCubemapCS(ComputeShaderInput IN)
     float2 panoUV = float2(atan2(-dir.x, -dir.z), acos(dir.y)) * InvAtan;
     float3 HDRColor = gSRV2DTable[descIndices.HDR2D_SRV].SampleLevel(gsamLinearRepeat, panoUV, 0).xyz;
 
-    gUAV2DArrayTable[descIndices.Cube_UAV][texCoord] =  float4(ToneMapping(HDRColor), 1);
+    gUAV2DArrayTable[descIndices.Cubemap_UAV_Skybox][texCoord] =  float4(ToneMapping(HDRColor), 1);
+    gUAV2DArrayTable[descIndices.Cubemap_UAV_HDR][texCoord] =  float4(HDRColor, 1);
 }

@@ -1,5 +1,0 @@
-<TODO>
-	-Implement resource allocator for texture
-		=Pre allocate texture array and allocate texture
-
-	-Implement basic deferred rendering with resource allocator & Bindless descriptors

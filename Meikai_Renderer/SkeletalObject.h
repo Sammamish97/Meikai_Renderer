@@ -17,6 +17,10 @@ class Animation;
 class SkeletalModel;
 class DXApp;
 
+/**
+ * @brief Class for manage models with animation.
+ * @detail Capsulize three objects. Animation, animator and model.
+ */
 class SkeletalObject
 {
 private:

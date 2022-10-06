@@ -177,6 +177,9 @@
     <ClInclude Include="AnimData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CalcIBLDiffusePass.h">
+      <Filter>Passes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXApp.cpp">
@@ -349,6 +352,9 @@
     </ClCompile>
     <ClCompile Include="Bone.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CalcIBLDiffusePass.cpp">
+      <Filter>Passes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

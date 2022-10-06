@@ -6,13 +6,14 @@
 #include "DXApp.h"
 #include "DXUtil.h"
 
-EquiRectToCubemapPass::EquiRectToCubemapPass(DXApp* appPtr, ComPtr<ID3DBlob> computeShader, UINT hdrSrvIdx, UINT cubemapUrvIdx)
+EquiRectToCubemapPass::EquiRectToCubemapPass(DXApp* appPtr, ComPtr<ID3DBlob> computeShader, UINT hdrSrvIdx, UINT SkyboxCubemapUrvIdx, UINT CubemapUrvIdx)
 	:IPass(appPtr, computeShader)
 {
 	InitRootSignature();
 	InitPSO();
     mEquiRectDescIndices.HDR_SRV_2D = hdrSrvIdx;
-    mEquiRectDescIndices.Cubemap_UAV_2DARRAY = cubemapUrvIdx;
+    mEquiRectDescIndices.Cubemap_UAV_Skybox = SkyboxCubemapUrvIdx;
+    mEquiRectDescIndices.Cubemap_UAV_HDR = CubemapUrvIdx;
 }
 
 void EquiRectToCubemapPass::InitRootSignature()
@@ -20,7 +21,7 @@ void EquiRectToCubemapPass::InitRootSignature()
     //EquiRectToCubemap compute shader need these
     //Cubemap face's size for 32bit - CB : b0
     //Equirectanglular HDR 2DTexture for SRV : t0
-    //Cubemap texture for UAV: t1
+    //Sky Cubemap Texture & Cubemap texture for UAV: t1
     //Sampler for load Equirectangular texture: s0
     
     auto device = mApp->GetDevice();
