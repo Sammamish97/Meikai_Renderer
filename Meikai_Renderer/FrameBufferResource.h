@@ -21,10 +21,9 @@ struct FrameBufferResource
 struct IBLResource
 {
 	std::shared_ptr<Texture> mHDRImage;
-	std::shared_ptr<Texture> mCubeMap;
 	std::shared_ptr<Texture> mSkyboxCubeMap;
-	std::shared_ptr<Texture> mDiffuseCubeMap;
-	std::shared_ptr<Texture> mSpecularCubeMap;
+	std::shared_ptr<Texture> mDiffuseMap;
+	std::shared_ptr<Texture> mSpecularMap;
 };
 
 struct FrameBufferDescriptorIndex

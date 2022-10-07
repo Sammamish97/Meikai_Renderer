@@ -6,14 +6,13 @@
 #include "DXApp.h"
 #include "DXUtil.h"
 
-EquiRectToCubemapPass::EquiRectToCubemapPass(DXApp* appPtr, ComPtr<ID3DBlob> computeShader, UINT hdrSrvIdx, UINT SkyboxCubemapUrvIdx, UINT CubemapUrvIdx)
+EquiRectToCubemapPass::EquiRectToCubemapPass(DXApp* appPtr, ComPtr<ID3DBlob> computeShader, UINT hdrSrvIdx, UINT SkyboxCubemapUrvIdx)
 	:IPass(appPtr, computeShader)
 {
 	InitRootSignature();
 	InitPSO();
     mEquiRectDescIndices.HDR_SRV_2D = hdrSrvIdx;
     mEquiRectDescIndices.Cubemap_UAV_Skybox = SkyboxCubemapUrvIdx;
-    mEquiRectDescIndices.Cubemap_UAV_HDR = CubemapUrvIdx;
 }
 
 void EquiRectToCubemapPass::InitRootSignature()

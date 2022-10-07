@@ -59,7 +59,6 @@ private:
 	void DrawSkyboxPass(CommandList& cmdList);
 
 	void DispatchEquiRectToCubemap(CommandList& cmdList);
-	void DispatchIBLDiffuse(CommandList& cmdList);
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
 
@@ -78,7 +77,6 @@ protected:
 
 private://Non-Iterating Pass
 	std::unique_ptr<EquiRectToCubemapPass> mEquiRectToCubemapPass;
-	std::unique_ptr<CalcIBLDiffusePass> mCalcIBLDiffusePass;
 
 private://Passes
 	std::unique_ptr<DefaultPass> mDefaultPass;

@@ -7,12 +7,16 @@
 #include <DirectXMath.h>
 
 
-LightingPass::LightingPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader)
+LightingPass::LightingPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader, UINT iblDiffuseIdx, UINT iblSpecularIdx)
 	:IPass(appPtr, vertShader, pixelShader)
 {
 	InitRootSignature();
 	InitPSO();
     InitDescIndices();
+    mLightDescIndices.IBL_DIFFUSE = iblDiffuseIdx;
+    mLightDescIndices.IBL_SPECULAR = iblSpecularIdx;
+    InitRandomParam();
+
 }
 
 void LightingPass::InitDescIndices()
@@ -23,6 +27,26 @@ void LightingPass::InitDescIndices()
     mLightDescIndices.Roughness = mApp->mDescIndex.mRoughnessDescSrvIdx;
     mLightDescIndices.Metalic = mApp->mDescIndex.mMetalicDescSrvIdx;
     mLightDescIndices.SSAO = mApp->mDescIndex.mSsaoDescSrvIdx;
+}
+
+void LightingPass::InitRandomParam()
+{
+    int kk;
+    int pos = 0;
+    block.hammersley.reserve(block.N * 2);
+    for (int k = 0; k < block.N; k++) 
+    {
+        float u = 0;
+        float p = 0.5f;
+        for (kk = k, u = 0.0f; kk; p *= 0.5f, kk >>= 1)
+        {
+            if (kk & 1)
+                u += p;
+        }
+        float v = (k + 0.5) / block.N;
+        block.hammersley.push_back(u);
+        block.hammersley.push_back(v);
+    }
 }
 
 void LightingPass::InitRootSignature()
@@ -102,3 +126,4 @@ void LightingPass::InitPSO()
 
     ThrowIfFailed(device->CreateGraphicsPipelineState(&lightingPSODesc, IID_PPV_ARGS(mPSO.GetAddressOf())))
 }
+

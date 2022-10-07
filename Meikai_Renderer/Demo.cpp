@@ -18,7 +18,6 @@
 #include "CommandQueue.h"
 
 #include "EquiRectToCubemapPass.h"
-#include "CalcIBLDiffusePass.h"
 #include "GeometryPass.h"
 #include "SkeletalGeometryPass.h"
 #include "LightingPass.h"
@@ -64,17 +63,15 @@ bool Demo::Initialize()
 	mScreenViewport = {0, 0, (float)mClientWidth, (float)mClientHeight,0, 1};
 	mDefaultPass = std::make_unique<DefaultPass>(this, mShaders["DefaultForwardVS"], mShaders["DefaultForwardPS"]);
 	mGeometryPass = std::make_unique<GeometryPass>(this, mShaders["GeomVS"], mShaders["GeomPS"]);
-	mLightingPass = std::make_unique<LightingPass>(this, mShaders["ScreenQuadVS"], mShaders["LightingPS"]);
+	mLightingPass = std::make_unique<LightingPass>(this, mShaders["ScreenQuadVS"], mShaders["LightingPS"], 
+		mIBLResource.mDiffuseMap->mSRVDescIDX.value(), mIBLResource.mSpecularMap->mSRVDescIDX.value());
 	mJointDebugPass = std::make_unique<JointDebugPass>(this, mShaders["DebugJointVS"], mShaders["DebugJointPS"]);
 	mBoneDebugPass = std::make_unique<BoneDebugPass>(this, mShaders["DebugJointVS"], mShaders["DebugJointPS"]);
 	mSkyboxPass = std::make_unique<SkyboxPass>(this, mShaders["SkyboxVS"], mShaders["SkyboxPS"], mIBLResource.mSkyboxCubeMap->mSRVDescIDX.value());
 	mSkeletalGeometryPass = std::make_unique<SkeletalGeometryPass>(this, mShaders["SkeletalGeomVS"], mShaders["SkeletalGeomPS"]);
 
 	mEquiRectToCubemapPass = std::make_unique<EquiRectToCubemapPass>(this, mShaders["EquiRectToCubemapCS"], 
-		mIBLResource.mHDRImage->mSRVDescIDX.value(), mIBLResource.mSkyboxCubeMap->mUAVDescIDX.value(), mIBLResource.mCubeMap->mUAVDescIDX.value());
-
-	mCalcIBLDiffusePass = std::make_unique<CalcIBLDiffusePass>(this, mShaders["CalcIBLDiffuseCS"],
-		mIBLResource.mCubeMap->mSRVDescIDX.value(), mIBLResource.mDiffuseCubeMap->mUAVDescIDX.value());
+		mIBLResource.mHDRImage->mSRVDescIDX.value(), mIBLResource.mSkyboxCubeMap->mUAVDescIDX.value());
 
 	auto fenceValue = mDirectCommandQueue->ExecuteCommandList(initList);
 	mDirectCommandQueue->WaitForFenceValue(fenceValue);
@@ -117,11 +114,6 @@ void Demo::PreCompute()
 	
 	auto fenceValue = mDirectCommandQueue->ExecuteCommandList(initList);
 	mDirectCommandQueue->WaitForFenceValue(fenceValue);
-
-	auto initList2 = mDirectCommandQueue->GetCommandList();
-	DispatchIBLDiffuse(*initList2);
-	auto fenceValue2 = mDirectCommandQueue->ExecuteCommandList(initList2);
-	mDirectCommandQueue->WaitForFenceValue(fenceValue2);
 }
 
 void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
@@ -156,10 +148,14 @@ void Demo::BuildFrameResource()
 void Demo::CreateIBLResources(std::shared_ptr<CommandList>& commandList)
 {
 	mIBLResource.mHDRImage = std::make_shared<Texture>(this);
-	commandList->LoadTextureFromFile(*mIBLResource.mHDRImage, L"../textures/Alexs_Apt_2k.hdr", D3D12_SRV_DIMENSION_TEXTURE2D);
+	commandList->LoadTextureFromFile(*mIBLResource.mHDRImage, L"../textures/Tropical_Beach_3k.hdr", D3D12_SRV_DIMENSION_TEXTURE2D);
+	mIBLResource.mDiffuseMap = std::make_shared<Texture>(this);
+	commandList->LoadTextureFromFile(*mIBLResource.mDiffuseMap, L"../textures/Tropical_Beach_3k.irr.hdr", D3D12_SRV_DIMENSION_TEXTURE2D);
+	mIBLResource.mSpecularMap = std::make_shared<Texture>(this);
+
+	commandList->LoadTextureFromFile(*mIBLResource.mSpecularMap, L"../textures/Tropical_Beach_3k.irr.hdr", D3D12_SRV_DIMENSION_TEXTURE2D);
 
 	auto cubemapDesc = mIBLResource.mHDRImage->GetD3D12ResourceDesc();
-
 	cubemapDesc.Format = AlbedoFormat;
 	cubemapDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
 	cubemapDesc.Width = cubemapDesc.Height = 1024;
@@ -167,11 +163,7 @@ void Demo::CreateIBLResources(std::shared_ptr<CommandList>& commandList)
 	cubemapDesc.MipLevels = 0;
 	mIBLResource.mSkyboxCubeMap = std::make_shared<Texture>(this, cubemapDesc, nullptr, D3D12_SRV_DIMENSION_TEXTURECUBE, D3D12_UAV_DIMENSION_TEXTURE2DARRAY, L"SkyboxCubemap");
 	cubemapDesc.Format = HDRFormat;
-	mIBLResource.mCubeMap = std::make_shared<Texture>(this, cubemapDesc, nullptr, D3D12_SRV_DIMENSION_TEXTURECUBE, D3D12_UAV_DIMENSION_TEXTURE2DARRAY, L"HDRCubemap");
-	mIBLResource.mDiffuseCubeMap = std::make_shared<Texture>(this, cubemapDesc, nullptr, D3D12_SRV_DIMENSION_TEXTURECUBE, D3D12_UAV_DIMENSION_TEXTURE2DARRAY, L"IBLDiffuseCubemap");
-	mIBLResource.mSpecularCubeMap = std::make_shared<Texture>(this, cubemapDesc, nullptr, D3D12_SRV_DIMENSION_TEXTURECUBE, D3D12_UAV_DIMENSION_TEXTURE2DARRAY, L"IBLSpecularCubemap");
-	//mIBLResource.mDIffuseCubeMap;
-	//mIBLResource.mSpecularCubeMap;
+
 }
 
 void Demo::CreateShader()
@@ -481,33 +473,6 @@ void Demo::DispatchEquiRectToCubemap(CommandList& cmdList)
 	cmdList.Dispatch(MathHelper::DivideByMultiple(equiRectToCubemapCB.CubemapSize, 16), MathHelper::DivideByMultiple(equiRectToCubemapCB.CubemapSize, 16), 6);
 }
 
-void Demo::DispatchIBLDiffuse(CommandList& cmdList)
-{
-	auto device = mApp->GetDevice();
-
-	auto cubemapResource = mIBLResource.mCubeMap->GetResource();
-	CD3DX12_RESOURCE_DESC cubemapDesc(cubemapResource->GetDesc());
-
-	cmdList.SetPipelineState(mCalcIBLDiffusePass->mPSO.Get());
-	cmdList.SetComputeRootSignature(mCalcIBLDiffusePass->mRootSig.Get());
-
-	IBLDiffuseCB IBLDiffuseCB;
-	IBLDiffuseCB.CubemapSize = std::max<uint32_t>(cubemapDesc.Width, cubemapDesc.Height);
-
-	auto srvHeap = mApp->GetDescriptorHeap(SRV_CUBE);
-	auto uavHeap = mApp->GetDescriptorHeap(UAV_2D_ARRAY);
-
-	cmdList.SetCompute32BitConstants(0, IBLDiffuseCB);
-	cmdList.SetDescriptorHeap(srvHeap->GetDescriptorHeap());
-	cmdList.SetComputeDescriptorTable(1, srvHeap->GetGpuHandle(0));
-
-	cmdList.SetDescriptorHeap(uavHeap->GetDescriptorHeap());
-	cmdList.SetComputeDescriptorTable(2, uavHeap->GetGpuHandle(0));
-
-	cmdList.SetCompute32BitConstants(3, mCalcIBLDiffusePass->mDiffuseDescIndices.TexNum + 1, &(mCalcIBLDiffusePass->mDiffuseDescIndices));
-
-	cmdList.Dispatch(MathHelper::DivideByMultiple(IBLDiffuseCB.CubemapSize, 16), MathHelper::DivideByMultiple(IBLDiffuseCB.CubemapSize, 16), 6);
-}
 
 void Demo::OnMouseDown(WPARAM btnState, int x, int y)
 {

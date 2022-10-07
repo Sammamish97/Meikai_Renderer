@@ -1,19 +1,5 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  Demo.cpp
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Model.h(17,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Mesh.h(14): message : see declaration of 'DXApp'
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.h(15,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalMesh.h(20): message : see declaration of 'DXApp'
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Demo.cpp(467,66): warning C4244: 'argument': conversion from 'UINT64' to 'const _Ty', possible loss of data
-          with
-          [
-              _Ty=uint32_t
-          ]
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Demo.cpp(495,59): warning C4244: 'argument': conversion from 'UINT64' to 'const _Ty', possible loss of data
-          with
-          [
-              _Ty=uint32_t
-          ]
+  LightingPass.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\LightingPass.cpp(36,38): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\LightingPass.cpp(46,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   Meikai_Renderer.vcxproj -> C:\Data\Meikai_Renderer\Meikai_Renderer\bin\Meikai_Renderer_debug.exe

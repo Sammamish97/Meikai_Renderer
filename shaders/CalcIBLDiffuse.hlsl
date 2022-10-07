@@ -100,7 +100,7 @@ void CalcIBLDiffuseCS(ComputeShaderInput IN)
             float3 tangentSample = float3(sin(theta) * cos(phi),  sin(theta) * sin(phi), cos(theta));
             // tangent space to world
             float3 sampleVec = tangentSample.x * right + tangentSample.y * up + tangentSample.z * dir;
-            irradiance += gSRVCubeTable[descIndices.HDR_SRV_CUBE].SampleLevel(gsamLinearRepeat, sampleVec, 0).xyz * cos(theta) * sin(theta);
+            irradiance = gSRVCubeTable[descIndices.HDR_SRV_CUBE].SampleLevel(gsamLinearRepeat, sampleVec, 0).xyz * cos(theta) * sin(theta);
             nrSamples++;
         }
     }
