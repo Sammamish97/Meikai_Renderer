@@ -23,13 +23,6 @@ public:
 	void InitPSO() override;
 	void InitDescIndices();
 
-	struct
-	{
-		float N = 20.f;
-		std::vector<float> hammersley;
-	}block;
-	void InitRandomParam();
-
 public:
 	LightDescIndices mLightDescIndices;
 };

@@ -94,6 +94,7 @@ private://Debug Passes
 private://CBV resource & allocation
 	std::unique_ptr<CommonCB> mCommonCB;
 	std::unique_ptr<LightCB> mLightCB;
+	std::unique_ptr<RandomSampleCB> mRandomSampleCB;
 
 private:
 	IBLResource mIBLResource;

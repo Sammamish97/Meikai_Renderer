@@ -64,7 +64,7 @@ bool Demo::Initialize()
 	mDefaultPass = std::make_unique<DefaultPass>(this, mShaders["DefaultForwardVS"], mShaders["DefaultForwardPS"]);
 	mGeometryPass = std::make_unique<GeometryPass>(this, mShaders["GeomVS"], mShaders["GeomPS"]);
 	mLightingPass = std::make_unique<LightingPass>(this, mShaders["ScreenQuadVS"], mShaders["LightingPS"], 
-		mIBLResource.mDiffuseMap->mSRVDescIDX.value(), mIBLResource.mSpecularMap->mSRVDescIDX.value());
+		mIBLResource.mDiffuseMap->mSRVDescIDX.value(), mIBLResource.mHDRImage->mSRVDescIDX.value());
 	mJointDebugPass = std::make_unique<JointDebugPass>(this, mShaders["DebugJointVS"], mShaders["DebugJointPS"]);
 	mBoneDebugPass = std::make_unique<BoneDebugPass>(this, mShaders["DebugJointVS"], mShaders["DebugJointPS"]);
 	mSkyboxPass = std::make_unique<SkyboxPass>(this, mShaders["SkyboxVS"], mShaders["SkyboxPS"], mIBLResource.mSkyboxCubeMap->mSRVDescIDX.value());
@@ -119,30 +119,33 @@ void Demo::PreCompute()
 void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 {
 	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
-	mSkeletalModels["X_Bot"] = std::make_shared<SkeletalModel>("../models/X_Bot.dae", this, *cmdList);
-	mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.dae", this, *cmdList);
+	mModels["Sphere"] = std::make_shared<Model>("../models/sphere.obj", this, *cmdList);
+	mModels["Bunny"] = std::make_shared<Model>("../models/bunny.obj", this, *cmdList);
+	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
+	//mSkeletalModels["X_Bot"] = std::make_shared<SkeletalModel>("../models/X_Bot.dae", this, *cmdList);
+	//mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.dae", this, *cmdList);
 }
 
 void Demo::LoadAnimations()
 {
-	mAnimations["walking"] = std::make_shared<Animation>("../animations/Walking.dae", mSkeletalModels["Y_Bot"]);
-	mAnimations["dancing"] = std::make_shared<Animation>("../animations/Dancing.dae", mSkeletalModels["X_Bot"]);
+	//mAnimations["walking"] = std::make_shared<Animation>("../animations/Walking.dae", mSkeletalModels["Y_Bot"]);
+	//mAnimations["dancing"] = std::make_shared<Animation>("../animations/Dancing.dae", mSkeletalModels["X_Bot"]);
 }
 
 void Demo::BuildObjects()
 {
-	mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(1.f, -1.f, 0.f)));
-	mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["X_Bot"], mAnimations["dancing"], XMFLOAT3(-1.f, -1.f, 0.f)));
+	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(1.f, -1.f, 0.f)));
+	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["X_Bot"], mAnimations["dancing"], XMFLOAT3(-1.f, -1.f, 0.f)));
 
+	mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0, -10, 0), XMFLOAT3(5, 5, 5)));
 	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
 }
 
 void Demo::BuildFrameResource()
 {
-	const size_t ConstantBufferAlignment = 256;
-
 	mCommonCB = std::make_unique<CommonCB>();
 	mLightCB = std::make_unique<LightCB>();
+	mRandomSampleCB = std::make_unique<RandomSampleCB>();
 }
 
 void Demo::CreateIBLResources(std::shared_ptr<CommandList>& commandList)
@@ -151,9 +154,6 @@ void Demo::CreateIBLResources(std::shared_ptr<CommandList>& commandList)
 	commandList->LoadTextureFromFile(*mIBLResource.mHDRImage, L"../textures/Tropical_Beach_3k.hdr", D3D12_SRV_DIMENSION_TEXTURE2D);
 	mIBLResource.mDiffuseMap = std::make_shared<Texture>(this);
 	commandList->LoadTextureFromFile(*mIBLResource.mDiffuseMap, L"../textures/Tropical_Beach_3k.irr.hdr", D3D12_SRV_DIMENSION_TEXTURE2D);
-	mIBLResource.mSpecularMap = std::make_shared<Texture>(this);
-
-	commandList->LoadTextureFromFile(*mIBLResource.mSpecularMap, L"../textures/Tropical_Beach_3k.irr.hdr", D3D12_SRV_DIMENSION_TEXTURE2D);
 
 	auto cubemapDesc = mIBLResource.mHDRImage->GetD3D12ResourceDesc();
 	cubemapDesc.Format = AlbedoFormat;
@@ -187,7 +187,7 @@ void Demo::CreateShader()
 	mShaders["SkyboxPS"] = DxUtil::CompileShader(L"../shaders/SkyboxPass.hlsl", nullptr, "PS", "ps_5_1");
 
 	mShaders["EquiRectToCubemapCS"] = DxUtil::CompileShader(L"../shaders/EquiRectToCubemap.hlsl", nullptr, "EquiRectToCubemapCS", "cs_5_1");
-	mShaders["CalcIBLDiffuseCS"] = DxUtil::CompileShader(L"../shaders/CalcIBLDiffuse.hlsl", nullptr, "CalcIBLDiffuseCS", "cs_5_1");
+	//mShaders["CalcIBLDiffuseCS"] = DxUtil::CompileShader(L"../shaders/CalcIBLDiffuse.hlsl", nullptr, "CalcIBLDiffuseCS", "cs_5_1");
 }
 
 void Demo::UpdatePassCB(const GameTimer& gt)
@@ -356,6 +356,7 @@ void Demo::DrawLightingPass(CommandList& cmdList)
 
 	cmdList.SetGraphicsDynamicConstantBuffer(0, sizeof(CommonCB), mCommonCB.get());
 	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(LightCB), mLightCB.get());
+	cmdList.SetGraphicsDynamicConstantBuffer(4, sizeof(RandomSampleCB), mRandomSampleCB.get());
 
 	//Set tables for geometry textures
 	cmdList.SetDescriptorHeap(srvTex2DHeap->GetDescriptorHeap());

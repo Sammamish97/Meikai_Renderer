@@ -52,6 +52,30 @@ struct LightCB
     PointLight pointLight[3];
 };
 
+struct RandomSampleCB
+{
+    RandomSampleCB()
+    {
+        int kk;
+        for (int k = 0; k < N; k++)
+        {
+            float u = 0;
+            float p = 0.5f;
+            for (kk = k, u = 0.0f; kk; p *= 0.5f, kk >>= 1)
+            {
+                if (kk & 1)
+                    u += p;
+            }
+            float v = (k + 0.5) / N;
+            hammersley[k] = XMFLOAT4(u, v, 0, 0);
+        }
+    }
+
+    float N = 20.f;
+    XMFLOAT3 padding;
+    XMFLOAT4 hammersley[20];
+};
+
 struct ShadowCB
 {
     XMFLOAT4X4 ShadowTransform = MathHelper::Identity4x4();

@@ -15,8 +15,6 @@ LightingPass::LightingPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID
     InitDescIndices();
     mLightDescIndices.IBL_DIFFUSE = iblDiffuseIdx;
     mLightDescIndices.IBL_SPECULAR = iblSpecularIdx;
-    InitRandomParam();
-
 }
 
 void LightingPass::InitDescIndices()
@@ -27,26 +25,6 @@ void LightingPass::InitDescIndices()
     mLightDescIndices.Roughness = mApp->mDescIndex.mRoughnessDescSrvIdx;
     mLightDescIndices.Metalic = mApp->mDescIndex.mMetalicDescSrvIdx;
     mLightDescIndices.SSAO = mApp->mDescIndex.mSsaoDescSrvIdx;
-}
-
-void LightingPass::InitRandomParam()
-{
-    int kk;
-    int pos = 0;
-    block.hammersley.reserve(block.N * 2);
-    for (int k = 0; k < block.N; k++) 
-    {
-        float u = 0;
-        float p = 0.5f;
-        for (kk = k, u = 0.0f; kk; p *= 0.5f, kk >>= 1)
-        {
-            if (kk & 1)
-                u += p;
-        }
-        float v = (k + 0.5) / block.N;
-        block.hammersley.push_back(u);
-        block.hammersley.push_back(v);
-    }
 }
 
 void LightingPass::InitRootSignature()
@@ -71,11 +49,12 @@ void LightingPass::InitRootSignature()
     CD3DX12_DESCRIPTOR_RANGE srvRange = {};
     srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, descriptorNumber, 0, 0);
     
-    CD3DX12_ROOT_PARAMETER rootParameters[4];
+    CD3DX12_ROOT_PARAMETER rootParameters[5];
 	rootParameters[0].InitAsConstantBufferView(0);
     rootParameters[1].InitAsConstantBufferView(1);
     rootParameters[2].InitAsDescriptorTable(1, &srvRange, D3D12_SHADER_VISIBILITY_PIXEL);
     rootParameters[3].InitAsConstants(mLightDescIndices.TexNum + 1, 2);
+    rootParameters[4].InitAsConstantBufferView(3);
 
     auto staticSamplers = mApp->GetStaticSamplers();
 
