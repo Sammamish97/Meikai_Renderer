@@ -119,8 +119,7 @@ void Demo::PreCompute()
 void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 {
 	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
-	mModels["Sphere"] = std::make_shared<Model>("../models/sphere.obj", this, *cmdList);
-	mModels["Bunny"] = std::make_shared<Model>("../models/bunny.obj", this, *cmdList);
+	mModels["Cube"] = std::make_shared<Model>("../models/Cube.obj", this, *cmdList);
 	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
 	//mSkeletalModels["X_Bot"] = std::make_shared<SkeletalModel>("../models/X_Bot.dae", this, *cmdList);
 	//mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.dae", this, *cmdList);
@@ -137,7 +136,7 @@ void Demo::BuildObjects()
 	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(1.f, -1.f, 0.f)));
 	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["X_Bot"], mAnimations["dancing"], XMFLOAT3(-1.f, -1.f, 0.f)));
 
-	mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0, -10, 0), XMFLOAT3(5, 5, 5)));
+	mObjects.push_back(std::make_unique<Object>(mModels["Cube"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1)));
 	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
 }
 
@@ -151,9 +150,9 @@ void Demo::BuildFrameResource()
 void Demo::CreateIBLResources(std::shared_ptr<CommandList>& commandList)
 {
 	mIBLResource.mHDRImage = std::make_shared<Texture>(this);
-	commandList->LoadTextureFromFile(*mIBLResource.mHDRImage, L"../textures/Tropical_Beach_3k.hdr", D3D12_SRV_DIMENSION_TEXTURE2D);
+	commandList->LoadTextureFromFile(*mIBLResource.mHDRImage, L"../textures/Alexs_Apt_2k.hdr", D3D12_SRV_DIMENSION_TEXTURE2D);
 	mIBLResource.mDiffuseMap = std::make_shared<Texture>(this);
-	commandList->LoadTextureFromFile(*mIBLResource.mDiffuseMap, L"../textures/Tropical_Beach_3k.irr.hdr", D3D12_SRV_DIMENSION_TEXTURE2D);
+	commandList->LoadTextureFromFile(*mIBLResource.mDiffuseMap, L"../textures/Alexs_Apt_2k.irr.hdr", D3D12_SRV_DIMENSION_TEXTURE2D);
 
 	auto cubemapDesc = mIBLResource.mHDRImage->GetD3D12ResourceDesc();
 	cubemapDesc.Format = AlbedoFormat;

@@ -137,8 +137,8 @@ float3 UvToVec(float u, float v)
 
 float2 VecToUv(float3 dir)
 {
-	float u = 0.5 - atan2(dir.y, dir.x) / (2 * PI);
-	float v = acos(dir.z) / PI;
+	float u = 0.5 - atan2(-dir.x, dir.z) / (2 * PI);
+	float v = acos(dir.y) / PI;
 	return float2(u, v);
 }
 // ----------------------------------------------------------------------------
@@ -156,7 +156,7 @@ float3 SampleRandomVectorGGX(float u, float v, float roughness)
 float3 RotateZaxisToLightAxis(float3 zSampled, float3 reflected)
 {
 	reflected = normalize(reflected);
-	float3 A = normalize(float3(-reflected.y, reflected.x, 0));
+	float3 A = normalize(float3(reflected.z, 0, -reflected.x));
 	float3 B = normalize(cross(reflected, A));
 	return normalize(zSampled.x * A + zSampled.y * B + zSampled.z * reflected);
 }
@@ -232,7 +232,7 @@ float4 PS(VertexOut pin) : SV_Target
 		float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, w_i), 0.0) + 0.0001;
 		float3 IBL_Specular = gTable[srvIndices.IBL_SPECULAR].SampleLevel(gsamPointClamp, VecToUv(w_i), 0.0f).xyz;
 
-		ambient_specular += numerator / denominator * IBL_Specular * NdotL;
+		ambient_specular += IBL_Specular;
 	}
 	ambient_specular /= randomValues.sampleNumber;
 	//float3 resultColor = ambient_diffuse + ambient_specular;
