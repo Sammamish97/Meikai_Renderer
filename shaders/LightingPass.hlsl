@@ -124,21 +124,11 @@ float4 PS(VertexOut pin) : SV_Target
 		float3 w_i = RotateZaxisToLightAxis(zOrientSample, reflected);
 		float3 sampledColor = gTable[srvIndices.IBL_SPECULAR].SampleLevel(gsamPointClamp, VecToUv(w_i), 0.0f).xyz;
 
-		float3 H = normalize(V + w_i);
-		float NdotL = max(dot(N, w_i), 0.0);
-
-		float G = GeometrySmith(N, V, w_i, roughness);
-		float3 F = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
-
-		float3 nom = G * F;
-		float denom = 4.0 * max(dot(N, V), 0.0) * max(dot(N, w_i), 0.0) + 0.0001;
-		
-		float3 result = sampledColor * NdotL * (nom / denom);
-		ambient_specular += result;
+		ambient_specular += IBLSpecular(V, N, w_i, sampledColor, albedo, roughness, metalic);
 	}
 	ambient_specular /= randomValues.sampleNumber;
 
-	float3 resultHDR = ambient_specular;
+	float3 resultHDR = LightOutput + ambient_diffuse + ambient_specular;
 	float3 resultLDR = ToneMapping(resultHDR, 5);
     return float4(resultLDR, 1.0);
 }

@@ -120,7 +120,7 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 {
 	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
 	mModels["Cube"] = std::make_shared<Model>("../models/Cube.obj", this, *cmdList);
-	mModels["Bunny"] = std::make_shared<Model>("../models/bunny.obj", this, *cmdList);
+	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);
 	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
 	//mSkeletalModels["X_Bot"] = std::make_shared<SkeletalModel>("../models/X_Bot.dae", this, *cmdList);
 	//mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.dae", this, *cmdList);
@@ -137,7 +137,9 @@ void Demo::BuildObjects()
 	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(1.f, -1.f, 0.f)));
 	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["X_Bot"], mAnimations["dancing"], XMFLOAT3(-1.f, -1.f, 0.f)));
 
-	mObjects.push_back(std::make_unique<Object>(mModels["Bunny"], XMFLOAT3(0, 0, 0), XMFLOAT3(10, 10, 10)));
+	//mObjects.push_back(std::make_unique<Object>(mModels["Torus"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1)));
+	mObjects.push_back(std::make_unique<Object>(mModels["Cube"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1)));
+
 	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
 }
 
@@ -227,14 +229,14 @@ void Demo::UpdateLightCB(const GameTimer& gt)
 	currentFramelightData.directLight.Direction = XMFLOAT3(-0.5f, 0.5f, 0.5f);
 	currentFramelightData.directLight.Color = XMFLOAT3(10, 10, 10);
 
-	currentFramelightData.pointLight[0].Position = XMFLOAT3(1.5, 1.5, 1.5);
-	currentFramelightData.pointLight[0].Color = XMFLOAT3(70, 70, 70);
+	currentFramelightData.pointLight[0].Position = XMFLOAT3(15, 15, 15);
+	currentFramelightData.pointLight[0].Color = XMFLOAT3(7, 7, 7);
 
-	currentFramelightData.pointLight[1].Position = XMFLOAT3(-1.5, -1.5, -1.5);
-	currentFramelightData.pointLight[1].Color = XMFLOAT3(70, 10, 70);
+	currentFramelightData.pointLight[1].Position = XMFLOAT3(-15, -15, -15);
+	currentFramelightData.pointLight[1].Color = XMFLOAT3(7, 7, 7);
 
 	currentFramelightData.pointLight[2].Position = XMFLOAT3(0, 0, 10);
-	currentFramelightData.pointLight[2].Color = XMFLOAT3(0, 0, 10);
+	currentFramelightData.pointLight[2].Color = XMFLOAT3(0, 0, 7);
 
 	*mLightCB = currentFramelightData;
 }

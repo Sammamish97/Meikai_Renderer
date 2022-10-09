@@ -83,7 +83,7 @@ float3 ToneMapping(float3 HDRColor, float exposure)
     float3 mapped = float3(1.0, 1.0, 1.0) - exp(-HDRColor * exposure);
     float inverseGamma = 1.0 / gamma;
     mapped = pow(mapped, float3(inverseGamma, inverseGamma, inverseGamma));
-    return float4(mapped, 1.0);
+    return mapped;
 }
 // ----------------------------------------------------------------------------
 float3 LightEquation(float3 viewDir, float3 normal, float3 fragmentPos, 
@@ -95,7 +95,7 @@ float3 LightEquation(float3 viewDir, float3 normal, float3 fragmentPos,
 
     float3 lightDir = normalize(lightPos - fragmentPos);
     float3 halfVector = normalize(viewDir + lightDir);
-    float distance = length(lightDir);
+    float distance = length(lightPos - fragmentPos);
     float attenuation = 1.0 / (distance * distance);
     float3 radiance = lightColor * attenuation;
 
@@ -103,15 +103,33 @@ float3 LightEquation(float3 viewDir, float3 normal, float3 fragmentPos,
     float G = GeometrySmith(normal, viewDir, lightDir, roughness);
     float3 F = fresnelSchlick(clamp(dot(halfVector, viewDir), 0.0, 1.0), F0);
 
-    float3 numerator = NDF * G * F;
-    float denominator = 4.0 * max(dot(normal, viewDir), 0.0) * max(dot(normal, lightDir), 0.0) + 0.0001;
-    float3 specular = numerator / denominator;
-
     float3 KS = F;
     float3 KD = float3(1.0, 1.0, 1.0) - KS;
     KD *= 1.0 - metalic;
 
+    float3 numerator = NDF * G * F;
+    float denominator = 4.0 * max(dot(normal, viewDir), 0.0) * max(dot(normal, lightDir), 0.0) + 0.0001;
+    float3 specular = numerator / denominator;
+
     float NdotL = max(dot(normal, lightDir), 0.0);
 
     return (KD * albedo / PI + specular) * radiance * NdotL;
+}
+
+float3 IBLSpecular(float3 viewDir, float3 normal, float3 lightDir,
+    float3 lightColor, float3 albedo, float roughness, float metalic)
+{
+    float3 F0 = float3(0.04, 0.04, 0.04); 
+    F0 = lerp(F0, albedo, metalic);
+
+    float3 H = normalize(viewDir + lightDir);
+	float NdotL = max(dot(normal, lightDir), 0.0);
+
+	float G = GeometrySmith(normal, viewDir, lightDir, roughness);
+	float3 F = fresnelSchlick(clamp(dot(H, viewDir), 0.0, 1.0), F0);
+
+	float3 nom = G * F;
+	float denom = 4.0 * max(dot(normal, viewDir), 0.0) * max(dot(normal, lightDir), 0.0) + 0.0001;
+		
+	return lightColor * NdotL * (nom / denom);
 }
