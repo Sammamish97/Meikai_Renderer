@@ -47,8 +47,8 @@ struct PS_OUTPUT
     float4 Position : SV_Target0;
     float4 Normal : SV_Target1;
     float4 Albdeo : SV_Target2;
-    float Metalic : SV_Target3;
-    float Roughness : SV_Target4;
+    float Roughness : SV_Target3;
+    float Metalic : SV_Target4;
 };
 
 VertexOut VS(VertexIn vin)
@@ -76,7 +76,7 @@ PS_OUTPUT PS(VertexOut pin)
     output.Position = pin.PosW;
     output.Normal = float4(pin.NormalW, 1.0);
     output.Albdeo = float4(1.0, 1.0, 1.0, 1.0);
+    output.Roughness = 0.001;
     output.Metalic = 0;
-    output.Roughness = 0.1;
     return output;
 }

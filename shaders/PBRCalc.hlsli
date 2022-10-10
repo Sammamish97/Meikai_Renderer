@@ -5,27 +5,29 @@ static const float2 InvAtan = float2(Inv2PI, InvPI);
 // ----------------------------------------------------------------------------
 float DistributionGGX(float3 N, float3 H, float roughness)
 {
-    float a = roughness * roughness;
-    float a2 = a * a;
-    float NdotH = max(dot(N, H), 0.0);
-    float NdotH2 = NdotH * NdotH;
+    float NdotH = dot(N, H);
+    float roughnessSquare = roughness * roughness;
+    float value = NdotH * NdotH * (roughnessSquare - 1.0) + 1.0;
+    value = value * value * PI;
 
-    float nom   = a2;
-    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
-    denom = PI * denom * denom;
-
-    return nom / denom;
+    return roughnessSquare / value;
 }
+
 // ----------------------------------------------------------------------------
 float GeometrySchlickGGX(float NdotV, float roughness)
 {
     float r = (roughness + 1.0);
-    float k = (r*r) / 8.0;
+    float k_IBL = (r*r) / 2;
 
     float nom   = NdotV;
-    float denom = NdotV * (1.0 - k) + k;
+    float denom = NdotV * (1.0 - k_IBL) + k_IBL;
 
     return nom / denom;
+}
+
+float GeometrySchlickGGX_GARY(float NdotV, float roughness)
+{
+   
 }
 // ----------------------------------------------------------------------------
 float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
@@ -36,6 +38,11 @@ float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
     float ggx1 = GeometrySchlickGGX(NdotL, roughness);
 
     return ggx1 * ggx2;
+}
+
+float GeometrySmith_GARY(float3 N, float3 V, float3 L, float roughness)
+{
+   
 }
 // ----------------------------------------------------------------------------
 float3 fresnelSchlick(float cosTheta, float3 F0)

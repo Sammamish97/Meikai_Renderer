@@ -124,14 +124,17 @@ float4 PS(VertexOut pin) : SV_Target
 			roughness);
 		float3 w_i = RotateZaxisToLightAxis(zOrientSample, reflected);
 		float distribution = DistributionGGX(N, normalize(V + w_i), roughness);
-		float level = (0.5 * log2(2400.f * 1200.f / 20.f)) - (0.5 * log2(distribution / 4.0));
+
+		float level = (0.5 * log2(2400.f * 1200.f / randomValues.sampleNumber)) - (0.5 * log2(distribution));
+
+		level = (roughness == 0) ? 0.0 : level;
 		float3 sampledColor = gTable[srvIndices.IBL_SPECULAR].SampleLevel(gsamLinearRepeat, VecToUv(w_i), level).xyz;
 
 		ambient_specular += IBLSpecular(V, N, w_i, sampledColor, albedo, roughness, metalic);
 	}
 	ambient_specular /= randomValues.sampleNumber;
 
-	float3 resultHDR = LightOutput + ambient_diffuse + ambient_specular;
+	float3 resultHDR = ambient_diffuse + ambient_specular + LightOutput;
 	float3 resultLDR = ToneMapping(resultHDR, 5);
     return float4(resultLDR, 1.0);
 }
