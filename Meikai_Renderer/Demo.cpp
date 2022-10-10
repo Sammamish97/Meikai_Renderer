@@ -78,12 +78,53 @@ bool Demo::Initialize()
 	m_ContentLoaded = true;
 
 	PreCompute();
+	InitImgui();
 
 	return true;
 }
 
+void Demo::InitImgui()
+{
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+	ImGui::StyleColorsDark();
+
+	ImGui_ImplWin32_Init(MainWnd());
+
+	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
+	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	desc.NumDescriptors = 1;
+	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	if (mdxDevice->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&g_pd3dSrvDescHeap)) != S_OK)
+	{
+		assert("Failed to create IMGUI SRV heap");
+	}
+
+	ImGui_ImplDX12_Init(mdxDevice.Get(), 1,
+		DXGI_FORMAT_R8G8B8A8_UNORM, g_pd3dSrvDescHeap.Get(),
+		g_pd3dSrvDescHeap->GetCPUDescriptorHandleForHeapStart(),
+		g_pd3dSrvDescHeap->GetGPUDescriptorHandleForHeapStart());
+}
+
+void Demo::StartImGuiFrame()
+{
+	ImGui_ImplDX12_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+}
+
+void Demo::ClearImGui()
+{
+	ImGui_ImplDX12_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+}
+
 void Demo::Update(const GameTimer& gt)
 {
+	StartImGuiFrame();
 	mCamera->Update(gt);
 	UpdatePassCB(gt);
 	UpdateLightCB(gt);
@@ -102,9 +143,11 @@ void Demo::Draw(const GameTimer& gt)
 	DrawSkyboxPass(*drawcmdList);
 	DrawJointDebug(*drawcmdList);
 	DrawBoneDebug(*drawcmdList);
+	DrawGUI(*drawcmdList);
 	mDirectCommandQueue->ExecuteCommandList(drawcmdList);
 	Present(mFrameResource.mRenderTarget);
 	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
+	
 }
 
 void Demo::PreCompute()
@@ -194,6 +237,8 @@ void Demo::CreateShader()
 
 void Demo::UpdatePassCB(const GameTimer& gt)
 {
+	static float testRoughness = 0;
+	static float testMetalic = 0;
 	CommonCB currentFrameCB;
 
 	XMMATRIX view = XMLoadFloat4x4(&mCamera->GetViewMat());
@@ -216,9 +261,18 @@ void Demo::UpdatePassCB(const GameTimer& gt)
 	currentFrameCB.InvRenderTargetSize = XMFLOAT2(1.0f / mClientWidth, 1.0f / mClientHeight);
 	currentFrameCB.NearZ = 1.0f;
 	currentFrameCB.FarZ = 1000.0f;
-	currentFrameCB.TotalTime = gt.TotalTime();
-	currentFrameCB.DeltaTime = gt.DeltaTime();
+	//Temporaily, Total time is Roughness and Delta time is metalic
+	//currentFrameCB.TotalTime = gt.TotalTime();
+	//currentFrameCB.DeltaTime = gt.DeltaTime();
 
+
+	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+	ImGui::SliderFloat("Roughness", &testRoughness, 0.0f, 0.05f);            // Edit 1 float using a slider from 0.0f to 1.0f
+	ImGui::SliderFloat("Metalic", &testMetalic, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+	ImGui::End();
+
+	currentFrameCB.TotalTime = testRoughness;
+	currentFrameCB.DeltaTime = testMetalic;
 	*mCommonCB = currentFrameCB;
 }
 
@@ -448,6 +502,22 @@ void Demo::DrawBoneDebug(CommandList& cmdList)
 	}
 }
 
+
+void Demo::DrawGUI(CommandList& cmdList)
+{
+	auto rtvHeapCPUHandle = mDescriptorHeaps[RTV]->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx);
+
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { rtvHeapCPUHandle };
+	cmdList.SetRenderTargets(rtvArray, nullptr);
+	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+	cmdList.SetDescriptorHeap(g_pd3dSrvDescHeap);
+	
+	ImGui::Render();
+
+	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), cmdList.GetList().Get());
+}
+
+
 void Demo::DispatchEquiRectToCubemap(CommandList& cmdList)
 {
 	auto device = mApp->GetDevice();
@@ -475,6 +545,8 @@ void Demo::DispatchEquiRectToCubemap(CommandList& cmdList)
 
 	cmdList.Dispatch(MathHelper::DivideByMultiple(equiRectToCubemapCB.CubemapSize, 16), MathHelper::DivideByMultiple(equiRectToCubemapCB.CubemapSize, 16), 6);
 }
+
+
 
 
 void Demo::OnMouseDown(WPARAM btnState, int x, int y)

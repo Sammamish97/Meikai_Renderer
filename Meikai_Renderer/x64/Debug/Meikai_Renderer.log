@@ -7,7 +7,7 @@ C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.h(15,13): 
 C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalMesh.h(20): message : see declaration of 'DXApp'
 C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
 C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Demo.cpp(462,66): warning C4244: 'argument': conversion from 'UINT64' to 'const _Ty', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Demo.cpp(532,66): warning C4244: 'argument': conversion from 'UINT64' to 'const _Ty', possible loss of data
           with
           [
               _Ty=uint32_t

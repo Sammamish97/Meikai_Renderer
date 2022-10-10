@@ -7,6 +7,11 @@
 #include "DXApp.h"
 #include "ConstantBuffers.h"
 
+
+#include <imgui_impl_win32.h>
+#include <imgui_impl_dx12.h>
+#include <imgui.h>
+
 class Model;
 class SkeletalModel;
 
@@ -36,10 +41,13 @@ public:
 	~Demo();
 
 	bool Initialize() override;
-
+	void InitImgui();
 protected:
 	void Update(const GameTimer& gt) override;
 	void Draw(const GameTimer& gt) override;
+
+	void StartImGuiFrame();
+	void ClearImGui();
 
 private:
 	void BuildModels(std::shared_ptr<CommandList>& cmdList);
@@ -57,14 +65,11 @@ private:
 	void DrawJointDebug(CommandList& cmdList);
 	void DrawBoneDebug(CommandList& cmdList);
 	void DrawSkyboxPass(CommandList& cmdList);
+	void DrawGUI(CommandList& commandList);
 
 	void DispatchEquiRectToCubemap(CommandList& cmdList);
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
-
-private:
-	void PreCalculateIBL();
-	void CalcDiffuseIrradiance();
 
 private:
 	void UpdatePassCB(const GameTimer& gt);
@@ -99,6 +104,10 @@ private://CBV resource & allocation
 private:
 	IBLResource mIBLResource;
 	IBLDescriptorIndex mIBLIndex;
+
+private:
+	ComPtr<ID3D12DescriptorHeap> g_pd3dRtvDescHeap = NULL;
+	ComPtr<ID3D12DescriptorHeap> g_pd3dSrvDescHeap = NULL;
 
 private:
 	std::unordered_map<std::string, std::shared_ptr<Model>> mModels;

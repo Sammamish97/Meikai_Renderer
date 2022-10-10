@@ -76,7 +76,7 @@ PS_OUTPUT PS(VertexOut pin)
     output.Position = pin.PosW;
     output.Normal = float4(pin.NormalW, 1.0);
     output.Albdeo = float4(1.0, 1.0, 1.0, 1.0);
-    output.Roughness = 0.001;
-    output.Metalic = 0;
+    output.Roughness = gTotalTime;
+    output.Metalic = gDeltaTime;
     return output;
 }

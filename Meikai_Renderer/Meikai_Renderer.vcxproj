@@ -87,6 +87,13 @@
     <ClCompile Include="..\include\DirectXTex\DirectXTexTGA.cpp" />
     <ClCompile Include="..\include\DirectXTex\DirectXTexUtil.cpp" />
     <ClCompile Include="..\include\DirectXTex\DirectXTexWIC.cpp" />
+    <ClCompile Include="..\include\IMGUI\imgui.cpp" />
+    <ClCompile Include="..\include\IMGUI\imgui_demo.cpp" />
+    <ClCompile Include="..\include\IMGUI\imgui_draw.cpp" />
+    <ClCompile Include="..\include\IMGUI\imgui_impl_dx12.cpp" />
+    <ClCompile Include="..\include\IMGUI\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\include\IMGUI\imgui_tables.cpp" />
+    <ClCompile Include="..\include\IMGUI\imgui_widgets.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Animator.cpp" />
     <ClCompile Include="Bone.cpp" />
@@ -178,7 +185,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)include\assimp-master\build\include;$(SolutionDir)include\assimp-master\include;$(SolutionDir)include\tools;$(SolutionDir)include\DirectXTex</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include\IMGUI;$(SolutionDir)include\assimp-master\build\include;$(SolutionDir)include\assimp-master\include;$(SolutionDir)include\tools;$(SolutionDir)include\DirectXTex</AdditionalIncludeDirectories>
       <PreprocessToFile>false</PreprocessToFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ProgramDataBaseFileName>$(TEMP)$(TargetName).pdb</ProgramDataBaseFileName>
@@ -200,7 +207,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)include\assimp-master\build\include;$(SolutionDir)include\assimp-master\include;$(SolutionDir)include\tools;$(SolutionDir)include\DirectXTex</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include\assimp-master\build\include;$(SolutionDir)include\assimp-master\include;$(SolutionDir)include\tools;$(SolutionDir)include\DirectXTex;$(SolutionDir)include\IMGUI</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ProgramDataBaseFileName>$(TEMP)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
