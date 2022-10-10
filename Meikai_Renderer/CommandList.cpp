@@ -204,6 +204,14 @@ void CommandList::LoadTextureFromFile(Texture& texture, const std::wstring& file
 			scratchImage));
 	}
 
+	ScratchImage mipChain;
+	auto hr = GenerateMipMaps(scratchImage.GetImages(), scratchImage.GetImageCount(),
+		scratchImage.GetMetadata(), TEX_FILTER_LINEAR, 0, mipChain);
+	if (FAILED(hr))
+	{
+		assert("Failed to create mipmap");
+	}
+
 	D3D12_RESOURCE_DESC textureDesc = {};
 	switch (metadata.dimension)
 	{
@@ -248,9 +256,9 @@ void CommandList::LoadTextureFromFile(Texture& texture, const std::wstring& file
 
 	ResourceStateTracker::AddGlobalResourceState(textureResource.Get(), D3D12_RESOURCE_STATE_COMMON);
 
-	std::vector<D3D12_SUBRESOURCE_DATA> subresources(scratchImage.GetImageCount());
-	const Image* pImages = scratchImage.GetImages();
-	for (int i = 0; i < scratchImage.GetImageCount(); ++i)
+	std::vector<D3D12_SUBRESOURCE_DATA> subresources(mipChain.GetImageCount());
+	const Image* pImages = mipChain.GetImages();
+	for (int i = 0; i < mipChain.GetImageCount(); ++i)
 	{
 		auto& subresource = subresources[i];
 		subresource.RowPitch = pImages[i].rowPitch;
@@ -264,7 +272,9 @@ void CommandList::LoadTextureFromFile(Texture& texture, const std::wstring& file
 		static_cast<uint32_t>(subresources.size()),
 		subresources.data());
 
-	texture.CreateViews(srvDim, uavDim);
+	texture.CreateViews(srvDim, uavDim, mipChain.GetImageCount());
+
+	
 }
 
 void CommandList::CopyTextureSubresource(Texture& texture, uint32_t firstSubresource, uint32_t numSubresources, D3D12_SUBRESOURCE_DATA* subresourceData)

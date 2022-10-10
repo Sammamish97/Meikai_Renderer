@@ -180,6 +180,9 @@
     <ClInclude Include="CalcIBLDiffusePass.h">
       <Filter>Passes</Filter>
     </ClInclude>
+    <ClInclude Include="PathGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXApp.cpp">
@@ -355,6 +358,9 @@
     </ClCompile>
     <ClCompile Include="CalcIBLDiffusePass.cpp">
       <Filter>Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="PathGenerator.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

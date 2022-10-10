@@ -36,7 +36,7 @@ public:
 
 	virtual ~Texture();
 
-	void CreateViews(D3D12_SRV_DIMENSION srvDim, D3D12_UAV_DIMENSION uavDim);
+	void CreateViews(D3D12_SRV_DIMENSION srvDim, D3D12_UAV_DIMENSION uavDim, UINT mipLevels = 1);
 
 	void Resize(uint32_t width, uint32_t height, uint32_t depthOrArraySize = 1);
 

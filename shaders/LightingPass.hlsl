@@ -77,6 +77,7 @@ SamplerState gsamPointClamp : register(s0);
 SamplerState gsamLinearClamp : register(s1);
 SamplerState gsamDepthMap : register(s2);
 SamplerState gsamLinearWrap : register(s3);
+SamplerState gsamLinearRepeat : register(s4);
 
 struct VertexOut
 {
@@ -96,7 +97,7 @@ float4 PS(VertexOut pin) : SV_Target
 	float metalic = gTable[srvIndices.Metalic].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
 	float occluded = gTable[srvIndices.SSAO].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
 
-	float3 N = normal;
+	float3 N = normalize(normal);
 	float3 V = normalize(gEyePosW - position);
 
 	float3 F0 = float3(0.04, 0.04, 0.04); 
@@ -110,7 +111,7 @@ float4 PS(VertexOut pin) : SV_Target
 	}
 	float2 normal_UV = VecToUv(normal);
 
-	float3 IBL_Diffuse = gTable[srvIndices.IBL_DIFFUSE].SampleLevel(gsamPointClamp, normal_UV, 0.0f).xyz;
+	float3 IBL_Diffuse = gTable[srvIndices.IBL_DIFFUSE].SampleLevel(gsamLinearRepeat, normal_UV, 0.0f).xyz;
 	
 	float3 ambient_diffuse = IBL_Diffuse * albedo / PI;
 	float3 ambient_specular = float3(0, 0, 0);
@@ -122,7 +123,9 @@ float4 PS(VertexOut pin) : SV_Target
 			randomValues.sampledUV[i].y,
 			roughness);
 		float3 w_i = RotateZaxisToLightAxis(zOrientSample, reflected);
-		float3 sampledColor = gTable[srvIndices.IBL_SPECULAR].SampleLevel(gsamPointClamp, VecToUv(w_i), 0.0f).xyz;
+		float distribution = DistributionGGX(N, normalize(V + w_i), roughness);
+		float level = (0.5 * log2(2400.f * 1200.f / 20.f)) - (0.5 * log2(distribution / 4.0));
+		float3 sampledColor = gTable[srvIndices.IBL_SPECULAR].SampleLevel(gsamLinearRepeat, VecToUv(w_i), level).xyz;
 
 		ambient_specular += IBLSpecular(V, N, w_i, sampledColor, albedo, roughness, metalic);
 	}

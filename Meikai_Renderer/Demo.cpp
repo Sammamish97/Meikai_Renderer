@@ -230,13 +230,13 @@ void Demo::UpdateLightCB(const GameTimer& gt)
 	currentFramelightData.directLight.Color = XMFLOAT3(10, 10, 10);
 
 	currentFramelightData.pointLight[0].Position = XMFLOAT3(15, 15, 15);
-	currentFramelightData.pointLight[0].Color = XMFLOAT3(7, 7, 7);
+	currentFramelightData.pointLight[0].Color = XMFLOAT3(0, 0, 0);
 
 	currentFramelightData.pointLight[1].Position = XMFLOAT3(-15, -15, -15);
-	currentFramelightData.pointLight[1].Color = XMFLOAT3(7, 7, 7);
+	currentFramelightData.pointLight[1].Color = XMFLOAT3(0, 0, 0);
 
 	currentFramelightData.pointLight[2].Position = XMFLOAT3(0, 0, 10);
-	currentFramelightData.pointLight[2].Color = XMFLOAT3(0, 0, 7);
+	currentFramelightData.pointLight[2].Color = XMFLOAT3(0, 0, 0);
 
 	*mLightCB = currentFramelightData;
 }

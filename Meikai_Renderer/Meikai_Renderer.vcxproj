@@ -51,6 +51,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="Page.h" />
     <ClInclude Include="PassDescStruct.h" />
+    <ClInclude Include="PathGenerator.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SkeletalGeometryPass.h" />
     <ClInclude Include="SkeletalMesh.h" />
@@ -113,6 +114,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Page.cpp" />
+    <ClCompile Include="PathGenerator.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="SkeletalGeometryPass.cpp" />
     <ClCompile Include="SkeletalMesh.cpp" />
