@@ -697,6 +697,8 @@ void DXApp::CreateBufferResources()
 	mFrameResource.mSsaoMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO,  D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"SSAO");
 	mFrameResource.mDepthStencilBuffer = std::make_shared<Texture>(this, depthDesc, &clearColorDepth, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"DepthStencil");
 	mFrameResource.mRenderTarget = std::make_shared<Texture>(this, colorDesc, &clearAlbedo, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"RenderTarget");
+	mFrameResource.mShadowDepthBuffer = std::make_shared<Texture>(this, depthDesc, &clearColorDepth, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"ShadowDepth");
+
 
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mPositionMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mNormalMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
@@ -706,6 +708,8 @@ void DXApp::CreateBufferResources()
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mSsaoMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mDepthStencilBuffer->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mRenderTarget->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
+	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mShadowDepthBuffer->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
+
 }
 
 void DXApp::CacheTextureIndices()
@@ -725,6 +729,7 @@ void DXApp::CacheTextureIndices()
 	mDescIndex.mMetalicDescSrvIdx = mFrameResource.mMetalicMap->mSRVDescIDX.value();
 	mDescIndex.mSsaoDescSrvIdx = mFrameResource.mSsaoMap->mSRVDescIDX.value();
 	mDescIndex.mDepthStencilSrvIdx = mFrameResource.mDepthStencilBuffer->mSRVDescIDX.value();
+	mDescIndex.mShadowDepthSrvIdx = mFrameResource.mShadowDepthBuffer->mSRVDescIDX.value();
 
 	mDescIndex.mDepthStencilDsvIdx = mFrameResource.mDepthStencilBuffer->mDSVDescIDX.value();
 }

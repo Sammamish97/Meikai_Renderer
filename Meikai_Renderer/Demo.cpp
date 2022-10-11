@@ -8,8 +8,6 @@
 #include "MathHelper.h"
 #include "DefaultPass.h"
 #include "DescriptorHeap.h"
-#include "Animation.h"
-#include "Animator.h"
 
 #include <d3dcompiler.h>
 #include <d3dx12.h>
@@ -24,6 +22,8 @@
 #include "JointDebugPass.h"
 #include "BoneDebugPass.h"
 #include "SkyboxPass.h"
+#include "ShadowPass.h"
+
 #include "Texture.h"
 
 #include "ResourceStateTracker.h"
@@ -69,6 +69,7 @@ bool Demo::Initialize()
 	mBoneDebugPass = std::make_unique<BoneDebugPass>(this, mShaders["DebugJointVS"], mShaders["DebugJointPS"]);
 	mSkyboxPass = std::make_unique<SkyboxPass>(this, mShaders["SkyboxVS"], mShaders["SkyboxPS"], mIBLResource.mSkyboxCubeMap->mSRVDescIDX.value());
 	mSkeletalGeometryPass = std::make_unique<SkeletalGeometryPass>(this, mShaders["SkeletalGeomVS"], mShaders["SkeletalGeomPS"]);
+	mShadowPass = std::make_unique<ShadowPass>(this, mShaders["ShadowVS"], mShaders["ShadowPS"]);
 
 	mEquiRectToCubemapPass = std::make_unique<EquiRectToCubemapPass>(this, mShaders["EquiRectToCubemapCS"], 
 		mIBLResource.mHDRImage->mSRVDescIDX.value(), mIBLResource.mSkyboxCubeMap->mUAVDescIDX.value());
@@ -138,6 +139,7 @@ void Demo::Draw(const GameTimer& gt)
 {
 	auto drawcmdList = mDirectCommandQueue->GetCommandList();
 	//DrawDefaultPass(*drawcmdList);
+	DrawShadowPass(*drawcmdList);
 	DrawGeometryPasses(*drawcmdList);
 	DrawLightingPass(*drawcmdList);
 	DrawSkyboxPass(*drawcmdList);
@@ -162,33 +164,32 @@ void Demo::PreCompute()
 void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 {
 	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
-	//mModels["Cube"] = std::make_shared<Model>("../models/Cube.obj", this, *cmdList);
-	//mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);
-	//mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, *cmdList);
-	//mModels["Sphere"] = std::make_shared<Model>("../models/Sphere.obj", this, *cmdList);
-	//mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);
+	mModels["Cube"] = std::make_shared<Model>("../models/Cube.obj", this, *cmdList);
+	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);
+	mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, *cmdList);
+	mModels["Sphere"] = std::make_shared<Model>("../models/Sphere.obj", this, *cmdList);
+	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
 
 	//mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
-	mSkeletalModels["X_Bot"] = std::make_shared<SkeletalModel>("../models/X_Bot.dae", this, *cmdList);
-	mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.dae", this, *cmdList);
+	//mSkeletalModels["X_Bot"] = std::make_shared<SkeletalModel>("../models/X_Bot.dae", this, *cmdList);
+	//mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.dae", this, *cmdList);
 }
 
 void Demo::LoadAnimations()
 {
-	mAnimations["walking"] = std::make_shared<Animation>("../animations/Walking.dae", mSkeletalModels["Y_Bot"]);
-	mAnimations["dancing"] = std::make_shared<Animation>("../animations/Dancing.dae", mSkeletalModels["X_Bot"]);
+	//mAnimations["walking"] = std::make_shared<Animation>("../animations/Walking.dae", mSkeletalModels["Y_Bot"]);
+	//mAnimations["dancing"] = std::make_shared<Animation>("../animations/Dancing.dae", mSkeletalModels["X_Bot"]);
 }
 
 void Demo::BuildObjects()
 {
-	mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(1.f, -1.f, 0.f)));
-	mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["X_Bot"], mAnimations["dancing"], XMFLOAT3(-1.f, -1.f, 0.f)));
-
-	//mObjects.push_back(std::make_unique<Object>(mModels["Torus"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1)));
-	/*mObjects.push_back(std::make_unique<Object>(mModels["Cube"], XMFLOAT3(-2, 0, 2), XMFLOAT3(1, 1, 1)));
+	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(1.f, -1.f, 0.f)));
+	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["X_Bot"], mAnimations["dancing"], XMFLOAT3(-1.f, -1.f, 0.f)));
+	mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0, -1, 0), XMFLOAT3(1, 1, 1)));
+	mObjects.push_back(std::make_unique<Object>(mModels["Cube"], XMFLOAT3(-2, 0, 2), XMFLOAT3(1, 1, 1)));
 	mObjects.push_back(std::make_unique<Object>(mModels["Torus"], XMFLOAT3(2, 0, 2), XMFLOAT3(1, 1, 1)));
 	mObjects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(-2, 0, -2), XMFLOAT3(1, 1, 1)));
-	mObjects.push_back(std::make_unique<Object>(mModels["Sphere"], XMFLOAT3(2, 0, -2), XMFLOAT3(1, 1, 1)));*/
+	mObjects.push_back(std::make_unique<Object>(mModels["Sphere"], XMFLOAT3(2, 0, -2), XMFLOAT3(1, 1, 1)));
 
 
 	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
@@ -198,7 +199,7 @@ void Demo::BuildFrameResource()
 {
 	mCommonCB = std::make_unique<CommonCB>();
 	mLightCB = std::make_unique<LightCB>();
-	mRandomSampleCB = std::make_unique<RandomSampleCB>();
+	mRandomSampleCB = std::make_unique<RandomSampleCB>(mIBLResource.mHDRImage->GetD3D12ResourceDesc().Width, mIBLResource.mHDRImage->GetD3D12ResourceDesc().Height);
 }
 
 void Demo::CreateIBLResources(std::shared_ptr<CommandList>& commandList)
@@ -238,6 +239,8 @@ void Demo::CreateShader()
 	mShaders["SkeletalGeomPS"] = DxUtil::CompileShader(L"../shaders/SkeletalGeometryPass.hlsl", nullptr, "PS", "ps_5_1");
 	mShaders["SkyboxVS"] = DxUtil::CompileShader(L"../shaders/SkyboxPass.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["SkyboxPS"] = DxUtil::CompileShader(L"../shaders/SkyboxPass.hlsl", nullptr, "PS", "ps_5_1");
+	mShaders["ShadowVS"] = DxUtil::CompileShader(L"../shaders/ShadowPass.hlsl", nullptr, "VS", "vs_5_1");
+	mShaders["ShadowPS"] = DxUtil::CompileShader(L"../shaders/ShadowPass.hlsl", nullptr, "PS", "ps_5_1");
 
 	mShaders["EquiRectToCubemapCS"] = DxUtil::CompileShader(L"../shaders/EquiRectToCubemap.hlsl", nullptr, "EquiRectToCubemapCS", "cs_5_1");
 	//mShaders["CalcIBLDiffuseCS"] = DxUtil::CompileShader(L"../shaders/CalcIBLDiffuse.hlsl", nullptr, "CalcIBLDiffuseCS", "cs_5_1");
@@ -245,8 +248,6 @@ void Demo::CreateShader()
 
 void Demo::UpdatePassCB(const GameTimer& gt)
 {
-	static float testRoughness = 0;
-	static float testMetalic = 0;
 	CommonCB currentFrameCB;
 
 	XMMATRIX view = XMLoadFloat4x4(&mCamera->GetViewMat());
@@ -269,18 +270,9 @@ void Demo::UpdatePassCB(const GameTimer& gt)
 	currentFrameCB.InvRenderTargetSize = XMFLOAT2(1.0f / mClientWidth, 1.0f / mClientHeight);
 	currentFrameCB.NearZ = 1.0f;
 	currentFrameCB.FarZ = 1000.0f;
-	//Temporaily, Total time is Roughness and Delta time is metalic
-	//currentFrameCB.TotalTime = gt.TotalTime();
-	//currentFrameCB.DeltaTime = gt.DeltaTime();
+	currentFrameCB.TotalTime = gt.TotalTime();
+	currentFrameCB.DeltaTime = gt.DeltaTime();
 
-
-	ImGui::Begin("PBR PARAMS");                          // Create a window called "Hello, world!" and append into it.
-	ImGui::SliderFloat("Roughness", &testRoughness, 0.0f, 0.1f);            // Edit 1 float using a slider from 0.0f to 1.0f
-	ImGui::SliderFloat("Metalic", &testMetalic, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-	ImGui::End();
-
-	currentFrameCB.TotalTime = testRoughness;
-	currentFrameCB.DeltaTime = testMetalic;
 	*mCommonCB = currentFrameCB;
 }
 
@@ -291,7 +283,7 @@ void Demo::UpdateLightCB(const GameTimer& gt)
 	currentFramelightData.directLight.Direction = XMFLOAT3(-0.5f, 0.5f, 0.5f);
 	currentFramelightData.directLight.Color = XMFLOAT3(10, 10, 10);
 
-	currentFramelightData.pointLight[0].Position = XMFLOAT3(15, 15, 15);
+	currentFramelightData.pointLight[0].Position = XMFLOAT3(5, 5, 5);
 	currentFramelightData.pointLight[0].Color = XMFLOAT3(0, 0, 0);
 
 	currentFramelightData.pointLight[1].Position = XMFLOAT3(-15, -15, -15);
@@ -301,6 +293,23 @@ void Demo::UpdateLightCB(const GameTimer& gt)
 	currentFramelightData.pointLight[2].Color = XMFLOAT3(0, 0, 0);
 
 	*mLightCB = currentFramelightData;
+}
+
+XMFLOAT4X4 Demo::BuildShadowMatrix()
+{
+	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
+	auto lightPosition = XMLoadFloat3(&mLightCB->pointLight[0].Position);
+	auto lightDir = XMVectorNegate(lightPosition);
+
+	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMMATRIX view = XMMatrixLookAtLH(lightPosition, lightDir, up);
+	XMMATRIX proj = XMMatrixPerspectiveFovLH(0.25f * MathHelper::Pi, aspectRatio, 1.0f, 1000.0f);
+	XMMATRIX viewProj = XMMatrixMultiply(view, proj);
+
+	XMFLOAT4X4 result;
+
+	XMStoreFloat4x4(&result, XMMatrixTranspose(viewProj));
+	return result;
 }
 
 void Demo::DrawDefaultPass(CommandList& cmdList)
@@ -510,6 +519,30 @@ void Demo::DrawBoneDebug(CommandList& cmdList)
 	}
 }
 
+void Demo::DrawShadowPass(CommandList& cmdList)
+{
+	auto dsvHeapCPUHandle = mDescriptorHeaps[DSV]->GetCpuHandle(mDescIndex.mShadowDepthDsvIdx);
+
+	cmdList.ClearDepthStencilTexture(mFrameResource.mShadowDepthBuffer, dsvHeapCPUHandle, D3D12_CLEAR_FLAG_DEPTH);
+
+	cmdList.SetPipelineState(mShadowPass->mPSO.Get());
+	cmdList.SetGraphicsRootSignature(mShadowPass->mRootSig.Get());
+
+
+	cmdList.SetViewport(mScreenViewport);
+	cmdList.SetScissorRect(mScissorRect);
+
+	cmdList.SetRenderTargets(std::vector<D3D12_CPU_DESCRIPTOR_HANDLE>(), &dsvHeapCPUHandle);
+
+	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	cmdList.SetGraphics32BitConstants(1, BuildShadowMatrix());
+	for (const auto& object : mObjects)
+	{
+		object->Draw(cmdList);
+	}
+	//TODO: Add pass and drawing pass for animated object.
+}
 
 void Demo::DrawGUI(CommandList& cmdList)
 {
@@ -553,9 +586,6 @@ void Demo::DispatchEquiRectToCubemap(CommandList& cmdList)
 
 	cmdList.Dispatch(MathHelper::DivideByMultiple(equiRectToCubemapCB.CubemapSize, 16), MathHelper::DivideByMultiple(equiRectToCubemapCB.CubemapSize, 16), 6);
 }
-
-
-
 
 void Demo::OnMouseDown(WPARAM btnState, int x, int y)
 {

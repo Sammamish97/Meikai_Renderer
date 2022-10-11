@@ -54,8 +54,11 @@ struct LightCB
 
 struct RandomSampleCB
 {
-    RandomSampleCB()
+    RandomSampleCB(int texwidth, int texHeight)
     {
+        textureDim.x = texwidth;
+        textureDim.y = texHeight;
+
         int kk;
         for (int k = 0; k < N; k++)
         {
@@ -74,24 +77,10 @@ struct RandomSampleCB
     float N = 20.f;
     XMFLOAT3 padding;
     XMFLOAT4 hammersley[20];
+    XMINT4 textureDim;
 };
 
 struct ShadowCB
 {
-    XMFLOAT4X4 ShadowTransform = MathHelper::Identity4x4();
-};
-
-struct GeometryCB
-{
-
-};
-
-struct SsaoCB
-{
-	
-};
-
-struct PostProcessCB
-{
-	
+    XMFLOAT4X4 LightMVP = MathHelper::Identity4x4();
 };

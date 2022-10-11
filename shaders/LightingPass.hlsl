@@ -19,13 +19,6 @@ struct PointLight
 	float padding2;
 };
 
-struct RandomSampling
-{
-	float sampleNumber;
-	float3 padding;
-	float4 sampledUV[MAX_UV];
-};
-
 cbuffer cbPass : register(b0)
 {
     float4x4 gView;
@@ -65,6 +58,14 @@ struct DescIndices
 };
 
 ConstantBuffer<DescIndices> srvIndices : register(b2);
+
+struct RandomSampling
+{
+	float sampleNumber;
+	float3 padding;
+	float4 sampledUV[MAX_UV];
+	int4 HDRTexDim;
+};
 
 cbuffer randomData : register(b3)
 {
@@ -125,7 +126,7 @@ float4 PS(VertexOut pin) : SV_Target
 		float3 w_i = RotateZaxisToLightAxis(zOrientSample, reflected);
 		float distribution = DistributionGGX(N, normalize(V + w_i), roughness);
 
-		float level = (0.5 * log2(2400.f * 1200.f / randomValues.sampleNumber)) - (0.5 * log2(distribution));
+		float level = (0.5 * log2(randomValues.HDRTexDim.x * randomValues.HDRTexDim.y / randomValues.sampleNumber)) - (0.5 * log2(distribution));
 
 		level = (roughness == 0) ? 0.0 : level;
 		float3 sampledColor = gTable[srvIndices.IBL_SPECULAR].SampleLevel(gsamLinearRepeat, VecToUv(w_i), level).xyz;

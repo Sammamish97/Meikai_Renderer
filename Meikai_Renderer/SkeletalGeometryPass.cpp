@@ -1,5 +1,4 @@
 #include "SkeletalGeometryPass.h"
-#include "DefaultPass.h"
 #include "DXUtil.h"
 #include "DXApp.h"
 #include "BufferFormat.h"

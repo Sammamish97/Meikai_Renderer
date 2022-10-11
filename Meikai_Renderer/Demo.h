@@ -7,11 +7,6 @@
 #include "DXApp.h"
 #include "ConstantBuffers.h"
 
-
-#include <imgui_impl_win32.h>
-#include <imgui_impl_dx12.h>
-#include <imgui.h>
-
 class Model;
 class SkeletalModel;
 
@@ -33,6 +28,7 @@ class LightingPass;
 class JointDebugPass;
 class BoneDebugPass;
 class SkyboxPass;
+class ShadowPass;
 
 class Demo : public DXApp
 {
@@ -66,6 +62,7 @@ private:
 	void DrawBoneDebug(CommandList& cmdList);
 	void DrawSkyboxPass(CommandList& cmdList);
 	void DrawGUI(CommandList& commandList);
+	void DrawShadowPass(CommandList& commandList);
 
 	void DispatchEquiRectToCubemap(CommandList& cmdList);
 
@@ -74,6 +71,7 @@ private:
 private:
 	void UpdatePassCB(const GameTimer& gt);
 	void UpdateLightCB(const GameTimer& gt);
+	XMFLOAT4X4 BuildShadowMatrix();
 
 protected:
 	void OnMouseDown(WPARAM btnState, int x, int y) override;
@@ -90,6 +88,7 @@ private://Passes
 	std::unique_ptr<SkeletalGeometryPass> mSkeletalGeometryPass;
 	std::unique_ptr<LightingPass> mLightingPass;
 	std::unique_ptr<SkyboxPass> mSkyboxPass;
+	std::unique_ptr<ShadowPass> mShadowPass;
 
 private://Debug Passes
 	std::unique_ptr<JointDebugPass> mJointDebugPass;
