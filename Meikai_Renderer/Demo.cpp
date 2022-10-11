@@ -164,6 +164,10 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
 	mModels["Cube"] = std::make_shared<Model>("../models/Cube.obj", this, *cmdList);
 	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);
+	mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, *cmdList);
+	mModels["Sphere"] = std::make_shared<Model>("../models/Sphere.obj", this, *cmdList);
+	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);
+
 	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
 	//mSkeletalModels["X_Bot"] = std::make_shared<SkeletalModel>("../models/X_Bot.dae", this, *cmdList);
 	//mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.dae", this, *cmdList);
@@ -181,7 +185,11 @@ void Demo::BuildObjects()
 	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["X_Bot"], mAnimations["dancing"], XMFLOAT3(-1.f, -1.f, 0.f)));
 
 	//mObjects.push_back(std::make_unique<Object>(mModels["Torus"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1)));
-	mObjects.push_back(std::make_unique<Object>(mModels["Cube"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1)));
+	mObjects.push_back(std::make_unique<Object>(mModels["Cube"], XMFLOAT3(-2, 0, 2), XMFLOAT3(1, 1, 1)));
+	mObjects.push_back(std::make_unique<Object>(mModels["Torus"], XMFLOAT3(2, 0, 2), XMFLOAT3(1, 1, 1)));
+	mObjects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(-2, 0, -2), XMFLOAT3(1, 1, 1)));
+	mObjects.push_back(std::make_unique<Object>(mModels["Sphere"], XMFLOAT3(2, 0, -2), XMFLOAT3(1, 1, 1)));
+
 
 	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
 }
@@ -266,8 +274,8 @@ void Demo::UpdatePassCB(const GameTimer& gt)
 	//currentFrameCB.DeltaTime = gt.DeltaTime();
 
 
-	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-	ImGui::SliderFloat("Roughness", &testRoughness, 0.0f, 0.05f);            // Edit 1 float using a slider from 0.0f to 1.0f
+	ImGui::Begin("PBR PARAMS");                          // Create a window called "Hello, world!" and append into it.
+	ImGui::SliderFloat("Roughness", &testRoughness, 0.0f, 0.1f);            // Edit 1 float using a slider from 0.0f to 1.0f
 	ImGui::SliderFloat("Metalic", &testMetalic, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 	ImGui::End();
 
