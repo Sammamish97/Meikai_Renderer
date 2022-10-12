@@ -55,6 +55,7 @@ struct DescIndices
 	uint SSAO;
 	uint IBL_DIFFUSE;
 	uint IBL_SPECULAR;
+	uint ShadowDepth;
 };
 
 ConstantBuffer<DescIndices> srvIndices : register(b2);
@@ -72,6 +73,13 @@ cbuffer randomData : register(b3)
 	RandomSampling randomValues;
 };
 
+struct Matrix
+{
+    matrix mat;
+};
+ConstantBuffer<Matrix> shadowVP : register(b4);
+
+
 Texture2D<float4> gTable[] : register(t0, space0);
 
 SamplerState gsamPointClamp : register(s0);
@@ -79,6 +87,39 @@ SamplerState gsamLinearClamp : register(s1);
 SamplerState gsamDepthMap : register(s2);
 SamplerState gsamLinearWrap : register(s3);
 SamplerState gsamLinearRepeat : register(s4);
+SamplerComparisonState gShadowSampler : register(s5);
+
+float CalcShadowFactor(float4 shadowPosH)
+{
+    // Complete projection by doing division by w.
+    shadowPosH.xyz /= shadowPosH.w;
+
+    // Depth in NDC space.
+    float depth = shadowPosH.z;
+
+    uint width, height, numMips;
+    gTable[srvIndices.ShadowDepth].GetDimensions(0, width, height, numMips);
+
+    // Texel size.
+    float dx = 1.0f / (float)width;
+
+    float percentLit = 0.0f;
+    const float2 offsets[9] =
+    {
+        float2(-dx,  -dx), float2(0.0f,  -dx), float2(dx,  -dx),
+        float2(-dx, 0.0f), float2(0.0f, 0.0f), float2(dx, 0.0f),
+        float2(-dx,  +dx), float2(0.0f,  +dx), float2(dx,  +dx)
+    };
+
+    [unroll]
+    for(int i = 0; i < 9; ++i)
+    {
+        percentLit += gTable[srvIndices.ShadowDepth].SampleCmpLevelZero(gShadowSampler,
+            shadowPosH.xy + offsets[i], depth).r;
+    }
+    
+    return percentLit / 9.0f;
+}
 
 struct VertexOut
 {
@@ -97,6 +138,8 @@ float4 PS(VertexOut pin) : SV_Target
 	float roughness = gTable[srvIndices.Roughness].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
 	float metalic = gTable[srvIndices.Metalic].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
 	float occluded = gTable[srvIndices.SSAO].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
+
+	float4 ShadowPos = mul(float4(position, 1.0f), shadowVP.mat);
 
 	float3 N = normalize(normal);
 	float3 V = normalize(gEyePosW - position);
@@ -135,7 +178,8 @@ float4 PS(VertexOut pin) : SV_Target
 	}
 	ambient_specular /= randomValues.sampleNumber;
 
+	float shadowFactor = CalcShadowFactor(ShadowPos);
 	float3 resultHDR = ambient_diffuse + ambient_specular + LightOutput;
-	float3 resultLDR = ToneMapping(resultHDR, 5);
+	float3 resultLDR = ToneMapping(resultHDR, 5) * shadowFactor;
     return float4(resultLDR, 1.0);
 }

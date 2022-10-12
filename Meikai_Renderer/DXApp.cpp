@@ -155,8 +155,19 @@ std::array<const CD3DX12_STATIC_SAMPLER_DESC, 8> DXApp::GetStaticSamplers()
 	const CD3DX12_STATIC_SAMPLER_DESC linearRepeatSampler(
 		4, D3D12_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR);
 
-	const CD3DX12_STATIC_SAMPLER_DESC anisotropicWrap(
+	const CD3DX12_STATIC_SAMPLER_DESC shadow(
 		5, // shaderRegister
+		D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT, // filter
+		D3D12_TEXTURE_ADDRESS_MODE_BORDER,  // addressU
+		D3D12_TEXTURE_ADDRESS_MODE_BORDER,  // addressV
+		D3D12_TEXTURE_ADDRESS_MODE_BORDER,  // addressW
+		0.0f,                               // mipLODBias
+		16,                                 // maxAnisotropy
+		D3D12_COMPARISON_FUNC_LESS_EQUAL,
+		D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE);
+
+	const CD3DX12_STATIC_SAMPLER_DESC anisotropicWrap(
+		6, // shaderRegister
 		D3D12_FILTER_ANISOTROPIC, // filter
 		D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressU
 		D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressV
@@ -165,7 +176,7 @@ std::array<const CD3DX12_STATIC_SAMPLER_DESC, 8> DXApp::GetStaticSamplers()
 		8);                               // maxAnisotropy
 
 	const CD3DX12_STATIC_SAMPLER_DESC anisotropicClamp(
-		6, // shaderRegister
+		7, // shaderRegister
 		D3D12_FILTER_ANISOTROPIC, // filter
 		D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressU
 		D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressV
@@ -173,16 +184,7 @@ std::array<const CD3DX12_STATIC_SAMPLER_DESC, 8> DXApp::GetStaticSamplers()
 		0.0f,                              // mipLODBias
 		8);                                // maxAnisotropy
 
-	const CD3DX12_STATIC_SAMPLER_DESC shadow(
-		7, // shaderRegister
-		D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT, // filter
-		D3D12_TEXTURE_ADDRESS_MODE_BORDER,  // addressU
-		D3D12_TEXTURE_ADDRESS_MODE_BORDER,  // addressV
-		D3D12_TEXTURE_ADDRESS_MODE_BORDER,  // addressW
-		0.0f,                               // mipLODBias
-		16,                                 // maxAnisotropy
-		D3D12_COMPARISON_FUNC_LESS_EQUAL,
-		D3D12_STATIC_BORDER_COLOR_OPAQUE_BLACK);
+	
 
 	return {
 		pointWrap, pointClamp,
@@ -731,6 +733,7 @@ void DXApp::CacheTextureIndices()
 	mDescIndex.mDepthStencilSrvIdx = mFrameResource.mDepthStencilBuffer->mSRVDescIDX.value();
 	mDescIndex.mShadowDepthSrvIdx = mFrameResource.mShadowDepthBuffer->mSRVDescIDX.value();
 
+	mDescIndex.mShadowDepthDsvIdx = mFrameResource.mShadowDepthBuffer->mDSVDescIDX.value();
 	mDescIndex.mDepthStencilDsvIdx = mFrameResource.mDepthStencilBuffer->mDSVDescIDX.value();
 }
 

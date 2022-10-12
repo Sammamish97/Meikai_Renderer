@@ -4,7 +4,7 @@
 
 struct LightDescIndices
 {
-	const UINT TexNum = 8;
+	const UINT TexNum = 9;
 	UINT Pos;
 	UINT Normal;
 	UINT Albedo;
@@ -13,6 +13,7 @@ struct LightDescIndices
 	UINT SSAO;
 	UINT IBL_DIFFUSE;
 	UINT IBL_SPECULAR;
+	UINT ShadowDepth;
 };
 
 class LightingPass : public IPass

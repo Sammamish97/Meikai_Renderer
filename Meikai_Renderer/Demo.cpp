@@ -283,7 +283,7 @@ void Demo::UpdateLightCB(const GameTimer& gt)
 	currentFramelightData.directLight.Direction = XMFLOAT3(-0.5f, 0.5f, 0.5f);
 	currentFramelightData.directLight.Color = XMFLOAT3(10, 10, 10);
 
-	currentFramelightData.pointLight[0].Position = XMFLOAT3(5, 5, 5);
+	currentFramelightData.pointLight[0].Position = XMFLOAT3(10, 10, 10);
 	currentFramelightData.pointLight[0].Color = XMFLOAT3(0, 0, 0);
 
 	currentFramelightData.pointLight[1].Position = XMFLOAT3(-15, -15, -15);
@@ -295,7 +295,7 @@ void Demo::UpdateLightCB(const GameTimer& gt)
 	*mLightCB = currentFramelightData;
 }
 
-XMFLOAT4X4 Demo::BuildShadowMatrix()
+XMFLOAT4X4 Demo::BuildShadowMatrix(bool isShadowPass)
 {
 	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
 	auto lightPosition = XMLoadFloat3(&mLightCB->pointLight[0].Position);
@@ -305,10 +305,21 @@ XMFLOAT4X4 Demo::BuildShadowMatrix()
 	XMMATRIX view = XMMatrixLookAtLH(lightPosition, lightDir, up);
 	XMMATRIX proj = XMMatrixPerspectiveFovLH(0.25f * MathHelper::Pi, aspectRatio, 1.0f, 1000.0f);
 	XMMATRIX viewProj = XMMatrixMultiply(view, proj);
+	XMMATRIX T(
+		0.5f, 0.0f, 0.0f, 0.0f,
+		0.0f, -0.5f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.0f, 1.0f);
 
+
+	XMMATRIX S;
+	S = viewProj * T;
+	if(isShadowPass)
+	{
+		S = viewProj;
+	}
 	XMFLOAT4X4 result;
-
-	XMStoreFloat4x4(&result, XMMatrixTranspose(viewProj));
+	XMStoreFloat4x4(&result, XMMatrixTranspose(S));
 	return result;
 }
 
@@ -437,6 +448,7 @@ void Demo::DrawLightingPass(CommandList& cmdList)
 
 	//Set descriptor indices
 	cmdList.SetGraphics32BitConstants(3, mLightingPass->mLightDescIndices.TexNum + 1, &(mLightingPass->mLightDescIndices));
+	cmdList.SetGraphics32BitConstants(5, BuildShadowMatrix(false));
 
 	//// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
 	cmdList.SetViewport(mScreenViewport);
@@ -536,7 +548,7 @@ void Demo::DrawShadowPass(CommandList& cmdList)
 
 	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	cmdList.SetGraphics32BitConstants(1, BuildShadowMatrix());
+	cmdList.SetGraphics32BitConstants(1, BuildShadowMatrix(true));
 	for (const auto& object : mObjects)
 	{
 		object->Draw(cmdList);

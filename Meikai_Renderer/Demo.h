@@ -66,12 +66,10 @@ private:
 
 	void DispatchEquiRectToCubemap(CommandList& cmdList);
 
-	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> GetStaticSamplers();
-
 private:
 	void UpdatePassCB(const GameTimer& gt);
 	void UpdateLightCB(const GameTimer& gt);
-	XMFLOAT4X4 BuildShadowMatrix();
+	XMFLOAT4X4 BuildShadowMatrix(bool isShadowPass);
 
 protected:
 	void OnMouseDown(WPARAM btnState, int x, int y) override;
