@@ -65,6 +65,9 @@ void ShadowPass::InitPSO()
         mPixelShader->GetBufferSize()
     };
     shadowPSODesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+    shadowPSODesc.RasterizerState.DepthBias = 100000;
+    shadowPSODesc.RasterizerState.DepthBiasClamp = 0.0f;
+    shadowPSODesc.RasterizerState.SlopeScaledDepthBias = 1.0f;
     shadowPSODesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
     shadowPSODesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
     shadowPSODesc.SampleMask = UINT_MAX;

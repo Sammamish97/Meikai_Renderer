@@ -96,19 +96,19 @@ float CalcShadowFactor(float4 shadowPosH)
 
     // Depth in NDC space.
     float depth = shadowPosH.z;
-
     uint width, height, numMips;
     gTable[srvIndices.ShadowDepth].GetDimensions(0, width, height, numMips);
-
+	
     // Texel size.
     float dx = 1.0f / (float)width;
+	float dy = 1.0f / (float)height;
 
     float percentLit = 0.0f;
     const float2 offsets[9] =
     {
-        float2(-dx,  -dx), float2(0.0f,  -dx), float2(dx,  -dx),
+        float2(-dx,  -dy), float2(0.0f,  -dy), float2(dx,  -dy),
         float2(-dx, 0.0f), float2(0.0f, 0.0f), float2(dx, 0.0f),
-        float2(-dx,  +dx), float2(0.0f,  +dx), float2(dx,  +dx)
+        float2(-dx,  +dy), float2(0.0f,  +dy), float2(dx,  +dy)
     };
 
     [unroll]
