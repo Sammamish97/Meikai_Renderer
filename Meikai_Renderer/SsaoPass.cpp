@@ -81,7 +81,7 @@ void SsaoPass::InitPSO()
     SsaoPSO.SampleDesc.Count = mApp->Get4xMsaaState() ? 4 : 1;
     SsaoPSO.SampleDesc.Quality = mApp->Get4xMsaaState() ? (mApp->Get4xMsaaQuality() - 1) : 0;
     SsaoPSO.NumRenderTargets = 1;
-    SsaoPSO.RTVFormats[0] = BackBufferFormat;
+    SsaoPSO.RTVFormats[0] = MonoFormat;
 
    
     SsaoPSO.InputLayout = { nullptr, 0 };

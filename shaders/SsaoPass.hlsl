@@ -19,6 +19,7 @@ cbuffer cbPass : register(b0)
 
 struct DescIndices
 {
+	uint TexNum;
 	uint Pos;
 	uint Normal;
 	uint Depth;

@@ -143,6 +143,7 @@ void Demo::Draw(const GameTimer& gt)
 	//DrawDefaultPass(*drawcmdList);
 	DrawShadowPass(*drawcmdList);
 	DrawGeometryPasses(*drawcmdList);
+	DrawSsaoPass(*drawcmdList);
 	DrawLightingPass(*drawcmdList);
 	DrawSkyboxPass(*drawcmdList);
 	DrawJointDebug(*drawcmdList);
@@ -560,10 +561,16 @@ void Demo::DrawShadowPass(CommandList& cmdList)
 
 void Demo::DrawSsaoPass(CommandList& cmdList)
 {
-	auto rtvHeap = mApp->GetDescriptorHeap(RTV);
-	auto renderTargetRTV = rtvHeap->GetCpuHandle(mDescIndex.mSsaoDescRtvIdx);
-
 	auto srvTex2DHeap = mApp->GetDescriptorHeap(SRV_2D);
+
+	auto rtvHeap = mApp->GetDescriptorHeap(RTV);
+	auto ssaoRTV = rtvHeap->GetCpuHandle(mDescIndex.mSsaoDescRtvIdx);
+
+	auto ssaoResource = mFrameResource.mSsaoMap;
+
+	float colorClearValue[] = { 0.f, 0.f, 0.f, 0.f };
+
+	cmdList.ClearTexture(ssaoResource, ssaoRTV, colorClearValue);
 
 	cmdList.SetPipelineState(mSsaoPass->mPSO.Get());
 	cmdList.SetGraphicsRootSignature(mSsaoPass->mRootSig.Get());
@@ -581,7 +588,7 @@ void Demo::DrawSsaoPass(CommandList& cmdList)
 	cmdList.SetViewport(mScreenViewport);
 	cmdList.SetScissorRect(mScissorRect);
 
-	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { renderTargetRTV };
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { ssaoRTV };
 	//// Specify the buffers we are going to render to.
 	cmdList.SetRenderTargets(rtvArray, nullptr);
 	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
