@@ -30,6 +30,7 @@ class BoneDebugPass;
 class SkyboxPass;
 class ShadowPass;
 class SsaoPass;
+class BlurPass;
 
 class Demo : public DXApp
 {
@@ -67,6 +68,7 @@ private:
 	void DrawSsaoPass(CommandList& commandList);
 
 	void DispatchEquiRectToCubemap(CommandList& cmdList);
+	void DispatchBluring(CommandList& cmdList);
 
 private:
 	void UpdatePassCB(const GameTimer& gt);
@@ -90,6 +92,10 @@ private://Passes
 	std::unique_ptr<SkyboxPass> mSkyboxPass;
 	std::unique_ptr<ShadowPass> mShadowPass;
 	std::unique_ptr<SsaoPass> mSsaoPass;
+
+	std::unique_ptr<BlurPass> mBlurHPass;
+	std::unique_ptr<BlurPass> mBlurVPass;
+
 
 private://Debug Passes
 	std::unique_ptr<JointDebugPass> mJointDebugPass;

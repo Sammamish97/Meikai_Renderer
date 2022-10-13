@@ -22,6 +22,8 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Animator.h" />
     <ClInclude Include="AnimData.h" />
+    <ClInclude Include="BlurPass.h" />
+    <ClInclude Include="BlurPassIndices.h" />
     <ClInclude Include="Bone.h" />
     <ClInclude Include="BoneDebugPass.h" />
     <ClInclude Include="Buffer.h" />
@@ -98,6 +100,7 @@
     <ClCompile Include="..\include\IMGUI\imgui_widgets.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Animator.cpp" />
+    <ClCompile Include="BlurPass.cpp" />
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="BoneDebugPass.cpp" />
     <ClCompile Include="Buffer.cpp" />

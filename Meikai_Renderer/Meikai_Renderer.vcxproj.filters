@@ -192,6 +192,12 @@
     <ClInclude Include="SsaoPass.h">
       <Filter>Passes</Filter>
     </ClInclude>
+    <ClInclude Include="BlurPass.h">
+      <Filter>Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="BlurPassIndices.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXApp.cpp">
@@ -396,6 +402,9 @@
       <Filter>Passes</Filter>
     </ClCompile>
     <ClCompile Include="SsaoPass.cpp">
+      <Filter>Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="BlurPass.cpp">
       <Filter>Passes</Filter>
     </ClCompile>
   </ItemGroup>

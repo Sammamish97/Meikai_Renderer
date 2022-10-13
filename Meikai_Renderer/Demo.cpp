@@ -24,7 +24,7 @@
 #include "SkyboxPass.h"
 #include "ShadowPass.h"
 #include "SsaoPass.h"
-
+#include "BlurPass.h"
 #include "Texture.h"
 
 #include "ResourceStateTracker.h"
@@ -72,6 +72,8 @@ bool Demo::Initialize()
 	mSkeletalGeometryPass = std::make_unique<SkeletalGeometryPass>(this, mShaders["SkeletalGeomVS"], mShaders["SkeletalGeomPS"]);
 	mShadowPass = std::make_unique<ShadowPass>(this, mShaders["ShadowVS"], mShaders["ShadowPS"]);
 	mSsaoPass = std::make_unique<SsaoPass>(this, mShaders["ScreenQuadVS"], mShaders["SsaoPS"]);
+	mBlurHPass = std::make_unique<BlurPass>(this, mShaders["HBlurCS"]);
+	mBlurVPass = std::make_unique<BlurPass>(this, mShaders["VBlurCS"]);
 
 	mEquiRectToCubemapPass = std::make_unique<EquiRectToCubemapPass>(this, mShaders["EquiRectToCubemapCS"], 
 		mIBLResource.mHDRImage->mSRVDescIDX.value(), mIBLResource.mSkyboxCubeMap->mUAVDescIDX.value());
@@ -152,7 +154,6 @@ void Demo::Draw(const GameTimer& gt)
 	mDirectCommandQueue->ExecuteCommandList(drawcmdList);
 	Present(mFrameResource.mRenderTarget);
 	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
-	
 }
 
 void Demo::PreCompute()
@@ -639,6 +640,66 @@ void Demo::DispatchEquiRectToCubemap(CommandList& cmdList)
 	cmdList.SetCompute32BitConstants(3, mEquiRectToCubemapPass->mEquiRectDescIndices.TexNum + 1, &(mEquiRectToCubemapPass->mEquiRectDescIndices));
 
 	cmdList.Dispatch(MathHelper::DivideByMultiple(equiRectToCubemapCB.CubemapSize, 16), MathHelper::DivideByMultiple(equiRectToCubemapCB.CubemapSize, 16), 6);
+}
+
+void Demo::DispatchBluring(CommandList& cmdList)
+{
+	//0: H
+	//1: V
+	auto srvHeap = mApp->GetDescriptorHeap(SRV_2D);
+	auto uavHeap = mApp->GetDescriptorHeap(UAV_2D_ARRAY);
+
+	auto ssaoTexWidth = mFrameResource.mSsaoMap->GetD3D12ResourceDesc().Width;
+	auto ssaoTexHeight = mFrameResource.mSsaoMap->GetD3D12ResourceDesc().Height;
+
+	auto weights = mBlurHPass->CalcGaussWeights(2.5f);
+	int blurRadius = (int)weights.size() / 2;
+
+	cmdList.SetComputeRootSignature(mBlurHPass->mRootSig);
+
+	cmdList.SetCompute32BitConstants(0, weights);//Weights
+	cmdList.SetCompute32BitConstants(3, mBlurHPass->mBlurDescIndices.TexNum + 1, &(mBlurHPass->mBlurDescIndices));//Desc Indices
+
+	cmdList.CopyResource(mFrameResource.mBlurBufferH->GetResource(), mFrameResource.mSsaoMap->GetResource());
+
+	cmdList.TransitionBarrier(mFrameResource.mBlurBufferH->GetResource(), D3D12_RESOURCE_STATE_GENERIC_READ);
+	cmdList.TransitionBarrier(mFrameResource.mBlurBufferV->GetResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+	for (int i = 0; i < blurCount; ++i)
+	{
+		//
+		// Horizontal Blur pass.
+		//
+
+		cmdList.SetPipelineState(mBlurHPass->mPSO);
+
+		cmdList.SetDescriptorHeap(srvHeap->GetDescriptorHeap());
+		cmdList.SetComputeDescriptorTable(1, srvHeap->GetGpuHandle(0));
+
+		cmdList.SetDescriptorHeap(uavHeap->GetDescriptorHeap());
+		cmdList.SetComputeDescriptorTable(2, uavHeap->GetGpuHandle(0));
+
+		// How many groups do we need to dispatch to cover a row of pixels, where each
+		// group covers 256 pixels (the 256 is defined in the ComputeShader).
+		UINT numGroupsX = (UINT)ceilf(ssaoTexWidth / 256.0f);
+		cmdList.Dispatch(numGroupsX, ssaoTexHeight, 1);
+
+		cmdList.TransitionBarrier(mFrameResource.mBlurBufferH->GetResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+		cmdList.TransitionBarrier(mFrameResource.mBlurBufferV->GetResource(), D3D12_RESOURCE_STATE_GENERIC_READ);
+		//
+		// Vertical Blur pass.
+		//
+
+		cmdList.SetPipelineState(mBlurVPass->mPSO);
+
+		// How many groups do we need to dispatch to cover a column of pixels, where each
+		// group covers 256 pixels  (the 256 is defined in the ComputeShader).
+		UINT numGroupsY = (UINT)ceilf(ssaoTexHeight / 256.0f);
+		cmdList.Dispatch(ssaoTexWidth, numGroupsY, 1);
+
+		cmdList.TransitionBarrier(mFrameResource.mBlurBufferH->GetResource(), D3D12_RESOURCE_STATE_GENERIC_READ);
+		cmdList.TransitionBarrier(mFrameResource.mBlurBufferV->GetResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	}
 }
 
 void Demo::OnMouseDown(WPARAM btnState, int x, int y)

@@ -7,15 +7,16 @@ C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.h(15,13): 
 C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalMesh.h(20): message : see declaration of 'DXApp'
 C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
 C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Demo.cpp(627,66): warning C4244: 'argument': conversion from 'UINT64' to 'const _Ty', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Demo.cpp(628,66): warning C4244: 'argument': conversion from 'UINT64' to 'const _Ty', possible loss of data
           with
           [
               _Ty=uint32_t
           ]
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Demo.cpp(698,20): warning C4244: 'argument': conversion from 'UINT64' to 'uint32_t', possible loss of data
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.32.31326\include\memory(3423,56): warning C4244: 'argument': conversion from '_Ty' to 'int', possible loss of data
           with
           [
               _Ty=UINT64
           ]
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Demo.cpp(205): message : see reference to function template instantiation 'std::unique_ptr<RandomSampleCB,std::default_delete<RandomSampleCB>> std::make_unique<RandomSampleCB,UINT64,UINT,0>(UINT64 &&,UINT &&)' being compiled
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Demo.cpp(206): message : see reference to function template instantiation 'std::unique_ptr<RandomSampleCB,std::default_delete<RandomSampleCB>> std::make_unique<RandomSampleCB,UINT64,UINT,0>(UINT64 &&,UINT &&)' being compiled
   Meikai_Renderer.vcxproj -> C:\Data\Meikai_Renderer\Meikai_Renderer\bin\Meikai_Renderer_debug.exe

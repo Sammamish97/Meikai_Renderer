@@ -17,6 +17,8 @@ struct FrameBufferResource
 	std::shared_ptr<Texture> mRoughnessMap;
 	std::shared_ptr<Texture> mSsaoMap;
 	std::shared_ptr<Texture> mShadowDepthBuffer;
+	std::shared_ptr<Texture> mBlurBufferH;
+	std::shared_ptr<Texture> mBlurBufferV;
 };
 
 struct IBLResource
@@ -54,6 +56,12 @@ struct FrameBufferDescriptorIndex
 
 	UINT mShadowDepthSrvIdx;
 	UINT mShadowDepthDsvIdx;
+
+	UINT mBlurHSrvIdx;
+	UINT mBlurHUavIdx;
+
+	UINT mBlurVSrvIdx;
+	UINT mBlurVUavIdx;
 };
 
 struct IBLDescriptorIndex

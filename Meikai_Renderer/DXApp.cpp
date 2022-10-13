@@ -668,6 +668,7 @@ void DXApp::CreateBufferResources()
 	auto normalDesc = CD3DX12_RESOURCE_DESC::Tex2D(NormalFormat, mClientWidth, mClientHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
 	auto monoDesc = CD3DX12_RESOURCE_DESC::Tex2D(MonoFormat, mClientWidth, mClientHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
 	auto depthDesc = CD3DX12_RESOURCE_DESC::Tex2D(DepthStencilDSVFormat, mClientWidth, mClientHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+	auto blurDesc = CD3DX12_RESOURCE_DESC::Tex2D(MonoFormat, mClientWidth, mClientHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 
 	CD3DX12_CLEAR_VALUE clearColorBlack;
 	clearColorBlack.Color[0] = 0.f;
@@ -700,6 +701,8 @@ void DXApp::CreateBufferResources()
 	mFrameResource.mDepthStencilBuffer = std::make_shared<Texture>(this, depthDesc, &clearColorDepth, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"DepthStencil");
 	mFrameResource.mRenderTarget = std::make_shared<Texture>(this, colorDesc, &clearAlbedo, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"RenderTarget");
 	mFrameResource.mShadowDepthBuffer = std::make_shared<Texture>(this, depthDesc, &clearColorDepth, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"ShadowDepth");
+	mFrameResource.mBlurBufferH = std::make_shared<Texture>(this, blurDesc, nullptr, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_TEXTURE2D, L"BlurH");
+	mFrameResource.mBlurBufferV = std::make_shared<Texture>(this, blurDesc, nullptr, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_TEXTURE2D, L"BlurV");;
 
 
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mPositionMap->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
@@ -711,7 +714,8 @@ void DXApp::CreateBufferResources()
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mDepthStencilBuffer->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mRenderTarget->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mShadowDepthBuffer->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
-
+	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mBlurBufferH->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
+	ResourceStateTracker::AddGlobalResourceState(mFrameResource.mBlurBufferV->GetResource().Get(), D3D12_RESOURCE_STATE_COMMON);
 }
 
 void DXApp::CacheTextureIndices()
@@ -732,6 +736,11 @@ void DXApp::CacheTextureIndices()
 	mDescIndex.mSsaoDescSrvIdx = mFrameResource.mSsaoMap->mSRVDescIDX.value();
 	mDescIndex.mDepthStencilSrvIdx = mFrameResource.mDepthStencilBuffer->mSRVDescIDX.value();
 	mDescIndex.mShadowDepthSrvIdx = mFrameResource.mShadowDepthBuffer->mSRVDescIDX.value();
+	mDescIndex.mBlurHSrvIdx = mFrameResource.mBlurBufferH->mSRVDescIDX.value();
+	mDescIndex.mBlurVSrvIdx = mFrameResource.mBlurBufferV->mSRVDescIDX.value();
+
+	mDescIndex.mBlurHUavIdx = mFrameResource.mBlurBufferH->mUAVDescIDX.value();
+	mDescIndex.mBlurVUavIdx = mFrameResource.mBlurBufferV->mUAVDescIDX.value();
 
 	mDescIndex.mShadowDepthDsvIdx = mFrameResource.mShadowDepthBuffer->mDSVDescIDX.value();
 	mDescIndex.mDepthStencilDsvIdx = mFrameResource.mDepthStencilBuffer->mDSVDescIDX.value();
