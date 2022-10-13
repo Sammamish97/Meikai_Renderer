@@ -23,6 +23,7 @@
 #include "BoneDebugPass.h"
 #include "SkyboxPass.h"
 #include "ShadowPass.h"
+#include "SsaoPass.h"
 
 #include "Texture.h"
 
@@ -70,6 +71,7 @@ bool Demo::Initialize()
 	mSkyboxPass = std::make_unique<SkyboxPass>(this, mShaders["SkyboxVS"], mShaders["SkyboxPS"], mIBLResource.mSkyboxCubeMap->mSRVDescIDX.value());
 	mSkeletalGeometryPass = std::make_unique<SkeletalGeometryPass>(this, mShaders["SkeletalGeomVS"], mShaders["SkeletalGeomPS"]);
 	mShadowPass = std::make_unique<ShadowPass>(this, mShaders["ShadowVS"], mShaders["ShadowPS"]);
+	mSsaoPass = std::make_unique<SsaoPass>(this, mShaders["ScreenQuadVS"], mShaders["SsaoPS"]);
 
 	mEquiRectToCubemapPass = std::make_unique<EquiRectToCubemapPass>(this, mShaders["EquiRectToCubemapCS"], 
 		mIBLResource.mHDRImage->mSRVDescIDX.value(), mIBLResource.mSkyboxCubeMap->mUAVDescIDX.value());
@@ -311,13 +313,13 @@ XMFLOAT4X4 Demo::BuildShadowMatrix(bool isShadowPass)
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.5f, 0.5f, 0.0f, 1.0f);
 
-
 	XMMATRIX S;
 	S = viewProj * T;
 	if(isShadowPass)
 	{
 		S = viewProj;
 	}
+
 	XMFLOAT4X4 result;
 	XMStoreFloat4x4(&result, XMMatrixTranspose(S));
 	return result;
@@ -554,6 +556,39 @@ void Demo::DrawShadowPass(CommandList& cmdList)
 		object->Draw(cmdList);
 	}
 	//TODO: Add pass and drawing pass for animated object.
+}
+
+void Demo::DrawSsaoPass(CommandList& cmdList)
+{
+	auto rtvHeap = mApp->GetDescriptorHeap(RTV);
+	auto renderTargetRTV = rtvHeap->GetCpuHandle(mDescIndex.mSsaoDescRtvIdx);
+
+	auto srvTex2DHeap = mApp->GetDescriptorHeap(SRV_2D);
+
+	cmdList.SetPipelineState(mSsaoPass->mPSO.Get());
+	cmdList.SetGraphicsRootSignature(mSsaoPass->mRootSig.Get());
+
+	cmdList.SetGraphicsDynamicConstantBuffer(0, sizeof(CommonCB), mCommonCB.get());
+
+	//Set tables for geometry textures
+	cmdList.SetDescriptorHeap(srvTex2DHeap->GetDescriptorHeap());
+	cmdList.SetGraphicsDescriptorTable(1, srvTex2DHeap->GetGpuHandle(0));
+
+	//Set descriptor indices
+	cmdList.SetGraphics32BitConstants(2, mSsaoPass->mSsaoIndices.TexNum + 1, &(mSsaoPass->mSsaoIndices));
+
+	//// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
+	cmdList.SetViewport(mScreenViewport);
+	cmdList.SetScissorRect(mScissorRect);
+
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { renderTargetRTV };
+	//// Specify the buffers we are going to render to.
+	cmdList.SetRenderTargets(rtvArray, nullptr);
+	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	cmdList.SetEmptyVertexBuffer();
+	cmdList.SetEmptyIndexBuffer();
+	cmdList.Draw(3);
 }
 
 void Demo::DrawGUI(CommandList& cmdList)

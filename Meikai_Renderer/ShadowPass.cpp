@@ -1,10 +1,9 @@
 #include "ShadowPass.h"
-
-#include <DirectXMath.h>
-
 #include "DXUtil.h"
 #include "DXApp.h"
 #include "BufferFormat.h"
+#include <DirectXMath.h>
+
 
 ShadowPass::ShadowPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader)
 	:IPass(appPtr, vertShader, pixelShader)
@@ -15,7 +14,7 @@ ShadowPass::ShadowPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBl
 
 void ShadowPass::InitRootSignature()
 {
-		//Shadow pass use these uniform values
+	//Shadow pass use these uniform values
 		//0. model's world position
 		//1. light MVP matrix
     auto device = mApp->GetDevice();

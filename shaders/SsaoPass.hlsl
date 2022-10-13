@@ -17,16 +17,21 @@ cbuffer cbPass : register(b0)
     float gDeltaTime;
 };
 
-Texture2D gPositionMap : register(t0);
-Texture2D gNormalMap  : register(t1);
-Texture2D gAlbedoMap  : register(t2);
-Texture2D gDepthMap  : register(t3);
-// Constant data that varies per material.
+struct DescIndices
+{
+	uint Pos;
+	uint Normal;
+	uint Depth;
+};
+ConstantBuffer<DescIndices> srvIndices : register(b1);
 
 SamplerState gsamPointClamp : register(s0);
 SamplerState gsamLinearClamp : register(s1);
 SamplerState gsamDepthMap : register(s2);
 SamplerState gsamLinearWrap : register(s3);
+SamplerState gsamLinearRepeat : register(s4);
+
+Texture2D<float4> gTable[] : register(t0, space0);
 
 struct VertexOut
 {
@@ -39,9 +44,9 @@ float4 PS(VertexOut pin) : SV_Target
 	float2 fliped_UV = pin.UV;
 	fliped_UV.y = 1 - fliped_UV.y;
 
-	float3 worldPosition = gPositionMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
-	float3 normal = normalize(gNormalMap.SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz);
-	float depth = gDepthMap.SampleLevel(gsamDepthMap, fliped_UV, 0.0f).r;
+	float3 worldPosition = gTable[srvIndices.Pos].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
+	float3 normal = normalize(gTable[srvIndices.Normal].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz);
+	float depth = gTable[srvIndices.Depth].SampleLevel(gsamDepthMap, fliped_UV, 0.0f).r;
 
 	int2 pixelScreenCoord = pin.posH.xy;
 	float2 pixelNDCCoord = pixelScreenCoord / gRenderTargetSize;
@@ -61,7 +66,7 @@ float4 PS(VertexOut pin) : SV_Target
 		float theta = 2.0 * 3.14 * alpha * (7.0 * sampleCount / 9.0) + phi;
 
 		float2 sampledUV = pixelNDCCoord + height * float2(cos(theta), sin(theta));
-		float3 sampledPos = gPositionMap.SampleLevel(gsamPointClamp, sampledUV, 0.0f).xyz;
+		float3 sampledPos = gTable[srvIndices.Pos].SampleLevel(gsamPointClamp, sampledUV, 0.0f).xyz;
 
 		float3 origin_to_sample = sampledPos - worldPosition;
 		float3 w_i = normalize(origin_to_sample);

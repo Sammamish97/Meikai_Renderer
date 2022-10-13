@@ -59,6 +59,7 @@
     <ClInclude Include="SkeletalModel.h" />
     <ClInclude Include="SkeletalObject.h" />
     <ClInclude Include="SkyboxPass.h" />
+    <ClInclude Include="SsaoPass.h" />
     <ClInclude Include="UploadBuffer.h" />
     <ClInclude Include="ResourceStateTracker.h" />
     <ClInclude Include="Texture.h" />
@@ -130,6 +131,7 @@
     <ClCompile Include="SkeletalModel.cpp" />
     <ClCompile Include="SkeletalObject.cpp" />
     <ClCompile Include="SkyboxPass.cpp" />
+    <ClCompile Include="SsaoPass.cpp" />
     <ClCompile Include="UploadBuffer.cpp" />
     <ClCompile Include="ResourceStateTracker.cpp" />
     <ClCompile Include="Texture.cpp" />

@@ -29,6 +29,7 @@ class JointDebugPass;
 class BoneDebugPass;
 class SkyboxPass;
 class ShadowPass;
+class SsaoPass;
 
 class Demo : public DXApp
 {
@@ -63,6 +64,7 @@ private:
 	void DrawSkyboxPass(CommandList& cmdList);
 	void DrawGUI(CommandList& commandList);
 	void DrawShadowPass(CommandList& commandList);
+	void DrawSsaoPass(CommandList& commandList);
 
 	void DispatchEquiRectToCubemap(CommandList& cmdList);
 
@@ -87,6 +89,7 @@ private://Passes
 	std::unique_ptr<LightingPass> mLightingPass;
 	std::unique_ptr<SkyboxPass> mSkyboxPass;
 	std::unique_ptr<ShadowPass> mShadowPass;
+	std::unique_ptr<SsaoPass> mSsaoPass;
 
 private://Debug Passes
 	std::unique_ptr<JointDebugPass> mJointDebugPass;
