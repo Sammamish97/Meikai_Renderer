@@ -3,11 +3,24 @@
 #include "DescriptorHeap.h"
 #include "DXUtil.h"
 
-BlurPass::BlurPass(DXApp* appPtr, ComPtr<ID3DBlob> computeShader)
+BlurPass::BlurPass(DXApp* appPtr, ComPtr<ID3DBlob> computeShader, bool isHorizontal)
 	:IPass(appPtr, computeShader)
 {
 	InitRootSignature();
-	InitPSO();   
+	InitPSO();
+    if(isHorizontal)
+    {
+        mBlurDescIndices.SRVTextureInput = mApp->mDescIndex.mBlurHSrvIdx;
+        mBlurDescIndices.UAVTextureOutput = mApp->mDescIndex.mBlurVUavIdx;
+    }
+    else
+    {
+        mBlurDescIndices.SRVTextureInput = mApp->mDescIndex.mBlurVSrvIdx;
+        mBlurDescIndices.UAVTextureOutput = mApp->mDescIndex.mBlurHUavIdx;
+    }
+
+    mBlurDescIndices.Normal = mApp->mDescIndex.mNormalDescSrvIdx;
+    mBlurDescIndices.Depth = mApp->mDescIndex.mDepthStencilSrvIdx;
 }
 
 void BlurPass::InitRootSignature()

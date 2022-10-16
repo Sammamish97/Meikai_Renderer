@@ -58,7 +58,8 @@ bool Demo::Initialize()
 	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
 	mCamera = std::make_unique<Camera>(aspectRatio);
 	BuildFrameResource();
-	CreateShader();
+	CreateShaderFromHLSL();
+	//CreateShaderFromCSO();
 
 	mScissorRect = { 0, 0, mClientWidth, mClientHeight };
 	mScreenViewport = {0, 0, (float)mClientWidth, (float)mClientHeight,0, 1};
@@ -72,8 +73,8 @@ bool Demo::Initialize()
 	mSkeletalGeometryPass = std::make_unique<SkeletalGeometryPass>(this, mShaders["SkeletalGeomVS"], mShaders["SkeletalGeomPS"]);
 	mShadowPass = std::make_unique<ShadowPass>(this, mShaders["ShadowVS"], mShaders["ShadowPS"]);
 	mSsaoPass = std::make_unique<SsaoPass>(this, mShaders["ScreenQuadVS"], mShaders["SsaoPS"]);
-	mBlurHPass = std::make_unique<BlurPass>(this, mShaders["HBlurCS"]);
-	mBlurVPass = std::make_unique<BlurPass>(this, mShaders["VBlurCS"]);
+	mBlurHPass = std::make_unique<BlurPass>(this, mShaders["HBlurCS"], true);
+	mBlurVPass = std::make_unique<BlurPass>(this, mShaders["VBlurCS"], false);
 
 	mEquiRectToCubemapPass = std::make_unique<EquiRectToCubemapPass>(this, mShaders["EquiRectToCubemapCS"], 
 		mIBLResource.mHDRImage->mSRVDescIDX.value(), mIBLResource.mSkyboxCubeMap->mUAVDescIDX.value());
@@ -146,6 +147,7 @@ void Demo::Draw(const GameTimer& gt)
 	DrawShadowPass(*drawcmdList);
 	DrawGeometryPasses(*drawcmdList);
 	DrawSsaoPass(*drawcmdList);
+	DispatchBluring(*drawcmdList);
 	DrawLightingPass(*drawcmdList);
 	DrawSkyboxPass(*drawcmdList);
 	DrawJointDebug(*drawcmdList);
@@ -176,18 +178,18 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 
 	//mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
 	//mSkeletalModels["X_Bot"] = std::make_shared<SkeletalModel>("../models/X_Bot.dae", this, *cmdList);
-	//mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.dae", this, *cmdList);
+	mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.dae", this, *cmdList);
 }
 
 void Demo::LoadAnimations()
 {
-	//mAnimations["walking"] = std::make_shared<Animation>("../animations/Walking.dae", mSkeletalModels["Y_Bot"]);
+	mAnimations["walking"] = std::make_shared<Animation>("../animations/Walking.dae", mSkeletalModels["Y_Bot"]);
 	//mAnimations["dancing"] = std::make_shared<Animation>("../animations/Dancing.dae", mSkeletalModels["X_Bot"]);
 }
 
 void Demo::BuildObjects()
 {
-	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(1.f, -1.f, 0.f)));
+	mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, 0.f, 0.f)));
 	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["X_Bot"], mAnimations["dancing"], XMFLOAT3(-1.f, -1.f, 0.f)));
 	mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0, -1, 0), XMFLOAT3(1, 1, 1)));
 	mObjects.push_back(std::make_unique<Object>(mModels["Cube"], XMFLOAT3(-2, 0, 2), XMFLOAT3(1, 1, 1)));
@@ -224,34 +226,72 @@ void Demo::CreateIBLResources(std::shared_ptr<CommandList>& commandList)
 
 }
 
-void Demo::CreateShader()
+void Demo::CreateShaderFromHLSL()
 {
-	mShaders["standardVS"] = DxUtil::CompileShader(L"../shaders/VertexShader.hlsl", nullptr, "main", "vs_5_1");
-	mShaders["opaquePS"] = DxUtil::CompileShader(L"../shaders/PixelShader.hlsl", nullptr, "main", "ps_5_1");
 	mShaders["GeomVS"] = DxUtil::CompileShader(L"../shaders/GeometryPass.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["GeomPS"] = DxUtil::CompileShader(L"../shaders/GeometryPass.hlsl", nullptr, "PS", "ps_5_1");
+
 	mShaders["ScreenQuadVS"] = DxUtil::CompileShader(L"../shaders/ScreenQuad.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["LightingPS"] = DxUtil::CompileShader(L"../shaders/LightingPass.hlsl", nullptr, "PS", "ps_5_1");
+
 	mShaders["SsaoPS"] = DxUtil::CompileShader(L"../shaders/SsaoPass.hlsl", nullptr, "PS", "ps_5_1");
-	mShaders["HBlurCS"] = DxUtil::CompileShader(L"../shaders/Blur.hlsl", nullptr, "HorzBlurCS", "cs_5_1");
-	mShaders["VBlurCS"] = DxUtil::CompileShader(L"../shaders/Blur.hlsl", nullptr, "VertBlurCS", "cs_5_1");
+
 	mShaders["DefaultForwardVS"] = DxUtil::CompileShader(L"../shaders/DefaultForward.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["DefaultForwardPS"] = DxUtil::CompileShader(L"../shaders/DefaultForward.hlsl", nullptr, "PS", "ps_5_1");
+
 	mShaders["DebugJointVS"] = DxUtil::CompileShader(L"../shaders/DebugJoint.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["DebugJointPS"] = DxUtil::CompileShader(L"../shaders/DebugJoint.hlsl", nullptr, "PS", "ps_5_1");
+
 	mShaders["SkeletalGeomVS"] = DxUtil::CompileShader(L"../shaders/SkeletalGeometryPass.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["SkeletalGeomPS"] = DxUtil::CompileShader(L"../shaders/SkeletalGeometryPass.hlsl", nullptr, "PS", "ps_5_1");
+
 	mShaders["SkyboxVS"] = DxUtil::CompileShader(L"../shaders/SkyboxPass.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["SkyboxPS"] = DxUtil::CompileShader(L"../shaders/SkyboxPass.hlsl", nullptr, "PS", "ps_5_1");
+
 	mShaders["ShadowVS"] = DxUtil::CompileShader(L"../shaders/ShadowPass.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["ShadowPS"] = DxUtil::CompileShader(L"../shaders/ShadowPass.hlsl", nullptr, "PS", "ps_5_1");
 
+	mShaders["HBlurCS"] = DxUtil::CompileShader(L"../shaders/Blur.hlsl", nullptr, "HorzBlurCS", "cs_5_1");
+	mShaders["VBlurCS"] = DxUtil::CompileShader(L"../shaders/Blur.hlsl", nullptr, "VertBlurCS", "cs_5_1");
 	mShaders["EquiRectToCubemapCS"] = DxUtil::CompileShader(L"../shaders/EquiRectToCubemap.hlsl", nullptr, "EquiRectToCubemapCS", "cs_5_1");
-	//mShaders["CalcIBLDiffuseCS"] = DxUtil::CompileShader(L"../shaders/CalcIBLDiffuse.hlsl", nullptr, "CalcIBLDiffuseCS", "cs_5_1");
+}
+
+void Demo::CreateShaderFromCSO()
+{
+	mShaders["GeomVS"] = DxUtil::LoadCSO(L"../shaders/GeomVS.cso");
+	mShaders["GeomPS"] = DxUtil::LoadCSO(L"../shaders/GeomPS.cso");
+
+	mShaders["ScreenQuadVS"] = DxUtil::LoadCSO(L"../shaders/ScreenQuadVS.cso");
+	mShaders["LightingPS"] = DxUtil::LoadCSO(L"../shaders/LightingPS.cso");
+
+	mShaders["SsaoPS"] = DxUtil::LoadCSO(L"../shaders/SsaoPS.cso");
+
+	mShaders["DefaultForwardVS"] = DxUtil::LoadCSO(L"../shaders/DefaultForwardVS.cso");
+	mShaders["DefaultForwardPS"] = DxUtil::LoadCSO(L"../shaders/DefaultForwardPS.cso");
+
+	mShaders["DebugJointVS"] = DxUtil::LoadCSO(L"../shaders/DebugJointVS.cso");
+	mShaders["DebugJointPS"] = DxUtil::LoadCSO(L"../shaders/DebugJointPS.cso");
+
+	mShaders["SkeletalGeomVS"] = DxUtil::LoadCSO(L"../shaders/SkeletalGeomVS.cso");
+	mShaders["SkeletalGeomPS"] = DxUtil::LoadCSO(L"../shaders/SkeletalGeomPS.cso");
+
+	mShaders["SkyboxVS"] = DxUtil::LoadCSO(L"../shaders/SkyboxVS.cso");
+	mShaders["SkyboxPS"] = DxUtil::LoadCSO(L"../shaders/SkyboxPS.cso");
+
+	mShaders["ShadowVS"] = DxUtil::LoadCSO(L"../shaders/ShadowVS.cso");
+	mShaders["ShadowPS"] = DxUtil::LoadCSO(L"../shaders/ShadowPS.cso");
+
+	mShaders["HBlurCS"] = DxUtil::LoadCSO(L"../shaders/HBlurCS.cso");
+	mShaders["VBlurCS"] = DxUtil::LoadCSO(L"../shaders/VBlurCS.cso");
+
+	mShaders["EquiRectToCubemapCS"] = DxUtil::LoadCSO(L"../shaders/EquiRectToCubemapCS.cso");
 }
 
 void Demo::UpdatePassCB(const GameTimer& gt)
 {
+	static float testRoughness = 0;
+	static float testMetalic = 0;
+
 	CommonCB currentFrameCB;
 
 	XMMATRIX view = XMLoadFloat4x4(&mCamera->GetViewMat());
@@ -274,8 +314,19 @@ void Demo::UpdatePassCB(const GameTimer& gt)
 	currentFrameCB.InvRenderTargetSize = XMFLOAT2(1.0f / mClientWidth, 1.0f / mClientHeight);
 	currentFrameCB.NearZ = 1.0f;
 	currentFrameCB.FarZ = 1000.0f;
-	currentFrameCB.TotalTime = gt.TotalTime();
-	currentFrameCB.DeltaTime = gt.DeltaTime();
+
+	//Temporaily, Total time is Roughness and Delta time is metalic
+	//currentFrameCB.TotalTime = gt.TotalTime();
+	//currentFrameCB.DeltaTime = gt.DeltaTime();
+
+
+	ImGui::Begin("PBR_PARAMS");                          // Create a window called "Hello, world!" and append into it.
+	ImGui::SliderFloat("Roughness", &testRoughness, 0.0f, 0.05f);            // Edit 1 float using a slider from 0.0f to 1.0f
+	ImGui::SliderFloat("Metalic", &testMetalic, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+	ImGui::End();
+
+	currentFrameCB.TotalTime = testRoughness;
+	currentFrameCB.DeltaTime = testMetalic;
 
 	*mCommonCB = currentFrameCB;
 }
@@ -647,7 +698,7 @@ void Demo::DispatchBluring(CommandList& cmdList)
 	//0: H
 	//1: V
 	auto srvHeap = mApp->GetDescriptorHeap(SRV_2D);
-	auto uavHeap = mApp->GetDescriptorHeap(UAV_2D_ARRAY);
+	auto uavHeap = mApp->GetDescriptorHeap(UAV_2D);
 
 	auto ssaoTexWidth = mFrameResource.mSsaoMap->GetD3D12ResourceDesc().Width;
 	auto ssaoTexHeight = mFrameResource.mSsaoMap->GetD3D12ResourceDesc().Height;
@@ -657,13 +708,15 @@ void Demo::DispatchBluring(CommandList& cmdList)
 
 	cmdList.SetComputeRootSignature(mBlurHPass->mRootSig);
 
-	cmdList.SetCompute32BitConstants(0, weights);//Weights
-	cmdList.SetCompute32BitConstants(3, mBlurHPass->mBlurDescIndices.TexNum + 1, &(mBlurHPass->mBlurDescIndices));//Desc Indices
+	cmdList.GetList()->SetComputeRoot32BitConstants(0, 1, &blurRadius, 0);
+	cmdList.GetList()->SetComputeRoot32BitConstants(0, (UINT)weights.size(), weights.data(), 1);
 
 	cmdList.CopyResource(mFrameResource.mBlurBufferH->GetResource(), mFrameResource.mSsaoMap->GetResource());
+	cmdList.FlushResourceBarriers();
 
-	cmdList.TransitionBarrier(mFrameResource.mBlurBufferH->GetResource(), D3D12_RESOURCE_STATE_GENERIC_READ);
-	cmdList.TransitionBarrier(mFrameResource.mBlurBufferV->GetResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	cmdList.TransitionBarrier(mFrameResource.mBlurBufferH->GetResource(), D3D12_RESOURCE_STATE_GENERIC_READ);//이것만 transition되고 
+	cmdList.TransitionBarrier(mFrameResource.mBlurBufferV->GetResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);//이것은 transition이 안됨.
+	cmdList.FlushResourceBarriers();
 
 	for (int i = 0; i < blurCount; ++i)
 	{
@@ -672,6 +725,8 @@ void Demo::DispatchBluring(CommandList& cmdList)
 		//
 
 		cmdList.SetPipelineState(mBlurHPass->mPSO);
+
+		cmdList.SetCompute32BitConstants(3, mBlurHPass->mBlurDescIndices.TexNum + 1, &(mBlurHPass->mBlurDescIndices));//Desc Indices
 
 		cmdList.SetDescriptorHeap(srvHeap->GetDescriptorHeap());
 		cmdList.SetComputeDescriptorTable(1, srvHeap->GetGpuHandle(0));
@@ -686,11 +741,21 @@ void Demo::DispatchBluring(CommandList& cmdList)
 
 		cmdList.TransitionBarrier(mFrameResource.mBlurBufferH->GetResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 		cmdList.TransitionBarrier(mFrameResource.mBlurBufferV->GetResource(), D3D12_RESOURCE_STATE_GENERIC_READ);
+		cmdList.FlushResourceBarriers();
+
 		//
 		// Vertical Blur pass.
 		//
 
 		cmdList.SetPipelineState(mBlurVPass->mPSO);
+
+		cmdList.SetCompute32BitConstants(3, mBlurVPass->mBlurDescIndices.TexNum + 1, &(mBlurVPass->mBlurDescIndices));//Desc Indices
+
+		cmdList.SetDescriptorHeap(srvHeap->GetDescriptorHeap());
+		cmdList.SetComputeDescriptorTable(1, srvHeap->GetGpuHandle(0));
+
+		cmdList.SetDescriptorHeap(uavHeap->GetDescriptorHeap());
+		cmdList.SetComputeDescriptorTable(2, uavHeap->GetGpuHandle(0));
 
 		// How many groups do we need to dispatch to cover a column of pixels, where each
 		// group covers 256 pixels  (the 256 is defined in the ComputeShader).
@@ -699,7 +764,11 @@ void Demo::DispatchBluring(CommandList& cmdList)
 
 		cmdList.TransitionBarrier(mFrameResource.mBlurBufferH->GetResource(), D3D12_RESOURCE_STATE_GENERIC_READ);
 		cmdList.TransitionBarrier(mFrameResource.mBlurBufferV->GetResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+		cmdList.FlushResourceBarriers();
+
 	}
+
+	cmdList.CopyResource(mFrameResource.mSsaoMap->GetResource(), mFrameResource.mBlurBufferH->GetResource());
 }
 
 void Demo::OnMouseDown(WPARAM btnState, int x, int y)

@@ -43,3 +43,11 @@ ComPtr<ID3DBlob> DxUtil::CompileShader(const std::wstring& filename, const D3D_S
 
 	return byteCode;
 }
+
+Microsoft::WRL::ComPtr<ID3DBlob> DxUtil::LoadCSO(const std::wstring& filename)
+{
+	ComPtr<ID3DBlob> ShaderBlob;
+	ThrowIfFailed(D3DReadFileToBlob(filename.c_str(), &ShaderBlob))
+
+	return ShaderBlob;
+}

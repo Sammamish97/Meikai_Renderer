@@ -54,7 +54,8 @@ private:
 
 	void BuildFrameResource();
 	void CreateIBLResources(std::shared_ptr<CommandList>& commandList);
-	void CreateShader();
+	void CreateShaderFromHLSL();
+	void CreateShaderFromCSO();
 	void PreCompute();
 
 	void DrawDefaultPass(CommandList& commandList);

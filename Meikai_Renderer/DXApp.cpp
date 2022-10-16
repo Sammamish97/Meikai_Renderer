@@ -668,7 +668,7 @@ void DXApp::CreateBufferResources()
 	auto normalDesc = CD3DX12_RESOURCE_DESC::Tex2D(NormalFormat, mClientWidth, mClientHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
 	auto monoDesc = CD3DX12_RESOURCE_DESC::Tex2D(MonoFormat, mClientWidth, mClientHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
 	auto depthDesc = CD3DX12_RESOURCE_DESC::Tex2D(DepthStencilDSVFormat, mClientWidth, mClientHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
-	auto blurDesc = CD3DX12_RESOURCE_DESC::Tex2D(MonoFormat, mClientWidth, mClientHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+	auto blurDesc = CD3DX12_RESOURCE_DESC::Tex2D(BlurFormat, mClientWidth, mClientHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 
 	CD3DX12_CLEAR_VALUE clearColorBlack;
 	clearColorBlack.Color[0] = 0.f;
@@ -697,7 +697,7 @@ void DXApp::CreateBufferResources()
 	mFrameResource.mAlbedoMap = std::make_shared<Texture>(this, colorDesc, &clearAlbedo,  D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"Albedo");
 	mFrameResource.mRoughnessMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO,  D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"Roughness");
 	mFrameResource.mMetalicMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"Metalic");
-	mFrameResource.mSsaoMap = std::make_shared<Texture>(this, monoDesc, &clearMetalicRoughnessSSAO,  D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"SSAO");
+	mFrameResource.mSsaoMap = std::make_shared<Texture>(this, colorDesc, &clearAlbedo,  D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"SSAO");
 	mFrameResource.mDepthStencilBuffer = std::make_shared<Texture>(this, depthDesc, &clearColorDepth, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"DepthStencil");
 	mFrameResource.mRenderTarget = std::make_shared<Texture>(this, colorDesc, &clearAlbedo, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"RenderTarget");
 	mFrameResource.mShadowDepthBuffer = std::make_shared<Texture>(this, depthDesc, &clearColorDepth, D3D12_SRV_DIMENSION_TEXTURE2D, D3D12_UAV_DIMENSION_UNKNOWN, L"ShadowDepth");

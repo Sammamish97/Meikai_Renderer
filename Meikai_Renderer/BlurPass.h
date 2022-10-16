@@ -8,7 +8,7 @@ class Shader;
 class BlurPass : public IPass
 {
 public:
-	BlurPass(DXApp* appPtr, ComPtr<ID3DBlob> computeShader);
+	BlurPass(DXApp* appPtr, ComPtr<ID3DBlob> computeShader, bool isHorizontal);
 	void InitRootSignature() override;
 	void InitPSO() override;
 	std::vector<float> CalcGaussWeights(float sigma);

@@ -48,6 +48,9 @@ struct DxUtil
         const D3D_SHADER_MACRO* defines,
         const std::string& entrypoint,
         const std::string& target);
+
+    static Microsoft::WRL::ComPtr<ID3DBlob> LoadCSO(
+        const std::wstring& filename);
 };
 
 template <typename T>
