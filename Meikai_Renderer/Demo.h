@@ -6,6 +6,7 @@
 #include "FrameBufferResource.h"
 #include "DXApp.h"
 #include "ConstantBuffers.h"
+#include "PathGenerator.h"
 
 class Model;
 class SkeletalModel;
@@ -133,6 +134,8 @@ private:
 	std::unique_ptr<Object> mSkybox;
 
 	std::unique_ptr<Camera> mCamera;
+
+	PathGenerator mPathGenerator;
 	POINT mLastMousePos;
 
 	bool m_ContentLoaded = false;

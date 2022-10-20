@@ -170,32 +170,34 @@ void Demo::PreCompute()
 void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 {
 	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
-	mModels["Cube"] = std::make_shared<Model>("../models/Cube.obj", this, *cmdList);
+	/*mModels["Cube"] = std::make_shared<Model>("../models/Cube.obj", this, *cmdList);
 	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);
 	mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, *cmdList);
 	mModels["Sphere"] = std::make_shared<Model>("../models/Sphere.obj", this, *cmdList);
 	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
+	mModels["bunny"] = std::make_shared<Model>("../models/bunny.obj", this, *cmdList);
+	mModels["dragon"] = std::make_shared<Model>("../models/dragon.obj", this, *cmdList);*/
 
 	//mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
-	//mSkeletalModels["X_Bot"] = std::make_shared<SkeletalModel>("../models/X_Bot.dae", this, *cmdList);
+	mSkeletalModels["X_Bot"] = std::make_shared<SkeletalModel>("../models/X_Bot.dae", this, *cmdList);
 	mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.dae", this, *cmdList);
 }
 
 void Demo::LoadAnimations()
 {
 	mAnimations["walking"] = std::make_shared<Animation>("../animations/Walking.dae", mSkeletalModels["Y_Bot"]);
-	//mAnimations["dancing"] = std::make_shared<Animation>("../animations/Dancing.dae", mSkeletalModels["X_Bot"]);
+	mAnimations["dancing"] = std::make_shared<Animation>("../animations/Dancing.dae", mSkeletalModels["X_Bot"]);
 }
 
 void Demo::BuildObjects()
 {
-	mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, 0.f, 0.f)));
-	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["X_Bot"], mAnimations["dancing"], XMFLOAT3(-1.f, -1.f, 0.f)));
-	mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0, -1, 0), XMFLOAT3(1, 1, 1)));
+	mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(-1.f, 0.f, 0.f)));
+	mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["X_Bot"], mAnimations["dancing"], XMFLOAT3(1.f, 0.f, 0.f)));
+	/*mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0, -1, 0), XMFLOAT3(1, 1, 1)));
 	mObjects.push_back(std::make_unique<Object>(mModels["Cube"], XMFLOAT3(-2, 0, 2), XMFLOAT3(1, 1, 1)));
-	mObjects.push_back(std::make_unique<Object>(mModels["Torus"], XMFLOAT3(2, 0, 2), XMFLOAT3(1, 1, 1)));
-	mObjects.push_back(std::make_unique<Object>(mModels["Monkey"], XMFLOAT3(-2, 0, -2), XMFLOAT3(1, 1, 1)));
-	mObjects.push_back(std::make_unique<Object>(mModels["Sphere"], XMFLOAT3(2, 0, -2), XMFLOAT3(1, 1, 1)));
+	mObjects.push_back(std::make_unique<Object>(mModels["bunny"], XMFLOAT3(2, -1, 2), XMFLOAT3(1, 1, 1)));
+	mObjects.push_back(std::make_unique<Object>(mModels["dragon"], XMFLOAT3(-2, 0, -2), XMFLOAT3(5 ,5, 5)));
+	mObjects.push_back(std::make_unique<Object>(mModels["Sphere"], XMFLOAT3(2, 0, -2), XMFLOAT3(1, 1, 1)));*/
 
 
 	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
@@ -321,7 +323,7 @@ void Demo::UpdatePassCB(const GameTimer& gt)
 
 
 	ImGui::Begin("PBR_PARAMS");                          // Create a window called "Hello, world!" and append into it.
-	ImGui::SliderFloat("Roughness", &testRoughness, 0.0f, 0.05f);            // Edit 1 float using a slider from 0.0f to 1.0f
+	ImGui::SliderFloat("Roughness", &testRoughness, 0.0f, 1.f);            // Edit 1 float using a slider from 0.0f to 1.0f
 	ImGui::SliderFloat("Metalic", &testMetalic, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 	ImGui::End();
 
@@ -584,6 +586,7 @@ void Demo::DrawBoneDebug(CommandList& cmdList)
 	{
 		object->DrawBone(cmdList);
 	}
+	mPathGenerator.Draw(cmdList);
 }
 
 void Demo::DrawShadowPass(CommandList& cmdList)
@@ -703,7 +706,7 @@ void Demo::DispatchBluring(CommandList& cmdList)
 	auto ssaoTexWidth = mFrameResource.mSsaoMap->GetD3D12ResourceDesc().Width;
 	auto ssaoTexHeight = mFrameResource.mSsaoMap->GetD3D12ResourceDesc().Height;
 
-	auto weights = mBlurHPass->CalcGaussWeights(2.5f);
+	auto weights = mBlurHPass->CalcGaussWeights(0.5f);
 	int blurRadius = (int)weights.size() / 2;
 
 	cmdList.SetComputeRootSignature(mBlurHPass->mRootSig);

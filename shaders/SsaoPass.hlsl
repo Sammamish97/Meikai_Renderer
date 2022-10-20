@@ -83,6 +83,6 @@ float4 PS(VertexOut pin) : SV_Target
 	float total_occluded = 2 * 3.14 * fallOff / sampleCount * accumulation;
 	total_occluded = max(0, total_occluded);
 
-    float result = pow((1 - total_occluded), 50);
+    float result = pow((1 - total_occluded), 100);
 	return float4(result, result, result, 1.0);
 }

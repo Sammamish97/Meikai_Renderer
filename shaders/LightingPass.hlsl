@@ -182,4 +182,5 @@ float4 PS(VertexOut pin) : SV_Target
 	float3 resultHDR = ambient_diffuse + ambient_specular + LightOutput;
 	float3 resultLDR = ToneMapping(resultHDR, 5) * shadowFactor;
     return float4(resultLDR, 1.0);
+	//return float4(occluded, occluded, occluded, 1);
 }
