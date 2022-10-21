@@ -1,9 +1,33 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  Demo.cpp
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\ConstantBuffers.h(72,21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\PathGenerator.h(18,55): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Model.h(17,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Mesh.h(14): message : see declaration of 'DXApp'
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\SkeletalModel.h(15,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\SkeletalMesh.h(20): message : see declaration of 'DXApp'
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(682,66): warning C4244: 'argument': conversion from 'UINT64' to 'const _Ty', possible loss of data
+          with
+          [
+              _Ty=uint32_t
+          ]
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(766,20): warning C4244: 'argument': conversion from 'UINT64' to 'uint32_t', possible loss of data
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.32.31326\include\memory(3423,56): warning C4244: 'argument': conversion from '_Ty' to 'int', possible loss of data
+          with
+          [
+              _Ty=UINT64
+          ]
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\Demo.cpp(210): message : see reference to function template instantiation 'std::unique_ptr<RandomSampleCB,std::default_delete<RandomSampleCB>> std::make_unique<RandomSampleCB,UINT64,UINT,0>(UINT64 &&,UINT &&)' being compiled
   PathGenerator.cpp
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.h(18,55): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(36,30): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(141,39): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(166,11): warning C4101: 'lowOnePos': unreferenced local variable
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(168,8): warning C4101: 'interpolatedAmount': unreferenced local variable
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(167,11): warning C4101: 'highOnePos': unreferenced local variable
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(170): error C4700: uninitialized local variable 'interpolatedPos' used
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\PathGenerator.h(18,55): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(36,30): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(141,39): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(178,42): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(179,20): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  main.cpp
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\ConstantBuffers.h(72,21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\Meikai_Renderer\PathGenerator.h(18,55): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
+  Meikai_Renderer.vcxproj -> C:\Users\chunmook.kim\Desktop\Data\Meikai_Renderer\bin\Meikai_Renderer_debug.exe

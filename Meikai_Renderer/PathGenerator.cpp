@@ -150,22 +150,33 @@ void PathGenerator::BuildArcTable()
 	}
 }
 
-float PathGenerator::DistanceTimeFunction(float animTick, float speed)
+float PathGenerator::DistanceTimeFunction(float speed)
 {
 	//Get time and spped. Return arcLength.
 	//The returning value must increasing.
-	return speed * animTick;
+	return 0.f;
 }
 
-XMVECTOR PathGenerator::GetPosition(float arcLength)
+XMVECTOR PathGenerator::ArcLengthToPosition(float arcLength)
 {
+	float deltaU = 1.f / mSlice;
 	auto lowOne = mArcMap.lower_bound(arcLength);
-	ArcMapData lowOneData = lowOne->second;
-	auto highOne = mArcArray[lowOneData.ArrayIndex + 1];
+	ArcMapData lowOneMap = lowOne->second;
 
-	XMVECTOR lowOnePos;
-	XMVECTOR highOnePos;
-	float interpolatedAmount;
-	XMVECTOR interpolatedPos;
-	return interpolatedPos;
+	EquationData lowOneData = mArcArray[lowOneMap.ArrayIndex];
+	EquationData highOneData = mArcArray[lowOneMap.ArrayIndex + 1];
+
+	float lowOneArclength = lowOneData.ArcLength;
+	float lowOneU = lowOneData.U;
+
+	float highOneArclength = highOneData.ArcLength;
+	float highOneU = highOneData.U;
+
+	float interpolateArcLength = (arcLength - lowOneArclength) / (highOneArclength - lowOneArclength);
+	float interpolatedU = deltaU * interpolateArcLength + lowOneU;
+
+	int segmentNum = mBezierEquations.size();
+	int equationIndex = ceil(interpolatedU * segmentNum);
+
+	return mBezierEquations[equationIndex](interpolatedU);
 }

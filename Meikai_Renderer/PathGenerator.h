@@ -31,8 +31,8 @@ public:
 	void ClacSubPoints();
 	void BuildFunctions();
 	void BuildArcTable();
-	XMVECTOR GetPosition(float arcLength);
-	float DistanceTimeFunction(float animTick, float speed);
+	XMVECTOR ArcLengthToPosition(float arcLength);
+	float DistanceTimeFunction(float speed);
 
 private:
 	XMVECTOR CalcA(XMVECTOR p_0, XMVECTOR p_1, XMVECTOR p_2);
