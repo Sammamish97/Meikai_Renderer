@@ -20,10 +20,12 @@ PathGenerator::PathGenerator()
 	mControlPoints.push_back(XMLoadFloat3(&test4));
 	mControlPoints.push_back(XMLoadFloat3(&test5));
 
-	ClacSubPoints();
+
+	CalcSubPoints();
 	BuildFunctions();
 	GetPointStrip();
-	BuildArcTable();
+	BuildAdaptiveTable(0.0001f);
+	//BuildForwardTable();
 }
 
 XMVECTOR PathGenerator::Update(GameTimer timer)
@@ -33,7 +35,7 @@ XMVECTOR PathGenerator::Update(GameTimer timer)
 	{
 		mTimeAccumulating = 0;
 	}
-	return ArcLengthToPosition(mTimeAccumulating);
+	return ArcLengthToPosition(DistanceTimeFunction(mTimeAccumulating));
 }
 
 void PathGenerator::Draw(CommandList& commandList)
@@ -91,7 +93,7 @@ void PathGenerator::BuildFunctions()
 	}
 }
 
-void PathGenerator::ClacSubPoints()
+void PathGenerator::CalcSubPoints()
 {
 	auto length = mControlPoints.size();
 	//a_0
@@ -128,65 +130,133 @@ XMVECTOR PathGenerator::CalcB(XMVECTOR p_0, XMVECTOR p_1, XMVECTOR p_2)
 	return p_1 - (p_2 - p_0) * 0.5f;
 }
 
-void PathGenerator::BuildArcTable()
+int PathGenerator::GetBezierIndex(float globalU)
 {
-	float delta_u = 1.f / mSlice;
-	float accumulatingU = 0;
-	XMFLOAT3 lengthOutputReadable;
-	mArcArray.push_back(EquationData(0.f, 0.f));
-	for (int i = 0; i < mBezierEquations.size(); ++i)
-	{
-		float normalizedU = 0.f;
-		for (float j = 0; j <= 1.f; j += delta_u)
-		{
-			accumulatingU += delta_u;
-			normalizedU += delta_u;
-			auto lengthOutput = XMVector3Length(mBezierEquations[i](normalizedU) - mBezierEquations[i](j));
-			XMStoreFloat3(&lengthOutputReadable, lengthOutput);
-			float currentSegLength = lengthOutputReadable.x;
-			float accumulatedLength = mArcArray[mArcArray.size() - 1].ArcLength + currentSegLength;
-			mArcArray.push_back(EquationData(accumulatedLength, accumulatingU));
-		}
-	}
-	int arcArrayLenght = mArcArray.size();
-	float totalU = mArcArray[arcArrayLenght - 1].U;
-	float totalArcLength = mArcArray[arcArrayLenght - 1].ArcLength;
+	return std::clamp(floorf(mBezierEquations.size() * globalU), 0.f, mBezierEquations.size()-1.f);
+}
 
-	for(int i = 0; i < arcArrayLenght; ++i)
+float PathGenerator::DenormalizeU(float globalU, int index)
+{
+	return globalU * mBezierEquations.size() - index;
+}
+
+XMFLOAT3 PathGenerator::GetPointDistances(float u_a, float u_b, float u_m)
+{
+	int a_funcIndex = GetBezierIndex(u_a);
+	int b_funcIndex = GetBezierIndex(u_b);
+	int m_funcIndex = GetBezierIndex(u_m);
+
+	float a_localU = DenormalizeU(u_a, a_funcIndex);
+	float b_localU = DenormalizeU(u_b, b_funcIndex);
+	float m_localU = DenormalizeU(u_m, m_funcIndex);
+
+	auto a_pos = mBezierEquations[a_funcIndex](a_localU);
+	auto m_pos = mBezierEquations[m_funcIndex](m_localU);
+	auto b_pos = mBezierEquations[b_funcIndex](b_localU);
+
+	XMVECTOR s_am = XMVector3Length(m_pos - a_pos);
+	XMVECTOR s_mb = XMVector3Length(b_pos - m_pos);
+	XMVECTOR s_ab = XMVector3Length(b_pos - a_pos);
+	XMFLOAT3 lengthOutputReadable;
+
+	XMStoreFloat3(&lengthOutputReadable, s_am);
+	float am_length = lengthOutputReadable.x;
+
+	XMStoreFloat3(&lengthOutputReadable, s_mb);
+	float mb_length = lengthOutputReadable.x;
+
+	XMStoreFloat3(&lengthOutputReadable, s_ab);
+	float ab_length = lengthOutputReadable.x;
+
+	return XMFLOAT3(am_length, mb_length, ab_length);
+}
+/*
+ * 수도 코드
+ * 리스트가 빌때까지 루프한다.
+ * 반으로 쪼갠다.
+ * 되는지 확인한다.
+ * 쪼개서 list에 넣는다.
+ * 다시 리스트의 처음부터 루프한다. 여기서 처음이라는것이 중요하다.
+ *
+ * 만약 s자라면, 중간의 점은 처음과 끝과 비슷하기에 오류가 날 수 있다.
+ * 그렇기에 강제로 최초 몇번을 쪼개야 한다.
+ */
+
+void PathGenerator::BuildAdaptiveTable(float threshHold)
+{
+	std::list<std::pair<float, float>> segments;
+	mParamArcLengthMap[0.f] = 0.f;
+	int preSegmentAmount = 10;
+	float preSegmentSlice = 1.f / preSegmentAmount;
+	for(int i = 0; i < preSegmentAmount; ++i)
 	{
-		mArcArray[i].ArcLength /= totalArcLength;
-		mArcArray[i].U /= totalU;
-		mArcMap[mArcArray[i].ArcLength] = ArcMapData(i, mArcArray[i].U);
+		segments.push_back({i * preSegmentSlice, (i+1) * preSegmentSlice });
+	}
+	auto i = segments.begin();
+	while(segments.empty() == false)
+	{
+		float u_a = i->first;
+		float u_b = i->second;
+		float u_m = (u_a + u_b) * 0.5f;
+
+		auto distances = GetPointDistances(u_a, u_b, u_m);//Return order: am -> mb -> ab
+		float am_length = distances.x;
+		float mb_length = distances.y;
+		float ab_length = distances.z;
+
+		if (am_length + mb_length - ab_length < threshHold)
+		{
+			//Case1: Complete
+			float firstHalfLength = mParamArcLengthMap[u_a] + am_length;
+			mParamArcLengthMap[u_m] = firstHalfLength;
+			mParamArcLengthMap[u_b] = firstHalfLength + mb_length;
+			segments.remove(*i);
+		}
+		else
+		{
+			//Case2: Divide and Repeat
+			segments.remove(*i);
+			std::pair firsthalf = {u_a, u_m};
+			std::pair secondhalf = {u_m, u_b};
+			segments.push_front(secondhalf);
+			segments.push_front(firsthalf);
+		}
+		i = segments.begin();
+	}
+	float lastArcLength = (--mParamArcLengthMap.end())->second;
+	for (auto& element : mParamArcLengthMap)
+	{
+		element.second /= lastArcLength;
+	}
+	for (auto element : mParamArcLengthMap)
+	{
+		mArcLengthParamMap[element.second] = element.first;
 	}
 }
 
 float PathGenerator::DistanceTimeFunction(float time)
 {
-	//return (sin(time * MathHelper::Pi - MathHelper::Pi / 2.f) + 1) * 0.5f;
-	return time;
+	return (sin(time * MathHelper::Pi - MathHelper::Pi / 2.f) + 1) * 0.5f;
+	//return time;
 }
 
 XMVECTOR PathGenerator::ArcLengthToPosition(float arcLength)
 {
 	static std::vector<int> test;
-	auto lowOne = --mArcMap.lower_bound(arcLength);
-	if(lowOne == mArcMap.end())
+	auto highUitor = mArcLengthParamMap.lower_bound(arcLength);
+	auto lowUitor = highUitor; --lowUitor;
+	if(highUitor == mArcLengthParamMap.begin())
 	{
-		lowOne = mArcMap.begin();
+		return mBezierEquations[0](0);
 	}
-	ArcMapData lowOneMap = lowOne->second;
+	float highU = highUitor->second;
+	float lowU = lowUitor->second;
 
-	EquationData lowOneData = mArcArray[lowOneMap.ArrayIndex];
-	EquationData highOneData = mArcArray[lowOneMap.ArrayIndex + 1];
+	auto highS = mParamArcLengthMap[highU];
+	auto lowS = mParamArcLengthMap[lowU];
 
-	float lowOneArclength = lowOneData.ArcLength;
-	float lowOneU = lowOneData.U;
-
-	float highOneArclength = highOneData.ArcLength;
-	float highOneU = highOneData.U;
-
-	float interpolateArcLength = (arcLength - lowOneArclength) / (highOneArclength - lowOneArclength);
-	float interpolatedU = (highOneU - lowOneU) * interpolateArcLength + lowOneU;
+	float interpolateArcLength = (arcLength - lowS) / (highS - lowS);
+	float interpolatedU = (highU - lowU) * interpolateArcLength + lowU;
 
 	int segmentNum = mBezierEquations.size();
 	int equationIndex = floorf(interpolatedU * segmentNum);
