@@ -43,3 +43,8 @@ void Object::DrawWithoutWorld(CommandList& commandList)
 		mesh.Draw(commandList);
 	}
 }
+
+void Object::SetPosition(XMVECTOR newPos)
+{
+	XMStoreFloat3(&mPosition, newPos);
+}

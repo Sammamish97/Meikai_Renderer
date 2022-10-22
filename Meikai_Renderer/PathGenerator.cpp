@@ -1,15 +1,18 @@
 #include "PathGenerator.h"
 #include "CommandList.h"
+#include "MathHelper.h"
 
 PathGenerator::PathGenerator()
 {
 	mSlice = 100;
+	mTimeAccumulating = 0.f;
 
 	auto test1 = XMFLOAT3(5, 0, 5);
 	auto test2 = XMFLOAT3(-5, 0, 5);
 	auto test3 = XMFLOAT3(-5, 0, -5);
 	auto test4 = XMFLOAT3(5, 0, -5);
 	auto test5 = XMFLOAT3(5, 0, 5);
+
 
 	mControlPoints.push_back(XMLoadFloat3(&test1));
 	mControlPoints.push_back(XMLoadFloat3(&test2));
@@ -23,8 +26,14 @@ PathGenerator::PathGenerator()
 	BuildArcTable();
 }
 
-void PathGenerator::Update(float dt)
+XMVECTOR PathGenerator::Update(GameTimer timer)
 {
+	mTimeAccumulating += timer.DeltaTime() / 10.f;
+	if(mTimeAccumulating > 1)
+	{
+		mTimeAccumulating = 0;
+	}
+	return ArcLengthToPosition(mTimeAccumulating);
 }
 
 void PathGenerator::Draw(CommandList& commandList)
@@ -122,20 +131,21 @@ XMVECTOR PathGenerator::CalcB(XMVECTOR p_0, XMVECTOR p_1, XMVECTOR p_2)
 void PathGenerator::BuildArcTable()
 {
 	float delta_u = 1.f / mSlice;
-	float u = 0;
+	float accumulatingU = 0;
 	XMFLOAT3 lengthOutputReadable;
 	mArcArray.push_back(EquationData(0.f, 0.f));
 	for (int i = 0; i < mBezierEquations.size(); ++i)
 	{
-		for (float j = 0; j < 1.f; j += delta_u)
+		float normalizedU = 0.f;
+		for (float j = 0; j <= 1.f; j += delta_u)
 		{
-			float last_u = u;
-			u += delta_u;
-			auto lengthOutput = XMVector3Length(mBezierEquations[i](u) - mBezierEquations[i](last_u));
+			accumulatingU += delta_u;
+			normalizedU += delta_u;
+			auto lengthOutput = XMVector3Length(mBezierEquations[i](normalizedU) - mBezierEquations[i](j));
 			XMStoreFloat3(&lengthOutputReadable, lengthOutput);
 			float currentSegLength = lengthOutputReadable.x;
 			float accumulatedLength = mArcArray[mArcArray.size() - 1].ArcLength + currentSegLength;
-			mArcArray.push_back(EquationData(accumulatedLength, u));
+			mArcArray.push_back(EquationData(accumulatedLength, accumulatingU));
 		}
 	}
 	int arcArrayLenght = mArcArray.size();
@@ -150,17 +160,20 @@ void PathGenerator::BuildArcTable()
 	}
 }
 
-float PathGenerator::DistanceTimeFunction(float speed)
+float PathGenerator::DistanceTimeFunction(float time)
 {
-	//Get time and spped. Return arcLength.
-	//The returning value must increasing.
-	return 0.f;
+	//return (sin(time * MathHelper::Pi - MathHelper::Pi / 2.f) + 1) * 0.5f;
+	return time;
 }
 
 XMVECTOR PathGenerator::ArcLengthToPosition(float arcLength)
 {
-	float deltaU = 1.f / mSlice;
-	auto lowOne = mArcMap.lower_bound(arcLength);
+	static std::vector<int> test;
+	auto lowOne = --mArcMap.lower_bound(arcLength);
+	if(lowOne == mArcMap.end())
+	{
+		lowOne = mArcMap.begin();
+	}
 	ArcMapData lowOneMap = lowOne->second;
 
 	EquationData lowOneData = mArcArray[lowOneMap.ArrayIndex];
@@ -173,10 +186,11 @@ XMVECTOR PathGenerator::ArcLengthToPosition(float arcLength)
 	float highOneU = highOneData.U;
 
 	float interpolateArcLength = (arcLength - lowOneArclength) / (highOneArclength - lowOneArclength);
-	float interpolatedU = deltaU * interpolateArcLength + lowOneU;
+	float interpolatedU = (highOneU - lowOneU) * interpolateArcLength + lowOneU;
 
 	int segmentNum = mBezierEquations.size();
-	int equationIndex = ceil(interpolatedU * segmentNum);
-
-	return mBezierEquations[equationIndex](interpolatedU);
+	int equationIndex = floorf(interpolatedU * segmentNum);
+	float denormalizeU = interpolatedU * segmentNum - equationIndex;
+	
+	return mBezierEquations[equationIndex](denormalizeU);
 }

@@ -19,6 +19,7 @@ public:
 	virtual void Draw(CommandList& commandList);
 	void DrawWithoutWorld(CommandList& commandList);
 	XMMATRIX GetWorldMat() const;
+	void SetPosition(XMVECTOR newPos);
 
 protected:
 	void SetWorldMatrix(CommandList& commandList);

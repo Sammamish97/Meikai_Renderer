@@ -4,6 +4,8 @@
 #include <functional>
 #include <map>
 
+#include "GameTimer.h"
+
 struct EquationData
 {
 	EquationData() = default;
@@ -17,7 +19,7 @@ struct ArcMapData
 	ArcMapData() = default;
 	ArcMapData(int index, float u) : ArrayIndex(index), U(u){}
 	int ArrayIndex;
-	int U;
+	float U;
 };
 using namespace DirectX;
 class CommandList;
@@ -25,7 +27,7 @@ class PathGenerator
 {
 public:
 	PathGenerator();
-	void Update(float dt);
+	XMVECTOR Update(GameTimer dt);
 	void Draw(CommandList& commandList);
 	void GetPointStrip();
 	void ClacSubPoints();
@@ -47,5 +49,6 @@ private:
 	std::vector<EquationData> mArcArray;
 	std::map<float, ArcMapData> mArcMap;
 	int mSlice;
+	float mTimeAccumulating;
 };
 

@@ -9,6 +9,8 @@
 #include "DefaultPass.h"
 #include "DescriptorHeap.h"
 
+#include "PathGenerator.h"
+
 #include <d3dcompiler.h>
 #include <d3dx12.h>
 
@@ -49,6 +51,8 @@ bool Demo::Initialize()
 	{
 		return false;
 	}
+	mPathGenerator = std::make_unique<PathGenerator>();
+
 	auto initList = mDirectCommandQueue->GetCommandList();
 	CreateIBLResources(initList);
 	BuildModels(initList);
@@ -134,6 +138,7 @@ void Demo::Update(const GameTimer& gt)
 	mCamera->Update(gt);
 	UpdatePassCB(gt);
 	UpdateLightCB(gt);
+  	mMoveTest->SetPosition(mPathGenerator->Update(gt));
 	for(auto& skeletalObject : mSkeletalObjects)
 	{
 		skeletalObject->Update(gt.DeltaTime());
@@ -170,10 +175,10 @@ void Demo::PreCompute()
 void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 {
 	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
+	mModels["Sphere"] = std::make_shared<Model>("../models/Sphere.obj", this, *cmdList);
 	/*mModels["Cube"] = std::make_shared<Model>("../models/Cube.obj", this, *cmdList);
 	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);
 	mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, *cmdList);
-	mModels["Sphere"] = std::make_shared<Model>("../models/Sphere.obj", this, *cmdList);
 	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
 	mModels["bunny"] = std::make_shared<Model>("../models/bunny.obj", this, *cmdList);
 	mModels["dragon"] = std::make_shared<Model>("../models/dragon.obj", this, *cmdList);*/
@@ -201,6 +206,7 @@ void Demo::BuildObjects()
 
 
 	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
+	mMoveTest = std::make_unique<Object>(mModels["Sphere"], XMFLOAT3(0.f, 0.f, 0.f));
 }
 
 void Demo::BuildFrameResource()
@@ -454,6 +460,8 @@ void Demo::DrawGeometryPasses(CommandList& cmdList)
 	{
 		object->Draw(cmdList);
 	}
+	mMoveTest->Draw(cmdList);
+
 
 	cmdList.SetPipelineState(mSkeletalGeometryPass->mPSO.Get());
 	cmdList.SetGraphicsRootSignature(mSkeletalGeometryPass->mRootSig.Get());
@@ -586,7 +594,7 @@ void Demo::DrawBoneDebug(CommandList& cmdList)
 	{
 		object->DrawBone(cmdList);
 	}
-	mPathGenerator.Draw(cmdList);
+	mPathGenerator->Draw(cmdList);
 }
 
 void Demo::DrawShadowPass(CommandList& cmdList)
