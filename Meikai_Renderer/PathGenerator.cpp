@@ -4,7 +4,7 @@
 
 PathGenerator::PathGenerator()
 {
-	mSlice = 100;
+	mSlice = 1000;
 	mTimeAccumulating = 0.f;
 
 	auto test1 = XMFLOAT3(5, 0, 5);
@@ -13,29 +13,27 @@ PathGenerator::PathGenerator()
 	auto test4 = XMFLOAT3(5, 0, -5);
 	auto test5 = XMFLOAT3(5, 0, 5);
 
-
 	mControlPoints.push_back(XMLoadFloat3(&test1));
 	mControlPoints.push_back(XMLoadFloat3(&test2));
 	mControlPoints.push_back(XMLoadFloat3(&test3));
 	mControlPoints.push_back(XMLoadFloat3(&test4));
 	mControlPoints.push_back(XMLoadFloat3(&test5));
 
-
 	CalcSubPoints();
 	BuildFunctions();
 	GetPointStrip();
-	BuildAdaptiveTable(0.0001f);
+	BuildAdaptiveTable(0.000001f);
 	//BuildForwardTable();
 }
 
-XMVECTOR PathGenerator::Update(GameTimer timer)
+void PathGenerator::Update(GameTimer timer)
 {
 	mTimeAccumulating += timer.DeltaTime() / 10.f;
 	if(mTimeAccumulating > 1)
 	{
 		mTimeAccumulating = 0;
 	}
-	return ArcLengthToPosition(DistanceTimeFunction(mTimeAccumulating));
+	ArcLengthToPosition(DistanceTimeFunction(mTimeAccumulating));
 }
 
 void PathGenerator::Draw(CommandList& commandList)
@@ -237,17 +235,17 @@ void PathGenerator::BuildAdaptiveTable(float threshHold)
 float PathGenerator::DistanceTimeFunction(float time)
 {
 	return (sin(time * MathHelper::Pi - MathHelper::Pi / 2.f) + 1) * 0.5f;
-	//return time;
 }
 
-XMVECTOR PathGenerator::ArcLengthToPosition(float arcLength)
+void PathGenerator::ArcLengthToPosition(float arcLength)
 {
 	static std::vector<int> test;
 	auto highUitor = mArcLengthParamMap.lower_bound(arcLength);
 	auto lowUitor = highUitor; --lowUitor;
 	if(highUitor == mArcLengthParamMap.begin())
 	{
-		return mBezierEquations[0](0);
+		mCurrentPosition = mBezierEquations[0](0);
+		return;
 	}
 	float highU = highUitor->second;
 	float lowU = lowUitor->second;
@@ -259,8 +257,25 @@ XMVECTOR PathGenerator::ArcLengthToPosition(float arcLength)
 	float interpolatedU = (highU - lowU) * interpolateArcLength + lowU;
 
 	int segmentNum = mBezierEquations.size();
-	int equationIndex = floorf(interpolatedU * segmentNum);
+
+	int equationIndex = std::clamp(floorf(interpolatedU * segmentNum), 0.f, (float)(segmentNum -1));
 	float denormalizeU = interpolatedU * segmentNum - equationIndex;
-	
-	return mBezierEquations[equationIndex](denormalizeU);
+	auto currentPosition = mBezierEquations[equationIndex](denormalizeU);
+
+	int nextIndex = std::clamp(floorf(highU * segmentNum), 0.f, (float)(segmentNum - 1));
+	float nextDenormalizeU = highU * segmentNum - nextIndex;
+	auto nextPosition = mBezierEquations[nextIndex](nextDenormalizeU);
+
+	mCurrentFrameRotation = XMVector3Normalize(nextPosition - currentPosition);
+	mCurrentPosition = currentPosition;
+}
+
+XMVECTOR PathGenerator::GetDirection()
+{
+	return mCurrentFrameRotation;
+}
+
+XMVECTOR PathGenerator::GetPosition()
+{
+	return mCurrentPosition;  
 }

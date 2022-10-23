@@ -5,7 +5,6 @@
 #include <cmath>
 
 #include "Model.h"
-#include "SkeletalModel.h"
 
 SkeletalObject::SkeletalObject(DXApp* appPtr, std::shared_ptr<SkeletalModel> model, std::shared_ptr<Animation> initAnim, XMFLOAT3 position,
 	XMFLOAT3 scale)
@@ -59,10 +58,29 @@ void SkeletalObject::DrawBone(CommandList& commandList)
 
 XMMATRIX SkeletalObject::GetWorldMat() const
 {
-    XMMATRIX translationMat = XMMatrixTranslation(mPosition.x, mPosition.y, mPosition.z);
     XMMATRIX scaleMat = XMMatrixScaling(mScale.x, mScale.y, mScale.z);
+    XMMATRIX translationMat = XMMatrixTranslation(mPosition.x, mPosition.y, mPosition.z);
 
-    return XMMatrixMultiply(translationMat, scaleMat);
+    XMMATRIX result;
+    if(mDirection.x == 0.f && mDirection.y == 0.f && mDirection.z == 0.f)
+    {
+	    result = translationMat * scaleMat;
+    }
+    else
+    {
+        XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+        XMVECTOR dir = XMLoadFloat3(&mDirection);
+        XMVECTOR position = XMLoadFloat3(&mPosition);
+        XMVECTOR target = position + dir;
+        XMMATRIX lookAt = XMMatrixLookAtLH(target, position, up);
+        XMFLOAT4X4 rotationPart;
+        XMStoreFloat4x4(&rotationPart, lookAt);
+
+        lookAt = XMLoadFloat4x4(&rotationPart);
+        lookAt = XMMatrixInverse(nullptr, lookAt);
+        result = lookAt * scaleMat;
+    }
+    return result;
 }
 
 void SkeletalObject::SetWorldMatrix(CommandList& commandList)
@@ -71,3 +89,15 @@ void SkeletalObject::SetWorldMatrix(CommandList& commandList)
     worldMat = XMMatrixTranspose(worldMat);
     commandList.SetGraphics32BitConstants(0, worldMat);
 }
+
+void SkeletalObject::SetPosition(XMVECTOR newPos)
+{
+    XMStoreFloat3(&mPosition, newPos);
+}
+
+void SkeletalObject::SetDirection(XMVECTOR newDir)
+{
+    XMStoreFloat3(&mDirection, newDir);
+
+}
+

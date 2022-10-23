@@ -12,14 +12,15 @@ class PathGenerator
 {
 public:
 	PathGenerator();
-	XMVECTOR Update(GameTimer dt);
+	void Update(GameTimer dt);
 	void Draw(CommandList& commandList);
 	void GetPointStrip();
 	void CalcSubPoints();
 	void BuildFunctions();
 	void BuildAdaptiveTable(float threshHold);
-	//void BuildForwardTable();
-	XMVECTOR ArcLengthToPosition(float arcLength);
+	void ArcLengthToPosition(float arcLength);
+	XMVECTOR GetDirection();
+	XMVECTOR GetPosition();
 	float DistanceTimeFunction(float speed);
 
 private:
@@ -37,7 +38,11 @@ private:
 	std::map<float, float> mParamArcLengthMap;//key: parameter, value: arc length
 	std::map<float, float> mArcLengthParamMap;//key: parameter, value: arc length 
 
+	XMVECTOR mCurrentFrameRotation;
+	XMVECTOR mCurrentPosition;
+
 	int mSlice;
+	float mDeltaU;
 	float mTimeAccumulating;
 };
 

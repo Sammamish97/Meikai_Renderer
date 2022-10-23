@@ -138,11 +138,14 @@ void Demo::Update(const GameTimer& gt)
 	mCamera->Update(gt);
 	UpdatePassCB(gt);
 	UpdateLightCB(gt);
-  	mMoveTest->SetPosition(mPathGenerator->Update(gt));
+	mPathGenerator->Update(gt);
+  	mMoveTest->SetPosition(mPathGenerator->GetPosition());
+	mMoveTest->SetDirection(mPathGenerator->GetDirection());
 	for(auto& skeletalObject : mSkeletalObjects)
 	{
 		skeletalObject->Update(gt.DeltaTime());
 	}
+	mMoveTest->Update(gt.DeltaTime());
 }
 
 void Demo::Draw(const GameTimer& gt)
@@ -185,28 +188,27 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 
 	//mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
 	mSkeletalModels["X_Bot"] = std::make_shared<SkeletalModel>("../models/X_Bot.dae", this, *cmdList);
-	//mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.dae", this, *cmdList);
+	mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.dae", this, *cmdList);
 }
 
 void Demo::LoadAnimations()
 {
-	//mAnimations["walking"] = std::make_shared<Animation>("../animations/Walking.dae", mSkeletalModels["Y_Bot"]);
+	mAnimations["walking"] = std::make_shared<Animation>("../animations/Walking.dae", mSkeletalModels["Y_Bot"]);
 	mAnimations["dancing"] = std::make_shared<Animation>("../animations/Dancing.dae", mSkeletalModels["X_Bot"]);
 }
 
 void Demo::BuildObjects()
 {
-	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(-1.f, 0.f, 0.f)));
-	mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["X_Bot"], mAnimations["dancing"], XMFLOAT3(1.f, 0.f, 0.f)));
+	mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(-1.f, 0.f, 0.f)));
+	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["X_Bot"], mAnimations["dancing"], XMFLOAT3(1.f, 0.f, 0.f)));
 	/*mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0, -1, 0), XMFLOAT3(1, 1, 1)));
 	mObjects.push_back(std::make_unique<Object>(mModels["Cube"], XMFLOAT3(-2, 0, 2), XMFLOAT3(1, 1, 1)));
 	mObjects.push_back(std::make_unique<Object>(mModels["bunny"], XMFLOAT3(2, -1, 2), XMFLOAT3(1, 1, 1)));
 	mObjects.push_back(std::make_unique<Object>(mModels["dragon"], XMFLOAT3(-2, 0, -2), XMFLOAT3(5 ,5, 5)));
 	mObjects.push_back(std::make_unique<Object>(mModels["Sphere"], XMFLOAT3(2, 0, -2), XMFLOAT3(1, 1, 1)));*/
 
-
 	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
-	mMoveTest = std::make_unique<Object>(mModels["Sphere"], XMFLOAT3(0.f, 0.f, 0.f));
+	mMoveTest = std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, 0.f, 0.f));
 }
 
 void Demo::BuildFrameResource()
@@ -460,7 +462,6 @@ void Demo::DrawGeometryPasses(CommandList& cmdList)
 	{
 		object->Draw(cmdList);
 	}
-	mMoveTest->Draw(cmdList);
 
 
 	cmdList.SetPipelineState(mSkeletalGeometryPass->mPSO.Get());
@@ -472,6 +473,8 @@ void Demo::DrawGeometryPasses(CommandList& cmdList)
 	{
 		skeletalObject->Draw(cmdList);
 	}
+	mMoveTest->Draw(cmdList);
+
 }
 
 void Demo::DrawLightingPass(CommandList& cmdList)

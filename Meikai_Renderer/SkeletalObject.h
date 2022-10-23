@@ -35,6 +35,8 @@ public:
 
 	XMMATRIX GetWorldMat() const;
 	void SetWorldMatrix(CommandList& commandList);
+	void SetPosition(XMVECTOR newPos);
+	void SetDirection(XMVECTOR newDir);
 
 	void SetAnimator(std::shared_ptr<Animation> newAnimation);
 
@@ -46,7 +48,9 @@ private:
 	std::vector<aiVector3t<float>> mBonePositions;
 
 	Animator mAnimator;
+
 	XMFLOAT3 mPosition;
 	XMFLOAT3 mScale;
+	XMFLOAT3 mDirection;
 };
 
