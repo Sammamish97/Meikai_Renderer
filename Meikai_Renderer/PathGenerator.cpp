@@ -1,34 +1,43 @@
 #include "PathGenerator.h"
 #include "CommandList.h"
 #include "MathHelper.h"
+#include "Model.h"
 
-PathGenerator::PathGenerator()
+PathGenerator::PathGenerator(std::shared_ptr<Model> controlPointModel)
 {
+	mControlPointModel = controlPointModel;
 	mSlice = 100;
 	mTimeAccumulating = 0.f;
+	float scale = 3.f;
 
-	auto test1 = XMFLOAT3(3, 0, 3);
-	auto test2 = XMFLOAT3(-3, 0, 3);
-	auto test3 = XMFLOAT3(-3, 0, -3);
-	auto test4 = XMFLOAT3(3, 0, -3);
-	//auto test5 = XMFLOAT3(3, 0, 3);
+	auto test0 = XMFLOAT3(0, 0, scale * 1.f);
+	auto test1 = XMFLOAT3(-scale, 0, scale);
+	auto test2 = XMFLOAT3(-scale * 2.f, 0, 0);
+	auto test3 = XMFLOAT3(-scale, 0, -scale);
+	auto test4 = XMFLOAT3(0, 0, -scale * 2.f);
+	auto test5 = XMFLOAT3(scale, 0, -scale);
+	auto test6 = XMFLOAT3(scale * 2.f, 0, 0);
+	auto test7 = XMFLOAT3(scale, 0, scale);
 
+	mControlPoints.push_back(XMLoadFloat3(&test0));
 	mControlPoints.push_back(XMLoadFloat3(&test1));
 	mControlPoints.push_back(XMLoadFloat3(&test2));
 	mControlPoints.push_back(XMLoadFloat3(&test3));
 	mControlPoints.push_back(XMLoadFloat3(&test4));
-	//mControlPoints.push_back(XMLoadFloat3(&test5));
+	mControlPoints.push_back(XMLoadFloat3(&test5));
+	mControlPoints.push_back(XMLoadFloat3(&test6));
+	mControlPoints.push_back(XMLoadFloat3(&test7));
+	mControlPoints.push_back(XMLoadFloat3(&test0));
 
 	CalcSubPoints();
 	BuildFunctions();
 	BuildAdaptiveTable(0.000001f);
 	GetPointStrip();
-	//BuildForwardTable();
 }
 
 void PathGenerator::Update(GameTimer timer)
 {
-	mTimeAccumulating += timer.DeltaTime() / 10.f;
+	mTimeAccumulating += timer.DeltaTime() / 100.f;
 	if(mTimeAccumulating > 1)
 	{
 		mTimeAccumulating = 0;
@@ -36,7 +45,7 @@ void PathGenerator::Update(GameTimer timer)
 	ArcLengthToPosition(DistanceTimeFunction(mTimeAccumulating));
 }
 
-void PathGenerator::Draw(CommandList& commandList)
+void PathGenerator::DrawPaths(CommandList& commandList)
 {
 	auto vertexCount = mPathLines.size();
 	auto vertexSize = sizeof(mPathLines[0]);
@@ -45,10 +54,30 @@ void PathGenerator::Draw(CommandList& commandList)
 	commandList.Draw(vertexCount);
 }
 
+void PathGenerator::DrawControlPoints(CommandList& commandList)
+{
+	commandList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	float pointScale = 0.05f;
+	XMMATRIX scale = XMMatrixScaling(pointScale, pointScale, pointScale);
+
+	for (auto element : mControlPoints)
+	{
+		XMFLOAT3 position;
+		XMStoreFloat3(&position, element);
+		XMMATRIX translation = XMMatrixTranspose(scale * XMMatrixTranslation(position.x, position.y, position.z));
+		XMMATRIX result;
+		for (auto mesh : mControlPointModel->mMeshes)
+		{
+			commandList.SetGraphics32BitConstants(0, translation);
+			mesh.Draw(commandList);
+		}
+	}
+}
+
 void PathGenerator::GetPointStrip()
 {
 	mPathLines.clear();
-	/*float slice = static_cast<float>(mSlice);
+	float slice = static_cast<float>(mSlice);
 	for(const auto& curveFunc : mBezierEquations)
 	{
 		for(float i = 0.f; i < 1; i += (1.f / slice))
@@ -57,13 +86,6 @@ void PathGenerator::GetPointStrip()
 			XMStoreFloat3(&value, curveFunc(i));
 			mPathLines.push_back(value);
 		}
-	}*/
-	for (auto element : mArcLengthParamMap)
-	{
-		ArcLengthToPosition(element.first);
-		XMFLOAT3 value;
-		XMStoreFloat3(&value, mCurrentPosition);
-		mPathLines.push_back(value);
 	}
 }
 
@@ -175,17 +197,6 @@ XMFLOAT3 PathGenerator::GetPointDistances(float u_a, float u_b, float u_m)
 
 	return XMFLOAT3(am_length, mb_length, ab_length);
 }
-/*
- * 수도 코드
- * 리스트가 빌때까지 루프한다.
- * 반으로 쪼갠다.
- * 되는지 확인한다.
- * 쪼개서 list에 넣는다.
- * 다시 리스트의 처음부터 루프한다. 여기서 처음이라는것이 중요하다.
- *
- * 만약 s자라면, 중간의 점은 처음과 끝과 비슷하기에 오류가 날 수 있다.
- * 그렇기에 강제로 최초 몇번을 쪼개야 한다.
- */
 
 void PathGenerator::BuildAdaptiveTable(float threshHold)
 {

@@ -5,11 +5,10 @@ using namespace Microsoft::WRL;
 class DXApp;
 class Shader;
 
-class BoneDebugPass : public IPass
+class DebugMeshPass : public IPass
 {
 public:
-	BoneDebugPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader);
+	DebugMeshPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader);
 	void InitRootSignature() override;
 	void InitPSO() override;
 };
-

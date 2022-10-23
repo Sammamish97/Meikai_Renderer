@@ -8,22 +8,24 @@
 
 using namespace DirectX;
 class CommandList;
+class Model;
 class PathGenerator
 {
 public:
-	PathGenerator();
+	PathGenerator(std::shared_ptr<Model> controlPointModel);
 	void Update(GameTimer dt);
-	void Draw(CommandList& commandList);
+	void DrawPaths(CommandList& commandList);
+	void DrawControlPoints(CommandList& commandList);
+	XMVECTOR GetDirection();
+	XMVECTOR GetPosition();
+
+private:
 	void GetPointStrip();
 	void CalcSubPoints();
 	void BuildFunctions();
 	void BuildAdaptiveTable(float threshHold);
 	void ArcLengthToPosition(float arcLength);
-	XMVECTOR GetDirection();
-	XMVECTOR GetPosition();
 	float DistanceTimeFunction(float speed);
-
-private:
 	XMVECTOR CalcA(XMVECTOR p_0, XMVECTOR p_1, XMVECTOR p_2);
 	XMVECTOR CalcB(XMVECTOR p_0, XMVECTOR p_1, XMVECTOR p_2);
 	int GetBezierIndex(float u);
@@ -36,7 +38,7 @@ private:
 	std::vector<std::function<XMVECTOR(float)>> mBezierEquations;
 	std::vector<XMFLOAT3> mPathLines;
 	std::map<float, float> mParamArcLengthMap;//key: parameter, value: arc length
-	std::map<float, float> mArcLengthParamMap;//key: parameter, value: arc length 
+	std::map<float, float> mArcLengthParamMap;//key: arc length , value: parameter
 
 	XMVECTOR mCurrentFrameRotation;
 	XMVECTOR mCurrentPosition;
@@ -44,5 +46,7 @@ private:
 	int mSlice;
 	float mDeltaU;
 	float mTimeAccumulating;
+
+	std::shared_ptr<Model> mControlPointModel;
 };
 

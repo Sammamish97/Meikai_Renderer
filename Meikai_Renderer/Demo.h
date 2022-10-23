@@ -27,8 +27,8 @@ class CalcIBLDiffusePass;
 class DefaultPass;
 class GeometryPass;
 class LightingPass;
-class JointDebugPass;
-class BoneDebugPass;
+class DebugMeshPass;
+class DebugLinePass;
 class SkyboxPass;
 class ShadowPass;
 class SsaoPass;
@@ -65,6 +65,8 @@ private:
 	void DrawLightingPass(CommandList& cmdList);
 	void DrawJointDebug(CommandList& cmdList);
 	void DrawBoneDebug(CommandList& cmdList);
+	void DrawPathDebug(CommandList& cmdList);
+	void DrawMeshDebug(CommandList& cmdList);
 	void DrawSkyboxPass(CommandList& cmdList);
 	void DrawGUI(CommandList& commandList);
 	void DrawShadowPass(CommandList& commandList);
@@ -101,8 +103,8 @@ private://Passes
 
 
 private://Debug Passes
-	std::unique_ptr<JointDebugPass> mJointDebugPass;
-	std::unique_ptr<BoneDebugPass> mBoneDebugPass;
+	std::unique_ptr<DebugMeshPass> mJointDebugPass;
+	std::unique_ptr<DebugLinePass> mBoneDebugPass;
 
 
 private://CBV resource & allocation

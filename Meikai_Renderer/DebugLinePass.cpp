@@ -1,17 +1,17 @@
-#include "BoneDebugPass.h"
+#include "DebugLinePass.h"
 #include "DXUtil.h"
 #include "DXApp.h"
 #include "BufferFormat.h"
 #include <DirectXMath.h>
 
-BoneDebugPass::BoneDebugPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader)
+DebugLinePass::DebugLinePass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader)
 	:IPass(appPtr, vertShader, pixelShader)
 {
 	InitRootSignature();
 	InitPSO();
 }
 
-void BoneDebugPass::InitRootSignature()
+void DebugLinePass::InitRootSignature()
 {
     //Joint debug do not need any special input.
     //Need only matrices.
@@ -48,7 +48,7 @@ void BoneDebugPass::InitRootSignature()
 	ThrowIfFailed(device->CreateRootSignature(0, rootSignatureBlob->GetBufferPointer(), rootSignatureBlob->GetBufferSize(), IID_PPV_ARGS(mRootSig.GetAddressOf())))
 }
 
-void BoneDebugPass::InitPSO()
+void DebugLinePass::InitPSO()
 {
     //Joint debug pass draw only point
     auto device = mApp->GetDevice();

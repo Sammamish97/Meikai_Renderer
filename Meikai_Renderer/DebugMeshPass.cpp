@@ -1,17 +1,17 @@
-#include "JointDebugPass.h"
+#include "DebugMeshPass.h"
 #include "DXUtil.h"
 #include "DXApp.h"
 #include "BufferFormat.h"
 #include <DirectXMath.h>
 
-JointDebugPass::JointDebugPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader)
+DebugMeshPass::DebugMeshPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader)
 	:IPass(appPtr, vertShader, pixelShader)
 {
 	InitRootSignature();
 	InitPSO();
 }
 
-void JointDebugPass::InitRootSignature()
+void DebugMeshPass::InitRootSignature()
 {
 	//Joint debug do not need any special input.
 	//Need only matrices.
@@ -48,7 +48,7 @@ void JointDebugPass::InitRootSignature()
 	ThrowIfFailed(device->CreateRootSignature(0, rootSignatureBlob->GetBufferPointer(), rootSignatureBlob->GetBufferSize(), IID_PPV_ARGS(mRootSig.GetAddressOf())))
 }
 
-void JointDebugPass::InitPSO()
+void DebugMeshPass::InitPSO()
 {
 	//Joint debug pass draw only point
     auto device = mApp->GetDevice();

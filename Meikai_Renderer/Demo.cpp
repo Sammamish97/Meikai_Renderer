@@ -21,8 +21,8 @@
 #include "GeometryPass.h"
 #include "SkeletalGeometryPass.h"
 #include "LightingPass.h"
-#include "JointDebugPass.h"
-#include "BoneDebugPass.h"
+#include "DebugMeshPass.h"
+#include "DebugLinePass.h"
 #include "SkyboxPass.h"
 #include "ShadowPass.h"
 #include "SsaoPass.h"
@@ -51,7 +51,6 @@ bool Demo::Initialize()
 	{
 		return false;
 	}
-	mPathGenerator = std::make_unique<PathGenerator>();
 
 	auto initList = mDirectCommandQueue->GetCommandList();
 	CreateIBLResources(initList);
@@ -61,6 +60,8 @@ bool Demo::Initialize()
 
 	float aspectRatio = mClientWidth / static_cast<float>(mClientHeight);
 	mCamera = std::make_unique<Camera>(aspectRatio);
+	mPathGenerator = std::make_unique<PathGenerator>(mModels["Sphere"]);
+
 	BuildFrameResource();
 	CreateShaderFromHLSL();
 	//CreateShaderFromCSO();
@@ -71,8 +72,8 @@ bool Demo::Initialize()
 	mGeometryPass = std::make_unique<GeometryPass>(this, mShaders["GeomVS"], mShaders["GeomPS"]);
 	mLightingPass = std::make_unique<LightingPass>(this, mShaders["ScreenQuadVS"], mShaders["LightingPS"], 
 		mIBLResource.mDiffuseMap->mSRVDescIDX.value(), mIBLResource.mHDRImage->mSRVDescIDX.value());
-	mJointDebugPass = std::make_unique<JointDebugPass>(this, mShaders["DebugJointVS"], mShaders["DebugJointPS"]);
-	mBoneDebugPass = std::make_unique<BoneDebugPass>(this, mShaders["DebugJointVS"], mShaders["DebugJointPS"]);
+	mJointDebugPass = std::make_unique<DebugMeshPass>(this, mShaders["DebugJointVS"], mShaders["DebugJointPS"]);
+	mBoneDebugPass = std::make_unique<DebugLinePass>(this, mShaders["DebugJointVS"], mShaders["DebugJointPS"]);
 	mSkyboxPass = std::make_unique<SkyboxPass>(this, mShaders["SkyboxVS"], mShaders["SkyboxPS"], mIBLResource.mSkyboxCubeMap->mSRVDescIDX.value());
 	mSkeletalGeometryPass = std::make_unique<SkeletalGeometryPass>(this, mShaders["SkeletalGeomVS"], mShaders["SkeletalGeomPS"]);
 	mShadowPass = std::make_unique<ShadowPass>(this, mShaders["ShadowVS"], mShaders["ShadowPS"]);
@@ -160,6 +161,8 @@ void Demo::Draw(const GameTimer& gt)
 	DrawSkyboxPass(*drawcmdList);
 	DrawJointDebug(*drawcmdList);
 	DrawBoneDebug(*drawcmdList);
+	DrawPathDebug(*drawcmdList);
+	DrawMeshDebug(*drawcmdList);
 	DrawGUI(*drawcmdList);
 	mDirectCommandQueue->ExecuteCommandList(drawcmdList);
 	Present(mFrameResource.mRenderTarget);
@@ -179,10 +182,10 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 {
 	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
 	mModels["Sphere"] = std::make_shared<Model>("../models/Sphere.obj", this, *cmdList);
+	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
 	/*mModels["Cube"] = std::make_shared<Model>("../models/Cube.obj", this, *cmdList);
 	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);
 	mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, *cmdList);
-	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
 	mModels["bunny"] = std::make_shared<Model>("../models/bunny.obj", this, *cmdList);
 	mModels["dragon"] = std::make_shared<Model>("../models/dragon.obj", this, *cmdList);*/
 
@@ -201,8 +204,8 @@ void Demo::BuildObjects()
 {
 	mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, 0.f, 0.f)));
 	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["X_Bot"], mAnimations["dancing"], XMFLOAT3(1.f, 0.f, 0.f)));
-	/*mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0, -1, 0), XMFLOAT3(1, 1, 1)));
-	mObjects.push_back(std::make_unique<Object>(mModels["Cube"], XMFLOAT3(-2, 0, 2), XMFLOAT3(1, 1, 1)));
+	mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0, 0, 0), XMFLOAT3(0.1f, 0.1, 0.1f)));
+	/*mObjects.push_back(std::make_unique<Object>(mModels["Cube"], XMFLOAT3(-2, 0, 2), XMFLOAT3(1, 1, 1)));
 	mObjects.push_back(std::make_unique<Object>(mModels["bunny"], XMFLOAT3(2, -1, 2), XMFLOAT3(1, 1, 1)));
 	mObjects.push_back(std::make_unique<Object>(mModels["dragon"], XMFLOAT3(-2, 0, -2), XMFLOAT3(5 ,5, 5)));
 	mObjects.push_back(std::make_unique<Object>(mModels["Sphere"], XMFLOAT3(2, 0, -2), XMFLOAT3(1, 1, 1)));*/
@@ -597,7 +600,45 @@ void Demo::DrawBoneDebug(CommandList& cmdList)
 	{
 		object->DrawBone(cmdList);
 	}
-	mPathGenerator->Draw(cmdList);
+}
+
+void Demo::DrawPathDebug(CommandList& cmdList)
+{
+	auto rtvHeapCPUHandle = mDescriptorHeaps[RTV]->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx);
+
+	cmdList.SetPipelineState(mBoneDebugPass->mPSO.Get());
+	cmdList.SetGraphicsRootSignature(mBoneDebugPass->mRootSig.Get());
+
+	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
+
+	cmdList.SetViewport(mScreenViewport);
+	cmdList.SetScissorRect(mScissorRect);
+
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { rtvHeapCPUHandle };
+	cmdList.SetRenderTargets(rtvArray, nullptr);
+	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+
+	cmdList.SetGraphics32BitConstants(0, XMMatrixIdentity());
+	mPathGenerator->DrawPaths(cmdList);
+}
+
+void Demo::DrawMeshDebug(CommandList& cmdList)
+{
+	auto rtvHeapCPUHandle = mDescriptorHeaps[RTV]->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx);
+
+	cmdList.SetPipelineState(mBoneDebugPass->mPSO.Get());
+	cmdList.SetGraphicsRootSignature(mBoneDebugPass->mRootSig.Get());
+
+	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
+
+	cmdList.SetViewport(mScreenViewport);
+	cmdList.SetScissorRect(mScissorRect);
+
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { rtvHeapCPUHandle };
+	cmdList.SetRenderTargets(rtvArray, nullptr);
+	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	mPathGenerator->DrawControlPoints(cmdList);
 }
 
 void Demo::DrawShadowPass(CommandList& cmdList)

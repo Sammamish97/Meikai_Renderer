@@ -25,7 +25,7 @@
     <ClInclude Include="BlurPass.h" />
     <ClInclude Include="BlurPassIndices.h" />
     <ClInclude Include="Bone.h" />
-    <ClInclude Include="BoneDebugPass.h" />
+    <ClInclude Include="DebugLinePass.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="BufferFormat.h" />
     <ClInclude Include="CalcIBLDiffusePass.h" />
@@ -43,7 +43,7 @@
     <ClInclude Include="GeometryPass.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="IPass.h" />
-    <ClInclude Include="JointDebugPass.h" />
+    <ClInclude Include="DebugMeshPass.h" />
     <ClInclude Include="LightingPass.h" />
     <ClInclude Include="FrameBufferResource.h" />
     <ClInclude Include="MathHelper.h" />
@@ -102,7 +102,7 @@
     <ClCompile Include="Animator.cpp" />
     <ClCompile Include="BlurPass.cpp" />
     <ClCompile Include="Bone.cpp" />
-    <ClCompile Include="BoneDebugPass.cpp" />
+    <ClCompile Include="DebugLinePass.cpp" />
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="CalcIBLDiffusePass.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -118,7 +118,7 @@
     <ClCompile Include="GeometryPass.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="IPass.cpp" />
-    <ClCompile Include="JointDebugPass.cpp" />
+    <ClCompile Include="DebugMeshPass.cpp" />
     <ClCompile Include="LightingPass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathHelper.cpp" />
