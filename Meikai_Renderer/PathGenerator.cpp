@@ -4,25 +4,25 @@
 
 PathGenerator::PathGenerator()
 {
-	mSlice = 1000;
+	mSlice = 100;
 	mTimeAccumulating = 0.f;
 
-	auto test1 = XMFLOAT3(5, 0, 5);
-	auto test2 = XMFLOAT3(-5, 0, 5);
-	auto test3 = XMFLOAT3(-5, 0, -5);
-	auto test4 = XMFLOAT3(5, 0, -5);
-	auto test5 = XMFLOAT3(5, 0, 5);
+	auto test1 = XMFLOAT3(3, 0, 3);
+	auto test2 = XMFLOAT3(-3, 0, 3);
+	auto test3 = XMFLOAT3(-3, 0, -3);
+	auto test4 = XMFLOAT3(3, 0, -3);
+	//auto test5 = XMFLOAT3(3, 0, 3);
 
 	mControlPoints.push_back(XMLoadFloat3(&test1));
 	mControlPoints.push_back(XMLoadFloat3(&test2));
 	mControlPoints.push_back(XMLoadFloat3(&test3));
 	mControlPoints.push_back(XMLoadFloat3(&test4));
-	mControlPoints.push_back(XMLoadFloat3(&test5));
+	//mControlPoints.push_back(XMLoadFloat3(&test5));
 
 	CalcSubPoints();
 	BuildFunctions();
-	GetPointStrip();
 	BuildAdaptiveTable(0.000001f);
+	GetPointStrip();
 	//BuildForwardTable();
 }
 
@@ -48,15 +48,22 @@ void PathGenerator::Draw(CommandList& commandList)
 void PathGenerator::GetPointStrip()
 {
 	mPathLines.clear();
-	float slice = static_cast<float>(mSlice);
+	/*float slice = static_cast<float>(mSlice);
 	for(const auto& curveFunc : mBezierEquations)
 	{
-		for(float i = 0.f; i < 1; i += 1.f / slice)
+		for(float i = 0.f; i < 1; i += (1.f / slice))
 		{
 			XMFLOAT3 value;
 			XMStoreFloat3(&value, curveFunc(i));
 			mPathLines.push_back(value);
 		}
+	}*/
+	for (auto element : mArcLengthParamMap)
+	{
+		ArcLengthToPosition(element.first);
+		XMFLOAT3 value;
+		XMStoreFloat3(&value, mCurrentPosition);
+		mPathLines.push_back(value);
 	}
 }
 
@@ -234,7 +241,8 @@ void PathGenerator::BuildAdaptiveTable(float threshHold)
 
 float PathGenerator::DistanceTimeFunction(float time)
 {
-	return (sin(time * MathHelper::Pi - MathHelper::Pi / 2.f) + 1) * 0.5f;
+	//return (sin(time * MathHelper::Pi - MathHelper::Pi / 2.f) + 1) * 0.5f;
+	return time;
 }
 
 void PathGenerator::ArcLengthToPosition(float arcLength)

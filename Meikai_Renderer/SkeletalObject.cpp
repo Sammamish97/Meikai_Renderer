@@ -80,6 +80,7 @@ XMMATRIX SkeletalObject::GetWorldMat() const
         lookAt = XMMatrixInverse(nullptr, lookAt);
         result = lookAt * scaleMat;
     }
+
     return result;
 }
 

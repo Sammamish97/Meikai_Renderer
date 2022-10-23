@@ -1,20 +1,9 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  PathGenerator.cpp
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(47,30): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(135,19): warning C4244: 'return': conversion from 'const _Ty' to 'int', possible loss of data
-          with
-          [
-              _Ty=float
-          ]
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(261,42): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(263,20): warning C4244: 'initializing': conversion from 'const _Ty' to 'int', possible loss of data
-          with
-          [
-              _Ty=float
-          ]
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(267,16): warning C4244: 'initializing': conversion from 'const _Ty' to 'int', possible loss of data
-          with
-          [
-              _Ty=float
-          ]
+  SkeletalObject.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.h(15,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalMesh.h(20): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Model.h(17,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Mesh.h(14): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalObject.cpp(46,33): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalObject.cpp(56,33): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
   Meikai_Renderer.vcxproj -> C:\Data\Meikai_Renderer\Meikai_Renderer\bin\Meikai_Renderer_debug.exe

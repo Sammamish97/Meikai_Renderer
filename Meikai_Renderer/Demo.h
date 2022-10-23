@@ -135,7 +135,6 @@ private:
 	std::unique_ptr<Object> mSkybox;
 	std::unique_ptr<SkeletalObject> mMoveTest;
 
-
 	std::unique_ptr<Camera> mCamera;
 
 	std::unique_ptr<PathGenerator> mPathGenerator;
