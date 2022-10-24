@@ -11,14 +11,13 @@ SkeletalObject::SkeletalObject(DXApp* appPtr, std::shared_ptr<SkeletalModel> mod
     :mApp(appPtr), mModel(model), mAnimation(initAnim), mAnimator(mAnimation), mPosition(position), mScale(scale)
 {
     mAnimator.PlayAnimation(mAnimation);
-
 }
 
-void SkeletalObject::Update(float dt)
+void SkeletalObject::Update(float tick)
 {
     mJointPositions.clear();
     mBonePositions.clear();
-    mAnimator.UpdateAnimation(dt, mJointPositions, mBonePositions);
+    mAnimator.UpdateAnimation(tick, mJointPositions, mBonePositions);
 }
 
 void SkeletalObject::SetAnimator(std::shared_ptr<Animation> newAnimation)
@@ -37,7 +36,6 @@ void SkeletalObject::Draw(CommandList& commandList)
 
 void SkeletalObject::DrawJoint(CommandList& commandList)
 {
-   
     auto vertexCount = mJointPositions.size();
     auto vertexSize = sizeof(mJointPositions[0]);
     commandList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
@@ -87,6 +85,21 @@ XMMATRIX SkeletalObject::GetWorldMat() const
     }
 
     return result;
+}
+
+float SkeletalObject::GetTicksPerSec()
+{
+    return mAnimation->GetTicksPerSecond();
+}
+
+float SkeletalObject::GetDuration()
+{
+    return mAnimation->GetDuration();
+}
+
+float SkeletalObject::GetDistacnePerDuration()
+{
+    return mAnimation->GetDistancePerDuration();
 }
 
 void SkeletalObject::SetWorldMatrix(CommandList& commandList)

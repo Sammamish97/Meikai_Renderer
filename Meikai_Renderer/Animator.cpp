@@ -1,7 +1,7 @@
 #include "Animator.h"
 Animator::Animator(std::shared_ptr<Animation> animation)
 {
-	m_CurrentTime = 0.0;
+	m_CurrentTick = 0.0;
 	m_CurrentAnimation = animation;
 
 	m_GlobalInverse = animation->GetRootNode().transformation;
@@ -11,13 +11,11 @@ Animator::Animator(std::shared_ptr<Animation> animation)
 		m_FinalBoneMatrices.push_back(aiMatrix4x4());
 }
 
-void Animator::UpdateAnimation(float dt, std::vector<aiVector3t<float>>& jointPosition, std::vector<aiVector3t<float>>& bonePosition)
+void Animator::UpdateAnimation(float tick, std::vector<aiVector3t<float>>& jointPosition, std::vector<aiVector3t<float>>& bonePosition)
 {
-	m_DeltaTime = dt;
 	if (m_CurrentAnimation)
 	{
-		m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * dt;
-		m_CurrentTime = fmod(m_CurrentTime, m_CurrentAnimation->GetDuration());
+		m_CurrentTick = fmod(tick, m_CurrentAnimation->GetDuration());
 		CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), aiMatrix4x4(), aiVector3t<float>(), jointPosition, bonePosition);
 	}
 }
@@ -25,7 +23,7 @@ void Animator::UpdateAnimation(float dt, std::vector<aiVector3t<float>>& jointPo
 void Animator::PlayAnimation(std::shared_ptr<Animation> pAnimation)
 {
 	m_CurrentAnimation = pAnimation;
-	m_CurrentTime = 0.0f;
+	m_CurrentTick = 0.0f;
 }
 
 void Animator::CalculateBoneTransform(const AssimpNodeData* node, aiMatrix4x4 parentTransform, aiVector3t<float> parentPos,
@@ -38,7 +36,7 @@ void Animator::CalculateBoneTransform(const AssimpNodeData* node, aiMatrix4x4 pa
 
 	if (Bone)
 	{
-		Bone->Update(m_CurrentTime);
+		Bone->Update(m_CurrentTick);
 		nodeTransform = Bone->GetLocalTransform();
 	}
 

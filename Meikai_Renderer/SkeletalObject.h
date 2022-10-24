@@ -27,13 +27,16 @@ private:
 	DXApp* mApp;
 public:
 	SkeletalObject(DXApp* appPtr, std::shared_ptr<SkeletalModel> model, std::shared_ptr<Animation> initAnim, XMFLOAT3 position,  XMFLOAT3 scale = XMFLOAT3(1.f, 1.f, 1.f));
-	void Update(float dt);
+	void Update(float tick);
 	void Draw(CommandList& commandList);
 
 	void DrawJoint(CommandList& commandList);
 	void DrawBone(CommandList& commandList);
 
 	XMMATRIX GetWorldMat() const;
+	float GetTicksPerSec();
+	float GetDuration();
+	float GetDistacnePerDuration();
 	void SetWorldMatrix(CommandList& commandList);
 	void SetPosition(XMVECTOR newPos);
 	void SetDirection(XMVECTOR newDir);

@@ -14,6 +14,7 @@ Animation::Animation(const std::string& animationPath, std::shared_ptr<SkeletalM
 	assert(scene && scene->mRootNode);
 	auto animation = scene->mAnimations[0];
 	mDuration = animation->mDuration;
+	mDistancePerDuration = 2.f;
 	mTickPerSec = animation->mTicksPerSecond;
 	aiMatrix4x4 globalTransformation = scene->mRootNode->mTransformation;
 	globalTransformation = globalTransformation.Inverse();

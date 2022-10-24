@@ -7,7 +7,8 @@ PathGenerator::PathGenerator(std::shared_ptr<Model> controlPointModel)
 {
 	mControlPointModel = controlPointModel;
 	mSlice = 100;
-	mTimeAccumulating = 0.f;
+	mTickAccumulating = 0.f;
+	mWorldArcLength = 0.f;
 	float scale = 3.f;
 
 	auto test0 = XMFLOAT3(0, 0, scale * 1.f);
@@ -35,28 +36,32 @@ PathGenerator::PathGenerator(std::shared_ptr<Model> controlPointModel)
 	GetPointStrip();
 }
 
-void PathGenerator::Update(GameTimer timer)
+float PathGenerator::Update(GameTimer timer, float tickPerSec, float duration, float distancePerDuration)
 {
-	mTimeAccumulating += timer.DeltaTime() / 10.f;
-	if(mTimeAccumulating > 1)
-	{
-		mTimeAccumulating = 0;
-	}
-	ArcLengthToPosition(DistanceTimeFunction(mTimeAccumulating));
+	float velocity = 0.03f;
+	mTickAccumulating += timer.DeltaTime() * tickPerSec * velocity;
+	mTickAccumulating = fmod(mTickAccumulating, duration);
+	float normalizedTick = mTickAccumulating / duration;
+	float normalizedArcLength = DistanceTimeFunction(normalizedTick);
+	ArcLengthToPosition(normalizedArcLength);
+
+	float distancePerTick = distancePerDuration / duration;//한 사이클 당 거리 / 한 사이클 당 틱
+	float worldDistance = mWorldArcLength * normalizedArcLength;
+	float tickAmount = worldDistance / distancePerTick;
+
+	return tickAmount;
 }
 
 void PathGenerator::DrawPaths(CommandList& commandList)
 {
 	auto vertexCount = mPathLines.size();
 	auto vertexSize = sizeof(mPathLines[0]);
-	commandList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
 	commandList.SetDynamicVertexBuffer(0, vertexCount, vertexSize, mPathLines.data());
 	commandList.Draw(vertexCount);
 }
 
 void PathGenerator::DrawControlPoints(CommandList& commandList)
 {
-	commandList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
 	float pointScale = 0.05f;
 	XMMATRIX scale = XMMatrixScaling(pointScale, pointScale, pointScale);
 
@@ -239,10 +244,11 @@ void PathGenerator::BuildAdaptiveTable(float threshHold)
 		}
 		i = segments.begin();
 	}
-	float lastArcLength = (--mParamArcLengthMap.end())->second;
+	mWorldArcLength = (--mParamArcLengthMap.end())->second;
+
 	for (auto& element : mParamArcLengthMap)
 	{
-		element.second /= lastArcLength;
+		element.second /= mWorldArcLength;
 	}
 	for (auto element : mParamArcLengthMap)
 	{
@@ -250,10 +256,16 @@ void PathGenerator::BuildAdaptiveTable(float threshHold)
 	}
 }
 
-float PathGenerator::DistanceTimeFunction(float time)
+float PathGenerator::DistanceTimeFunction(float tick)
 {
-	//return (sin(time * MathHelper::Pi - MathHelper::Pi / 2.f) + 1) * 0.5f;
-	return time;
+	return (sin(tick * MathHelper::Pi - MathHelper::Pi * 0.5f) + 1) * 0.5f;
+	//return tick;
+}
+
+float PathGenerator::VelocityTimeFunction(float tick)
+{
+	return 0.5f * MathHelper::Pi * sin(MathHelper::Pi * tick);
+
 }
 
 void PathGenerator::ArcLengthToPosition(float arcLength)
@@ -275,22 +287,11 @@ void PathGenerator::ArcLengthToPosition(float arcLength)
 	float interpolateArcLength = (arcLength - lowS) / (highS - lowS);
 	float interpolatedU = (highU - lowU) * interpolateArcLength + lowU;
 
-	if(interpolatedU >= highU)
-	{
-		mCurrentPosition = XMVECTOR();
-	}
-
 	int segmentNum = mBezierEquations.size();
 
-	int equationIndex = floorf(interpolatedU * segmentNum);
+	int equationIndex = std::clamp(floorf(interpolatedU * segmentNum),0.f, (float)(segmentNum - 1));
 	float denormalizeU = interpolatedU * segmentNum - equationIndex;
 	auto currentPosition = mBezierEquations[equationIndex](denormalizeU);
-	//TODO: 포지션을 또 interpolate해야하나? 문서를 읽어보자.
-
-	if (0.99 <= denormalizeU)
-	{
-		mCurrentPosition = XMVECTOR();
-	}
 
 	int nextIndex = std::clamp(floorf(highU * segmentNum), 0.f, (float)(segmentNum - 1));
 	float nextDenormalizeU = highU * segmentNum - nextIndex;

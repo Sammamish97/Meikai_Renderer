@@ -37,12 +37,14 @@ private:
 
 	float mTickPerSec;
 	float mDuration;
+	float mDistancePerDuration;
 	AssimpNodeData mRootNode;
 
 public:
 
 	inline float GetTicksPerSecond() { return mTickPerSec; }
 	inline float GetDuration() { return mDuration; }
+	inline float GetDistancePerDuration() { return mDistancePerDuration; }
 	inline const AssimpNodeData& GetRootNode() { return mRootNode; }
 	inline const std::map<std::string, BoneInfo>& GetBoneIDMap()
 	{

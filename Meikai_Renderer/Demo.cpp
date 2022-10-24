@@ -64,7 +64,6 @@ bool Demo::Initialize()
 
 	BuildFrameResource();
 	CreateShaderFromHLSL();
-	//CreateShaderFromCSO();
 
 	mScissorRect = { 0, 0, mClientWidth, mClientHeight };
 	mScreenViewport = {0, 0, (float)mClientWidth, (float)mClientHeight,0, 1};
@@ -139,17 +138,14 @@ void Demo::Update(const GameTimer& gt)
 	mCamera->Update(gt);
 	UpdatePassCB(gt);
 	UpdateLightCB(gt);
-	mPathGenerator->Update(gt);
+	float tick = mPathGenerator->Update(gt, mMoveTestSkeletal->GetTicksPerSec(), mMoveTestSkeletal->GetDuration(), mMoveTestSkeletal->GetDistacnePerDuration());
   	mMoveTestSkeletal->SetPosition(mPathGenerator->GetPosition());
 	mMoveTestSkeletal->SetDirection(mPathGenerator->GetDirection());
-	mMoveTest->SetPosition(mPathGenerator->GetPosition());
 	for(auto& skeletalObject : mSkeletalObjects)
 	{
-		skeletalObject->Update(gt.DeltaTime());
+		skeletalObject->Update(gt.DeltaTime() * skeletalObject->GetTicksPerSec());
 	}
-	mMoveTestSkeletal->Update(gt.DeltaTime());
-	mMoveTest->Update(gt.DeltaTime());
-
+	mMoveTestSkeletal->Update(tick);
 }
 
 void Demo::Draw(const GameTimer& gt)
@@ -205,7 +201,6 @@ void Demo::LoadAnimations()
 
 void Demo::BuildObjects()
 {
-	mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, 0.f, 0.f)));
 	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["X_Bot"], mAnimations["dancing"], XMFLOAT3(1.f, 0.f, 0.f)));
 	mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0, 0, 0), XMFLOAT3(0.1f, 0.1, 0.1f)));
 	/*mObjects.push_back(std::make_unique<Object>(mModels["Cube"], XMFLOAT3(-2, 0, 2), XMFLOAT3(1, 1, 1)));
@@ -214,7 +209,6 @@ void Demo::BuildObjects()
 	mObjects.push_back(std::make_unique<Object>(mModels["Sphere"], XMFLOAT3(2, 0, -2), XMFLOAT3(1, 1, 1)));*/
 
 	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
-	mMoveTest = std::make_unique<Object>(mModels["Sphere"], XMFLOAT3(0.f, 0.f, 0.f));
 	mMoveTestSkeletal = std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, 0.f, 0.f));
 }
 
@@ -469,8 +463,6 @@ void Demo::DrawGeometryPasses(CommandList& cmdList)
 	{
 		object->Draw(cmdList);
 	}
-	mMoveTest->Draw(cmdList);
-
 
 	cmdList.SetPipelineState(mSkeletalGeometryPass->mPSO.Get());
 	cmdList.SetGraphicsRootSignature(mSkeletalGeometryPass->mRootSig.Get());
@@ -630,8 +622,8 @@ void Demo::DrawMeshDebug(CommandList& cmdList)
 {
 	auto rtvHeapCPUHandle = mDescriptorHeaps[RTV]->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx);
 
-	cmdList.SetPipelineState(mBoneDebugPass->mPSO.Get());
-	cmdList.SetGraphicsRootSignature(mBoneDebugPass->mRootSig.Get());
+	cmdList.SetPipelineState(mJointDebugPass->mPSO.Get());
+	cmdList.SetGraphicsRootSignature(mJointDebugPass->mRootSig.Get());
 
 	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
 

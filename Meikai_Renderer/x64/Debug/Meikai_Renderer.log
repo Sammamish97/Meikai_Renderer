@@ -1,19 +1,23 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  PathGenerator.cpp
+  Demo.cpp
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\ConstantBuffers.h(72,21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Model.h(17,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
 C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Mesh.h(14): message : see declaration of 'DXApp'
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(54,30): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(68,12): warning C4101: 'result': unreferenced local variable
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(162,19): warning C4244: 'return': conversion from 'const _Ty' to 'int', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalModel.h(15,13): warning C4099: 'DXApp': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\SkeletalMesh.h(20): message : see declaration of 'DXApp'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Camera.h(9,1): warning C4099: 'Camera': type name first seen using 'class' now seen using 'struct'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Camera.h(8): message : see declaration of 'Camera'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Demo.cpp(205,108): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Demo.cpp(730,66): warning C4244: 'argument': conversion from 'UINT64' to 'const _Ty', possible loss of data
           with
           [
-              _Ty=float
+              _Ty=uint32_t
           ]
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(283,42): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(285,20): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(295,16): warning C4244: 'initializing': conversion from 'const _Ty' to 'int', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Demo.cpp(814,20): warning C4244: 'argument': conversion from 'UINT64' to 'uint32_t', possible loss of data
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.32.31326\include\memory(3423,56): warning C4244: 'argument': conversion from '_Ty' to 'int', possible loss of data
           with
           [
-              _Ty=float
+              _Ty=UINT64
           ]
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\Demo.cpp(219): message : see reference to function template instantiation 'std::unique_ptr<RandomSampleCB,std::default_delete<RandomSampleCB>> std::make_unique<RandomSampleCB,UINT64,UINT,0>(UINT64 &&,UINT &&)' being compiled
   Meikai_Renderer.vcxproj -> C:\Data\Meikai_Renderer\Meikai_Renderer\bin\Meikai_Renderer_debug.exe
