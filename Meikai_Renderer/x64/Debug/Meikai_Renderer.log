@@ -9,12 +9,8 @@ C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(162,19
           [
               _Ty=float
           ]
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(289,42): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(291,20): warning C4244: 'initializing': conversion from 'const _Ty' to 'int', possible loss of data
-          with
-          [
-              _Ty=float
-          ]
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(283,42): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(285,20): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 C:\Data\Meikai_Renderer\Meikai_Renderer\Meikai_Renderer\PathGenerator.cpp(295,16): warning C4244: 'initializing': conversion from 'const _Ty' to 'int', possible loss of data
           with
           [

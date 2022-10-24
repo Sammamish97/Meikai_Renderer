@@ -37,7 +37,7 @@ PathGenerator::PathGenerator(std::shared_ptr<Model> controlPointModel)
 
 void PathGenerator::Update(GameTimer timer)
 {
-	mTimeAccumulating += timer.DeltaTime() / 100.f;
+	mTimeAccumulating += timer.DeltaTime() / 10.f;
 	if(mTimeAccumulating > 1)
 	{
 		mTimeAccumulating = 0;
@@ -275,11 +275,22 @@ void PathGenerator::ArcLengthToPosition(float arcLength)
 	float interpolateArcLength = (arcLength - lowS) / (highS - lowS);
 	float interpolatedU = (highU - lowU) * interpolateArcLength + lowU;
 
+	if(interpolatedU >= highU)
+	{
+		mCurrentPosition = XMVECTOR();
+	}
+
 	int segmentNum = mBezierEquations.size();
 
-	int equationIndex = std::clamp(floorf(interpolatedU * segmentNum), 0.f, (float)(segmentNum -1));
+	int equationIndex = floorf(interpolatedU * segmentNum);
 	float denormalizeU = interpolatedU * segmentNum - equationIndex;
 	auto currentPosition = mBezierEquations[equationIndex](denormalizeU);
+	//TODO: 포지션을 또 interpolate해야하나? 문서를 읽어보자.
+
+	if (0.99 <= denormalizeU)
+	{
+		mCurrentPosition = XMVECTOR();
+	}
 
 	int nextIndex = std::clamp(floorf(highU * segmentNum), 0.f, (float)(segmentNum - 1));
 	float nextDenormalizeU = highU * segmentNum - nextIndex;

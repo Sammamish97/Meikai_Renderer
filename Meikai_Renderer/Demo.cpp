@@ -140,13 +140,16 @@ void Demo::Update(const GameTimer& gt)
 	UpdatePassCB(gt);
 	UpdateLightCB(gt);
 	mPathGenerator->Update(gt);
-  	mMoveTest->SetPosition(mPathGenerator->GetPosition());
-	mMoveTest->SetDirection(mPathGenerator->GetDirection());
+  	mMoveTestSkeletal->SetPosition(mPathGenerator->GetPosition());
+	mMoveTestSkeletal->SetDirection(mPathGenerator->GetDirection());
+	mMoveTest->SetPosition(mPathGenerator->GetPosition());
 	for(auto& skeletalObject : mSkeletalObjects)
 	{
 		skeletalObject->Update(gt.DeltaTime());
 	}
+	mMoveTestSkeletal->Update(gt.DeltaTime());
 	mMoveTest->Update(gt.DeltaTime());
+
 }
 
 void Demo::Draw(const GameTimer& gt)
@@ -211,7 +214,8 @@ void Demo::BuildObjects()
 	mObjects.push_back(std::make_unique<Object>(mModels["Sphere"], XMFLOAT3(2, 0, -2), XMFLOAT3(1, 1, 1)));*/
 
 	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
-	mMoveTest = std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, 0.f, 0.f));
+	mMoveTest = std::make_unique<Object>(mModels["Sphere"], XMFLOAT3(0.f, 0.f, 0.f));
+	mMoveTestSkeletal = std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, 0.f, 0.f));
 }
 
 void Demo::BuildFrameResource()
@@ -465,6 +469,7 @@ void Demo::DrawGeometryPasses(CommandList& cmdList)
 	{
 		object->Draw(cmdList);
 	}
+	mMoveTest->Draw(cmdList);
 
 
 	cmdList.SetPipelineState(mSkeletalGeometryPass->mPSO.Get());
@@ -476,8 +481,7 @@ void Demo::DrawGeometryPasses(CommandList& cmdList)
 	{
 		skeletalObject->Draw(cmdList);
 	}
-	mMoveTest->Draw(cmdList);
-
+	mMoveTestSkeletal->Draw(cmdList);
 }
 
 void Demo::DrawLightingPass(CommandList& cmdList)

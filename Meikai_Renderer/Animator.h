@@ -26,6 +26,7 @@ public:
 	std::vector<aiMatrix4x4> GetFinalBoneMatrices();
 	
 private:
+	aiMatrix4x4 m_GlobalInverse;
 	std::vector<aiMatrix4x4> m_FinalBoneMatrices;
 	std::shared_ptr<Animation> m_CurrentAnimation;
 	float m_CurrentTime;

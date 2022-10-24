@@ -4,8 +4,9 @@ Animator::Animator(std::shared_ptr<Animation> animation)
 	m_CurrentTime = 0.0;
 	m_CurrentAnimation = animation;
 
-	m_FinalBoneMatrices.reserve(100);
+	m_GlobalInverse = animation->GetRootNode().transformation;
 
+	m_FinalBoneMatrices.reserve(100);
 	for (int i = 0; i < 100; i++)
 		m_FinalBoneMatrices.push_back(aiMatrix4x4());
 }

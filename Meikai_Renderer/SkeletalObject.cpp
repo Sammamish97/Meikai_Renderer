@@ -76,9 +76,14 @@ XMMATRIX SkeletalObject::GetWorldMat() const
         XMFLOAT4X4 rotationPart;
         XMStoreFloat4x4(&rotationPart, lookAt);
 
+        for(int i = 0; i < 3; ++i)
+        {
+            rotationPart.m[3][i] = 0.f;
+        }
         lookAt = XMLoadFloat4x4(&rotationPart);
+        
         lookAt = XMMatrixInverse(nullptr, lookAt);
-        result = lookAt * scaleMat;
+        result = scaleMat * lookAt * translationMat;
     }
 
     return result;
