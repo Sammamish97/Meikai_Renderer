@@ -28,12 +28,10 @@
     <ClInclude Include="DebugLinePass.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="BufferFormat.h" />
-    <ClInclude Include="CalcIBLDiffusePass.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommandList.h" />
     <ClInclude Include="CommandQueue.h" />
     <ClInclude Include="ConstantBuffers.h" />
-    <ClInclude Include="DefaultPass.h" />
     <ClInclude Include="Demo.h" />
     <ClInclude Include="DescriptorHeap.h" />
     <ClInclude Include="DXApp.h" />
@@ -104,11 +102,9 @@
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="DebugLinePass.cpp" />
     <ClCompile Include="Buffer.cpp" />
-    <ClCompile Include="CalcIBLDiffusePass.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CommandList.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
-    <ClCompile Include="DefaultPass.cpp" />
     <ClCompile Include="Demo.cpp" />
     <ClCompile Include="DescriptorHeap.cpp" />
     <ClCompile Include="DXApp.cpp" />

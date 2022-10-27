@@ -24,7 +24,6 @@ class PathGenerator;
 class SkeletalGeometryPass;
 class EquiRectToCubemapPass;
 class CalcIBLDiffusePass;
-class DefaultPass;
 class GeometryPass;
 class LightingPass;
 class DebugMeshPass;
@@ -60,7 +59,6 @@ private:
 	void CreateShaderFromCSO();
 	void PreCompute();
 
-	void DrawDefaultPass(CommandList& commandList);
 	void DrawGeometryPasses(CommandList& cmdList);
 	void DrawLightingPass(CommandList& cmdList);
 	void DrawJointDebug(CommandList& cmdList);
@@ -89,7 +87,6 @@ private://Non-Iterating Pass
 	std::unique_ptr<EquiRectToCubemapPass> mEquiRectToCubemapPass;
 
 private://Passes
-	std::unique_ptr<DefaultPass> mDefaultPass;
 
 	std::unique_ptr<GeometryPass> mGeometryPass;
 	std::unique_ptr<SkeletalGeometryPass> mSkeletalGeometryPass;

@@ -60,9 +60,8 @@ VertexOut VS(VertexIn vin)
 	vout.TangentW = mul(vin.TangentU, (float3x3)objectWorld.mat);
 
     // Transform to homogeneous clip space.
-    float4 posW = mul(float4(vin.PosL, 1.0f), objectWorld.mat);
-    vout.PosW = posW;
-    vout.PosH = mul(posW, gViewProj);
+    vout.PosW = mul(float4(vin.PosL, 1.0f), objectWorld.mat);;
+    vout.PosH = mul(vout.PosW, gViewProj);
 
     return vout;
 }

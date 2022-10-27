@@ -71,11 +71,10 @@ VertexOut VS(VertexIn vin)
     }
 
     // Transform to homogeneous clip space.
-    float4 posL = mul(float4(vin.PosL, 1.f), BoneTransform);
+    float4 posBone = mul(float4(vin.PosL, 1.f), BoneTransform);
     //float4 posL = float4(vin.PosL, 1.f);
-    float4 posW = mul(posL, objectWorld.mat);
-    vout.PosW = posW;
-    vout.PosH = mul(posW, gViewProj);
+    vout.PosW = mul(posBone, objectWorld.mat);;
+    vout.PosH = mul(vout.PosW, gViewProj);
     vout.NormalW = mul(vin.NormalL, (float3x3)objectWorld.mat);
     vout.TangentW = mul(vin.TangentU, (float3x3)objectWorld.mat);
 

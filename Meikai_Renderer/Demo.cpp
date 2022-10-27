@@ -6,7 +6,6 @@
 #include "Camera.h"
 #include "BufferFormat.h"
 #include "MathHelper.h"
-#include "DefaultPass.h"
 #include "DescriptorHeap.h"
 
 #include "PathGenerator.h"
@@ -67,7 +66,6 @@ bool Demo::Initialize()
 
 	mScissorRect = { 0, 0, mClientWidth, mClientHeight };
 	mScreenViewport = {0, 0, (float)mClientWidth, (float)mClientHeight,0, 1};
-	mDefaultPass = std::make_unique<DefaultPass>(this, mShaders["DefaultForwardVS"], mShaders["DefaultForwardPS"]);
 	mGeometryPass = std::make_unique<GeometryPass>(this, mShaders["GeomVS"], mShaders["GeomPS"]);
 	mLightingPass = std::make_unique<LightingPass>(this, mShaders["ScreenQuadVS"], mShaders["LightingPS"], 
 		mIBLResource.mDiffuseMap->mSRVDescIDX.value(), mIBLResource.mHDRImage->mSRVDescIDX.value());
@@ -151,14 +149,12 @@ void Demo::Update(const GameTimer& gt)
 void Demo::Draw(const GameTimer& gt)
 {
 	auto drawcmdList = mDirectCommandQueue->GetCommandList();
-	//DrawDefaultPass(*drawcmdList);
 	DrawShadowPass(*drawcmdList);
 	DrawGeometryPasses(*drawcmdList);
 	DrawSsaoPass(*drawcmdList);
 	DispatchBluring(*drawcmdList);
 	DrawLightingPass(*drawcmdList);
 	DrawSkyboxPass(*drawcmdList);
-	DrawJointDebug(*drawcmdList);
 	DrawBoneDebug(*drawcmdList);
 	DrawPathDebug(*drawcmdList);
 	DrawMeshDebug(*drawcmdList);
@@ -246,9 +242,6 @@ void Demo::CreateShaderFromHLSL()
 	mShaders["LightingPS"] = DxUtil::CompileShader(L"../shaders/LightingPass.hlsl", nullptr, "PS", "ps_5_1");
 
 	mShaders["SsaoPS"] = DxUtil::CompileShader(L"../shaders/SsaoPass.hlsl", nullptr, "PS", "ps_5_1");
-
-	mShaders["DefaultForwardVS"] = DxUtil::CompileShader(L"../shaders/DefaultForward.hlsl", nullptr, "VS", "vs_5_1");
-	mShaders["DefaultForwardPS"] = DxUtil::CompileShader(L"../shaders/DefaultForward.hlsl", nullptr, "PS", "ps_5_1");
 
 	mShaders["DebugJointVS"] = DxUtil::CompileShader(L"../shaders/DebugJoint.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["DebugJointPS"] = DxUtil::CompileShader(L"../shaders/DebugJoint.hlsl", nullptr, "PS", "ps_5_1");
@@ -389,36 +382,6 @@ XMFLOAT4X4 Demo::BuildShadowMatrix(bool isShadowPass)
 	return result;
 }
 
-void Demo::DrawDefaultPass(CommandList& cmdList)
-{
-	float colorClearValue[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-
-	cmdList.SetPipelineState(mDefaultPass->mPSO.Get());
-	cmdList.SetGraphicsRootSignature(mDefaultPass->mRootSig.Get());
-
-	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
-
-	cmdList.SetViewport(mScreenViewport);
-	cmdList.SetScissorRect(mScissorRect);
-
-	auto rtvHeapCPUHandle = mDescriptorHeaps[RTV]->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx);
-	auto dsvHeapCPUHandle = mDescriptorHeaps[DSV]->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx);
-
-	auto rtvHeap = mDescriptorHeaps[RTV];
-	cmdList.ClearTexture(mFrameResource.mRenderTarget, rtvHeapCPUHandle,colorClearValue);
-	cmdList.ClearDepthStencilTexture(mFrameResource.mDepthStencilBuffer, dsvHeapCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL);
-
-	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { rtvHeapCPUHandle };
-	cmdList.SetRenderTargets(rtvArray, &dsvHeapCPUHandle);
-
-	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	for (auto& object : mObjects)
-	{
-		object->Draw(cmdList);
-	}
-}
-
 void Demo::DrawGeometryPasses(CommandList& cmdList)
 {
 	auto rtvHeap = mDescriptorHeaps[RTV];
@@ -517,10 +480,6 @@ void Demo::DrawLightingPass(CommandList& cmdList)
 	cmdList.SetGraphics32BitConstants(3, mLightingPass->mLightDescIndices.TexNum + 1, &(mLightingPass->mLightDescIndices));
 	cmdList.SetGraphics32BitConstants(5, BuildShadowMatrix(false));
 
-	//// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
-	cmdList.SetViewport(mScreenViewport);
-	cmdList.SetScissorRect(mScissorRect);
-
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { renderTargetRTV };
 	//// Specify the buffers we are going to render to.
 	cmdList.SetRenderTargets(rtvArray, nullptr);
@@ -539,9 +498,6 @@ void Demo::DrawSkyboxPass(CommandList& cmdList)
 
 	cmdList.SetPipelineState(mSkyboxPass->mPSO.Get());
 	cmdList.SetGraphicsRootSignature(mSkyboxPass->mRootSig.Get());
-
-	cmdList.SetViewport(mScreenViewport);
-	cmdList.SetScissorRect(mScissorRect);
 
 	cmdList.SetGraphicsDynamicConstantBuffer(0, sizeof(CommonCB), mCommonCB.get());
 	cmdList.SetDescriptorHeap(srvCubeHeap->GetDescriptorHeap());
@@ -563,11 +519,6 @@ void Demo::DrawJointDebug(CommandList& cmdList)
 
 	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
 
-	cmdList.SetViewport(mScreenViewport);
-	cmdList.SetScissorRect(mScissorRect);
-
-	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { rtvHeapCPUHandle };
-	cmdList.SetRenderTargets(rtvArray, nullptr);
 	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 
 	for (auto& object : mSkeletalObjects)
@@ -585,11 +536,6 @@ void Demo::DrawBoneDebug(CommandList& cmdList)
 
 	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
 
-	cmdList.SetViewport(mScreenViewport);
-	cmdList.SetScissorRect(mScissorRect);
-
-	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { rtvHeapCPUHandle };
-	cmdList.SetRenderTargets(rtvArray, nullptr);
 	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST); 
 
 	for (auto& object : mSkeletalObjects)
@@ -607,11 +553,6 @@ void Demo::DrawPathDebug(CommandList& cmdList)
 
 	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
 
-	cmdList.SetViewport(mScreenViewport);
-	cmdList.SetScissorRect(mScissorRect);
-
-	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { rtvHeapCPUHandle };
-	cmdList.SetRenderTargets(rtvArray, nullptr);
 	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	cmdList.SetGraphics32BitConstants(0, XMMatrixIdentity());
@@ -627,11 +568,6 @@ void Demo::DrawMeshDebug(CommandList& cmdList)
 
 	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
 
-	cmdList.SetViewport(mScreenViewport);
-	cmdList.SetScissorRect(mScissorRect);
-
-	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { rtvHeapCPUHandle };
-	cmdList.SetRenderTargets(rtvArray, nullptr);
 	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	mPathGenerator->DrawControlPoints(cmdList);
@@ -645,10 +581,6 @@ void Demo::DrawShadowPass(CommandList& cmdList)
 
 	cmdList.SetPipelineState(mShadowPass->mPSO.Get());
 	cmdList.SetGraphicsRootSignature(mShadowPass->mRootSig.Get());
-
-
-	cmdList.SetViewport(mScreenViewport);
-	cmdList.SetScissorRect(mScissorRect);
 
 	cmdList.SetRenderTargets(std::vector<D3D12_CPU_DESCRIPTOR_HANDLE>(), &dsvHeapCPUHandle);
 
@@ -687,10 +619,6 @@ void Demo::DrawSsaoPass(CommandList& cmdList)
 	//Set descriptor indices
 	cmdList.SetGraphics32BitConstants(2, mSsaoPass->mSsaoIndices.TexNum + 1, &(mSsaoPass->mSsaoIndices));
 
-	//// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
-	cmdList.SetViewport(mScreenViewport);
-	cmdList.SetScissorRect(mScissorRect);
-
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { ssaoRTV };
 	//// Specify the buffers we are going to render to.
 	cmdList.SetRenderTargets(rtvArray, nullptr);
@@ -705,8 +633,6 @@ void Demo::DrawGUI(CommandList& cmdList)
 {
 	auto rtvHeapCPUHandle = mDescriptorHeaps[RTV]->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx);
 
-	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { rtvHeapCPUHandle };
-	cmdList.SetRenderTargets(rtvArray, nullptr);
 	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 	cmdList.SetDescriptorHeap(g_pd3dSrvDescHeap);
 	
@@ -769,6 +695,12 @@ void Demo::DispatchBluring(CommandList& cmdList)
 	cmdList.TransitionBarrier(mFrameResource.mBlurBufferV->GetResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);//이것은 transition이 안됨.
 	cmdList.FlushResourceBarriers();
 
+	cmdList.SetDescriptorHeap(srvHeap->GetDescriptorHeap());
+	cmdList.SetComputeDescriptorTable(1, srvHeap->GetGpuHandle(0));
+
+	cmdList.SetDescriptorHeap(uavHeap->GetDescriptorHeap());
+	cmdList.SetComputeDescriptorTable(2, uavHeap->GetGpuHandle(0));
+
 	for (int i = 0; i < blurCount; ++i)
 	{
 		//
@@ -778,12 +710,6 @@ void Demo::DispatchBluring(CommandList& cmdList)
 		cmdList.SetPipelineState(mBlurHPass->mPSO);
 
 		cmdList.SetCompute32BitConstants(3, mBlurHPass->mBlurDescIndices.TexNum + 1, &(mBlurHPass->mBlurDescIndices));//Desc Indices
-
-		cmdList.SetDescriptorHeap(srvHeap->GetDescriptorHeap());
-		cmdList.SetComputeDescriptorTable(1, srvHeap->GetGpuHandle(0));
-
-		cmdList.SetDescriptorHeap(uavHeap->GetDescriptorHeap());
-		cmdList.SetComputeDescriptorTable(2, uavHeap->GetGpuHandle(0));
 
 		// How many groups do we need to dispatch to cover a row of pixels, where each
 		// group covers 256 pixels (the 256 is defined in the ComputeShader).
@@ -802,12 +728,6 @@ void Demo::DispatchBluring(CommandList& cmdList)
 
 		cmdList.SetCompute32BitConstants(3, mBlurVPass->mBlurDescIndices.TexNum + 1, &(mBlurVPass->mBlurDescIndices));//Desc Indices
 
-		cmdList.SetDescriptorHeap(srvHeap->GetDescriptorHeap());
-		cmdList.SetComputeDescriptorTable(1, srvHeap->GetGpuHandle(0));
-
-		cmdList.SetDescriptorHeap(uavHeap->GetDescriptorHeap());
-		cmdList.SetComputeDescriptorTable(2, uavHeap->GetGpuHandle(0));
-
 		// How many groups do we need to dispatch to cover a column of pixels, where each
 		// group covers 256 pixels  (the 256 is defined in the ComputeShader).
 		UINT numGroupsY = (UINT)ceilf(ssaoTexHeight / 256.0f);
@@ -816,7 +736,6 @@ void Demo::DispatchBluring(CommandList& cmdList)
 		cmdList.TransitionBarrier(mFrameResource.mBlurBufferH->GetResource(), D3D12_RESOURCE_STATE_GENERIC_READ);
 		cmdList.TransitionBarrier(mFrameResource.mBlurBufferV->GetResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 		cmdList.FlushResourceBarriers();
-
 	}
 
 	cmdList.CopyResource(mFrameResource.mSsaoMap->GetResource(), mFrameResource.mBlurBufferH->GetResource());
