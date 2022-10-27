@@ -161,12 +161,14 @@ float4 PS(VertexOut pin) : SV_Target
 	float3 ambient_specular = float3(0, 0, 0);
 
 	float3 reflected = 2 * dot(N, V) * N - V;
+	float3 A = normalize(float3(reflected.z, 0, -reflected.x));
+	float3 B = normalize(cross(reflected, A));
 	for(int i = 0; i < randomValues.sampleNumber; ++i)
 	{
 		float3 zOrientSample = SampleRandomVectorGGX(randomValues.sampledUV[i].x,
 			randomValues.sampledUV[i].y,
 			roughness);
-		float3 w_i = RotateZaxisToLightAxis(zOrientSample, reflected);
+		float3 w_i = RotateZaxisToLightAxis(zOrientSample, reflected, A, B);
 		float distribution = DistributionGGX(N, normalize(V + w_i), roughness);
 
 		float level = (0.5 * log2(randomValues.HDRTexDim.x * randomValues.HDRTexDim.y / randomValues.sampleNumber)) - (0.5 * log2(distribution));
@@ -181,6 +183,6 @@ float4 PS(VertexOut pin) : SV_Target
 	float shadowFactor = CalcShadowFactor(ShadowPos);
 	float3 resultHDR = ambient_diffuse + ambient_specular + LightOutput;
 	float3 resultLDR = ToneMapping(resultHDR, 5) * shadowFactor;
-    //return float4(resultLDR, 1.0);
-	return float4(occluded, occluded, occluded, 1);
+    return float4(resultLDR, 1.0);
+	//return float4(occluded, occluded, occluded, 1);
 }

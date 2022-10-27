@@ -25,10 +25,6 @@ float GeometrySchlickGGX(float NdotV, float roughness)
     return nom / denom;
 }
 
-float GeometrySchlickGGX_GARY(float NdotV, float roughness)
-{
-   
-}
 // ----------------------------------------------------------------------------
 float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
 {
@@ -40,15 +36,12 @@ float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
     return ggx1 * ggx2;
 }
 
-float GeometrySmith_GARY(float3 N, float3 V, float3 L, float roughness)
-{
-   
-}
 // ----------------------------------------------------------------------------
 float3 fresnelSchlick(float cosTheta, float3 F0)
 {
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
+
 // ----------------------------------------------------------------------------
 float3 UvToVec(float u, float v)
 {
@@ -75,11 +68,9 @@ float3 SampleRandomVectorGGX(float u, float v, float roughness)
 	return normalize(UvToVec(newUV.x, newUV.y / PI));
 }
 // ----------------------------------------------------------------------------
-float3 RotateZaxisToLightAxis(float3 zSampled, float3 reflected)
+float3 RotateZaxisToLightAxis(float3 zSampled, float3 reflected, float3 A, float3 B)
 {
 	reflected = normalize(reflected);
-	float3 A = normalize(float3(reflected.z, 0, -reflected.x));
-	float3 B = normalize(cross(reflected, A));
 	return normalize(zSampled.x * A + zSampled.y * B + zSampled.z * reflected);
 }
 // ----------------------------------------------------------------------------

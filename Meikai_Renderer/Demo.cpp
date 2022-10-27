@@ -619,6 +619,7 @@ void Demo::DrawSsaoPass(CommandList& cmdList)
 	//Set descriptor indices
 	cmdList.SetGraphics32BitConstants(2, mSsaoPass->mSsaoIndices.TexNum + 1, &(mSsaoPass->mSsaoIndices));
 
+
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { ssaoRTV };
 	//// Specify the buffers we are going to render to.
 	cmdList.SetRenderTargets(rtvArray, nullptr);
@@ -736,6 +737,7 @@ void Demo::DispatchBluring(CommandList& cmdList)
 		cmdList.TransitionBarrier(mFrameResource.mBlurBufferH->GetResource(), D3D12_RESOURCE_STATE_GENERIC_READ);
 		cmdList.TransitionBarrier(mFrameResource.mBlurBufferV->GetResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 		cmdList.FlushResourceBarriers();
+
 	}
 
 	cmdList.CopyResource(mFrameResource.mSsaoMap->GetResource(), mFrameResource.mBlurBufferH->GetResource());

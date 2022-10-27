@@ -141,6 +141,6 @@ private:
 
 	bool m_ContentLoaded = false;
 
-	int blurCount = 5;
+	int blurCount = 2;
 };
 
