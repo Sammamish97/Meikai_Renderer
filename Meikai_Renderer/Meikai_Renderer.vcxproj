@@ -44,6 +44,7 @@
     <ClInclude Include="DebugMeshPass.h" />
     <ClInclude Include="LightingPass.h" />
     <ClInclude Include="FrameBufferResource.h" />
+    <ClInclude Include="MaterialData.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="MemDefine.h" />
     <ClInclude Include="Mesh.h" />

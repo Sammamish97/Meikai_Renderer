@@ -123,6 +123,28 @@ void Demo::StartImGuiFrame()
 	ImGui::NewFrame();
 }
 
+void Demo::UpdateGUI()
+{
+	ImGui::Begin("GUI");
+	ImGui::Checkbox("SSAO", &mDrawSsaoBuffer);
+	ImGui::Checkbox("Draw DebugLine", &mDrawDebugLines);
+	ImGui::SliderFloat3("Object Albedo", &(mMainAlbedo.x), 0, 1);
+	ImGui::SliderFloat("Object Metalic", &mMainMetalic, 0, 1);
+	ImGui::SliderFloat("Object Roughness", &mMainRoughness, 0, 1);
+	ImGui::End();
+}
+
+void Demo::UpdateMainObject()
+{
+	mMainObject->SetAlbedo(mMainAlbedo);
+	mMainObject->SetMetalic(mMainMetalic);
+	mMainObject->SetRoughness(mMainRoughness);
+
+	mMoveTestSkeletal->SetAlbedo(mMainAlbedo);
+	mMoveTestSkeletal->SetMetalic(mMainMetalic);
+	mMoveTestSkeletal->SetRoughness(mMainRoughness);
+}
+
 void Demo::ClearImGui()
 {
 	ImGui_ImplDX12_Shutdown();
@@ -136,6 +158,8 @@ void Demo::Update(const GameTimer& gt)
 	mCamera->Update(gt);
 	UpdatePassCB(gt);
 	UpdateLightCB(gt);
+	UpdateGUI();
+	UpdateMainObject();
 	float tick = mPathGenerator->Update(gt, mMoveTestSkeletal->GetTicksPerSec(), mMoveTestSkeletal->GetDuration(), mMoveTestSkeletal->GetDistacnePerDuration());
   	mMoveTestSkeletal->SetPosition(mPathGenerator->GetPosition());
 	mMoveTestSkeletal->SetDirection(mPathGenerator->GetDirection());
@@ -155,9 +179,12 @@ void Demo::Draw(const GameTimer& gt)
 	DispatchBluring(*drawcmdList);
 	DrawLightingPass(*drawcmdList);
 	DrawSkyboxPass(*drawcmdList);
-	DrawBoneDebug(*drawcmdList);
-	DrawPathDebug(*drawcmdList);
-	DrawMeshDebug(*drawcmdList);
+	if(mDrawDebugLines)
+	{
+		DrawBoneDebug(*drawcmdList);
+		DrawPathDebug(*drawcmdList);
+		DrawMeshDebug(*drawcmdList);
+	}
 	DrawGUI(*drawcmdList);
 	mDirectCommandQueue->ExecuteCommandList(drawcmdList);
 	Present(mFrameResource.mRenderTarget);
@@ -178,11 +205,13 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 	mModels["Skybox"] = std::make_shared<Model>("../models/Skybox.obj", this, *cmdList);
 	mModels["Sphere"] = std::make_shared<Model>("../models/Sphere.obj", this, *cmdList);
 	mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
-	/*mModels["Cube"] = std::make_shared<Model>("../models/Cube.obj", this, *cmdList);
+	mModels["bunny"] = std::make_shared<Model>("../models/bunny.obj", this, *cmdList);
+	mModels["Cube"] = std::make_shared<Model>("../models/Cube.obj", this, *cmdList);
 	mModels["Torus"] = std::make_shared<Model>("../models/Torus.obj", this, *cmdList);
 	mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, *cmdList);
 	mModels["bunny"] = std::make_shared<Model>("../models/bunny.obj", this, *cmdList);
-	mModels["dragon"] = std::make_shared<Model>("../models/dragon.obj", this, *cmdList);*/
+	mModels["dragon"] = std::make_shared<Model>("../models/dragon.obj", this, *cmdList);
+	//mModels["Sponza"] = std::make_shared<Model>("../models/sponza.obj", this, *cmdList);
 
 	//mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
 	mSkeletalModels["X_Bot"] = std::make_shared<SkeletalModel>("../models/X_Bot.dae", this, *cmdList);
@@ -197,15 +226,22 @@ void Demo::LoadAnimations()
 
 void Demo::BuildObjects()
 {
-	//mSkeletalObjects.push_back(std::make_unique<SkeletalObject>(this, mSkeletalModels["X_Bot"], mAnimations["dancing"], XMFLOAT3(1.f, 0.f, 0.f)));
-	mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0, 0, 0), XMFLOAT3(0.1f, 0.1, 0.1f)));
-	/*mObjects.push_back(std::make_unique<Object>(mModels["Cube"], XMFLOAT3(-2, 0, 2), XMFLOAT3(1, 1, 1)));
-	mObjects.push_back(std::make_unique<Object>(mModels["bunny"], XMFLOAT3(2, -1, 2), XMFLOAT3(1, 1, 1)));
-	mObjects.push_back(std::make_unique<Object>(mModels["dragon"], XMFLOAT3(-2, 0, -2), XMFLOAT3(5 ,5, 5)));
-	mObjects.push_back(std::make_unique<Object>(mModels["Sphere"], XMFLOAT3(2, 0, -2), XMFLOAT3(1, 1, 1)));*/
+	for(int metalic = -2 ; metalic <= 2; ++metalic)
+	{
+		for(int roughness = -2; roughness <= 2; ++roughness)
+		{
+			int normalizeMetalic = metalic + 2;
+			int normalizeRoughness = roughness + 2;
+			mObjects.push_back(std::make_unique<Object>(mModels["Sphere"], XMFLOAT3(metalic * 2.5f,  roughness * 2.5f + 5.f, 15), XMFLOAT3(1, 1, 1), 
+				normalizeMetalic / 5.f, normalizeRoughness / 5.f));
+		}
+	}
+	//mObjects.push_back(std::make_unique<Object>(mModels["Sponza"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), 1.f, 0.f));
 
-	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f));
-	mMoveTestSkeletal = std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, 0.f, 0.f));
+	mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), 0.f, 1.f, XMFLOAT3(0.1f, 0.1, 0.1f)));
+	mMainObject = std::make_unique<Object>(mModels["bunny"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), 1.f, 1.f, XMFLOAT3(2.f, 2.f, 2.f));
+	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(1, 1, 1),  0.f, 0.f);
+	mMoveTestSkeletal = std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(0, 0, 0), 1.0, 1.0);
 }
 
 void Demo::BuildFrameResource()
@@ -293,9 +329,6 @@ void Demo::CreateShaderFromCSO()
 
 void Demo::UpdatePassCB(const GameTimer& gt)
 {
-	static float testRoughness = 0;
-	static float testMetalic = 0;
-
 	CommonCB currentFrameCB;
 
 	XMMATRIX view = XMLoadFloat4x4(&mCamera->GetViewMat());
@@ -319,18 +352,8 @@ void Demo::UpdatePassCB(const GameTimer& gt)
 	currentFrameCB.NearZ = 1.0f;
 	currentFrameCB.FarZ = 1000.0f;
 
-	//Temporaily, Total time is Roughness and Delta time is metalic
-	//currentFrameCB.TotalTime = gt.TotalTime();
-	//currentFrameCB.DeltaTime = gt.DeltaTime();
-
-
-	ImGui::Begin("PBR_PARAMS");                          // Create a window called "Hello, world!" and append into it.
-	ImGui::SliderFloat("Roughness", &testRoughness, 0.0f, 1.f);            // Edit 1 float using a slider from 0.0f to 1.0f
-	ImGui::SliderFloat("Metalic", &testMetalic, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-	ImGui::End();
-
-	currentFrameCB.TotalTime = testRoughness;
-	currentFrameCB.DeltaTime = testMetalic;
+	currentFrameCB.TotalTime = gt.TotalTime();
+	currentFrameCB.DeltaTime = gt.DeltaTime();
 
 	*mCommonCB = currentFrameCB;
 }
@@ -413,7 +436,6 @@ void Demo::DrawGeometryPasses(CommandList& cmdList)
 	cmdList.SetGraphicsRootSignature(mGeometryPass->mRootSig.Get());
 
 	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
-
 	cmdList.SetViewport(mScreenViewport);
 	cmdList.SetScissorRect(mScissorRect);
 
@@ -426,7 +448,7 @@ void Demo::DrawGeometryPasses(CommandList& cmdList)
 	{
 		object->Draw(cmdList);
 	}
-
+	mMainObject->Draw(cmdList);
 	cmdList.SetPipelineState(mSkeletalGeometryPass->mPSO.Get());
 	cmdList.SetGraphicsRootSignature(mSkeletalGeometryPass->mRootSig.Get());
 
@@ -479,6 +501,15 @@ void Demo::DrawLightingPass(CommandList& cmdList)
 	//Set descriptor indices
 	cmdList.SetGraphics32BitConstants(3, mLightingPass->mLightDescIndices.TexNum + 1, &(mLightingPass->mLightDescIndices));
 	cmdList.SetGraphics32BitConstants(5, BuildShadowMatrix(false));
+	if(mDrawSsaoBuffer)
+	{
+		cmdList.SetGraphics32BitConstants(6, 1);
+
+	}
+	else
+	{
+		cmdList.SetGraphics32BitConstants(6, 0);
+	}
 
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { renderTargetRTV };
 	//// Specify the buffers we are going to render to.
@@ -542,20 +573,24 @@ void Demo::DrawBoneDebug(CommandList& cmdList)
 	{
 		object->DrawBone(cmdList);
 	}
+	mMoveTestSkeletal->DrawBone(cmdList);
 }
 
 void Demo::DrawPathDebug(CommandList& cmdList)
 {
 	auto rtvHeapCPUHandle = mDescriptorHeaps[RTV]->GetCpuHandle(mDescIndex.mRenderTargetRtvIdx);
+	auto dsvHeapCPUHandle = mDescriptorHeaps[DSV]->GetCpuHandle(mDescIndex.mDepthStencilDsvIdx);
 
 	cmdList.SetPipelineState(mBoneDebugPass->mPSO.Get());
 	cmdList.SetGraphicsRootSignature(mBoneDebugPass->mRootSig.Get());
 
 	cmdList.SetGraphicsDynamicConstantBuffer(1, sizeof(CommonCB), mCommonCB.get());
+	cmdList.SetGraphics32BitConstants(0, XMMatrixIdentity());
 
 	cmdList.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 
-	cmdList.SetGraphics32BitConstants(0, XMMatrixIdentity());
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvArray = { rtvHeapCPUHandle };
+	cmdList.SetRenderTargets(rtvArray, &dsvHeapCPUHandle);
 	mPathGenerator->DrawPaths(cmdList);
 }
 

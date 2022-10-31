@@ -1,6 +1,7 @@
 #pragma once
-#include "IPass.h"
+#include <DirectXMath.h>
 
+#include "IPass.h"
 
 struct LightDescIndices
 {

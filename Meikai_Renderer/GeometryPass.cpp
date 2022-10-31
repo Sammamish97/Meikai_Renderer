@@ -2,6 +2,7 @@
 #include "DXUtil.h"
 #include "DXApp.h"
 #include "BufferFormat.h"
+#include "MaterialData.h"
 #include <DirectXMath.h>
 
 GeometryPass::GeometryPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader)
@@ -29,9 +30,11 @@ void GeometryPass::InitRootSignature()
         D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
         D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
 
-    CD3DX12_ROOT_PARAMETER1 rootParameters[2];
+    CD3DX12_ROOT_PARAMETER1 rootParameters[3];
     rootParameters[0].InitAsConstants(sizeof(DirectX::XMMATRIX) / 4, 0, 0, D3D12_SHADER_VISIBILITY_VERTEX);
     rootParameters[1].InitAsConstantBufferView(1);
+    rootParameters[2].InitAsConstants(sizeof(MaterialData), 2);
+
 
     CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDescription;
     rootSignatureDescription.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, rootSignatureFlags);

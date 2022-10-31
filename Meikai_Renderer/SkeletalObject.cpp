@@ -4,11 +4,14 @@
 #include "DXApp.h"
 #include <cmath>
 
+#include "MaterialData.h"
 #include "Model.h"
 
-SkeletalObject::SkeletalObject(DXApp* appPtr, std::shared_ptr<SkeletalModel> model, std::shared_ptr<Animation> initAnim, XMFLOAT3 position,
-	XMFLOAT3 scale)
-    :mApp(appPtr), mModel(model), mAnimation(initAnim), mAnimator(mAnimation), mPosition(position), mScale(scale)
+
+SkeletalObject::SkeletalObject(DXApp* appPtr, std::shared_ptr<SkeletalModel> model, std::shared_ptr<Animation> initAnim,
+	XMFLOAT3 position, XMFLOAT3 albedo, float metalic, float roughness, XMFLOAT3 scale)
+    :mApp(appPtr), mModel(model), mAnimation(initAnim), mAnimator(mAnimation), mPosition(position),
+		mAlbedo(albedo), mMetalic(metalic), mRoughness(roughness), mScale(scale)
 {
     mAnimator.PlayAnimation(mAnimation);
 }
@@ -31,6 +34,7 @@ void SkeletalObject::Draw(CommandList& commandList)
     auto finalMatrices = mAnimator.GetFinalBoneMatrices();
     commandList.SetGraphicsDynamicConstantBuffer(2, finalMatrices.size() * sizeof(aiMatrix4x4), finalMatrices.data());
 	SetWorldMatrix(commandList);
+    SetMaterial(commandList);
     mModel->Draw(commandList);
 }
 
@@ -109,6 +113,12 @@ void SkeletalObject::SetWorldMatrix(CommandList& commandList)
     commandList.SetGraphics32BitConstants(0, worldMat);
 }
 
+void SkeletalObject::SetMaterial(CommandList& commandList)
+{
+    MaterialData matData(mAlbedo, mMetalic, mRoughness);
+    commandList.SetGraphics32BitConstants(3, matData);
+}
+
 void SkeletalObject::SetPosition(XMVECTOR newPos)
 {
     XMStoreFloat3(&mPosition, newPos);
@@ -120,3 +130,17 @@ void SkeletalObject::SetDirection(XMVECTOR newDir)
 
 }
 
+void SkeletalObject::SetAlbedo(XMFLOAT3 newAlbedo)
+{
+    mAlbedo = newAlbedo;
+}
+
+void SkeletalObject::SetMetalic(float newMetalic)
+{
+    mMetalic = newMetalic;
+}
+
+void SkeletalObject::SetRoughness(float newRoughness)
+{
+    mRoughness = newRoughness;
+}

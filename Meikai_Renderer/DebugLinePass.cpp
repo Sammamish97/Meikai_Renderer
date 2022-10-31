@@ -36,7 +36,6 @@ void DebugLinePass::InitRootSignature()
     rootParameters[0].InitAsConstants(sizeof(DirectX::XMMATRIX) / 4, 0, 0, D3D12_SHADER_VISIBILITY_VERTEX);
     rootParameters[1].InitAsConstantBufferView(1);
 
-
     CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDescription;
     rootSignatureDescription.Init_1_0(_countof(rootParameters), rootParameters,
         0, nullptr, rootSignatureFlags);

@@ -151,7 +151,6 @@ void SkeletalModel::ExtractBoneWeightForVertices(std::vector<SkeletalVertex>& ve
             vertices[vertexId].AddBoneData(boneID, weight);
         }
     }
-    
 }
 
 void SkeletalModel::Draw(CommandList& commandList)

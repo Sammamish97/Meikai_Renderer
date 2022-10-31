@@ -29,6 +29,15 @@ cbuffer BoneDatas : register(b2)
     float4x4 cBoneTable[MAX_BONE];
 };
 
+struct MaterialData
+{
+    float4 albedo;
+    float metalic;
+    float roughness;
+};
+
+ConstantBuffer<MaterialData> materialDatas: register(b3);
+
 struct VertexIn
 {
 	float3 PosL    : POSITION;
@@ -89,8 +98,8 @@ PS_OUTPUT PS(VertexOut pin)
     PS_OUTPUT output;
     output.Position = pin.PosW;
     output.Normal = float4(pin.NormalW, 1.0);
-    output.Albdeo = float4(1.0, 1.0, 1.0, 1.0);
-    output.Roughness = gTotalTime;
-    output.Metalic = gDeltaTime;
+    output.Albdeo = materialDatas.albedo;
+    output.Metalic = materialDatas.metalic;
+    output.Roughness = materialDatas.roughness;
     return output;
 }

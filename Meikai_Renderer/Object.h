@@ -12,7 +12,8 @@ class Model;
 class Object
 {
 public:
-	Object(std::shared_ptr<Model> model, XMFLOAT3 position, XMFLOAT3 scale = XMFLOAT3(1.f, 1.f, 1.f));
+	Object(std::shared_ptr<Model> model, XMFLOAT3 position, XMFLOAT3 mAlbedo, float metalic, float roughness,
+		XMFLOAT3 scale = XMFLOAT3(1.f, 1.f, 1.f));
 
 public:
 	virtual void Update(float dt);
@@ -20,13 +21,20 @@ public:
 	void DrawWithoutWorld(CommandList& commandList);
 	XMMATRIX GetWorldMat() const;
 	void SetPosition(XMVECTOR newPos);
-	void SetDirection(XMVECTOR newDir);
+	void SetAlbedo(XMFLOAT3 newAlbedo);
+	void SetMetalic(float newMetalic);
+	void SetRoughness(float newRoughness);
 
 protected:
 	void SetWorldMatrix(CommandList& commandList);
-
+	void SetMaterial(CommandList& commandList);
+	
 	std::shared_ptr<Model> mModel = nullptr;
 	XMFLOAT3 mPosition;
 	XMFLOAT3 mScale;
+
+	XMFLOAT3 mAlbedo;
+	float mMetalic;
+	float mRoughness;
 };
 

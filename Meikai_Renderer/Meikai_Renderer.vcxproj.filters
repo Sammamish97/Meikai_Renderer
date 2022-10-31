@@ -192,6 +192,9 @@
     <ClInclude Include="BlurPassIndices.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MaterialData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXApp.cpp">

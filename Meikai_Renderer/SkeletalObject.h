@@ -26,7 +26,8 @@ class SkeletalObject
 private:
 	DXApp* mApp;
 public:
-	SkeletalObject(DXApp* appPtr, std::shared_ptr<SkeletalModel> model, std::shared_ptr<Animation> initAnim, XMFLOAT3 position,  XMFLOAT3 scale = XMFLOAT3(1.f, 1.f, 1.f));
+	SkeletalObject(DXApp* appPtr, std::shared_ptr<SkeletalModel> model, std::shared_ptr<Animation> initAnim, XMFLOAT3 position,  
+		XMFLOAT3 mAlbedo, float metalic, float roughness, XMFLOAT3 scale = XMFLOAT3(1.f, 1.f, 1.f));
 	void Update(float tick);
 	void Draw(CommandList& commandList);
 
@@ -38,12 +39,22 @@ public:
 	float GetDuration();
 	float GetDistacnePerDuration();
 	void SetWorldMatrix(CommandList& commandList);
+	void SetMaterial(CommandList& commandList);
+
 	void SetPosition(XMVECTOR newPos);
 	void SetDirection(XMVECTOR newDir);
+	void SetAlbedo(XMFLOAT3 newAlbedo);
+	void SetMetalic(float newMetalic);
+	void SetRoughness(float newRoughness);
+
 
 	void SetAnimator(std::shared_ptr<Animation> newAnimation);
 
 private:
+	XMFLOAT3 mAlbedo;
+	float mMetalic;
+	float mRoughness;
+
 	std::shared_ptr<SkeletalModel> mModel = nullptr;
 	std::shared_ptr<Animation> mAnimation = nullptr;
 

@@ -46,6 +46,8 @@ protected:
 	void Draw(const GameTimer& gt) override;
 
 	void StartImGuiFrame();
+	void UpdateGUI();
+	void UpdateMainObject();
 	void ClearImGui();
 
 private:
@@ -134,6 +136,11 @@ private:
 	std::unique_ptr<Object> mSkybox;
 	std::unique_ptr<SkeletalObject> mMoveTestSkeletal;
 
+	std::unique_ptr<Object> mMainObject;
+	float mMainMetalic;
+	float mMainRoughness;
+	XMFLOAT3 mMainAlbedo;
+
 	std::unique_ptr<Camera> mCamera;
 
 	std::unique_ptr<PathGenerator> mPathGenerator;
@@ -142,5 +149,9 @@ private:
 	bool m_ContentLoaded = false;
 
 	int blurCount = 2;
+
+private:
+	bool mDrawDebugLines;
+	bool mDrawSsaoBuffer;
 };
 

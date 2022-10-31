@@ -43,14 +43,14 @@ void LightingPass::InitRootSignature()
     CD3DX12_DESCRIPTOR_RANGE srvRange = {};
     srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, descriptorNumber, 0, 0);
     
-    CD3DX12_ROOT_PARAMETER rootParameters[6];
+    CD3DX12_ROOT_PARAMETER rootParameters[7];
 	rootParameters[0].InitAsConstantBufferView(0);
     rootParameters[1].InitAsConstantBufferView(1);
     rootParameters[2].InitAsDescriptorTable(1, &srvRange, D3D12_SHADER_VISIBILITY_PIXEL);
     rootParameters[3].InitAsConstants(mLightDescIndices.TexNum + 1, 2);
     rootParameters[4].InitAsConstantBufferView(3);
-    rootParameters[5].InitAsConstants(sizeof(DirectX::XMMATRIX) / 4, 4, 0);
-
+    rootParameters[5].InitAsConstants(sizeof(DirectX::XMMATRIX) / 4, 4);
+    rootParameters[6].InitAsConstants(sizeof(UINT), 5);
 
     auto staticSamplers = mApp->GetStaticSamplers();
 

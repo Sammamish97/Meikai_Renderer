@@ -5,6 +5,8 @@
 #include "DescriptorHeap.h"
 #include <DirectXMath.h>
 
+#include "MaterialData.h"
+
 //Skeletal Pass is almost same as geometry pass
 //Only different thing is different input layout for each vertices bone data and using bone data 
 SkeletalGeometryPass::SkeletalGeometryPass(DXApp* appPtr, ComPtr<ID3DBlob> vertShader, ComPtr<ID3DBlob> pixelShader)
@@ -34,10 +36,12 @@ void SkeletalGeometryPass::InitRootSignature()
         D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
         D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
 
-    CD3DX12_ROOT_PARAMETER1 rootParameters[3];
+    CD3DX12_ROOT_PARAMETER1 rootParameters[4];
     rootParameters[0].InitAsConstants(sizeof(DirectX::XMMATRIX) / 4, 0, 0, D3D12_SHADER_VISIBILITY_VERTEX);
     rootParameters[1].InitAsConstantBufferView(1);
     rootParameters[2].InitAsConstantBufferView(2, 0);
+    rootParameters[3].InitAsConstants(sizeof(MaterialData), 3);
+
     CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDescription;
     rootSignatureDescription.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, rootSignatureFlags);
 

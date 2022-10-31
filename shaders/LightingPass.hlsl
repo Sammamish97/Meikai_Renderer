@@ -79,6 +79,11 @@ struct Matrix
 };
 ConstantBuffer<Matrix> shadowVP : register(b4);
 
+struct DrawSsao
+{
+	uint boolValue;
+};
+ConstantBuffer<DrawSsao> drawSSAO : register(b5);
 
 Texture2D<float4> gTable[] : register(t0, space0);
 
@@ -132,12 +137,17 @@ float4 PS(VertexOut pin) : SV_Target
 	float2 fliped_UV = pin.UV;
 	fliped_UV.y = 1 - fliped_UV.y;
 
+	float occluded = gTable[srvIndices.SSAO].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
+
+	if(drawSSAO.boolValue)
+	{
+		return float4(occluded, occluded, occluded, 1);
+	}
 	float3 position = gTable[srvIndices.Pos].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
 	float3 normal = normalize(gTable[srvIndices.Normal].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz);
 	float3 albedo = gTable[srvIndices.Albedo].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).xyz;
 	float roughness = gTable[srvIndices.Roughness].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
 	float metalic = gTable[srvIndices.Metalic].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
-	float occluded = gTable[srvIndices.SSAO].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
 
 	float4 ShadowPos = mul(float4(position, 1.0f), shadowVP.mat);
 
@@ -184,5 +194,4 @@ float4 PS(VertexOut pin) : SV_Target
 	float3 resultHDR = ambient_diffuse + ambient_specular + LightOutput;
 	float3 resultLDR = ToneMapping(resultHDR, 5) * shadowFactor;
     return float4(resultLDR, 1.0);
-	//return float4(occluded, occluded, occluded, 1);
 }
