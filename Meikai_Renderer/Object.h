@@ -24,6 +24,7 @@ public:
 	void SetAlbedo(XMFLOAT3 newAlbedo);
 	void SetMetalic(float newMetalic);
 	void SetRoughness(float newRoughness);
+	void SetModel(std::shared_ptr<Model> model);
 
 protected:
 	void SetWorldMatrix(CommandList& commandList);

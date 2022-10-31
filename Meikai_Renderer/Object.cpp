@@ -71,3 +71,8 @@ void Object::SetRoughness(float newRoughness)
 {
 	mRoughness = newRoughness;
 }
+
+void Object::SetModel(std::shared_ptr<Model> model)
+{
+	mModel = model;
+}

@@ -22,6 +22,7 @@ void SkeletalGeometryPass::InitRootSignature()
          //0. Object world matrix
          //1. PassCB
 		 //2. Bone data
+         //3. Material data
 		
     auto device = mApp->GetDevice();
     D3D12_FEATURE_DATA_ROOT_SIGNATURE featureData = {};

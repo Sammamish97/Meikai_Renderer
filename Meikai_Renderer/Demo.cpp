@@ -95,7 +95,7 @@ void Demo::InitImgui()
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	mGuiIO = ImGui::GetIO(); (void)mGuiIO;
 
 	ImGui::StyleColorsDark();
 
@@ -125,17 +125,33 @@ void Demo::StartImGuiFrame()
 
 void Demo::UpdateGUI()
 {
+	static int modelIndex;
 	ImGui::Begin("GUI");
 	ImGui::Checkbox("SSAO", &mDrawSsaoBuffer);
 	ImGui::Checkbox("Draw DebugLine", &mDrawDebugLines);
+	ImGui::SliderFloat3("Object Position", &(mMainPosition.x), 0, 3);
 	ImGui::SliderFloat3("Object Albedo", &(mMainAlbedo.x), 0, 1);
 	ImGui::SliderFloat("Object Metalic", &mMainMetalic, 0, 1);
 	ImGui::SliderFloat("Object Roughness", &mMainRoughness, 0, 1);
+
+	auto vector_getter = [](void* vec, int idx, const char** out_text)
+	{
+		auto& vector = *static_cast<std::vector<std::string>*>(vec);
+		if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
+		*out_text = vector.at(idx).c_str();
+		return true;
+	};
+
+	if(ImGui::Combo("Main Model", &modelIndex, vector_getter, static_cast<void*>(&mModelNames), static_cast<int>(mModelNames.size())))
+	{
+		mMainObject->SetModel(mModels[mModelIndexMap[modelIndex]]);
+	}
 	ImGui::End();
 }
 
 void Demo::UpdateMainObject()
 {
+	mMainObject->SetPosition(XMLoadFloat3(&mMainPosition));
 	mMainObject->SetAlbedo(mMainAlbedo);
 	mMainObject->SetMetalic(mMainMetalic);
 	mMainObject->SetRoughness(mMainRoughness);
@@ -211,9 +227,13 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 	mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, *cmdList);
 	mModels["bunny"] = std::make_shared<Model>("../models/bunny.obj", this, *cmdList);
 	mModels["dragon"] = std::make_shared<Model>("../models/dragon.obj", this, *cmdList);
-	//mModels["Sponza"] = std::make_shared<Model>("../models/sponza.obj", this, *cmdList);
+	int i = 0;
+	for (auto model : mModels)
+	{
+		mModelNames.push_back(model.first);
+		mModelIndexMap[i++] = model.first;
+	}
 
-	//mModels["Plane"] = std::make_shared<Model>("../models/Plane.obj", this, *cmdList);
 	mSkeletalModels["X_Bot"] = std::make_shared<SkeletalModel>("../models/X_Bot.dae", this, *cmdList);
 	mSkeletalModels["Y_Bot"] = std::make_shared<SkeletalModel>("../models/Y_Bot.dae", this, *cmdList);
 }

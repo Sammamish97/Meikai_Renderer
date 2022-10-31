@@ -120,6 +120,8 @@ private:
 	ComPtr<ID3D12DescriptorHeap> g_pd3dSrvDescHeap = NULL;
 
 private:
+	std::vector<std::string> mModelNames;
+	std::unordered_map<int, std::string> mModelIndexMap;
 	std::unordered_map<std::string, std::shared_ptr<Model>> mModels;
 	std::unordered_map<std::string, std::shared_ptr<SkeletalModel>> mSkeletalModels;
 
@@ -140,6 +142,7 @@ private:
 	float mMainMetalic;
 	float mMainRoughness;
 	XMFLOAT3 mMainAlbedo;
+	XMFLOAT3 mMainPosition;
 
 	std::unique_ptr<Camera> mCamera;
 
@@ -151,6 +154,7 @@ private:
 	int blurCount = 2;
 
 private:
+	ImGuiIO mGuiIO;
 	bool mDrawDebugLines;
 	bool mDrawSsaoBuffer;
 };
