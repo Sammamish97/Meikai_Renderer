@@ -102,7 +102,7 @@ void HorzBlurCS(int3 groupThreadID : SV_GroupThreadID,
 		// blurColor += weight * gInputCache[k];
 		// totalWeight += weight;
 	}
-	gUavTable[descIndices.UAVOutput][dispatchThreadID.xy] = blurColor / totalWeight;
+	gUavTable[descIndices.UAVOutput][dispatchThreadID.xy - 0.5] = blurColor / totalWeight;
 }
 
 [numthreads(1, N, 1)]
@@ -161,5 +161,5 @@ void VertBlurCS(int3 groupThreadID : SV_GroupThreadID,
 		// blurColor += weight * gInputCache[k];
 		// totalWeight += weight;
 	}
-	gUavTable[descIndices.UAVOutput][dispatchThreadID.xy] = blurColor / totalWeight;
+	gUavTable[descIndices.UAVOutput][dispatchThreadID.xy - 0.5] = blurColor / totalWeight;
 }

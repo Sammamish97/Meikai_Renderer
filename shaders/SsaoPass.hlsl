@@ -52,8 +52,8 @@ float4 PS(VertexOut pin) : SV_Target
 	int2 pixelScreenCoord = pin.posH.xy;
 	float2 pixelNDCCoord = pixelScreenCoord / gRenderTargetSize;
 
-	int sampleCount = 50;
-	float radius = 0.2;
+	int sampleCount = 200;
+	float radius = 0.1;
 	float phi = (30 * pixelScreenCoord.x ^ pixelScreenCoord.y) + 10 * pixelScreenCoord.x * pixelScreenCoord.y;
 	float fallOff = radius * 0.1;
 	float depth_threshold = 0.001;
@@ -83,6 +83,6 @@ float4 PS(VertexOut pin) : SV_Target
 	float total_occluded = 2 * 3.14 * fallOff / sampleCount * accumulation;
 	total_occluded = max(0, total_occluded);
 
-    float result = pow((1 - total_occluded), 100);
+    float result = pow((1 - total_occluded), 700);
 	return float4(result, result, result, 1.0);
 }
