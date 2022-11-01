@@ -181,7 +181,7 @@ protected:
     UINT mCbvSrvUavDescriptorSize = 0;
 
     // Derived class should set these in derived constructor to customize starting values.
-    std::wstring mMainWndCaption = L"dx App";
+    std::wstring mMainWndCaption = L"Meikai Renderer";
     D3D_DRIVER_TYPE md3dDriverType = D3D_DRIVER_TYPE_HARDWARE;
 
     int mClientWidth = 1920;

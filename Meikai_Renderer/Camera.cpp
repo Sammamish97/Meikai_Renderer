@@ -1,4 +1,6 @@
 #include "Camera.h"
+
+#include "GameTimer.h"
 #include "MathHelper.h"
 
 Camera::Camera(float aspectRatio)
@@ -9,6 +11,7 @@ Camera::Camera(float aspectRatio)
 
 void Camera::Update(const GameTimer& gt)
 {
+	mTheta -= gt.DeltaTime() * 0.1f;
 	// Convert Spherical to Cartesian coordinates.
 	mEyePos.x = mRadius * sinf(mPhi) * cosf(mTheta);
 	mEyePos.z = mRadius * sinf(mPhi) * sinf(mTheta);

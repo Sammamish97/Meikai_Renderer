@@ -805,42 +805,53 @@ void Demo::OnMouseDown(WPARAM btnState, int x, int y)
 	mLastMousePos.x = x;
 	mLastMousePos.y = y;
 
+	ImGuiIO& io = ImGui::GetIO();
+	io.AddMouseButtonEvent(0, true);
+
 	SetCapture(mhMainWnd);
 }
 
 void Demo::OnMouseUp(WPARAM btnState, int x, int y)
 {
 	DXApp::OnMouseUp(btnState, x, y);
+
+	ImGuiIO& io = ImGui::GetIO();
+	io.AddMouseButtonEvent(0, false);
+
 	ReleaseCapture();
 }
 
 void Demo::OnMouseMove(WPARAM btnState, int x, int y)
 {
+	ImGuiIO& io = ImGui::GetIO();
 	DXApp::OnMouseMove(btnState, x, y);
-	if ((btnState & MK_LBUTTON) != 0)
+	if (io.WantCaptureMouse == false)
 	{
-		// Make each pixel correspond to a quarter of a degree.
-		float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
-		float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
+		if ((btnState & MK_LBUTTON) != 0)
+		{
+			// Make each pixel correspond to a quarter of a degree.
+			float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
+			float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
 
-		// Update angles based on input to orbit camera around box.
-		mCamera->mTheta += dx;
-		mCamera->mPhi += dy;
+			// Update angles based on input to orbit camera around box.
+			mCamera->mTheta += dx;
+			mCamera->mPhi += dy;
 
-		// Restrict the angle mPhi.
-		mCamera->mPhi = MathHelper::Clamp(mCamera->mPhi, 0.1f, MathHelper::Pi - 0.1f);
-	}
-	else if ((btnState & MK_RBUTTON) != 0)
-	{
-		// Make each pixel correspond to 0.2 unit in the scene.
-		float dx = 0.05f * static_cast<float>(x - mLastMousePos.x);
-		float dy = 0.05f * static_cast<float>(y - mLastMousePos.y);
+			// Restrict the angle mPhi.
+			mCamera->mPhi = MathHelper::Clamp(mCamera->mPhi, 0.1f, MathHelper::Pi - 0.1f);
+		}
+		else if ((btnState & MK_RBUTTON) != 0)
+		{
+			// Make each pixel correspond to 0.2 unit in the scene.
+			float dx = 0.05f * static_cast<float>(x - mLastMousePos.x);
+			float dy = 0.05f * static_cast<float>(y - mLastMousePos.y);
 
-		// Update the camera radius based on input.
-		mCamera->mRadius += dx - dy;
+			// Update the camera radius based on input.
+			mCamera->mRadius += dx - dy;
 
-		// Restrict the radius.
-		mCamera->mRadius = MathHelper::Clamp(mCamera->mRadius, 5.0f, 150.0f);
+			// Restrict the radius.
+			mCamera->mRadius = MathHelper::Clamp(mCamera->mRadius, 5.0f, 150.0f);
+		}
 	}
 
 	mLastMousePos.x = x;
