@@ -133,6 +133,7 @@ void Demo::UpdateGUI()
 	ImGui::SliderFloat3("Object Albedo", &(mMainAlbedo.x), 0, 1);
 	ImGui::SliderFloat("Object Metalic", &mMainMetalic, 0, 1);
 	ImGui::SliderFloat("Object Roughness", &mMainRoughness, 0, 1);
+	ImGui::SliderInt("SSAO BLUR", &blurCount, 0, 20);
 
 	auto vector_getter = [](void* vec, int idx, const char** out_text)
 	{
@@ -736,7 +737,7 @@ void Demo::DispatchBluring(CommandList& cmdList)
 	auto ssaoTexWidth = mFrameResource.mSsaoMap->GetD3D12ResourceDesc().Width;
 	auto ssaoTexHeight = mFrameResource.mSsaoMap->GetD3D12ResourceDesc().Height;
 
-	auto weights = mBlurHPass->CalcGaussWeights(0.5f);
+	auto weights = mBlurHPass->CalcGaussWeights(2.5f);
 	int blurRadius = (int)weights.size() / 2;
 
 	cmdList.SetComputeRootSignature(mBlurHPass->mRootSig);

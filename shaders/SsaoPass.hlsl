@@ -52,7 +52,7 @@ float4 PS(VertexOut pin) : SV_Target
 	int2 pixelScreenCoord = pin.posH.xy;
 	float2 pixelNDCCoord = pixelScreenCoord / gRenderTargetSize;
 
-	int sampleCount = 10;
+	int sampleCount = 50;
 	float radius = 0.2;
 	float phi = (30 * pixelScreenCoord.x ^ pixelScreenCoord.y) + 10 * pixelScreenCoord.x * pixelScreenCoord.y;
 	float fallOff = radius * 0.1;

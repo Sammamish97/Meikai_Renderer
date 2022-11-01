@@ -39,7 +39,6 @@ SamplerState gsamDepthMap : register(s2);
 SamplerState gsamLinearWrap : register(s3);
 SamplerState gsamLinearRepeat : register(s4);
 
-#define N 256
 static const int gMaxBlurRadius = 5;
 
 #define N 256
@@ -63,7 +62,7 @@ void HorzBlurCS(int3 groupThreadID : SV_GroupThreadID,
 		gNormalCache[groupThreadID.x] = gSrvTable[descIndices.Normal][int2(x, dispatchThreadID.y)];
 		gDepthCache[groupThreadID.x] = gSrvTable[descIndices.Depth][int2(x, dispatchThreadID.y)];
 	}
-	if(groupThreadID.x >= N-gBlurRadius)
+	if(groupThreadID.x >= N - gBlurRadius)
 	{
 		// Clamp out of bound samples that occur at image borders.
 		int x = min(dispatchThreadID.x + gBlurRadius, gSrvTable[descIndices.SRVInput].Length.x-1);
@@ -79,15 +78,31 @@ void HorzBlurCS(int3 groupThreadID : SV_GroupThreadID,
 	// Wait for all threads to finish.
 	GroupMemoryBarrierWithGroupSync();
 
-	float4 blurColor = float4(0, 0, 0, 0);
+	float4 blurColor = weights[gBlurRadius] * gInputCache[groupThreadID.x];
+	float totalWeight = weights[gBlurRadius];
+
+	float3 centerNormal = gNormalCache[groupThreadID.x];
+	float centerDepth = gDepthCache[groupThreadID.x];
 
 	for(int i = -gBlurRadius; i <= gBlurRadius; ++i)
 	{
+		if(i == 0) continue;
 		int k = groupThreadID.x + gBlurRadius + i;
-		blurColor += weights[i + gBlurRadius] * gInputCache[k];
+
+		float3 neighborNormal =  gNormalCache[k];
+		float neighborDepth = gDepthCache[k];
+
+		if(dot(neighborNormal, centerNormal) >= 0.99f && abs(neighborDepth - centerDepth) <= 0.01f)
+		{
+			float weight = weights[i + gBlurRadius];
+			blurColor += weight * gInputCache[k];
+			totalWeight += weight;
+		}
+		// float weight = weights[i + gBlurRadius];
+		// blurColor += weight * gInputCache[k];
+		// totalWeight += weight;
 	}
-	
-	gUavTable[descIndices.UAVOutput][dispatchThreadID.xy] = blurColor;
+	gUavTable[descIndices.UAVOutput][dispatchThreadID.xy] = blurColor / totalWeight;
 }
 
 [numthreads(1, N, 1)]
@@ -109,27 +124,42 @@ void VertBlurCS(int3 groupThreadID : SV_GroupThreadID,
 	{
 		// Clamp out of bound samples that occur at image borders.
 		int y = min(dispatchThreadID.y + gBlurRadius, gSrvTable[descIndices.SRVInput].Length.y-1);
-		gInputCache[groupThreadID.y + 2*gBlurRadius] = gSrvTable[descIndices.SRVInput][int2(dispatchThreadID.x, y)];
+		gInputCache[groupThreadID.y + 2 * gBlurRadius] = gSrvTable[descIndices.SRVInput][int2(dispatchThreadID.x, y)];
 		gNormalCache[groupThreadID.y + 2 * gBlurRadius] = gSrvTable[descIndices.Normal][int2(dispatchThreadID.x, y)];
 		gDepthCache[groupThreadID.y + 2 * gBlurRadius] = gSrvTable[descIndices.Depth][int2(dispatchThreadID.x, y)];
 	}
 	
 	// Clamp out of bound samples that occur at image borders.
-	gInputCache[groupThreadID.y+gBlurRadius] = gSrvTable[descIndices.SRVInput][min(dispatchThreadID.xy, gSrvTable[descIndices.SRVInput].Length.xy-1)];
+	gInputCache[groupThreadID.y + gBlurRadius] = gSrvTable[descIndices.SRVInput][min(dispatchThreadID.xy, gSrvTable[descIndices.SRVInput].Length.xy-1)];
 	gNormalCache[groupThreadID.y + gBlurRadius] = gSrvTable[descIndices.Normal][min(dispatchThreadID.xy, gSrvTable[descIndices.SRVInput].Length.xy - 1)];
 	gDepthCache[groupThreadID.y + gBlurRadius] = gSrvTable[descIndices.Depth][min(dispatchThreadID.xy, gSrvTable[descIndices.SRVInput].Length.xy - 1)];
 
 	// Wait for all threads to finish.
 	GroupMemoryBarrierWithGroupSync();
 
-	float4 blurColor = float4(0, 0, 0, 0);
-	
+	float4 blurColor = weights[gBlurRadius] * gInputCache[groupThreadID.y];
+	float totalWeight = weights[gBlurRadius];
+
+	float3 centerNormal = gNormalCache[groupThreadID.y];
+	float centerDepth = gDepthCache[groupThreadID.y];
+
 	for(int i = -gBlurRadius; i <= gBlurRadius; ++i)
 	{
+		if(i == 0) continue;
 		int k = groupThreadID.y + gBlurRadius + i;
-		
-		blurColor += weights[i + gBlurRadius] * gInputCache[k];
+
+		float3 neighborNormal =  gNormalCache[k];
+		float neighborDepth = gDepthCache[k];
+
+		if(dot(neighborNormal, centerNormal) >= 0.99f && abs(neighborDepth - centerDepth) <= 0.01f)
+		{
+			float weight = weights[i + gBlurRadius];
+			blurColor += weight * gInputCache[k];
+			totalWeight += weight;
+		}
+		// float weight = weights[i + gBlurRadius];
+		// blurColor += weight * gInputCache[k];
+		// totalWeight += weight;
 	}
-	
-	gUavTable[descIndices.UAVOutput][dispatchThreadID.xy] = blurColor;
+	gUavTable[descIndices.UAVOutput][dispatchThreadID.xy] = blurColor / totalWeight;
 }
