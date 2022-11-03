@@ -143,6 +143,7 @@ private:
 	float mMainRoughness;
 	XMFLOAT3 mMainAlbedo;
 	XMFLOAT3 mMainPosition;
+	float mMainScale;
 
 	std::unique_ptr<Camera> mCamera;
 

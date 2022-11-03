@@ -149,7 +149,7 @@ float4 PS(VertexOut pin) : SV_Target
 	float roughness = gTable[srvIndices.Roughness].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
 	float metalic = gTable[srvIndices.Metalic].SampleLevel(gsamPointClamp, fliped_UV, 0.0f).x;
 
-	float4 ShadowPos = mul(float4(position, 1.0f), shadowVP.mat);
+	//float4 ShadowPos = mul(float4(position, 1.0f), shadowVP.mat);
 
 	float3 N = normalize(normal);
 	float3 V = normalize(gEyePosW - position);
@@ -190,8 +190,9 @@ float4 PS(VertexOut pin) : SV_Target
 	}
 	ambient_specular /= randomValues.sampleNumber;
 
-	float shadowFactor = CalcShadowFactor(ShadowPos);
+	//float shadowFactor = CalcShadowFactor(ShadowPos);
 	float3 resultHDR = ambient_diffuse + ambient_specular + LightOutput;
-	float3 resultLDR = ToneMapping(resultHDR, 5) * shadowFactor;
+	//float3 resultLDR = ToneMapping(resultHDR, 5) * shadowFactor;
+	float3 resultLDR = ToneMapping(resultHDR, 5);
     return float4(resultLDR, 1.0);
 }

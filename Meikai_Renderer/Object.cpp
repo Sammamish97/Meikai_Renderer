@@ -57,6 +57,11 @@ void Object::SetPosition(XMVECTOR newPos)
 	XMStoreFloat3(&mPosition, newPos);
 }
 
+void Object::SetScale(XMVECTOR newScale)
+{
+	XMStoreFloat3(&mScale, newScale);
+}
+
 void Object::SetAlbedo(XMFLOAT3 newAlbedo)
 {
 	mAlbedo = newAlbedo;

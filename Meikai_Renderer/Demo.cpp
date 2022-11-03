@@ -130,10 +130,11 @@ void Demo::UpdateGUI()
 	ImGui::Checkbox("SSAO", &mDrawSsaoBuffer);
 	ImGui::Checkbox("Draw DebugLine", &mDrawDebugLines);
 	ImGui::SliderFloat3("Object Position", &(mMainPosition.x), 0, 3);
+	ImGui::SliderFloat("Object Scale", &mMainScale, 0, 10);
+
 	ImGui::SliderFloat3("Object Albedo", &(mMainAlbedo.x), 0, 1);
 	ImGui::SliderFloat("Object Metalic", &mMainMetalic, 0, 1);
 	ImGui::SliderFloat("Object Roughness", &mMainRoughness, 0, 1);
-	ImGui::SliderInt("SSAO BLUR", &blurCount, 0, 20);
 
 	auto vector_getter = [](void* vec, int idx, const char** out_text)
 	{
@@ -153,6 +154,8 @@ void Demo::UpdateGUI()
 void Demo::UpdateMainObject()
 {
 	mMainObject->SetPosition(XMLoadFloat3(&mMainPosition));
+	mMainObject->SetScale(XMLoadFloat3(&XMFLOAT3(mMainScale, mMainScale, mMainScale)));
+
 	mMainObject->SetAlbedo(mMainAlbedo);
 	mMainObject->SetMetalic(mMainMetalic);
 	mMainObject->SetRoughness(mMainRoughness);
@@ -190,7 +193,7 @@ void Demo::Update(const GameTimer& gt)
 void Demo::Draw(const GameTimer& gt)
 {
 	auto drawcmdList = mDirectCommandQueue->GetCommandList();
-	DrawShadowPass(*drawcmdList);
+	//DrawShadowPass(*drawcmdList);
 	DrawGeometryPasses(*drawcmdList);
 	DrawSsaoPass(*drawcmdList);
 	DispatchBluring(*drawcmdList);
@@ -228,6 +231,9 @@ void Demo::BuildModels(std::shared_ptr<CommandList>& cmdList)
 	mModels["Monkey"] = std::make_shared<Model>("../models/Monkey.obj", this, *cmdList);
 	mModels["bunny"] = std::make_shared<Model>("../models/bunny.obj", this, *cmdList);
 	mModels["dragon"] = std::make_shared<Model>("../models/dragon.obj", this, *cmdList);
+	mModels["bmw"] = std::make_shared<Model>("../models/bmw.obj", this, *cmdList);
+	mModels["buddha"] = std::make_shared<Model>("../models/buddha.obj", this, *cmdList);
+
 	int i = 0;
 	for (auto model : mModels)
 	{
@@ -258,9 +264,10 @@ void Demo::BuildObjects()
 		}
 	}
 	//mObjects.push_back(std::make_unique<Object>(mModels["Sponza"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), 1.f, 0.f));
-
-	mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), 0.f, 1.f, XMFLOAT3(0.1f, 0.1, 0.1f)));
 	mMainObject = std::make_unique<Object>(mModels["bunny"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), 1.f, 1.f, XMFLOAT3(2.f, 2.f, 2.f));
+	mMainPosition = XMFLOAT3(0, 0, 0);
+	mMainScale = 1;
+	mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), 0.f, 1.f, XMFLOAT3(0.1f, 0.1, 0.1f)));
 	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(1, 1, 1),  0.f, 0.f);
 	mMoveTestSkeletal = std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(0, 0, 0), 1.0, 1.0);
 }

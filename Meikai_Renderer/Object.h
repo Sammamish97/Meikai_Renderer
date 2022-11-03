@@ -21,6 +21,7 @@ public:
 	void DrawWithoutWorld(CommandList& commandList);
 	XMMATRIX GetWorldMat() const;
 	void SetPosition(XMVECTOR newPos);
+	void SetScale(XMVECTOR newScale);
 	void SetAlbedo(XMFLOAT3 newAlbedo);
 	void SetMetalic(float newMetalic);
 	void SetRoughness(float newRoughness);
