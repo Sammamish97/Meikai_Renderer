@@ -39,6 +39,7 @@
     <ClInclude Include="EquiRectToCubemapPass.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GeometryPass.h" />
+    <ClInclude Include="IkObject.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="IPass.h" />
     <ClInclude Include="DebugMeshPass.h" />
@@ -113,6 +114,7 @@
     <ClCompile Include="EquiRectToCubemapPass.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GeometryPass.cpp" />
+    <ClCompile Include="IkObject.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="IPass.cpp" />
     <ClCompile Include="DebugMeshPass.cpp" />

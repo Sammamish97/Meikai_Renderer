@@ -195,6 +195,9 @@
     <ClInclude Include="MaterialData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IkObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXApp.cpp">
@@ -397,6 +400,9 @@
     </ClCompile>
     <ClCompile Include="BlurPass.cpp">
       <Filter>Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="IkObject.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
