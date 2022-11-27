@@ -132,20 +132,17 @@ private:
 	std::shared_ptr<Animator> testAnimator;
 
 	std::vector<D3D12_INPUT_ELEMENT_DESC> mInputLayout;
-	std::vector<std::shared_ptr<Object>> mObjects;
-	std::vector<std::shared_ptr<SkeletalObject>> mSkeletalObjects;
+	std::vector<std::unique_ptr<Object>> mObjects;
+	std::vector<std::unique_ptr<SkeletalObject>> mSkeletalObjects;
 
-	std::shared_ptr<Object> mSkybox;
-	std::shared_ptr<SkeletalObject> mMoveTestSkeletal;
+	std::unique_ptr<Object> mSkybox;
+	std::unique_ptr<SkeletalObject> mMoveTestSkeletal;
 
-	std::shared_ptr<Object> mMainObject;
-	std::shared_ptr<Object> mIkTarget;
-
+	std::unique_ptr<Object> mMainObject;
 	float mMainMetalic;
 	float mMainRoughness;
 	XMFLOAT3 mMainAlbedo;
 	XMFLOAT3 mMainPosition;
-	XMFLOAT3 mIkTargetPosition;
 	float mMainScale;
 
 	std::unique_ptr<Camera> mCamera;

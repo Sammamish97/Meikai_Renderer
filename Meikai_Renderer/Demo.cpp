@@ -136,8 +136,6 @@ void Demo::UpdateGUI()
 	ImGui::SliderFloat("Object Metalic", &mMainMetalic, 0, 1);
 	ImGui::SliderFloat("Object Roughness", &mMainRoughness, 0, 1);
 
-	ImGui::SliderFloat3("Ik Target Position", &(mIkTargetPosition.x), -50, 50);
-
 	auto vector_getter = [](void* vec, int idx, const char** out_text)
 	{
 		auto& vector = *static_cast<std::vector<std::string>*>(vec);
@@ -165,8 +163,6 @@ void Demo::UpdateMainObject()
 	mMoveTestSkeletal->SetAlbedo(mMainAlbedo);
 	mMoveTestSkeletal->SetMetalic(mMainMetalic);
 	mMoveTestSkeletal->SetRoughness(mMainRoughness);
-
-	mIkTarget->SetPosition(XMLoadFloat3(&mIkTargetPosition));
 }
 
 void Demo::ClearImGui()
@@ -187,12 +183,11 @@ void Demo::Update(const GameTimer& gt)
 	float tick = mPathGenerator->Update(gt, mMoveTestSkeletal->GetTicksPerSec(), mMoveTestSkeletal->GetDuration(), mMoveTestSkeletal->GetDistacnePerDuration());
   	mMoveTestSkeletal->SetPosition(mPathGenerator->GetPosition());
 	mMoveTestSkeletal->SetDirection(mPathGenerator->GetDirection());
+	for(auto& skeletalObject : mSkeletalObjects)
+	{
+		skeletalObject->Update(gt.DeltaTime() * skeletalObject->GetTicksPerSec());
+	}
 	mMoveTestSkeletal->Update(tick);
-	//for(auto& skeletalObject : mSkeletalObjects)
-	//{
-	//	skeletalObject->Update(gt.DeltaTime() * skeletalObject->GetTicksPerSec());
-	//}
-
 }
 
 void Demo::Draw(const GameTimer& gt)
@@ -269,16 +264,12 @@ void Demo::BuildObjects()
 		}
 	}
 	//mObjects.push_back(std::make_unique<Object>(mModels["Sponza"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), 1.f, 0.f));
-	mMainObject = std::make_shared<Object>(mModels["bunny"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), 1.f, 1.f, XMFLOAT3(2.f, 2.f, 2.f));
-	mIkTarget = std::make_shared<Object>(mModels["Sphere"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), 1.f, 1.f, XMFLOAT3(0.1, 0.1, 0.1));
+	mMainObject = std::make_unique<Object>(mModels["bunny"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), 1.f, 1.f, XMFLOAT3(2.f, 2.f, 2.f));
 	mMainPosition = XMFLOAT3(0, 0, 0);
 	mMainScale = 1;
-	mObjects.push_back(std::make_shared<Object>(mModels["Plane"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), 0.f, 1.f, XMFLOAT3(0.1f, 0.1, 0.1f)));
-	mObjects.push_back(mMainObject);
-	mObjects.push_back(mIkTarget);
-	mSkybox = std::make_shared<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(1, 1, 1),  0.f, 0.f);
-	mMoveTestSkeletal = std::make_shared<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(0, 0, 0), 1.0, 1.0); \
-	mSkeletalObjects.push_back(mMoveTestSkeletal);
+	mObjects.push_back(std::make_unique<Object>(mModels["Plane"], XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), 0.f, 1.f, XMFLOAT3(0.1f, 0.1, 0.1f)));
+	mSkybox = std::make_unique<Object>(mModels["Skybox"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(1, 1, 1),  0.f, 0.f);
+	mMoveTestSkeletal = std::make_unique<SkeletalObject>(this, mSkeletalModels["Y_Bot"], mAnimations["walking"], XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(0, 0, 0), 1.0, 1.0);
 }
 
 void Demo::BuildFrameResource()
@@ -485,6 +476,7 @@ void Demo::DrawGeometryPasses(CommandList& cmdList)
 	{
 		object->Draw(cmdList);
 	}
+	mMainObject->Draw(cmdList);
 	cmdList.SetPipelineState(mSkeletalGeometryPass->mPSO.Get());
 	cmdList.SetGraphicsRootSignature(mSkeletalGeometryPass->mRootSig.Get());
 
@@ -494,6 +486,7 @@ void Demo::DrawGeometryPasses(CommandList& cmdList)
 	{
 		skeletalObject->Draw(cmdList);
 	}
+	mMoveTestSkeletal->Draw(cmdList);
 }
 
 void Demo::DrawLightingPass(CommandList& cmdList)
@@ -608,6 +601,7 @@ void Demo::DrawBoneDebug(CommandList& cmdList)
 	{
 		object->DrawBone(cmdList);
 	}
+	mMoveTestSkeletal->DrawBone(cmdList);
 }
 
 void Demo::DrawPathDebug(CommandList& cmdList)
