@@ -3,6 +3,7 @@
 #include <DirectXMath.h>
 #include <functional>
 #include <map>
+#include <memory>
 
 #include "GameTimer.h"
 
